@@ -104,7 +104,7 @@ app.middleware.repository.init(function () {
 		.into(app);
 
 	http.listen(app.config.port, function () {
-		console.log('LAPIG-MAPS Server @ [port %s] [pid %s]', app.config.port, process.pid.toString());
+		console.log('TVI Server @ [port %s] [pid %s]', app.config.port, process.pid.toString());
 		if (process.env.PRIMARY_WORKER) {
 			app.middleware.jobs.start();
 		}
