@@ -6,30 +6,30 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model User {
-  id      Int      @id @default(autoincrement())
-  name    String?
-  email   String   @unique
-  age     Int
-  address String?
-  posts   Post[]
-  Profile Profile?
+  id                 Int @id @default(autoincrement())
+  name               String?
+  email              String? @unique
+  city               String
+  state              String
+  country            String
+  organizationId     Int
+  geeKey             String
+  password           String
+  typeUserInCampaign TypeUserInCampaign @default(INSPETOR)
+  typeUser           TypeUser @default(USER)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  active             Boolean  @default(false)
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  createdAt DateTime @default(now())
-  content   String?
-  published Boolean  @default(false)
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
+enum TypeUser {
+  USER
+  SUPERADMIN
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  userId Int     @unique
-  User   User    @relation(fields: [userId], references: [id])
+enum TypeUserInCampaign {
+  INSPETOR
+  SUPERVISOR
+  ADMIN
 }
