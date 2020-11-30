@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'ngx-oauth-btn',
   styleUrls: ['./oauth.component.scss'],
   templateUrl: './oauth.component.html',
 })
-export class OauthComponent implements OnInit, OnDestroy {
+export class OauthComponent implements OnInit {
 
   public gapiSetup: boolean = false; // marks if the gapi library has been loaded
   public authInstance: gapi.auth2.GoogleAuth;
