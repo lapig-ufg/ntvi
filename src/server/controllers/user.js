@@ -23,7 +23,12 @@ module.exports = function (app) {
 
     Controller.getAllUsers = async function (request, response) {
         try {
-            const users = await prisma.user.findMany()
+            const users = await prisma.user.findMany({
+                select: {
+                    id: true,
+                    name: true
+                },
+            })
             response.json(users)
         }catch (e) {
             console.error(e)
