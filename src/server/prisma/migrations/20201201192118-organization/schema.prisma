@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Organization {
@@ -30,7 +30,6 @@ model User {
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
   active             Boolean            @default(false)
-  organization       Organization?      @relation(fields: [organizationId], references: [id])
 }
 
 enum TypeUser {
