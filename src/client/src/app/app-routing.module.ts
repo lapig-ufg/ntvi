@@ -6,6 +6,8 @@ import {
   NbLoginComponent,
   NbLogoutComponent,
   NbPasswordAuthStrategy,
+  NbOAuth2ResponseType,
+  NbOAuth2AuthStrategy,
   NbRegisterComponent,
   NbRequestPasswordComponent,
   NbResetPasswordComponent,
@@ -69,12 +71,26 @@ const socialLinks = [
   imports: [
     RouterModule.forRoot(routes, config),
     NbAuthModule.forRoot({
+      strategies: [
+        NbOAuth2AuthStrategy.setup({
+          name: 'google',
+          clientId: 'YOUR_CLIENT_ID',
+          clientSecret: '',
+          authorize: {
+            endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+            responseType: NbOAuth2ResponseType.TOKEN,
+            scope: 'https://www.googleapis.com/auth/userinfo.profile',
+          },
+        }),
+      ],
       forms: {
         login: {
-          socialLinks: socialLinks,
+          socialLinks: null,
+          endpoint: '/service/auth/login',
         },
         register: {
-          socialLinks: socialLinks,
+          socialLinks: null,
+          endpoint: '/service/auth/login',
         },
       },
     }),
