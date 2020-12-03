@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CampaignComponent } from './campaign.component';
-import { CampRegisterComponent } from './camp-register/camp-register.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [{
-  path: 'campaign',
+  path: '',
   component: CampaignComponent,
   children: [
     {
-      path: 'camp-register',
-      component: CampRegisterComponent,
+      path: 'register',
+      component: RegisterComponent,
     },
   ],
 }];
@@ -23,5 +23,5 @@ export class CampaignRoutingModule { }
 
 export const routedComponents = [
   CampaignComponent,
-  CampRegisterComponent,
+  RegisterComponent,
 ];

@@ -16,7 +16,8 @@ var express = require('express')
 	, bodyParser = require('body-parser')
 	, multer = require('multer')
 	, session = require('express-session')
-	, parseCookie = require('cookie-parser');
+	, parseCookie = require('cookie-parser')
+	, cors = require('cors');
 
 
 const { PrismaClient } = require('@prisma/client')
@@ -79,6 +80,13 @@ app.middleware.repository.init(function () {
 			response.end();
 		}
 	}));
+
+	var corsOptions = {
+		origin: 'http://localhost:4200',
+		optionsSuccessStatus: 200
+	}
+
+	app.use(cors(corsOptions))
 
 	app.use(responseTime());
 	app.use(bodyParser.json());
