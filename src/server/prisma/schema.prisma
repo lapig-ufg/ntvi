@@ -30,6 +30,7 @@ model User {
   typeUser           TypeUser           @default(USER)
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
+  terms              Boolean            @default(false)
   active             Boolean            @default(false)
   organization       Organization?      @relation(fields: [organizationId], references: [id])
 }

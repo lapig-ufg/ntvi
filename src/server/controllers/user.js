@@ -10,12 +10,17 @@ module.exports = function (app) {
         var id = request.param('id')
         // const { id } = request.params
         try {
-            const post = await prisma.user.findUnique({
+            const user = await prisma.user.findUnique({
+                select: {
+                    id: true,
+                    name: true,
+                    organization:true
+                },
                 where: {
                     id: parseInt(id),
                 },
-            })
-            response.json(post)
+            });
+            response.json(user)
         }catch (e) {
             console.error(e)
         }
@@ -26,7 +31,8 @@ module.exports = function (app) {
             const users = await prisma.user.findMany({
                 select: {
                     id: true,
-                    name: true
+                    name: true,
+                    organization:true
                 },
             })
             response.json(users)

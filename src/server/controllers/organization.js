@@ -13,7 +13,7 @@ module.exports = function (app) {
             const organization = await prisma.organization.findUnique({
                 where: {
                     id: parseInt(id),
-                },
+                }
             })
             response.json(organization)
         }catch (e) {
@@ -26,7 +26,8 @@ module.exports = function (app) {
             const organizations = await prisma.organization.findMany({
                 select: {
                     id: true,
-                    name: true
+                    name: true,
+                    users: true,
                 },
             })
             response.json(organizations)
