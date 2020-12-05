@@ -1,7 +1,8 @@
 module.exports = function (app) {
 
-    var control = app.controllers.user;
+    const control = app.controllers.user;
+    const JWT     = app.middleware.jwt;
 
-    app.get('/service/user/', control.getUserByID);
-    app.get('/service/users', control.getAllUsers);
+    app.get('/service/user/', JWT.verifyJWT, control.getUserByID);
+    app.get('/service/users', JWT.verifyJWT, control.getAllUsers);
 }

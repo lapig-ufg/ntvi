@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
 const dotenv = require("dotenv-safe");
+const CryptoJS = require("crypto-js");
+const jwt = require('jsonwebtoken');
 
 const result = dotenv.config({
     allowEmptyValues: true,
@@ -12,17 +14,21 @@ const { parsed: env } = result;
 
 module.exports = function (app) {
     let Controller = {}
-    const jwt = require('jsonwebtoken');
-    const prisma = new PrismaClient()
-    const CryptoJS = require("crypto-js");
 
-    Controller.login = async function (request, response) {
-        const { email, password } = request.body
+    let language = app.util.language;
+
+    const prisma = new PrismaClient({
+        errorFormat: 'colorless',
+    })
+
+    Controller.login    = async function (request, response) {
+        const texts = language.getLang('en');
 
         try {
+            const { email, password } = request.body
             const user = await prisma.user.findUnique({
                 where: {
-                    email: email,
+                    email: 'irtharles@gmail.com',
                 },
             })
 
@@ -60,6 +66,10 @@ module.exports = function (app) {
             console.error(e)
             response.status(500).json({message: 'Erro ao consultar o usuário: ' + e + '.'});
         }
+    }
+
+    Controller.logout   = async function (request, response) {
+        response.json({ auth: false, token: null });
     }
 
     return Controller;

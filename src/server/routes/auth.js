@@ -4,4 +4,5 @@ module.exports = function (app) {
 
     app.post('/api/auth/login', control.login);
     app.post('/api/auth/register', control.register);
+    app.get('/api/auth/logout', control.logout);
 }

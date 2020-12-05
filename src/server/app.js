@@ -35,6 +35,7 @@ const prisma = new PrismaClient()
 load('config.js', { 'verbose': false })
 	.then('libs')
 	.then('middleware')
+	.then('util')
 	.into(app);
 
 app.middleware.repository.init(function () {
