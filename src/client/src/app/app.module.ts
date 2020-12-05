@@ -6,13 +6,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HttpClient} from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { LanguageInterceptor } from './interceptors/language.interceptor';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -29,6 +30,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [AppComponent],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LanguageInterceptor,
+      multi: true,
+    },
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -1,5 +1,5 @@
 {
   "title": "TVI - EN",
   "login_msg_invalid": "Invalid login!",
-  "login_msg_invalid": "Invalid login!"
+  "login_msg_erro": "Error querying user: "
 }

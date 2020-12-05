@@ -22,13 +22,14 @@ module.exports = function (app) {
     })
 
     Controller.login    = async function (request, response) {
-        const texts = language.getLang('en');
-
+        const { lang } = request.headers;
+        const texts = language.getLang(lang);
+        console.log(texts)
         try {
             const { email, password } = request.body
             const user = await prisma.user.findUnique({
                 where: {
-                    email: 'irtharles@gmail.com',
+                    email: email,
                 },
             })
 
@@ -41,10 +42,10 @@ module.exports = function (app) {
                 });
                 return response.json({ auth: true, token: token });
             }
-            response.status(500).json({message: 'Login inválido!'});
+            response.status(500).json({message: texts.login_msg_invalid});
         }catch (e) {
             console.error(e)
-            response.status(500).json({message: 'Erro ao consultar o usuário: ' + e + '.'});
+            response.status(500).json({message: texts.login_msg_erro + e + '.'});
         }
     }
 
