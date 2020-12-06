@@ -24,7 +24,14 @@
         <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
       </nb-select>
     </nb-action>
-
+    <nb-action class="control-item" >
+      <nb-toggle
+        status="success"
+        labelPosition="right"
+        [(checked)]="english"
+        (click)="toggleEnglish()"
+      >EN</nb-toggle>
+    </nb-action>
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
       <nb-user [nbContextMenu]="userMenu"
                [onlyPicture]="userPictureOnly"

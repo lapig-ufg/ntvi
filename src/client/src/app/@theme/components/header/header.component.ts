@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
-
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
@@ -18,7 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: any;
   title: string;
-
+  english: boolean;
   themes = [
     {
       value: 'default',
@@ -49,9 +48,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
               public translate: TranslateService) {
+    this.english = false;
   }
 
   ngOnInit() {
+    this.english = this.translate.currentLang === 'en' ? true : false;
     this.title = this.translate.instant('title');
     this.currentTheme = this.themeService.currentTheme;
     this.userService.getUsers()
@@ -88,6 +89,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.layoutService.changeLayoutSize();
 
     return false;
+  }
+
+  toggleEnglish() {
+    if (this.english) {
+      this.translate.reloadLang('en');
+    } else {
+      this.translate.reloadLang('pt');
+    }
+    this.title = this.translate.instant('title');
   }
 
   navigateHome() {
