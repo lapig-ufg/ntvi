@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
   NbAuthComponent,
+  NbAuthJWTToken,
   NbAuthModule,
   NbOAuth2AuthStrategy,
   NbOAuth2ResponseType,
@@ -45,21 +46,33 @@ const socialLinks = [
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          // baseEndpoint: 'http://localhost:3000',
+          token: {
+            class: NbAuthJWTToken,
+            key: 'token',
+          },
           login: {
             endpoint: 'login',
             redirect: {
-              success: '/dashboard/',
-              failure: null,
+              success: '/pages/campaign/',
+              failure: '/auth/login',
             },
           },
           register: {
             endpoint: 'register',
             redirect: {
-              success: '/welcome/',
-              failure: null,
+              success: '/pages/campaign/',
+              failure: '/auth/register',
             },
           },
+          logout: {
+            endpoint: 'logout',
+            method: null,
+            redirect:
+              {
+                success: '/',
+                failure: '/',
+              },
+            },
         }),
         NbOAuth2AuthStrategy.setup({
           name: 'google',

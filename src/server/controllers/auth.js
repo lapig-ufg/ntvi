@@ -18,13 +18,14 @@ module.exports = function (app) {
     let language = app.util.language;
 
     const prisma = new PrismaClient({
-        errorFormat: 'colorless',
+        errorFormat: 'pretty',
+        log: ['query', 'info', 'warn'],
     })
 
     Controller.login    = async function (request, response) {
         const { lang } = request.headers;
         const texts = language.getLang(lang);
-        console.log(texts)
+
         try {
             const { email, password } = request.body
             const user = await prisma.user.findUnique({
@@ -36,11 +37,17 @@ module.exports = function (app) {
             const hash = CryptoJS.MD5(password).toString();
 
             if(user.email === email && user.password === hash){
-                const id = user.id;
-                const token = jwt.sign({ id }, env.SECRET, {
+                const payload = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email
+                };
+                const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: 3800
                 });
-                return response.json({ auth: true, token: token });
+                return response.json({
+                    token: token,
+                });
             }
             response.status(500).json({message: texts.login_msg_invalid});
         }catch (e) {
@@ -62,7 +69,17 @@ module.exports = function (app) {
                     terms: terms
                 },
             });
-            response.json(user)
+            const payload = {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            };
+            const token = jwt.sign(payload, env.SECRET, {
+                expiresIn: 3800
+            });
+            return response.json({
+                token: token,
+            });
         } catch (e) {
             console.error(e)
             response.status(500).json({message: 'Erro ao consultar o usuário: ' + e + '.'});

@@ -15,14 +15,19 @@ module.exports = function (app) {
 
     JWT.verifyJWT = async function (request, response,  next) {
         try {
-            const token = request.headers['x-access-token'];
+            const token = request.headers['token'];
+
             if (!token) return response.status(401).json({ auth: false, message: 'No token provided.' });
 
             jwt.verify(token, env.SECRET, function(err, decoded) {
-                if (err) return response.status(500).json({ auth: false, message: 'Failed to authenticate token.' });
+
+                if (err) {
+                    console.log(err)
+                    return response.status(500).json({ auth: false, message: 'Failed to authenticate token.' });
+                }
 
                 // se tudo estiver ok, salva no request para uso posterior
-                request.userId = decoded.id;
+                request.user = decoded;
                 next();
             });
         }catch (e) {

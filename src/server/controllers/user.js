@@ -7,20 +7,22 @@ module.exports = function (app) {
 
     Controller.getUserByID = async function (request, response) {
 
-        var id = request.param('id')
+        const {user} = request;
+        console.log(user)
+
         // const { id } = request.params
         try {
-            const user = await prisma.user.findUnique({
+            const us = await prisma.user.findUnique({
                 select: {
                     id: true,
                     name: true,
                     organization:true
                 },
                 where: {
-                    id: parseInt(id),
+                    id: parseInt(user.id),
                 },
             });
-            response.json(user)
+            response.json(us)
         }catch (e) {
             console.error(e)
         }

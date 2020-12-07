@@ -18,6 +18,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Campaign',
     icon: 'map',
+    home: true,
     children: [
       {
         title: 'Register',
@@ -204,19 +205,4 @@ export const MENU_ITEMS: NbMenuItem[] = [
   //     },
   //   ],
   // },
-  {
-    title: 'Auth',
-    icon: 'lock-outline',
-    children: [
-      {
-        title: 'Login',
-        link: '/auth/login',
-        home: true,
-      },
-      {
-        title: 'Register',
-        link: '/auth/register',
-      },
-    ],
-  },
 ];

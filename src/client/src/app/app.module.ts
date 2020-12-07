@@ -14,6 +14,8 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LanguageInterceptor } from './interceptors/language.interceptor';
+import { JWTInterceptor  } from './interceptors/jwt.interceptor';
+import { AuthGuard } from './services/auth-guard.service';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -36,6 +38,12 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: LanguageInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JWTInterceptor,
+      multi: true,
+    },
+    AuthGuard,
   ],
   imports: [
     BrowserModule,

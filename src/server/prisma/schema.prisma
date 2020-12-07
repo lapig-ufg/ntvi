@@ -25,7 +25,7 @@ model User {
   country            String?
   organizationId     Int?
   geeKey             String?
-  password           String?
+  password           String?            @select(false)
   typeUserInCampaign TypeUserInCampaign @default(INSPETOR)
   typeUser           TypeUser           @default(USER)
   createdAt          DateTime           @default(now())

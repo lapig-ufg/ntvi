@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { NbTokenService, NbAuthService } from '@nebular/auth';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'ngx-header',
@@ -47,17 +50,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private userService: UserData,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
-              public translate: TranslateService) {
+              public  translate: TranslateService,
+              private authService: NbAuthService,
+              private token: NbTokenService,
+              private http: HttpClient,
+              private router: Router) {
     this.english = false;
   }
 
   ngOnInit() {
     this.english = this.translate.currentLang === 'en' ? true : false;
     this.title = this.translate.instant('title');
+    this.getUser();
     this.currentTheme = this.themeService.currentTheme;
-    this.userService.getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
@@ -103,5 +108,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navigateHome() {
     this.menuService.navigateHome();
     return false;
+  }
+
+  logout() {
+    this.authService.logout('email');
+    this.token.clear()
+    this.router.navigate(['auth/login']);
+  }
+
+  handleMenu(evt) {
+    const self = this;
+    this.menuService.onItemClick().subscribe(result => {
+      const { item } = result;
+      if (item.title === 'Log out') {
+        self.logout();
+      }
+    });
+  }
+  getUser() {
+    const self = this;
+    this.http.get('/service/user').subscribe(result => {
+      this.user = result;
+    }, function (error) {
+      self.authService.logout('email');
+      self.token.clear()
+      self.router.navigate(['auth/login']);
+    });
   }
 }
