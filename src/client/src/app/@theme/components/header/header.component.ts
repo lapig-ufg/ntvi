@@ -112,7 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout('email');
-    this.token.clear()
+    this.token.clear();
     this.router.navigate(['auth/login']);
   }
 
@@ -131,7 +131,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.user = result;
     }, function (error) {
       self.authService.logout('email');
-      self.token.clear()
+      self.token.clear();
       self.router.navigate(['auth/login']);
     });
   }
