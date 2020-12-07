@@ -130,6 +130,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.http.get('/service/user').subscribe(result => {
       this.user = result;
     }, function (error) {
+      // redirect o login
       self.authService.logout('email');
       self.token.clear();
       self.router.navigate(['auth/login']);
