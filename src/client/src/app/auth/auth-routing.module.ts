@@ -12,7 +12,6 @@ import {
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent} from './register/register.component';
-import { NbOAuth2LoginComponent } from './oauth/oauth.component';
 
 export const routes: Routes = [
   {
@@ -28,8 +27,9 @@ export const routes: Routes = [
         component: RegisterComponent,
       },
       {
-        path: 'oauth',
-        component: NbOAuth2LoginComponent,
+        path: 'oauth2',
+        loadChildren: () => import('./oauth2/oauth2.module')
+          .then(m => m.OAuth2Module),
       },
     ],
   },
@@ -87,10 +87,10 @@ const socialLinks = [
             endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
             responseType: NbOAuth2ResponseType.TOKEN,
             scope: 'https://www.googleapis.com/auth/userinfo.profile',
-            redirectUri: 'https://ntvi.lapig.iesa.ufg.br/api/auth/oauth',
+            redirectUri: 'https://ntvi.lapig.iesa.ufg.br/auth/oauth2/callback',
           },
           redirect: {
-            success: '/pages/',
+            success: '/auth/oauth2',
             failure: null,
           },
         }),
