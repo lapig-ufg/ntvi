@@ -6,8 +6,9 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { NbTokenService, NbAuthService } from '@nebular/auth';
+import {NbTokenService, NbAuthService, NbAuthJWTToken} from '@nebular/auth';
 import {Router} from '@angular/router';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
 
 @Component({
   selector: 'ngx-header',
@@ -127,9 +128,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   getUser() {
     const self = this;
-    this.http.get('/service/user').subscribe(result => {
-      this.user = result;
-    }, function (error) {
+    this.authService.getToken()
+      .subscribe((token: NbAuthJWTToken) => {
+        if (token.isValid()) {
+          const payload = jwtDecode<JwtPayload>(token.getValue());
+          this.user = payload;
+        }
+      }, function (error) {
       // redirect o login
       self.authService.logout('email');
       self.token.clear();

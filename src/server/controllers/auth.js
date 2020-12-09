@@ -43,7 +43,7 @@ module.exports = function (app) {
                     email: user.email
                 };
                 const token = jwt.sign(payload, env.SECRET, {
-                    expiresIn: 3800
+                    expiresIn: '24h'
                 });
                 return response.json({
                     token: token,
@@ -75,7 +75,7 @@ module.exports = function (app) {
                 email: user.email
             };
             const token = jwt.sign(payload, env.SECRET, {
-                expiresIn: 3800
+                expiresIn: '24h'
             });
             return response.json({
                 token: token,
@@ -84,6 +84,10 @@ module.exports = function (app) {
             console.error(e)
             response.status(500).json({message: 'Erro ao consultar o usuário: ' + e + '.'});
         }
+    }
+
+    Controller.oauth    = async function (request, response) {
+        response.json({ request: request});
     }
 
     Controller.logout   = async function (request, response) {

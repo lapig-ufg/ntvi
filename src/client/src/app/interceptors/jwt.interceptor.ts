@@ -12,7 +12,7 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 export class JWTInterceptor implements HttpInterceptor {
   constructor(private authService: NbAuthService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.authService.onTokenChange()
+    this.authService.getToken()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           request = request.clone({

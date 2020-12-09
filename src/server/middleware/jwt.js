@@ -11,11 +11,15 @@ const { parsed: env } = result;
 
 module.exports = function (app) {
     let JWT = {}
+
     const jwt = require('jsonwebtoken');
 
     JWT.verifyJWT = async function (request, response,  next) {
+
         try {
-            const token = request.headers['token'];
+            const { lang } = request.headers;
+
+            const  { token }  = request.headers;
 
             if (!token) return response.status(401).json({ auth: false, message: 'No token provided.' });
 

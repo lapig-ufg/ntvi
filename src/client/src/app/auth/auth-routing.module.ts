@@ -12,6 +12,7 @@ import {
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent} from './register/register.component';
+import { NbOAuth2LoginComponent } from './oauth/oauth.component';
 
 export const routes: Routes = [
   {
@@ -26,13 +27,17 @@ export const routes: Routes = [
         path: 'register',
         component: RegisterComponent,
       },
+      {
+        path: 'oauth',
+        component: NbOAuth2LoginComponent,
+      },
     ],
   },
 ];
 
 const socialLinks = [
   {
-    url: 'https://github.com/akveo/nebular',
+    url: 'http://localhost:4200/auth/oauth',
     target: '_blank',
     icon: 'google',
   },
@@ -76,16 +81,17 @@ const socialLinks = [
         }),
         NbOAuth2AuthStrategy.setup({
           name: 'google',
-          clientId: 'YOUR_CLIENT_ID',
-          clientSecret: '',
+          clientId: '750256806057-52odg19a6lkgbjuu67f3a12o0vq5aipq.apps.googleusercontent.com',
+          clientSecret: '-59HNErVLJfZkM_RAH4s4l8N',
           authorize: {
             endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
             responseType: NbOAuth2ResponseType.TOKEN,
             scope: 'https://www.googleapis.com/auth/userinfo.profile',
+            redirectUri: 'https://ntvi.lapig.iesa.ufg.br/api/auth/oauth',
           },
           redirect: {
-            success: '/welcome/', // welcome page path
-            failure: null, // stay on the same page
+            success: '/pages/',
+            failure: null,
           },
         }),
       ],

@@ -25,6 +25,7 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import {NbTokenLocalStorage, NbTokenStorage} from '@nebular/auth';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -42,6 +43,10 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: JWTInterceptor,
       multi: true,
+    },
+    {
+      provide: NbTokenStorage,
+      useClass: NbTokenLocalStorage,
     },
     AuthGuard,
   ],
