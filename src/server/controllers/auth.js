@@ -87,7 +87,40 @@ module.exports = function (app) {
     }
 
     Controller.oauth    = async function (request, response) {
-        response.json({ request: request});
+        // const { lang } = request.headers;
+        // const texts = language.getLang(lang);
+        const {headers, params} = request
+        console.log(request)
+        try {
+            // const { email, password } = request.body
+            // const user = await prisma.user.findUnique({
+            //     where: {
+            //         email: email,
+            //     },
+            // })
+
+            // const hash = CryptoJS.MD5(password).toString();
+            //
+            // if(user.email === email && user.password === hash){
+            //     const payload = {
+            //         id: user.id,
+            //         name: user.name,
+            //         email: user.email
+            //     };
+            //     const token = jwt.sign(payload, env.SECRET, {
+            //         expiresIn: '24h'
+            //     });
+            //     return response.json({
+            //         token: token,
+            //     });
+            // }
+            //
+            return response.json({ 'headers': headers, 'params': params });
+            // response.status(500).json({message: texts.login_msg_invalid});
+        }catch (e) {
+            console.error(e)
+            response.status(500).json({message: texts.login_msg_erro + e + '.'});
+        }
     }
 
     Controller.logout   = async function (request, response) {
