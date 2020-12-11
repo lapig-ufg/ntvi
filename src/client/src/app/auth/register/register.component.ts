@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NbRegisterComponent} from '@nebular/auth';
+import {NbAuthResult, NbRegisterComponent} from '@nebular/auth';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'ngx-register',
@@ -7,4 +9,13 @@ import { NbRegisterComponent} from '@nebular/auth';
   templateUrl: './register.component.html',
 })
 export class RegisterComponent extends NbRegisterComponent {
+  private destroy$ = new Subject<void>();
+
+  loginGoogle() {
+    this.service.authenticate('google')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((authResult: NbAuthResult) => {
+        // console.log(authResult);
+      });
+  }
 }
