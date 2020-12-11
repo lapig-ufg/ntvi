@@ -23,7 +23,7 @@ export class LoginComponent extends NbLoginComponent implements OnDestroy {
   loginEmail() {
     this.login();
     localStorage.clear();
-    localStorage.setItem('auth_type', 'oauth');
+    localStorage.setItem('auth_type', 'email');
   }
 
   ngOnDestroy(): void {
