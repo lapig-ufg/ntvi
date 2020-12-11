@@ -40,7 +40,8 @@ module.exports = function (app) {
                 const payload = {
                     id: user.id,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    picture: user.picture
                 };
                 const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: '24h'
@@ -57,6 +58,8 @@ module.exports = function (app) {
     }
 
     Controller.register = async function (request, response) {
+        const { lang } = request.headers;
+        const texts = language.getLang(lang);
 
         const {fullName, confirmPassword, email, terms } = request.body;
         const hash = CryptoJS.MD5(confirmPassword).toString();
@@ -72,7 +75,8 @@ module.exports = function (app) {
             const payload = {
                 id: user.id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                picture: user.picture
             };
             const token = jwt.sign(payload, env.SECRET, {
                 expiresIn: '24h'
@@ -80,47 +84,84 @@ module.exports = function (app) {
             return response.json({
                 token: token,
             });
+
+            response.status(500).json({message: texts.login_msg_invalid});
         } catch (e) {
             console.error(e)
-            response.status(500).json({message: 'Erro ao consultar o usuário: ' + e + '.'});
+            response.status(500).json({message: texts.login_msg_erro + e + '.'});
         }
     }
 
     Controller.oauth    = async function (request, response) {
-        // const { lang } = request.headers;
-        // const texts = language.getLang(lang);
-        const {headers, params} = request
-        console.log(request)
-        try {
-            // const { email, password } = request.body
-            // const user = await prisma.user.findUnique({
-            //     where: {
-            //         email: email,
-            //     },
-            // })
+        const { name, email, picture, locale} = request.body
 
-            // const hash = CryptoJS.MD5(password).toString();
-            //
-            // if(user.email === email && user.password === hash){
-            //     const payload = {
-            //         id: user.id,
-            //         name: user.name,
-            //         email: user.email
-            //     };
-            //     const token = jwt.sign(payload, env.SECRET, {
-            //         expiresIn: '24h'
-            //     });
-            //     return response.json({
-            //         token: token,
-            //     });
-            // }
-            //
-            return response.json({ 'headers': headers, 'params': params });
-            // response.status(500).json({message: texts.login_msg_invalid});
+        let { lang } = request.headers;
+
+        if(!lang){
+            lang = locale.includes('pt')? 'pt' : 'en';
+        }
+
+        const texts = language.getLang(lang);
+        try {
+
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: email,
+                },
+            })
+
+            if(user) {
+                if(!user.picture && picture != '' ) {
+                    await prisma.user.update({
+                        where: { id: parseInt(user.id) },
+                        data: { picture: picture },
+                    })
+                }
+                const payload = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    picture: user.picture
+                };
+                const token = jwt.sign(payload, env.SECRET, {
+                    expiresIn: '24h'
+                });
+
+                return response.json(token);
+
+            } else {
+                const user = await prisma.user.create({
+                    data: {
+                        name: name,
+                        email: email,
+                        picture: picture,
+                        terms:false,
+                    },
+                });
+
+                const payload = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    picture: user.picture
+                };
+                const token = jwt.sign(payload, env.SECRET, {
+                    expiresIn: '24h'
+                });
+
+                return response.json(token);
+            }
+
+            response.status(500).json({message: texts.login_msg_notfound});
         }catch (e) {
             console.error(e)
             response.status(500).json({message: texts.login_msg_erro + e + '.'});
         }
+    }
+
+    Controller.token   = async function (request, response) {
+        const { headers, params } = request
+        response.json({ headers: headers, params: params });
     }
 
     Controller.logout   = async function (request, response) {

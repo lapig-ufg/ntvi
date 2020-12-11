@@ -1,11 +1,11 @@
 
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule, Routes} from '@angular/router';
 import {
   NbAuthComponent,
   NbAuthJWTToken,
-  NbAuthModule,
-  NbOAuth2AuthStrategy,
+  NbAuthModule, NbAuthOAuth2Token,
+  NbOAuth2AuthStrategy, NbOAuth2GrantType,
   NbOAuth2ResponseType,
   NbPasswordAuthStrategy,
 } from '@nebular/auth';
@@ -86,11 +86,12 @@ const socialLinks = [
           authorize: {
             endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
             responseType: NbOAuth2ResponseType.TOKEN,
-            scope: 'https://www.googleapis.com/auth/userinfo.profile',
-            redirectUri: 'https://ntvi.lapig.iesa.ufg.br/auth/oauth2/callback',
+            scope: 'email profile',
+            redirectUri: 'http://localhost:4200/auth/oauth2/callback',
+            // redirectUri: 'https://ntvi.lapig.iesa.ufg.br/auth/oauth2/callback',
           },
           redirect: {
-            success: '/auth/oauth2',
+            success: '/pages',
             failure: null,
           },
         }),

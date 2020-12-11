@@ -1,5 +1,4 @@
 module.exports = function (app) {
-
     const control = app.controllers.user;
     const JWT     = app.middleware.jwt;
 
