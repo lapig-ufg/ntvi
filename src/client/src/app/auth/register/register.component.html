@@ -143,7 +143,7 @@
   <div class="socials">
     <ng-container *ngFor="let socialLink of socialLinks">
       <a *ngIf="socialLink.link"
-         [routerLink]="socialLink.link"
+         (click)="loginGoogle()"
          [attr.target]="socialLink.target"
          [attr.class]="socialLink.icon"
          [class.with-icon]="socialLink.icon">
@@ -151,7 +151,7 @@
         <ng-template #title>{{ socialLink.title }}</ng-template>
       </a>
       <a *ngIf="socialLink.url"
-         [attr.href]="socialLink.url"
+         (click)="loginGoogle()"
          [attr.target]="socialLink.target"
          [attr.class]="socialLink.icon"
          [class.with-icon]="socialLink.icon">
