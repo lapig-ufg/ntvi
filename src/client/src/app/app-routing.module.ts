@@ -42,7 +42,8 @@ export const routes: Routes = [
 ];
 
 const config: ExtraOptions = {
-  useHash: true,
+  scrollPositionRestoration: 'top',
+  useHash: false,
 };
 
 @NgModule({

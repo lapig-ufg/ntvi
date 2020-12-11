@@ -27,6 +27,7 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import {NbTokenLocalStorage, NbTokenStorage} from '@nebular/auth';
+import {LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -54,6 +55,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: NbTokenStorage,
       useClass: NbTokenLocalStorage,
+    },
+    {
+      provide: LocationStrategy,
+      useClass: PathLocationStrategy,
     },
     AuthGuard,
   ],
