@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Organization {
@@ -14,14 +14,6 @@ model Organization {
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
   users              User[]
-}
-
-model UseClass {
-  id                 Int                @id @default(autoincrement())
-  name               String
-  description        String
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
 }
 
 model User {
