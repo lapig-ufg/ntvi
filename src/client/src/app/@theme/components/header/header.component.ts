@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { UserData } from '../../../@core/data/users';
@@ -55,7 +56,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private authService: NbAuthService,
               private token: NbTokenService,
               private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private storage: StorageMap) {
     this.english = false;
   }
 
@@ -113,6 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout('email');
+    this.storage.clear().subscribe(() => {});
     this.token.clear();
     this.router.navigate(['auth/login']);
   }
@@ -128,17 +131,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   getUser() {
     const self = this;
-    this.authService.getToken()
-      .subscribe((token: NbAuthJWTToken) => {
-        if (token.isValid()) {
-          const payload = jwtDecode<JwtPayload>(token.getValue());
-          this.user = payload;
-        }
-      }, function (error) {
-      // redirect o login
-      self.authService.logout('email');
-      self.token.clear();
-      self.router.navigate(['auth/login']);
-    });
+    const auth_type = localStorage.getItem('auth_type');
+    if ( auth_type === 'oauth' ) {
+      const token = localStorage.getItem('token');
+      const payload = jwtDecode<JwtPayload>(token.toString());
+      this.user     = payload;
+    } else {
+      this.authService.getToken()
+        .subscribe((token: NbAuthJWTToken) => {
+          if (token.isValid()) {
+            const payload = jwtDecode<JwtPayload>(token.getValue());
+            this.user = payload;
+          }
+        }, function (error) {
+          // redirect o login
+          self.authService.logout('email');
+          self.token.clear();
+          self.router.navigate(['auth/login']);
+        });
+    }
   }
 }

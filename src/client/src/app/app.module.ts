@@ -14,6 +14,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LanguageInterceptor } from './interceptors/language.interceptor';
+import { StorageInterceptor } from './interceptors/storage.interceptor';
 import { JWTInterceptor  } from './interceptors/jwt.interceptor';
 import { AuthGuard } from './services/auth-guard.service';
 import {
@@ -26,6 +27,7 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import {NbTokenLocalStorage, NbTokenStorage} from '@nebular/auth';
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -42,6 +44,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JWTInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: StorageInterceptor,
       multi: true,
     },
     {
