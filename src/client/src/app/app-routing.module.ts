@@ -42,7 +42,6 @@ export const routes: Routes = [
 ];
 
 const config: ExtraOptions = {
-  scrollPositionRestoration: 'top',
   useHash: false,
 };
 
