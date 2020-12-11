@@ -18,6 +18,12 @@ const routes: Routes = [{
         .then(m => m.CampaignModule),
     },
     {
+      path: 'class',
+      canActivate: [AuthGuard],
+      loadChildren: () => import('./use-class/use-class.module')
+        .then(m => m.UseClassModule),
+    },
+    {
       path: 'iot-dashboard',
       component: DashboardComponent,
     },
