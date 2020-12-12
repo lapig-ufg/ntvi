@@ -44,6 +44,7 @@ const socialLinks = [
 ];
 
 
+// @ts-ignore
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
@@ -87,8 +88,8 @@ const socialLinks = [
             endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
             responseType: NbOAuth2ResponseType.TOKEN,
             scope: 'email profile',
-            redirectUri: 'http://localhost:4200/auth/oauth2/callback',
-            // redirectUri: 'https://ntvi.lapig.iesa.ufg.br/auth/oauth2/callback',
+            // redirectUri: 'http://localhost:4200/auth/oauth2/callback',
+            redirectUri: 'https://ntvi.lapig.iesa.ufg.br/auth/oauth2/callback',
           },
           redirect: {
             success: '/pages',
