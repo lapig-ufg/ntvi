@@ -19,9 +19,6 @@ var express = require('express')
 	, parseCookie = require('cookie-parser')
 	, cors = require('cors');
 
-
-const { PrismaClient } = require('@prisma/client')
-
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -30,7 +27,6 @@ var cookie = parseCookie('LAPIG')
 var mongoAdapter = require('socket.io-adapter-mongo');
 var sharedsession = require("express-socket.io-session");
 
-const prisma = new PrismaClient()
 
 load('config.js', { 'verbose': false })
 	.then('libs')
@@ -47,6 +43,7 @@ app.middleware.repository.init(function () {
 	io.adapter(mongoAdapter(mongodbUrl));
 
 	app.use(cookie);
+
 	var middlewareSession = session({
 		store: store,
 		secret: 'LAPIG',
@@ -65,7 +62,10 @@ app.middleware.repository.init(function () {
 	}));
 
 	app.use(compression());
-	app.use(express.static(app.config.clientDir));
+	app.use(express.static(app.config.clientDir, { redirect: false }));
+	app.get('*', function (req, res, next) {
+		res.sendFile(path.resolve(app.config.clientDir + '/index.html'));
+	});
 	app.set('views', __dirname + '/templates');
 	app.set('view engine', 'ejs');
 
