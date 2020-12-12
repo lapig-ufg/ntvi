@@ -63,9 +63,6 @@ app.middleware.repository.init(function () {
 
 	app.use(compression());
 	app.use(express.static(app.config.clientDir, { redirect: false }));
-	app.get('*', function (req, res, next) {
-		res.sendFile(path.resolve(app.config.clientDir + '/index.html'));
-	});
 	app.set('views', __dirname + '/templates');
 	app.set('view engine', 'ejs');
 

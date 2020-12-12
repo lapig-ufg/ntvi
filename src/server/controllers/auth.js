@@ -19,10 +19,10 @@ module.exports = function (app) {
 
     const prisma = new PrismaClient({
         errorFormat: 'pretty',
-        log: ['query', 'info', 'warn'],
+        log: ['query'],
     })
 
-    Controller.login    = async function (request, response) {
+    Controller.login = async function (request, response) {
         const { lang } = request.headers;
         const texts = language.getLang(lang);
 
