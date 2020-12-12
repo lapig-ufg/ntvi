@@ -8,8 +8,6 @@ module.exports = function (app) {
     Controller.getUserByID = async function (request, response) {
 
         const {user} = request;
-        console.log(user)
-
         // const { id } = request.params
         try {
             const us = await prisma.user.findUnique({
@@ -29,6 +27,7 @@ module.exports = function (app) {
     }
 
     Controller.getAllUsers = async function (request, response) {
+        console.log('passei')
         try {
             const users = await prisma.user.findMany({
                 select: {
