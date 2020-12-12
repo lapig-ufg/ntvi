@@ -63,6 +63,13 @@ app.middleware.repository.init(function () {
 
 	app.use(compression());
 	app.use(express.static(app.config.clientDir, { redirect: false }));
+	app.get('*', function (request, response, next) {
+		if (!request.url.includes('api') && !request.url.includes('service')) {
+			response.sendFile(path.resolve(app.config.clientDir + '/index.html'));
+		} else {
+			next();
+		}
+	});
 	app.set('views', __dirname + '/templates');
 	app.set('view engine', 'ejs');
 
@@ -110,7 +117,7 @@ app.middleware.repository.init(function () {
 		.into(app);
 
 	http.listen(app.config.port, function () {
-		console.log('TVI Server @ [port %s] [pid %s]', app.config.port, process.pid.toString());
+		console.log('NTVI Server @ [port %s] [pid %s]', app.config.port, process.pid.toString());
 		if (process.env.PRIMARY_WORKER) {
 			app.middleware.jobs.start();
 		}
