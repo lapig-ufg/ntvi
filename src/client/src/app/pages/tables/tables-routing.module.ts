@@ -10,7 +10,7 @@ const routes: Routes = [{
   component: TablesComponent,
   children: [
     {
-      path: 'smart-table',
+      path: '_use-class',
       component: SmartTableComponent,
     },
     {

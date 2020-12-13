@@ -68,15 +68,15 @@ module.exports = function (app) {
     }
 
     Controller.updateClass = async function (request, response) {
-        const {id, name, description} = request.params
-
+        const {id} = request.params
+        const {name, description} = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
         try {
 
             const _class = await prisma.useClass.update({
-                where: { id: id },
+                where: { id: parseInt(id) },
                 data: { name: name, description: description },
             })
             response.status(200).json(_class);
@@ -88,12 +88,12 @@ module.exports = function (app) {
     }
 
     Controller.deleteClass    = async function (request, response) {
-        const { id } = request.body
+        const { id } = request.params
         let { lang } = request.headers;
         const texts = language.getLang(lang);
         try {
 
-            const _class = await prisma.user.delete({
+            const _class = await prisma.useClass.delete({
                 where: { id: parseInt(id)},
             })
 

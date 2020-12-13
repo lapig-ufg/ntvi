@@ -1,0 +1,50 @@
+<!--<div class="container">-->
+<!--  <h1>Use Classes</h1>-->
+
+<!--  <button href="#" (click)="goTo('/pages/use-class/create')" class="btn btn-success">Create New Use Class</button>-->
+
+<!--  <table class="table table-bordered">-->
+<!--    <tr>-->
+<!--      <th>Name</th>-->
+<!--      <th>Description</th>-->
+<!--      <th width="220px">Actions</th>-->
+<!--    </tr>-->
+<!--    <tr *ngFor="let useClass of classes">-->
+<!--      <td>{{ useClass.name }}</td>-->
+<!--      <td>{{ useClass.description }}</td>-->
+<!--      <td>-->
+<!--        <button [routerLink]="['/pages/use-class/', useClass.id, 'view']" class="btn btn-info">View</button>-->
+<!--        <button [routerLink]="['/pages/use-class/', useClass.id, 'edit']" class="btn btn-primary">Edit</button>-->
+<!--        <button type="button" (click)="deleteClass(useClass.id)" class="btn btn-danger">Delete</button>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--  </table>-->
+<!--</div>-->
+
+<nb-card id="index-use-class">
+  <nb-card-header>Use Classes</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="search-inline">
+          <input #search class="search" nbInput fullWidth type="text"  class="mr-2 mb-2" placeholder="Search..." (keydown)="onSearch(search.value)">
+          <button (click)="goTo('/pages/use-class/create')" class="mb-2" nbButton status="success" size="large">
+            <nb-icon icon="plus-outline" ></nb-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ng2-smart-table
+          [settings]="settings"
+          [source]="source"
+          (edit)="onEdit($event)"
+          (delete)="onDeleteConfirm($event)"
+        >
+        </ng2-smart-table>
+      </div>
+    </div>
+    </nb-card-body>
+</nb-card>
+
