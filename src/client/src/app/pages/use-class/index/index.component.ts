@@ -10,8 +10,8 @@ import { LocalDataSource } from 'ng2-smart-table';
   styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit {
+  @ViewChild('search') search: ElementRef;
   classes: UseClass[] = [];
-
   settings = {
     mode: 'external',
     hideSubHeader: true,
@@ -75,6 +75,12 @@ export class IndexComponent implements OnInit {
       this.source.load(this.classes);
     }
   }
+
+  refresh() {
+    this.search.nativeElement.value = '';
+    this.source.reset();
+  }
+
   onSearch(query: string = '') {
     this.source.setFilter([
       {
@@ -83,26 +89,6 @@ export class IndexComponent implements OnInit {
       },
       {
         field: 'description',
-        search: query,
-      },
-      {
-        field: 'email',
-        search: query,
-      },
-    ], false);
-  }
-  onSearch2(query: string = '') {
-    this.source.setFilter([
-      {
-        field: 'name',
-        search: query,
-      },
-      {
-        field: 'description',
-        search: query,
-      },
-      {
-        field: 'email',
         search: query,
       },
     ], false);

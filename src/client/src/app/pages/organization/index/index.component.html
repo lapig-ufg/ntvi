@@ -6,6 +6,9 @@
       <div class="col-md-12">
         <div class="search-inline">
           <input #search class="search" nbInput fullWidth type="text"  class="mr-2 mb-2" placeholder="Search..." (keydown)="onSearch(search.value)">
+          <button (click)="refresh()" class="mb-2 mr-2" nbButton status="primary" size="large">
+            <nb-icon icon="refresh-outline"></nb-icon>
+          </button>
           <button (click)="goTo('/pages/organization/create')" class="mb-2" nbButton status="success" size="large">
             <nb-icon icon="plus-outline" ></nb-icon>
           </button>
