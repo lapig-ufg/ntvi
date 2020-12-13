@@ -11,7 +11,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class EditComponent implements OnInit {
   id: number;
-  organization: Organization;
+  organization = {} as Organization;
   form: FormGroup;
 
   constructor(
