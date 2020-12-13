@@ -16,13 +16,9 @@ import { Subject } from 'rxjs';
 
 @Component({
   selector: 'ngx-oauth2-callback',
-  template: `    <nb-card>
-    <nb-card-header>Oauth2 Authentication</nb-card-header>
-    <nb-card-body>
-     <p>authenticating...</p>
-    </nb-card-body>
-  </nb-card>`,
+  templateUrl: './oauth2-callback.component.html',
 })
+
 export class OAuth2CallbackComponent implements OnDestroy {
 
   private destroy$ = new Subject<void>();

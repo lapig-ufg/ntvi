@@ -1,20 +1,6 @@
 import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
-  // {
-  //   title: 'Campaign',
-  //   icon: 'map',
-  //   link: '/pages/campaign',
-  // },
-  // {
-  //   title: 'IoT Dashboard',
-  //   icon: 'home-outline',
-  //   link: '/pages/iot-dashboard',
-  // },
-  // {
-  //   title: 'FEATURES',
-  //   group: true,
-  // },
   {
     title: 'Campaign',
     icon: 'map',
@@ -26,6 +12,26 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Organizations',
+    icon: 'map',
+    link: '/pages/organization/index',
+  },
+  {
+    title: 'Use Class',
+    icon: 'map',
+    link: '/pages/use-class/index',
+  },
+  // {
+  //   title: 'IoT Dashboard',
+  //   icon: 'home-outline',
+  //   link: '/pages/iot-dashboard',
+  // },
+  // {
+  //   title: 'FEATURES',
+  //   group: true,
+  // },
+
   // {
   //   title: 'Forms',
   //   icon: 'edit-2-outline',
@@ -187,7 +193,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   //   children: [
   //     {
   //       title: 'Smart Table',
-  //       link: '/pages/tables/smart-table',
+  //       link: '/pages/tables/_use-class',
   //     },
   //     {
   //       title: 'Tree Grid',

@@ -16,7 +16,7 @@ model Organization {
   users              User[]
 }
 
-model UseClass {
+model Organization {
   id                 Int                @id @default(autoincrement())
   name               String
   description        String
