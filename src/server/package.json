@@ -4,7 +4,7 @@
   "description": "ERROR: No README.md file found!",
   "main": "importar_dados.js",
   "dependencies": {
-    "@prisma/client": "^2.12.1",
+    "@prisma/client": "2.13.0",
     "always": "^2.2.0",
     "app-root-path": "^1.0.0",
     "archiver": "~0.4.10",
