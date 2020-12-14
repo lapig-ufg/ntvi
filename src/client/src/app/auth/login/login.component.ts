@@ -25,6 +25,7 @@ export class LoginComponent extends NbLoginComponent implements OnDestroy {
     this.login();
     localStorage.clear();
     localStorage.setItem('auth_type', 'email');
+    localStorage.setItem('user', null);
     this.service.getToken()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
