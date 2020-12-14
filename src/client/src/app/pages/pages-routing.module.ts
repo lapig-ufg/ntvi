@@ -5,7 +5,7 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from '../services/auth-guard.service';
-import { RoleGuardService} from '../services/role-guard.service';
+import { RoleGuardService } from '../services/role-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -21,14 +21,14 @@ const routes: Routes = [{
     {
       path: 'use-class',
       canActivate: [AuthGuard, RoleGuardService],
-      data: { roles: ['ROOT', 'USER'] },
+      data: { roles: ['ROOT'] },
       loadChildren: () => import('./use-class/use-class.module')
         .then(m => m.UseClassModule),
     },
     {
       path: 'organization',
       canActivate: [AuthGuard, RoleGuardService],
-      data: { roles: ['ROOT'] },
+      data: { roles: ['ROOT', 'USER'] },
       loadChildren: () => import('./organization/organization.module')
         .then(m => m.OrganizationModule),
     },
