@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from '../services/auth-guard.service';
+import { RoleGuardService} from '../services/role-guard.service';
 
 const routes: Routes = [{
   path: '',
@@ -13,19 +13,22 @@ const routes: Routes = [{
   children: [
     {
       path: 'campaign',
-      canActivate: [AuthGuard],
+      data: { roles: ['ROOT', 'ADMIN', 'USER'] },
+      canActivate: [AuthGuard, RoleGuardService],
       loadChildren: () => import('./campaign/campaign.module')
         .then(m => m.CampaignModule),
     },
     {
       path: 'use-class',
-      canActivate: [AuthGuard],
+      canActivate: [AuthGuard, RoleGuardService],
+      data: { roles: ['ROOT', 'USER'] },
       loadChildren: () => import('./use-class/use-class.module')
         .then(m => m.UseClassModule),
     },
     {
       path: 'organization',
-      canActivate: [AuthGuard],
+      canActivate: [AuthGuard, RoleGuardService],
+      data: { roles: ['ROOT'] },
       loadChildren: () => import('./organization/organization.module')
         .then(m => m.OrganizationModule),
     },

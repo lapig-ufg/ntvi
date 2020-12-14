@@ -1,9 +1,15 @@
 import { NbMenuItem } from '@nebular/theme';
 
+const grantMenu = function (roles) {
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+  return !roles.includes(currentUser.role);
+};
+
 export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Campaign',
     icon: 'map',
+    hidden: grantMenu(['ROOT', 'ADMIN', 'USER']),
     home: true,
     children: [
       {
@@ -16,11 +22,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Organizations',
     icon: 'map',
     link: '/pages/organization/index',
+    hidden: grantMenu(['ROOT']),
   },
   {
     title: 'Use Class',
     icon: 'map',
     link: '/pages/use-class/index',
+    hidden: grantMenu(['ROOT', 'USER']),
   },
   // {
   //   title: 'IoT Dashboard',

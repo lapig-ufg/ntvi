@@ -13,6 +13,7 @@ import {
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import jwtDecode, {JwtPayload} from 'jwt-decode';
 
 @Component({
   selector: 'ngx-oauth2-callback',
@@ -26,8 +27,6 @@ export class OAuth2CallbackComponent implements OnDestroy {
     private authService: NbAuthService,
     private router: Router,
     private http: HttpClient,
-    private token: NbTokenService,
-    private storage: StorageMap,
   ) {
     localStorage.clear();
     localStorage.setItem('auth_type', 'oauth');
@@ -42,6 +41,8 @@ export class OAuth2CallbackComponent implements OnDestroy {
         }).subscribe(result => {
           this.http.post('/api/auth/oauth', result).subscribe(auth => {
             localStorage.setItem('token', auth.toString());
+            const payload = jwtDecode<JwtPayload>(auth.toString());
+            localStorage.setItem('user', JSON.stringify(payload));
             this.router.navigate(['/pages/']);
           }, function (err) {
             localStorage.clear();

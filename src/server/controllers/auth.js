@@ -41,7 +41,8 @@ module.exports = function (app) {
                     id: user.id,
                     name: user.name,
                     email: user.email,
-                    picture: user.picture
+                    picture: user.picture,
+                    role: user.typeUser,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: '24h'
@@ -76,7 +77,8 @@ module.exports = function (app) {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                picture: user.picture
+                picture: user.picture,
+                role: user.typeUser,
             };
             const token = jwt.sign(payload, env.SECRET, {
                 expiresIn: '24h'
@@ -121,7 +123,8 @@ module.exports = function (app) {
                     id: user.id,
                     name: user.name,
                     email: user.email,
-                    picture: user.picture
+                    picture: user.picture,
+                    role: user.typeUser,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: '24h'
@@ -143,7 +146,8 @@ module.exports = function (app) {
                     id: user.id,
                     name: user.name,
                     email: user.email,
-                    picture: user.picture
+                    picture: user.picture,
+                    role: user.typeUser,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: '24h'
@@ -157,11 +161,6 @@ module.exports = function (app) {
             console.error(e)
             response.status(500).json({message: texts.login_msg_erro + e + '.'});
         }
-    }
-
-    Controller.token   = async function (request, response) {
-        const { headers, params } = request
-        response.json({ headers: headers, params: params });
     }
 
     Controller.logout   = async function (request, response) {

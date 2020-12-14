@@ -1,7 +1,8 @@
 import { Component, Injector, OnDestroy} from '@angular/core';
-import { NbAuthResult, NbLoginComponent } from '@nebular/auth';
+import {NbAuthJWTToken, NbAuthResult, NbLoginComponent} from '@nebular/auth';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import jwtDecode, {JwtPayload} from 'jwt-decode';
 
 @Component({
   selector: 'ngx-login',
@@ -24,6 +25,14 @@ export class LoginComponent extends NbLoginComponent implements OnDestroy {
     this.login();
     localStorage.clear();
     localStorage.setItem('auth_type', 'email');
+    this.service.getToken()
+      .subscribe((token: NbAuthJWTToken) => {
+        if (token.isValid()) {
+          const payload = jwtDecode<JwtPayload>(token.getValue());
+          localStorage.setItem('user', JSON.stringify(payload));
+          this.user = payload;
+        }
+      });
   }
 
   ngOnDestroy(): void {

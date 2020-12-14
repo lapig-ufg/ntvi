@@ -135,12 +135,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if ( auth_type === 'oauth' ) {
       const token = localStorage.getItem('token');
       const payload = jwtDecode<JwtPayload>(token.toString());
+      localStorage.setItem('user', JSON.stringify(payload));
       this.user     = payload;
     } else {
       this.authService.getToken()
         .subscribe((token: NbAuthJWTToken) => {
           if (token.isValid()) {
             const payload = jwtDecode<JwtPayload>(token.getValue());
+            localStorage.setItem('user', JSON.stringify(payload));
             this.user = payload;
           }
         }, function (error) {
