@@ -2,10 +2,10 @@ import { NbMenuItem } from '@nebular/theme';
 
 const grantMenu = function (roles) {
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  if (currentUser === undefined || currentUser === null) {
-    currentUser['role'] = 'DEFAULT';
-  }
-  return !roles.includes(currentUser.role);
+
+  const roleDefault = 'DEFAULT';
+
+  return !roles.includes((currentUser === undefined || currentUser === null) ? roleDefault : currentUser.role);
 };
 
 export const MENU_ITEMS: NbMenuItem[] = [
@@ -25,13 +25,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Organizations',
     icon: 'map',
     link: '/pages/organization/index',
-    //hidden: grantMenu(['ROOT', 'USER']),
+    hidden: grantMenu(['ROOT', 'USER']),
   },
   {
     title: 'Use Class',
     icon: 'map',
     link: '/pages/use-class/index',
-    //hidden: grantMenu(['ROOT', 'USER']),
+    hidden: grantMenu(['ROOT']),
   },
   // {
   //   title: 'IoT Dashboard',
