@@ -30,6 +30,7 @@ export class OAuth2CallbackComponent implements OnDestroy {
   ) {
     localStorage.clear();
     localStorage.setItem('auth_type', 'oauth');
+    localStorage.setItem('user', null);
     this.authService.authenticate('google')
       .pipe(takeUntil(this.destroy$))
       .subscribe((authResult: NbAuthResult) => {

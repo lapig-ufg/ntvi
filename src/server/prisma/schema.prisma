@@ -51,15 +51,18 @@ model Point {
   info               String?
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
+  campaignId         Int?
+  campaign           Campaign?         @relation(fields: [campaignId], references: [id])
 }
 
-model Point {
+model Image {
   id                 Int                @id @default(autoincrement())
-  latitude           String
-  longitude          String
-  info               String?
+  date               DateTime?
+  url                String?
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
+  satelliteId        Int?
+  satellite          Satellite?         @relation(fields: [satelliteId], references: [id])
 }
 
 model Campaign {
@@ -68,7 +71,7 @@ model Campaign {
   description        String
   organizationId     Int?
   numInspectors      Int
-  typeUser           TypePeriod         @default(YEARLY)
+  typePeriod         TypePeriod         @default(YEARLY)
   initialDate        DateTime
   finalDate          DateTime
   publish            Boolean            @default(false)
@@ -77,12 +80,13 @@ model Campaign {
   classes            UseClass[]
   compositions       Composition[]
   points             Point[]
+  images             Image[]
 }
 
 model UsersOnCampaigns {
   user               User     @relation(fields: [userId], references: [id])
   userId             Int
-  campaign           Campaign @relation(fields: [categoryId], references: [id])
+  campaign           Campaign @relation(fields: [campaignId], references: [id])
   campaignId         Int
   typeUserInCampaign TypeUserInCampaign @default(INSPETOR)
   createdAt          DateTime @default(now())
