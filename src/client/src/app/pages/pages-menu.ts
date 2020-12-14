@@ -31,7 +31,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Use Class',
     icon: 'map',
     link: '/pages/use-class/index',
-    hidden: grantMenu(['ROOT']),
+    hidden: grantMenu(['ROOT', 'USER']),
   },
   // {
   //   title: 'IoT Dashboard',
