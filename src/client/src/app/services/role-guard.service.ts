@@ -1,9 +1,9 @@
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {NbToastrService, NbComponentStatus} from '@nebular/theme';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { NbToastrService, NbComponentStatus } from '@nebular/theme';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class RoleGuardService implements  CanActivate {
+export class RoleGuardService implements CanActivate {
 
   private allowedRoles: string[];
 
@@ -20,6 +20,8 @@ export class RoleGuardService implements  CanActivate {
     if (!allowed) {
       this.showToast('warning', 'top-right');
     }
+
+    console.log(currentUser)
     return allowed;
   }
 
