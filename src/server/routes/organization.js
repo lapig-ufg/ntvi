@@ -1,6 +1,6 @@
 module.exports = function (app) {
     const control = app.controllers.organization;
-    const JWT     = app.middleware.jwt;
+    const JWT = app.middleware.jwt;
 
     app.get('/service/organizations', JWT.verifyJWT, control.getAllOrganizations);
     app.get('/service/organizations/:id', JWT.verifyJWT, control.getOrganization);
