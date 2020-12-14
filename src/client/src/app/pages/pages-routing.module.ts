@@ -21,7 +21,7 @@ const routes: Routes = [{
     {
       path: 'use-class',
       canActivate: [AuthGuard, RoleGuardService],
-      data: { roles: ['ROOT', 'USER'] },
+      data: { roles: ['ROOT'] },
       loadChildren: () => import('./use-class/use-class.module')
         .then(m => m.UseClassModule),
     },

@@ -23,7 +23,6 @@ export class RoleGuardService implements CanActivate {
       this.showToast('warning', 'top-right');
     }
 
-    console.log(currentUser)
     return allowed;
   }
 
