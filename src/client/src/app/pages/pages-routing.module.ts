@@ -13,7 +13,7 @@ const routes: Routes = [{
   children: [
     {
       path: 'campaign',
-      data: { roles: ['ROOT', 'ADMIN', 'USER'] },
+      data: { roles: ['ROOT', 'ADMIN', 'USER', 'DEFAULT'] },
       canActivate: [AuthGuard, RoleGuardService],
       loadChildren: () => import('./campaign/campaign.module')
         .then(m => m.CampaignModule),

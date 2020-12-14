@@ -15,8 +15,10 @@ export class RoleGuardService implements  CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     this.allowedRoles = route.data['roles'];
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    const allowed = this.allowedRoles.includes(currentUser.role);
+    let currentUser = JSON.parse(localStorage.getItem('user'));
+    const roleDefault = 'DEFAULT'
+    
+    const allowed = this.allowedRoles.includes((currentUser === undefined || currentUser === null) ? roleDefault : currentUser.role);
     if (!allowed) {
       this.showToast('warning', 'top-right');
     }
