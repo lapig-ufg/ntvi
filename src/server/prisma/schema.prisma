@@ -46,7 +46,8 @@ model User {
 
 enum TypeUser {
   USER
-  SUPERADMIN
+  ADMIN
+  ROOT
 }
 
 enum TypeUserInCampaign {

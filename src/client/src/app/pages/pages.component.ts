@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import {AfterViewInit, Component} from '@angular/core';
+import {NbMenuItem, NbMenuService} from '@nebular/theme';
 import { MENU_ITEMS } from './pages-menu';
 
 @Component({
@@ -12,7 +12,12 @@ import { MENU_ITEMS } from './pages-menu';
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent {
+export class PagesComponent implements  AfterViewInit {
+  constructor(private menuService: NbMenuService) {
+  }
 
   menu = MENU_ITEMS;
+
+  ngAfterViewInit(): void {
+  }
 }

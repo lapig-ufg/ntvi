@@ -14,7 +14,7 @@ export class StorageInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { url } = request;
     if (url.includes('/api/auth/login') || url.includes('/api/auth/register')) {
-      this.storage.set('auth_type', 'email').subscribe(() => {});
+      localStorage.setItem('auth_type', 'email');
     }
     return next.handle(request);
   }
