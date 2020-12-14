@@ -22,7 +22,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Organizations',
     icon: 'map',
     link: '/pages/organization/index',
-    hidden: grantMenu(['ROOT']),
+    hidden: grantMenu(['ROOT', 'USER']),
   },
   {
     title: 'Use Class',
