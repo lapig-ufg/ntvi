@@ -2,6 +2,9 @@ import { NbMenuItem } from '@nebular/theme';
 
 const grantMenu = function (roles) {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  if (currentUser === undefined || currentUser === null) {
+    currentUser['role'] = 'DEFAULT';
+  }
   return !roles.includes(currentUser.role);
 };
 
@@ -9,7 +12,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Campaign',
     icon: 'map',
-    // hidden: grantMenu(['ROOT', 'ADMIN', 'USER']),
+    hidden: grantMenu(['ROOT', 'ADMIN', 'USER', 'DEFAULT']),
     home: true,
     children: [
       {
