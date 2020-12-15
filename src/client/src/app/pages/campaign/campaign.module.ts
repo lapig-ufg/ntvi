@@ -1,22 +1,44 @@
 import { NgModule } from '@angular/core';
-import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule } from '@nebular/theme';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
-
-import { ThemeModule } from '../../@theme/theme.module';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule, FormsModule as ngFormsModule} from '@angular/forms';
 import { CampaignRoutingModule, routedComponents } from './campaign-routing.module';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+import {
+  NbActionsModule,
+  NbButtonModule,
+  NbCardModule,
+  NbAlertModule,
+  NbCheckboxModule, NbDatepickerModule, NbIconModule,
+  NbInputModule, NbRadioModule, NbSelectModule,
+  NbUserModule, NbListModule,
+} from '@nebular/theme';
+
 
 @NgModule({
-  imports: [
-    NbCardModule,
-    NbTreeGridModule,
-    NbIconModule,
-    NbInputModule,
-    ThemeModule,
-    CampaignRoutingModule,
-    Ng2SmartTableModule,
-  ],
   declarations: [
     ...routedComponents,
+  ],
+  imports: [
+    CommonModule,
+    CampaignRoutingModule,
+    ReactiveFormsModule,
+    Ng2SmartTableModule,
+    FormsModule,
+    NbAlertModule,
+    NbInputModule,
+    NbCardModule,
+    NbButtonModule,
+    NbActionsModule,
+    NbUserModule,
+    NbCheckboxModule,
+    NbRadioModule,
+    NbDatepickerModule,
+    NbSelectModule,
+    NbIconModule,
+    ngFormsModule,
+    NbListModule,
+    NbEvaIconsModule,
   ],
 })
 export class CampaignModule { }

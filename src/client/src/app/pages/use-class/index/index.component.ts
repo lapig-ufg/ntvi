@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { UseClassService } from '../use-class.service';
-import { UseClass } from '../use-class';
+import { UseClassService } from '../service/use-class.service';
+import { UseClass } from '../model/use-class';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 

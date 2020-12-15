@@ -55,9 +55,9 @@ CREATE TABLE "Composition" (
 -- CreateTable
 CREATE TABLE "Point" (
 "id" SERIAL,
-    "latitude" TEXT NOT NULL,
-    "longitude" TEXT NOT NULL,
-    "info" TEXT,
+    "latitude" TEXT,
+    "longitude" TEXT,
+    "info" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "campaignId" INTEGER,
@@ -83,7 +83,6 @@ CREATE TABLE "Campaign" (
 "id" SERIAL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "organizationId" INTEGER,
     "numInspectors" INTEGER NOT NULL,
     "typePeriod" "TypePeriod" NOT NULL DEFAULT E'YEARLY',
     "initialDate" TIMESTAMP(3) NOT NULL,
@@ -91,6 +90,7 @@ CREATE TABLE "Campaign" (
     "publish" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "organizationId" INTEGER,
 
     PRIMARY KEY ("id")
 );
@@ -113,7 +113,6 @@ CREATE TABLE "User" (
     "city" TEXT,
     "state" TEXT,
     "country" TEXT,
-    "organizationId" INTEGER,
     "geeKey" TEXT,
     "password" TEXT,
     "typeUser" "TypeUser" NOT NULL DEFAULT E'USER',
@@ -122,6 +121,7 @@ CREATE TABLE "User" (
     "terms" BOOLEAN NOT NULL DEFAULT false,
     "picture" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT false,
+    "organizationId" INTEGER,
 
     PRIMARY KEY ("id")
 );
@@ -155,6 +155,9 @@ ALTER TABLE "Image" ADD FOREIGN KEY("satelliteId")REFERENCES "Satellite"("id") O
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD FOREIGN KEY("campaignId")REFERENCES "Campaign"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Campaign" ADD FOREIGN KEY("organizationId")REFERENCES "Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UsersOnCampaigns" ADD FOREIGN KEY("userId")REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

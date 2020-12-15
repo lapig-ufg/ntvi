@@ -46,9 +46,9 @@ model Composition {
 
 model Point {
   id                 Int                @id @default(autoincrement())
-  latitude           String
-  longitude          String
-  info               String?
+  latitude           String?
+  longitude          String?
+  info               String
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
   campaignId         Int?
@@ -69,7 +69,6 @@ model Campaign {
   id                 Int                @id @default(autoincrement())
   name               String
   description        String
-  organizationId     Int?
   numInspectors      Int
   typePeriod         TypePeriod         @default(YEARLY)
   initialDate        DateTime
@@ -81,6 +80,8 @@ model Campaign {
   compositions       Composition[]
   points             Point[]
   images             Image[]
+  organizationId     Int?
+  organization       Organization?      @relation(fields: [organizationId], references: [id])
 }
 
 model UsersOnCampaigns {
@@ -100,7 +101,6 @@ model User {
   city               String?
   state              String?
   country            String?
-  organizationId     Int?
   geeKey             String?
   password           String?
   typeUser           TypeUser           @default(USER)
@@ -109,6 +109,7 @@ model User {
   terms              Boolean            @default(false)
   picture            String?
   active             Boolean            @default(false)
+  organizationId     Int?
   organization       Organization?      @relation(fields: [organizationId], references: [id])
 }
 

@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { OrganizationService } from '../organization.service';
-import { Organization } from '../organization';
+import { OrganizationService } from '../service/organization.service';
+import { Organization } from '../model/organization';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 

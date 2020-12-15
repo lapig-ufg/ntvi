@@ -19,10 +19,9 @@ export class RoleGuardService implements CanActivate {
     const roleDefault = 'DEFAULT';
     const allowed = this.allowedRoles.includes(
       (currentUser === undefined || currentUser === null) ? roleDefault : currentUser.role);
-    if (!allowed) {
+    if (allowed === false) {
       this.showToast('warning', 'top-right');
     }
-
     return allowed;
   }
 
