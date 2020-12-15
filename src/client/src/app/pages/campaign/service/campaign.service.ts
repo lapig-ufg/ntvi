@@ -4,12 +4,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Organization } from './organization';
+import { Campaign } from '../models/campaign';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OrganizationService {
+export class CampaignService {
 
   private apiURL = '/service';
 
@@ -21,15 +21,15 @@ export class OrganizationService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAll(): Observable<Organization[]> {
-    return this.httpClient.get<Organization[]>(this.apiURL + '/organizations/')
+  getAll(): Observable<Campaign[]> {
+    return this.httpClient.get<Campaign[]>(this.apiURL + '/organizations/')
       .pipe(
         catchError(this.errorHandler),
       );
   }
 
-  create(useClass): Observable<Organization> {
-    return this.httpClient.post<Organization>(
+  create(useClass): Observable<Campaign> {
+    return this.httpClient.post<Campaign>(
       this.apiURL + '/organizations/',
       JSON.stringify(useClass),
       this.httpOptions,
@@ -39,15 +39,15 @@ export class OrganizationService {
       );
   }
 
-  find(id): Observable<Organization> {
-    return this.httpClient.get<Organization>(this.apiURL + '/organizations/' + id)
+  find(id): Observable<Campaign> {
+    return this.httpClient.get<Campaign>(this.apiURL + '/organizations/' + id)
       .pipe(
         catchError(this.errorHandler),
       );
   }
 
-  update(id, organization): Observable<Organization> {
-    return this.httpClient.put<Organization>(
+  update(id, organization): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
       this.apiURL + '/organizations/' + id,
       JSON.stringify(organization),
       this.httpOptions,
@@ -58,7 +58,7 @@ export class OrganizationService {
   }
 
   delete(id) {
-    return this.httpClient.delete<Organization>(this.apiURL + '/organizations/' + id, this.httpOptions)
+    return this.httpClient.delete<Campaign>(this.apiURL + '/organizations/' + id, this.httpOptions)
       .pipe(
         catchError(this.errorHandler),
       );

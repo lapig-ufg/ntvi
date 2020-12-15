@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UseClassService } from '../use-class.service';
-import { UseClass} from '../use-class';
+import { UseClassService } from '../service/use-class.service';
+import { UseClass} from '../model/use-class';
 import {ActivatedRoute, Router} from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 

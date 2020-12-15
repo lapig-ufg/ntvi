@@ -24,7 +24,7 @@ import {
   NbDialogModule,
   NbMenuModule,
   NbSidebarModule,
-  NbToastrModule,
+  NbToastrModule, NbToastrService,
   NbWindowModule,
 } from '@nebular/theme';
 import {NbTokenLocalStorage, NbTokenStorage} from '@nebular/auth';
@@ -63,6 +63,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     },
     AuthGuard,
     RoleGuardService,
+    NbToastrService,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,31 @@
+
+<nb-card id="index-use-class">
+  <nb-card-header>Satellites</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="search-inline">
+          <input #search class="search" nbInput fullWidth type="text"  class="mr-2 mb-2" placeholder="Search..." (keydown)="onSearch(search.value)">
+          <button (click)="refresh()" class="mb-2 mr-2" nbButton status="primary" size="large">
+            <nb-icon icon="refresh-outline"></nb-icon>
+          </button>
+          <button (click)="goTo('/pages/satellite/create')" class="mb-2" nbButton status="success" size="large">
+            <nb-icon icon="plus-outline" ></nb-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ng2-smart-table
+          [settings]="settings"
+          [source]="source"
+          (edit)="onEdit($event)"
+          (delete)="onDeleteConfirm($event)"
+        >
+        </ng2-smart-table>
+      </div>
+    </div>
+    </nb-card-body>
+</nb-card>
+

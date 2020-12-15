@@ -1,22 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { IndexComponent } from './index/index.component';
+import { ViewComponent } from './view/view.component';
+import { CreateComponent } from './create/create.component';
+import { EditComponent } from './edit/edit.component';
 
-import { CampaignComponent } from './campaign.component';
-import { RegisterComponent } from './register/register.component';
-import {AuthGuard} from '../../services/auth-guard.service';
-
-const routes: Routes = [{
-  path: '',
-  component: CampaignComponent,
-  children: [
-    {
-      path: 'register',
-      data: { roles: ['ROOT', 'ADMIN', 'USER'] },
-      canActivate: [AuthGuard],
-      component: RegisterComponent,
-    },
-  ],
-}];
+const routes: Routes = [
+  { path: '/', redirectTo: 'post/index', pathMatch: 'full'},
+  { path: 'index', component: IndexComponent },
+  { path: ':campaignId/view', component: ViewComponent },
+  { path: 'create', component: CreateComponent },
+  { path: ':campaignId/edit', component: EditComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
@@ -25,6 +20,8 @@ const routes: Routes = [{
 export class CampaignRoutingModule { }
 
 export const routedComponents = [
-  CampaignComponent,
-  RegisterComponent,
+  IndexComponent,
+  ViewComponent,
+  CreateComponent,
+  EditComponent,
 ];
