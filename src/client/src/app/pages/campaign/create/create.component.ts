@@ -262,7 +262,6 @@ export class CreateComponent implements OnInit {
 
     this.campaignService.create(this.infoForm.value).subscribe(res => {
       this.campaign = res;
-      console.log(this.campaign)
     });
   }
   onConfigFormSubmit() {
@@ -271,26 +270,21 @@ export class CreateComponent implements OnInit {
     this.campaign.initialDate = this.configForm.get('initialDate').value;
     this.campaign.finalDate = this.configForm.get('finalDate').value;
 
-    for (let ob of this.useClassesSelected) {
-      delete ob.id;
-    }
+    // for (let ob of this.useClassesSelected) {
+    //   delete ob.id;
+    // }
 
-    for (let ob of this.compositions) {
-      delete ob.id;
-      delete ob.satellite.id;
-    }
+    // for (let ob of this.compositions) {
+    //   delete ob.id;
+    //   delete ob.satellite.id;
+    // }
 
 
     this.campaign.compositions = this.compositions;
     this.campaign.classes = this.useClassesSelected;
 
-
-
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
-
-      console.log(res)
     });
-
 
 
   }
