@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { requiredFileType } from '../../../validators/upload-file-validators';
@@ -17,9 +17,9 @@ import { Point } from '../models/point';
 import { User } from '../models/user';
 import { UsersOnCampaigns } from '../models/usersOnCampaigns';
 import { Image } from '../models/image';
+import { Location } from '../models/location';
+import { LocalDataSource } from 'ng2-smart-table';
 import { Campaign } from '../models/campaign';
-import { observable } from 'rxjs';
-
 
 @Component({
   selector: 'ngx-create',
@@ -41,18 +41,82 @@ export class CreateComponent implements OnInit {
   users = [] as User[];
   images = [] as Image[];
   campaign: Campaign;
-
-  permissions = [
-    { id: 'ADMIN', name: 'ADMIN' },
-    { id: 'INSPETOR', name: 'INSPETOR' },
-    { id: 'SUPERVISOR', name: 'SUPERVISOR' },
-  ];
   usersOnCampaign = [] as UsersOnCampaigns[];
-  colorsComposition = [
-    { id: 'NIR', name: 'NIR' },
-    { id: 'SWIR', name: 'SWIR' },
-    { id: 'RED', name: 'RED' },
+  loadingPoints = false as boolean;
+  permissions = [
+    {id: 'ADMIN',  name: 'ADMIN'},
+    {id: 'INSPETOR', name: 'INSPETOR'},
+    {id: 'SUPERVISOR',  name: 'SUPERVISOR'},
   ];
+  colorsComposition = [
+    {id: 'NIR',  name: 'NIR'},
+    {id: 'SWIR', name: 'SWIR'},
+    {id: 'RED',  name: 'RED'},
+  ];
+  tablePoints = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: false,
+      columns: {
+        latitude: {
+          title: 'Latitude',
+        },
+        longitude: {
+          title: 'Longitude',
+        },
+        info: {
+          title: 'Location',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableUseClass = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: {
+        position: 'right',
+        edit: false,
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        name: {
+          title: 'Name',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableCompositions = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: {
+        position: 'right',
+        edit: false,
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        satellite: {
+          name: {
+            title: 'Name',
+          },
+        },
+        colors: {
+          title: 'Colors',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
   constructor(
     public campaignService: CampaignService,
     public satelliteService: SatelliteService,
@@ -84,8 +148,8 @@ export class CreateComponent implements OnInit {
     this.infoForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      organizationId: ['', Validators.required],
-      numInspectors: ['', Validators.required],
+      organizationId:  ['', Validators.required],
+      numInspectors:  ['', Validators.required],
     });
 
     this.configForm = this.fb.group({
@@ -111,7 +175,7 @@ export class CreateComponent implements OnInit {
       url: [],
     });
   }
-  addClass() {
+  async addClass() {
     const useClassId = this.configForm.get('useClass').value;
     if (!useClassId) {
       this.showToast('danger', 'You need to choose a use class', 'top-right');
@@ -122,8 +186,10 @@ export class CreateComponent implements OnInit {
     this.configForm.patchValue({
       useClass: '',
     });
+    this.tableUseClass.source.reset();
+    await this.tableUseClass.source.load(this.useClassesSelected);
   }
-  addComposition() {
+  async addComposition() {
     const satelliteId = this.configForm.get('satellite').value;
     const colors: [] = this.configForm.get('_colors').value;
     if (!satelliteId) {
@@ -137,7 +203,7 @@ export class CreateComponent implements OnInit {
     const satellite = this.satellites.find(sat => sat.id === parseInt(satelliteId, 0));
     const composition = {
       colors: colors.toString(),
-      // satelliteId: satelliteId,
+      satelliteId: satelliteId,
       satellite: satellite,
     };
     this.compositions.push(composition);
@@ -145,8 +211,10 @@ export class CreateComponent implements OnInit {
       satellite: '',
       _colors: [],
     });
+    this.tableCompositions.source.reset();
+    await this.tableCompositions.source.load(this.compositions);
   }
-  addUserOnCampaign() {
+  async addUserOnCampaign() {
     const userId = this.usersForm.get('user').value;
     const permission = this.usersForm.get('permission').value;
     if (!userId) {
@@ -172,7 +240,7 @@ export class CreateComponent implements OnInit {
   addImage() {
     const imgSatellite = this.imagesForm.get('imgSatellite').value;
     const dataImg = this.imagesForm.get('dataImg').value;
-    const url = this.imagesForm.get('url').value;
+    const url  = this.imagesForm.get('url').value;
 
     if (!imgSatellite) {
       this.showToast('danger', 'You need to choose a satellite.', 'top-right');
@@ -202,26 +270,32 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  removeComposition(index) {
-    this.compositions = this.compositions.filter(function (item, i) {
+  async removeComposition(event) {
+    const index = event.data.index;
+    this.compositions = this.compositions.filter(function(item, i) {
       return i !== index;
     });
+    this.tableCompositions.source.reset();
+    await this.tableCompositions.source.load(this.compositions);
   }
 
-  removeClass(index) {
-    this.useClasses = this.useClasses.filter(function (item, i) {
-      return i !== index;
+  async removeClass(event) {
+    const index = parseInt(event.data.id, 0);
+    this.useClassesSelected = this.useClassesSelected.filter(function(item, i) {
+      return item.id !== index;
     });
+    this.tableUseClass.source.reset();
+    await this.tableUseClass.source.load(this.useClassesSelected);
   }
 
   removeUserOnCampaign(index) {
-    this.usersOnCampaign = this.usersOnCampaign.filter(function (item, i) {
+    this.usersOnCampaign = this.usersOnCampaign.filter(function(item, i) {
       return i !== index;
     });
   }
 
   removeImage(index) {
-    this.images = this.images.filter(function (item, i) {
+    this.images = this.images.filter(function(item, i) {
       return i !== index;
     });
   }
@@ -258,8 +332,6 @@ export class CreateComponent implements OnInit {
 
   onInfoFormSubmit() {
     this.infoForm.markAsDirty();
-    // console.log(this.infoForm.value);
-
     this.campaignService.create(this.infoForm.value).subscribe(res => {
       this.campaign = res;
     });
@@ -315,15 +387,25 @@ export class CreateComponent implements OnInit {
       temp = this.points[ctr];
       this.points[ctr] = this.points[index];
       this.points[index] = temp;
+      this.tablePoints.source.reset();
     }
   }
   handlePointsFile(file) {
+    const self = this;
+    this.loadingPoints = true;
     const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      this.points = this.csvToArray(fileReader.result);
-      this.points = this.points.filter(function (item, i) {
+    fileReader.onload = async function (e) {
+      self.points = self.csvToArray(fileReader.result);
+      self.points = self.points.filter(function(item, i) {
         return (item.latitude !== null && item.longitude !== null && item.info !== null);
       });
+      for (const [index, point] of self.points.entries()) {
+        const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
+        const location = data.results[0].locations[0];
+        self.points[index].info = location.adminArea5 + ' - ' +  location.adminArea3 + ' - ' + location.adminArea1;
+      }
+      await self.tablePoints.source.load(self.points);
+      self.loadingPoints = false;
     };
     fileReader.readAsText(file);
   }
