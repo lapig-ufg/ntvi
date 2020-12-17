@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import {  Observable, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Campaign } from '../models/campaign';
-import { Location } from '../models/location';
 
 @Injectable({
   providedIn: 'root',
@@ -29,10 +28,8 @@ export class CampaignService {
       );
   }
 
-  getPointInfo(lat, lng): Observable<Location> {
-    const url = 'https://www.mapquestapi.com/geocoding/v1/reverse?key=bBVooFBpN6TcczLfcG0MVLyk7HDhgdxq&location='
-      + lat + '%2C' + lng + '&outFormat=json&thumbMaps=false';
-    return this.httpClient.get<Location>(url)
+  getPointInfo(): Observable<Campaign[]> {
+    return this.httpClient.get<Campaign[]>(this.apiURL + '/campaigns/')
       .pipe(
         catchError(this.errorHandler),
       );
@@ -40,7 +37,18 @@ export class CampaignService {
 
   create(campaign): Observable<Campaign> {
     return this.httpClient.post<Campaign>(
-      this.apiURL + '/campaigns/',
+      this.apiURL + '/campaign/create',
+      JSON.stringify(campaign),
+      this.httpOptions,
+    )
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
+  createConfigForm(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/createConfigForm/' + campaign.id,
       JSON.stringify(campaign),
       this.httpOptions,
     )

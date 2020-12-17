@@ -1,7 +1,7 @@
 import { UseClass } from '../../use-class/model/use-class';
 import { Organization } from '../../organization/model/organization';
 import { Composition } from './composition';
-import { Image } from './Image';
+import { Image } from './image';
 import { Point } from './point';
 
 export interface Campaign {

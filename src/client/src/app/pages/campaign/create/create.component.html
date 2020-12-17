@@ -72,7 +72,7 @@
                 </div>
               </div>
               <div class="actions">
-                <button type="submit" nbButton nbStepperNext>next</button>
+                <button type="submit" (click)="onInfoFormSubmit()" nbButton nbStepperNext>next</button>
               </div>
             </nb-card-body>
           </nb-card>
@@ -172,14 +172,6 @@
                             </button>
                           </nb-list-item>
                         </nb-list>
-                        <div class="col-sm-12 col-md-12 col-xl-12">
-                          <ng2-smart-table *ngIf="compositions.length > 0"
-                             [settings]="tableCompositions.settings"
-                             [source]="tableCompositions.source"
-                             (delete)="removeComposition($event)"
-                          >
-                          </ng2-smart-table>
-                        </div>
                       </div>
                     </nb-card-body>
                   </nb-card>
@@ -211,14 +203,16 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12 col-md-12 col-xl-12">
-                          <ng2-smart-table *ngIf="useClassesSelected.length > 0"
-                            [settings]="tableUseClass.settings"
-                            [source]="tableUseClass.source"
-                            (delete)="removeClass($event)"
-                          >
-                          </ng2-smart-table>
-                        </div>
+                        <nb-list>
+                          <nb-list-item class="actions-item-list" *ngFor="let useClass of useClassesSelected; let i = index">
+                            <span >
+                              {{ useClass.name }}
+                            </span>
+                            <button class="mt-1" nbButton status="danger" size="small" (click)="removeClass(i)">
+                              <nb-icon icon="close-outline" ></nb-icon>
+                            </button>
+                          </nb-list-item>
+                        </nb-list>
                       </div>
                     </nb-card-body>
                   </nb-card>
@@ -226,7 +220,7 @@
               </div>
               <div class="actions">
                 <button nbButton nbStepperPrevious>prev</button>
-                <button nbButton nbStepperNext>next</button>
+                <button nbButton (click) = "onConfigFormSubmit()" nbStepperNext>next</button>
               </div>
             </nb-card-body>
           </nb-card>
@@ -234,11 +228,7 @@
       </nb-step>
       <nb-step [stepControl]="pointsForm" label="Points">
         <form [formGroup]="pointsForm" (ngSubmit)="onPointsFormSubmit()" class="step-container">
-          <nb-card  [nbSpinner]="loadingPoints"
-                    nbSpinnerStatus="danger"
-                    nbSpinnerSize="large"
-                    nbSpinnerMessage="Loading points"
-          >
+          <nb-card>
             <nb-card-header>Points of Campaign</nb-card-header>
             <nb-card-body>
               <div class="row mt-3">
@@ -258,7 +248,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row" *ngIf="points.length > 0 && !loadingPoints">
+              <div class="row" *ngIf="points.length > 0">
                 <div class="col-sm-12">
                   <ngx-ol-map
                     [center]="[4.984761,34.337429]"
@@ -268,9 +258,9 @@
                   ></ngx-ol-map>
                 </div>
               </div>
-              <div class="row mt-3" *ngIf="points.length > 0 && !loadingPoints">
+              <div class="row mt-3" *ngIf="points.length > 0">
                 <div class="col-sm-12">
-                  <nb-card>
+                  <nb-card size="medium">
                     <nb-card-header class="header-flex">
                       <span>
                         <h6>  Points from file </h6>
@@ -285,11 +275,20 @@
                       </span>
                     </nb-card-header>
                     <nb-card-body>
-                      <ng2-smart-table
-                        [settings]="tablePoints.settings"
-                        [source]="tablePoints.source"
-                      >
-                      </ng2-smart-table>
+                      <nb-list >
+                        <nb-list-item class="actions-item-list" >
+                          <span > ID </span>
+                          <span > LATITUDE</span>
+                          <span > LONGITUDE </span>
+                          <span > INFO </span>
+                        </nb-list-item>
+                        <nb-list-item class="actions-item-list" *ngFor="let point of points; let i = index">
+                          <span > {{ point.id }} </span>
+                          <span > {{ point.latitude }} </span>
+                          <span > {{ point.longitude }} </span>
+                          <span > {{ point.info }} </span>
+                        </nb-list-item>
+                      </nb-list>
                     </nb-card-body>
                   </nb-card>
                 </div>
