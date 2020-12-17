@@ -12,7 +12,7 @@ import {View, Feature, Map} from 'ol';
 import {Coordinate} from 'ol/coordinate';
 import { ScaleLine, defaults as DefaultControls} from 'ol/control';
 import * as proj4x from 'proj4';
-const proj4 = (proj4x as any).default;
+const  proj4 = (proj4x as any).default;
 import VectorLayer from 'ol/layer/Vector';
 import Projection from 'ol/proj/Projection';
 import {register} from 'ol/proj/proj4';

@@ -7,7 +7,7 @@ module.exports = function (app) {
 
     const prisma = new PrismaClient({
         errorFormat: 'pretty',
-        log: ['query', 'info', 'warn'],
+        log: ['query'],
     })
 
     Controller.getAllOrganizations = async function (request, response) {

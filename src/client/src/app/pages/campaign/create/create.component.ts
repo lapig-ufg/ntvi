@@ -7,6 +7,7 @@ import { OrganizationService } from '../../organization/service/organization.ser
 import { SatelliteService } from '../../satellite/service/satellite.service';
 import { CampaignService } from '../service/campaign.service';
 import { UseClassService } from '../../use-class/service/use-class.service';
+import { UserService } from '../service/user.service';
 
 import { Satellite } from '../../satellite/model/satellite';
 import { Composition } from '../models/composition';
@@ -15,6 +16,8 @@ import { UseClass } from '../../use-class/model/use-class';
 import { Point } from '../models/point';
 import { User } from '../models/user';
 import { UsersOnCampaigns } from '../models/usersOnCampaigns';
+import { Image } from '../models/Image';
+
 
 @Component({
   selector: 'ngx-create',
@@ -34,12 +37,13 @@ export class CreateComponent implements OnInit {
   useClassesSelected = [] as UseClass[];
   points = [] as Point[];
   users = [] as User[];
+  images = [] as Image[];
   permissions = [
     {id: 'ADMIN',  name: 'ADMIN'},
     {id: 'INSPETOR', name: 'INSPETOR'},
     {id: 'SUPERVISOR',  name: 'SUPERVISOR'},
-  ]
-  userOnCampaign = [] as UsersOnCampaigns[];
+  ];
+  usersOnCampaign = [] as UsersOnCampaigns[];
   colorsComposition = [
     {id: 'NIR',  name: 'NIR'},
     {id: 'SWIR', name: 'SWIR'},
@@ -50,6 +54,7 @@ export class CreateComponent implements OnInit {
     public satelliteService: SatelliteService,
     public organizationService: OrganizationService,
     public useClassService: UseClassService,
+    public userService: UserService,
     private toastService: NbToastrService,
     private router: Router,
     private fb: FormBuilder,
@@ -66,6 +71,10 @@ export class CreateComponent implements OnInit {
 
     this.useClassService.getAll().subscribe((data: UseClass[]) => {
       this.useClasses = data;
+    });
+
+    this.userService.getAll().subscribe((data: User[]) => {
+      this.users = data;
     });
 
     this.infoForm = this.fb.group({
@@ -88,11 +97,14 @@ export class CreateComponent implements OnInit {
     });
 
     this.usersForm = this.fb.group({
-      thirdCtrl: ['', Validators.required],
+      user: [],
+      permission: [],
     });
 
     this.imagesForm = this.fb.group({
-      thirdCtrl: ['', Validators.required],
+      imgSatellite: [],
+      dataImg: [],
+      url: [],
     });
   }
   addClass() {
@@ -107,7 +119,6 @@ export class CreateComponent implements OnInit {
       useClass: '',
     });
   }
-
   addComposition() {
     const satelliteId = this.configForm.get('satellite').value;
     const colors: [] = this.configForm.get('_colors').value;
@@ -131,6 +142,62 @@ export class CreateComponent implements OnInit {
       _colors: [],
     });
   }
+  addUserOnCampaign() {
+    const userId = this.usersForm.get('user').value;
+    const permission = this.usersForm.get('permission').value;
+    if (!userId) {
+      this.showToast('danger', 'You need to choose a user', 'top-right');
+      return;
+    }
+    if (!permission) {
+      this.showToast('danger', 'You need to choose three a permission', 'top-right');
+      return;
+    }
+    const user = this.users.find(us => us.id === parseInt(userId, 0));
+    const userOnCampaign = {
+      userId: userId,
+      typeUserInCampaign: permission,
+      user: user,
+    };
+    this.usersOnCampaign.push(userOnCampaign);
+    this.usersForm.patchValue({
+      user: '',
+      permission: '',
+    });
+  }
+  addImage() {
+    const imgSatellite = this.imagesForm.get('imgSatellite').value;
+    const dataImg = this.imagesForm.get('dataImg').value;
+    const url  = this.imagesForm.get('url').value;
+
+    if (!imgSatellite) {
+      this.showToast('danger', 'You need to choose a satellite.', 'top-right');
+      return;
+    }
+    if (!dataImg) {
+      this.showToast('danger', 'You need to inform the date of the image.', 'top-right');
+      return;
+    }
+    if (!url) {
+      this.showToast('danger', 'You need to inform the url of the image.', 'top-right');
+      return;
+    }
+    const satellite = this.satellites.find(sat => sat.id === parseInt(imgSatellite, 0));
+
+    const image = {
+      date: dataImg,
+      url: url,
+      satelliteId: imgSatellite,
+      satellite: satellite,
+    };
+    this.images.push(image);
+    this.imagesForm.patchValue({
+      imgSatellite: '',
+      dataImg: '',
+      url: '',
+    });
+  }
+
   removeComposition(index) {
     this.compositions = this.compositions.filter(function(item, i) {
       return i !== index;
@@ -139,6 +206,18 @@ export class CreateComponent implements OnInit {
 
   removeClass(index) {
     this.useClasses = this.useClasses.filter(function(item, i) {
+      return i !== index;
+    });
+  }
+
+  removeUserOnCampaign(index) {
+    this.usersOnCampaign = this.usersOnCampaign.filter(function(item, i) {
+      return i !== index;
+    });
+  }
+
+  removeImage(index) {
+    this.images = this.images.filter(function(item, i) {
       return i !== index;
     });
   }
@@ -175,6 +254,7 @@ export class CreateComponent implements OnInit {
 
   onInfoFormSubmit() {
     this.infoForm.markAsDirty();
+    // console.log(this.infoForm.value);
   }
   onConfigFormSubmit() {
     this.configForm.markAsDirty();
