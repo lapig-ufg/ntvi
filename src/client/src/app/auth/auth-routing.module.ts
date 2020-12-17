@@ -59,14 +59,14 @@ const socialLinks = [
           login: {
             endpoint: 'login',
             redirect: {
-              success: '/pages/_campaign/',
+              success: '/pages/campaign/',
               failure: '/auth/login',
             },
           },
           register: {
             endpoint: 'register',
             redirect: {
-              success: '/pages/_campaign/',
+              success: '/pages/campaign/',
               failure: '/auth/register',
             },
           },

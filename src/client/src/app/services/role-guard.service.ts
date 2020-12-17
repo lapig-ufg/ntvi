@@ -20,12 +20,12 @@ export class RoleGuardService implements CanActivate {
     const allowed = this.allowedRoles.includes(
       (currentUser === undefined || currentUser === null) ? roleDefault : currentUser.role);
     if (allowed === false) {
-      this.showToast('warning', 'top-right');
+      this.showToast('warning', 'Permission denied!', 'top-right');
     }
     return allowed;
   }
 
-  showToast(status: NbComponentStatus, position) {
-    this.toastService.show(status, 'Permission denied!', { status, position });
+  showToast(status: NbComponentStatus, massage, position) {
+    this.toastService.show(status, massage, { status, position });
   }
 }
