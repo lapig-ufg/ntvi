@@ -15,4 +15,4 @@ export class UsersRoutingModule { }
 
 export const routedComponents = [
   ProfileComponent,
-];
+]
