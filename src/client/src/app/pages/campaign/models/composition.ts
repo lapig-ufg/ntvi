@@ -1,9 +1,9 @@
-import {Satellite} from '../../satellite/model/satellite';
+import { Satellite } from '../../satellite/model/satellite';
 
 export interface Composition {
   id?: number;
   colors: string;
-  satelliteId: number;
+  // satelliteId: number;
   campaignId?: number;
   satellite: Satellite;
 }

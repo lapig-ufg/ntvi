@@ -8,110 +8,118 @@ datasource db {
 }
 
 model Organization {
-  id                 Int                @id @default(autoincrement())
-  name               String
-  description        String
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  users              User[]
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  users       User[]
+  Campaign    Campaign[]
 }
 
 model UseClass {
-  id                 Int                @id @default(autoincrement())
-  name               String
-  description        String
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  campaigns          Campaign[]
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  campaigns   Campaign[]
 }
 
 model Satellite {
-  id                 Int                @id @default(autoincrement())
-  name               String
-  description        String
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Composition Composition[]
+  Image       Image[]
 }
 
 model Composition {
-  id                 Int                @id @default(autoincrement())
-  colors             String?
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  satelliteId        Int?
-  satellite          Satellite?         @relation(fields: [satelliteId], references: [id])
-  campaignId         Int?
-  campaign           Campaign?          @relation(fields: [campaignId], references: [id])
+  id          Int        @id @default(autoincrement())
+  colors      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  satelliteId Int?
+  satellite   Satellite? @relation(fields: [satelliteId], references: [id])
+  campaignId  Int?
+  campaign    Campaign?  @relation(fields: [campaignId], references: [id])
 }
 
 model Point {
-  id                 Int                @id @default(autoincrement())
-  latitude           String?
-  longitude          String?
-  info               String
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  campaignId         Int?
-  campaign           Campaign?         @relation(fields: [campaignId], references: [id])
+  id         Int       @id @default(autoincrement())
+  latitude   String?
+  longitude  String?
+  info       String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  campaignId Int?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
 }
 
 model Image {
-  id                 Int                @id @default(autoincrement())
-  date               DateTime?
-  url                String?
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  satelliteId        Int?
-  satellite          Satellite?         @relation(fields: [satelliteId], references: [id])
+  id          Int        @id @default(autoincrement())
+  date        DateTime?
+  url         String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  satelliteId Int?
+  satellite   Satellite? @relation(fields: [satelliteId], references: [id])
+  Campaign    Campaign?  @relation(fields: [campaignId], references: [id])
+  campaignId  Int?
 }
 
 model Campaign {
-  id                 Int                @id @default(autoincrement())
-  name               String
-  description        String
-  numInspectors      Int
-  typePeriod         TypePeriod         @default(YEARLY)
-  status             TypeStatus         @default(INCOMPLETE)
-  initialDate        DateTime
-  finalDate          DateTime
-  publish            Boolean            @default(false)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  classes            UseClass[]
-  compositions       Composition[]
-  points             Point[]
-  images             Image[]
-  organizationId     Int?
-  organization       Organization?      @relation(fields: [organizationId], references: [id])
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String
+  numInspectors    Int
+  typePeriod       TypePeriod         @default(YEARLY)
+  status           TypeStatus         @default(INCOMPLETE)
+  initialDate      DateTime?
+  finalDate        DateTime?
+  publish          Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  classes          UseClass[]
+  compositions     Composition[]
+  points           Point[]
+  images           Image[]
+  organizationId   Int?
+  organization     Organization?      @relation(fields: [organizationId], references: [id])
+  UsersOnCampaigns UsersOnCampaigns[]
 }
 
 model UsersOnCampaigns {
-  user               User     @relation(fields: [userId], references: [id])
+  user               User               @relation(fields: [userId], references: [id])
   userId             Int
-  campaign           Campaign @relation(fields: [campaignId], references: [id])
+  campaign           Campaign           @relation(fields: [campaignId], references: [id])
   campaignId         Int
   typeUserInCampaign TypeUserInCampaign @default(INSPETOR)
-  createdAt          DateTime @default(now())
+  createdAt          DateTime           @default(now())
+
   @@id([userId, campaignId])
 }
 
 model User {
-  id                 Int                @id @default(autoincrement())
-  name               String
-  email              String             @unique
-  city               String?
-  state              String?
-  country            String?
-  geeKey             String?
-  password           String?
-  typeUser           TypeUser           @default(USER)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  terms              Boolean            @default(false)
-  picture            String?
-  active             Boolean            @default(false)
-  organizationId     Int?
-  organization       Organization?      @relation(fields: [organizationId], references: [id])
+  id               Int                @id @default(autoincrement())
+  name             String
+  email            String             @unique
+  city             String?
+  state            String?
+  country          String?
+  geeKey           String?
+  password         String?
+  typeUser         TypeUser           @default(USER)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  terms            Boolean            @default(false)
+  picture          String?
+  active           Boolean            @default(false)
+  organizationId   Int?
+  organization     Organization?      @relation(fields: [organizationId], references: [id])
+  UsersOnCampaigns UsersOnCampaigns[]
 }
 
 enum TypeUser {
@@ -136,4 +144,3 @@ enum TypeStatus {
   CACHING
   READY
 }
-

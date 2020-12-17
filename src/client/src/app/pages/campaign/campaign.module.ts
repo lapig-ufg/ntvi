@@ -6,13 +6,13 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { MapModule } from '../map/map.module';
 import {
-  NbActionsModule,
-  NbButtonModule,
-  NbCardModule,
-  NbAlertModule,
-  NbCheckboxModule, NbDatepickerModule, NbIconModule,
-  NbInputModule, NbRadioModule, NbSelectModule,
-  NbUserModule, NbListModule, NbStepperModule, NbBadgeModule, NbSpinnerModule,
+    NbActionsModule,
+    NbButtonModule,
+    NbCardModule,
+    NbAlertModule,
+    NbCheckboxModule, NbDatepickerModule, NbIconModule,
+    NbInputModule, NbRadioModule, NbSelectModule,
+    NbUserModule, NbListModule, NbStepperModule, NbBadgeModule,
 } from '@nebular/theme';
 
 
@@ -45,7 +45,6 @@ import {
         NbEvaIconsModule,
         MapModule,
         NbBadgeModule,
-        NbSpinnerModule,
     ],
 })
 export class CampaignModule { }
