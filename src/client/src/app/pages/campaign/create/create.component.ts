@@ -17,6 +17,8 @@ import { Point } from '../models/point';
 import { User } from '../models/user';
 import { UsersOnCampaigns } from '../models/usersOnCampaigns';
 import { Image } from '../models/Image';
+import { Location } from '../models/location';
+import { LocalDataSource } from 'ng2-smart-table';
 
 
 @Component({
@@ -38,17 +40,82 @@ export class CreateComponent implements OnInit {
   points = [] as Point[];
   users = [] as User[];
   images = [] as Image[];
+  usersOnCampaign = [] as UsersOnCampaigns[];
+  loadingPoints = false as boolean;
   permissions = [
     {id: 'ADMIN',  name: 'ADMIN'},
     {id: 'INSPETOR', name: 'INSPETOR'},
     {id: 'SUPERVISOR',  name: 'SUPERVISOR'},
   ];
-  usersOnCampaign = [] as UsersOnCampaigns[];
   colorsComposition = [
     {id: 'NIR',  name: 'NIR'},
     {id: 'SWIR', name: 'SWIR'},
     {id: 'RED',  name: 'RED'},
   ];
+  tablePoints = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: false,
+      columns: {
+        latitude: {
+          title: 'Latitude',
+        },
+        longitude: {
+          title: 'Longitude',
+        },
+        info: {
+          title: 'Location',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableUseClass = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: {
+        position: 'right',
+        edit: false,
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        name: {
+          title: 'Name',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableCompositions = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: {
+        position: 'right',
+        edit: false,
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        satellite: {
+          name: {
+            title: 'Name',
+          },
+        },
+        colors: {
+          title: 'Colors',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
   constructor(
     public campaignService: CampaignService,
     public satelliteService: SatelliteService,
@@ -107,7 +174,7 @@ export class CreateComponent implements OnInit {
       url: [],
     });
   }
-  addClass() {
+  async addClass() {
     const useClassId = this.configForm.get('useClass').value;
     if (!useClassId) {
       this.showToast('danger', 'You need to choose a use class', 'top-right');
@@ -118,8 +185,10 @@ export class CreateComponent implements OnInit {
     this.configForm.patchValue({
       useClass: '',
     });
+    this.tableUseClass.source.reset();
+    await this.tableUseClass.source.load(this.useClassesSelected);
   }
-  addComposition() {
+  async addComposition() {
     const satelliteId = this.configForm.get('satellite').value;
     const colors: [] = this.configForm.get('_colors').value;
     if (!satelliteId) {
@@ -141,8 +210,10 @@ export class CreateComponent implements OnInit {
       satellite: '',
       _colors: [],
     });
+    this.tableCompositions.source.reset();
+    await this.tableCompositions.source.load(this.compositions);
   }
-  addUserOnCampaign() {
+  async addUserOnCampaign() {
     const userId = this.usersForm.get('user').value;
     const permission = this.usersForm.get('permission').value;
     if (!userId) {
@@ -198,16 +269,22 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  removeComposition(index) {
+  async removeComposition(event) {
+    const index = event.data.index;
     this.compositions = this.compositions.filter(function(item, i) {
       return i !== index;
     });
+    this.tableCompositions.source.reset();
+    await this.tableCompositions.source.load(this.compositions);
   }
 
-  removeClass(index) {
-    this.useClasses = this.useClasses.filter(function(item, i) {
-      return i !== index;
+  async removeClass(event) {
+    const index = parseInt(event.data.id, 0);
+    this.useClassesSelected = this.useClassesSelected.filter(function(item, i) {
+      return item.id !== index;
     });
+    this.tableUseClass.source.reset();
+    await this.tableUseClass.source.load(this.useClassesSelected);
   }
 
   removeUserOnCampaign(index) {
@@ -286,15 +363,25 @@ export class CreateComponent implements OnInit {
       temp = this.points[ctr];
       this.points[ctr] = this.points[index];
       this.points[index] = temp;
+      this.tablePoints.source.reset();
     }
   }
   handlePointsFile(file) {
+    const self = this;
+    this.loadingPoints = true;
     const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      this.points = this.csvToArray(fileReader.result);
-      this.points = this.points.filter(function(item, i) {
+    fileReader.onload = async function (e) {
+      self.points = self.csvToArray(fileReader.result);
+      self.points = self.points.filter(function(item, i) {
         return (item.latitude !== null && item.longitude !== null && item.info !== null);
       });
+      for (const [index, point] of self.points.entries()) {
+        const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
+        const location = data.results[0].locations[0];
+        self.points[index].info = location.adminArea5 + ' - ' +  location.adminArea3 + ' - ' + location.adminArea1;
+      }
+      await self.tablePoints.source.load(self.points);
+      self.loadingPoints = false;
     };
     fileReader.readAsText(file);
   }
