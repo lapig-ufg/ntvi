@@ -5,6 +5,7 @@ import {  Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Campaign } from '../models/campaign';
+import { Location } from '../models/location';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +29,10 @@ export class CampaignService {
       );
   }
 
-  getPointInfo(): Observable<Campaign[]> {
-    return this.httpClient.get<Campaign[]>(this.apiURL + '/campaigns/')
+  getPointInfo(lat, lng): Observable<Location> {
+    const url = 'https://www.mapquestapi.com/geocoding/v1/reverse?key=bBVooFBpN6TcczLfcG0MVLyk7HDhgdxq&location='
+      + lat + '%2C' + lng + '&outFormat=json&thumbMaps=false';
+    return this.httpClient.get<Location>(url)
       .pipe(
         catchError(this.errorHandler),
       );
