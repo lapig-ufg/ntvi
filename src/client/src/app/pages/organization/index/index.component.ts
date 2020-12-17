@@ -11,7 +11,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 })
 export class IndexComponent implements OnInit {
   @ViewChild('search') search: ElementRef;
-  classes: Organization[] = [];
+  organizations: Organization[] = [];
   settings = {
     mode: 'external',
     hideSubHeader: true,
@@ -50,8 +50,8 @@ export class IndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.organizationService.getAll().subscribe((data: Organization[]) => {
-      this.classes = data;
-      this.source.load(this.classes);
+      this.organizations = data;
+      this.source.load(this.organizations);
     });
   }
 
@@ -61,8 +61,8 @@ export class IndexComponent implements OnInit {
 
   deleteClass(id) {
     this.organizationService.delete(id).subscribe(res => {
-      this.classes = this.classes.filter(item => item.id !== id);
-      this.source.load(this.classes);
+      this.organizations = this.organizations.filter(item => item.id !== id);
+      this.source.load(this.organizations);
     });
   }
 

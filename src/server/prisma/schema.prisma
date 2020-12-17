@@ -71,6 +71,7 @@ model Campaign {
   description        String
   numInspectors      Int
   typePeriod         TypePeriod         @default(YEARLY)
+  status             TypeStatus         @default(INCOMPLETE)
   initialDate        DateTime
   finalDate          DateTime
   publish            Boolean            @default(false)
@@ -129,3 +130,10 @@ enum TypeUserInCampaign {
   SUPERVISOR
   ADMIN
 }
+
+enum TypeStatus {
+  INCOMPLETE
+  CACHING
+  READY
+}
+
