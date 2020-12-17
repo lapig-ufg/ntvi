@@ -2,305 +2,305 @@
   <nb-card-header>Create New Campaign</nb-card-header>
   <nb-card-body>
     <nb-stepper #stepper  orientation="vertical">
-<!--      <nb-step [stepControl]="infoForm" label="Information">-->
-<!--        <form [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit()" class="step-container">-->
-<!--          <nb-card >-->
-<!--            <nb-card-header>Information of Campaign</nb-card-header>-->
-<!--            <nb-card-body>-->
-<!--              <div class="form-group">-->
-<!--                <label for="name" class="label">Name</label>-->
-<!--                <input-->
-<!--                  id="name"-->
-<!--                  formControlName="name"-->
-<!--                  placeholder="Name of Campaign"-->
-<!--                  type="text"-->
-<!--                  nbInput-->
-<!--                  fullWidth-->
-<!--                >-->
-<!--                <div *ngIf="fInfo.name.touched && fInfo.name.invalid" class="mt-2">-->
-<!--                  <nb-alert status="danger" *ngIf="fInfo.name.errors.required"> Name is required. </nb-alert>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="form-group">-->
-<!--                <label for="description" class="label">Description</label>-->
-<!--                <textarea-->
-<!--                  id="description"-->
-<!--                  formControlName="description"-->
-<!--                  placeholder="Description of Campaign"-->
-<!--                  rows="10"-->
-<!--                  fieldSize="large"-->
-<!--                  nbInput-->
-<!--                  fullWidth-->
-<!--                ></textarea>-->
-<!--                <div *ngIf="fInfo.description.touched && fInfo.description.invalid" class="mt-2">-->
-<!--                  <nb-alert status="danger" *ngIf="fInfo.description.errors.required"> Description is required. </nb-alert>-->
-<!--                </div>-->
-<!--                <div class="row">-->
-<!--                  <div class="col-sm-12 col-md-6 col-xl-6">-->
-<!--                    <div class="">-->
-<!--                      <label for="name" class="label">Organization</label>-->
-<!--                      <nb-select-->
-<!--                        id="organizationId"-->
-<!--                        formControlName="organizationId"-->
-<!--                        placeholder="Select a organization"-->
-<!--                        fullWidth-->
-<!--                        filled-->
-<!--                      >-->
-<!--                        <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>-->
-<!--                      </nb-select>-->
-<!--                      <div *ngIf="fInfo.organizationId.touched && fInfo.organizationId.invalid" class="mt-2">-->
-<!--                        <nb-alert status="danger" *ngIf="fInfo.organizationId.errors.required"> Organization is required. </nb-alert>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <div class="col-sm-12 col-md-6 col-xl-16">-->
-<!--                    <div class="form-group">-->
-<!--                      <label for="numInspectors" class="label">Inspectors</label>-->
-<!--                      <input-->
-<!--                        id="numInspectors"-->
-<!--                        formControlName="numInspectors"-->
-<!--                        placeholder="Number of Inspectors"-->
-<!--                        type="number"-->
-<!--                        nbInput-->
-<!--                        fullWidth-->
-<!--                      >-->
-<!--                      <div *ngIf="fInfo.numInspectors.touched && fInfo.numInspectors.invalid" class="mt-2">-->
-<!--                        <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required"> Number of inspectors is required. </nb-alert>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="actions">-->
-<!--                <button nbButton nbStepperNext>next</button>-->
-<!--              </div>-->
-<!--            </nb-card-body>-->
-<!--          </nb-card>-->
-<!--        </form>-->
-<!--      </nb-step>-->
-<!--      <nb-step [stepControl]="configForm" label="Configuration">-->
-<!--        <form [formGroup]="configForm" (ngSubmit)="onConfigFormSubmit()" class="step-container">-->
-<!--          <nb-card >-->
-<!--            <nb-card-header>Configuration of Campaign</nb-card-header>-->
-<!--            <nb-card-body>-->
-<!--              <div class="row">-->
-<!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="initialDate" class="label">Initial Date</label>-->
-<!--                    <input-->
-<!--                      id="initialDate"-->
-<!--                      formControlName="initialDate"-->
-<!--                      placeholder="Initial Date"-->
-<!--                      [nbDatepicker]="dpInitialDate"-->
-<!--                      nbInput-->
-<!--                      fullWidth-->
-<!--                    >-->
-<!--                    <nb-datepicker #dpInitialDate></nb-datepicker>-->
-<!--                    <div *ngIf="fConfig.initialDate.touched && fConfig.initialDate.invalid" class="mt-2">-->
-<!--                      <nb-alert status="danger" *ngIf="fConfig.initialDate.errors.required"> Initial Date is required. </nb-alert>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="col-sm-12 col-md-6 col-xl-16">-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="finalDate" class="label">Final Date</label>-->
-<!--                    <input-->
-<!--                      id="finalDate"-->
-<!--                      formControlName="finalDate"-->
-<!--                      placeholder="Final Date"-->
-<!--                      [nbDatepicker]="dpFinalDate"-->
-<!--                      nbInput-->
-<!--                      fullWidth-->
-<!--                    >-->
-<!--                    <nb-datepicker #dpFinalDate></nb-datepicker>-->
-<!--                    <div *ngIf="fConfig.finalDate.touched && fConfig.finalDate.invalid" class="mt-2">-->
-<!--                      <nb-alert status="danger" *ngIf="fConfig.finalDate.errors.required"> Final Date is required. </nb-alert>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="row">-->
-<!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
-<!--                  <nb-card >-->
-<!--                    <nb-card-header>Color Composition</nb-card-header>-->
-<!--                    <nb-card-body>-->
-<!--                      <div class="row">-->
-<!--                        <div class="col-sm-12 col-md-5 col-xl-5">-->
-<!--                          <div class="form-group">-->
-<!--                            <label for="satellite" class="label">Satellite</label>-->
-<!--                            <nb-select-->
-<!--                              id="satellite"-->
-<!--                              formControlName="satellite"-->
-<!--                              placeholder="Select a satellite"-->
-<!--                              fullWidth-->
-<!--                              filled-->
-<!--                            >-->
-<!--                              <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">{{satellite.name}}</nb-option>-->
-<!--                            </nb-select>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-sm-12 col-md-5 col-xl-5">-->
-<!--                          <div class="form-group">-->
-<!--                            <label for="_colors" class="label">Colors</label>-->
-<!--                            <nb-select-->
-<!--                              id="_colors"-->
-<!--                              formControlName="_colors"-->
-<!--                              placeholder="Select colors"-->
-<!--                              fullWidth-->
-<!--                              filled-->
-<!--                              multiple-->
-<!--                            >-->
-<!--                                <nb-option *ngFor="let colorComp of colorsComposition" value="{{colorComp.id}}">{{colorComp.name}}</nb-option>-->
-<!--                            </nb-select>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-sm-12 col-md-2 col-xl-2">-->
-<!--                          <div class="mb-1"></div>-->
-<!--                          <button (click)="addComposition()" class="mt-4" nbButton status="success" size="small">-->
-<!--                            <nb-icon icon="plus-outline" ></nb-icon>-->
-<!--                          </button>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div class="row">-->
-<!--                        <nb-list>-->
-<!--                          <nb-list-item class="actions-item-list" *ngFor="let composition of compositions; let i = index">-->
-<!--                            <span >-->
-<!--                              {{ composition.satellite.name }} - {{composition.colors}}-->
-<!--                            </span>-->
-<!--                            <button class="mt-1" nbButton status="danger" size="small" (click)="removeComposition(i)">-->
-<!--                              <nb-icon icon="close-outline" ></nb-icon>-->
-<!--                            </button>-->
-<!--                          </nb-list-item>-->
-<!--                        </nb-list>-->
-<!--                      </div>-->
-<!--                    </nb-card-body>-->
-<!--                  </nb-card>-->
-<!--                </div>-->
-<!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
-<!--                  <nb-card >-->
-<!--                    <nb-card-header>Use classes</nb-card-header>-->
-<!--                    <nb-card-body>-->
-<!--                      <div class="row">-->
-<!--                        <div class="col-sm-12 col-md-10 col-xl-10">-->
-<!--                          <div class="form-group">-->
-<!--                            <label for="useClass" class="label">Class</label>-->
-<!--                            <nb-select-->
-<!--                              id="useClass"-->
-<!--                              formControlName="useClass"-->
-<!--                              placeholder="Select a Class"-->
-<!--                              fullWidth-->
-<!--                              filled-->
-<!--                            >-->
-<!--                              <nb-option *ngFor="let useClass of useClasses" value="{{useClass.id}}">{{useClass.name}}</nb-option>-->
-<!--                            </nb-select>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-sm-12 col-md-2 col-xl-2">-->
-<!--                          <div class="mb-1"></div>-->
-<!--                          <button (click)="addClass()" class="mt-4" nbButton status="success" size="small">-->
-<!--                            <nb-icon icon="plus-outline" ></nb-icon>-->
-<!--                          </button>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div class="row">-->
-<!--                        <nb-list>-->
-<!--                          <nb-list-item class="actions-item-list" *ngFor="let useClass of useClassesSelected; let i = index">-->
-<!--                            <span >-->
-<!--                              {{ useClass.name }}-->
-<!--                            </span>-->
-<!--                            <button class="mt-1" nbButton status="danger" size="small" (click)="removeClass(i)">-->
-<!--                              <nb-icon icon="close-outline" ></nb-icon>-->
-<!--                            </button>-->
-<!--                          </nb-list-item>-->
-<!--                        </nb-list>-->
-<!--                      </div>-->
-<!--                    </nb-card-body>-->
-<!--                  </nb-card>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="actions">-->
-<!--                <button nbButton nbStepperPrevious>prev</button>-->
-<!--                <button nbButton nbStepperNext>next</button>-->
-<!--              </div>-->
-<!--            </nb-card-body>-->
-<!--          </nb-card>-->
-<!--        </form>-->
-<!--      </nb-step>-->
-<!--      <nb-step [stepControl]="pointsForm" label="Points">-->
-<!--        <form [formGroup]="pointsForm" (ngSubmit)="onPointsFormSubmit()" class="step-container">-->
-<!--          <nb-card>-->
-<!--            <nb-card-header>Points of Campaign</nb-card-header>-->
-<!--            <nb-card-body>-->
-<!--              <div class="row mt-3">-->
-<!--                <div class="col-sm-12">-->
-<!--                  <div class="form-group">-->
-<!--                    <label for="pointsFile" class="label">File of Points</label>-->
-<!--                    <input-->
-<!--                      id="pointsFile"-->
-<!--                      accept="text/csv"-->
-<!--                      formControlName="pointsFile"-->
-<!--                      placeholder="CSV with points of campaign"-->
-<!--                      type="file"-->
-<!--                      (change)="handlePointsFile($event.target.files[0])"-->
-<!--                      nbInput-->
-<!--                      fullWidth-->
-<!--                    >-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="row" *ngIf="points.length > 0">-->
-<!--                <div class="col-sm-12">-->
-<!--                  <ngx-ol-map-->
-<!--                    [center]="[4.984761,34.337429]"-->
-<!--                    [zoom]="4"-->
-<!--                    [points]="points"-->
-<!--                    (mapReady)="onMapReady($event)"-->
-<!--                  ></ngx-ol-map>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="row mt-3" *ngIf="points.length > 0">-->
-<!--                <div class="col-sm-12">-->
-<!--                  <nb-card size="medium">-->
-<!--                    <nb-card-header class="header-flex">-->
-<!--                      <span>-->
-<!--                        <h6>  Points from file </h6>-->
-<!--                      </span>-->
-<!--                      <span>-->
-<!--                       <button (click)="shufflePoints()"  nbButton status="warning" size="medium">-->
-<!--                         shuffle points-->
-<!--                       </button>-->
-<!--                      </span>-->
-<!--                      <span>-->
-<!--                         <h6> Total of points: {{points.length}} </h6>-->
-<!--                      </span>-->
-<!--                    </nb-card-header>-->
-<!--                    <nb-card-body>-->
-<!--                      <nb-list >-->
-<!--                        <nb-list-item class="actions-item-list" >-->
-<!--                          <span > ID </span>-->
-<!--                          <span > LATITUDE</span>-->
-<!--                          <span > LONGITUDE </span>-->
-<!--                          <span > INFO </span>-->
-<!--                        </nb-list-item>-->
-<!--                        <nb-list-item class="actions-item-list" *ngFor="let point of points; let i = index">-->
-<!--                          <span > {{ point.id }} </span>-->
-<!--                          <span > {{ point.latitude }} </span>-->
-<!--                          <span > {{ point.longitude }} </span>-->
-<!--                          <span > {{ point.info }} </span>-->
-<!--                        </nb-list-item>-->
-<!--                      </nb-list>-->
-<!--                    </nb-card-body>-->
-<!--                  </nb-card>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="actions">-->
-<!--                <button nbButton nbStepperPrevious>prev</button>-->
-<!--                <button nbButton nbStepperNext>next</button>-->
-<!--              </div>-->
-<!--            </nb-card-body>-->
-<!--          </nb-card>-->
-<!--        </form>-->
-<!--      </nb-step>-->
+      <nb-step [stepControl]="infoForm" label="Information">
+        <form [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit()" class="step-container">
+          <nb-card >
+            <nb-card-header>Information of Campaign</nb-card-header>
+            <nb-card-body>
+              <div class="form-group">
+                <label for="name" class="label">Name</label>
+                <input
+                  id="name"
+                  formControlName="name"
+                  placeholder="Name of Campaign"
+                  type="text"
+                  nbInput
+                  fullWidth
+                >
+                <div *ngIf="fInfo.name.touched && fInfo.name.invalid" class="mt-2">
+                  <nb-alert status="danger" *ngIf="fInfo.name.errors.required"> Name is required. </nb-alert>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description" class="label">Description</label>
+                <textarea
+                  id="description"
+                  formControlName="description"
+                  placeholder="Description of Campaign"
+                  rows="10"
+                  fieldSize="large"
+                  nbInput
+                  fullWidth
+                ></textarea>
+                <div *ngIf="fInfo.description.touched && fInfo.description.invalid" class="mt-2">
+                  <nb-alert status="danger" *ngIf="fInfo.description.errors.required"> Description is required. </nb-alert>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-6 col-xl-6">
+                    <div class="">
+                      <label for="name" class="label">Organization</label>
+                      <nb-select
+                        id="organizationId"
+                        formControlName="organizationId"
+                        placeholder="Select a organization"
+                        fullWidth
+                        filled
+                      >
+                        <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>
+                      </nb-select>
+                      <div *ngIf="fInfo.organizationId.touched && fInfo.organizationId.invalid" class="mt-2">
+                        <nb-alert status="danger" *ngIf="fInfo.organizationId.errors.required"> Organization is required. </nb-alert>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-xl-16">
+                    <div class="form-group">
+                      <label for="numInspectors" class="label">Inspectors</label>
+                      <input
+                        id="numInspectors"
+                        formControlName="numInspectors"
+                        placeholder="Number of Inspectors"
+                        type="number"
+                        nbInput
+                        fullWidth
+                      >
+                      <div *ngIf="fInfo.numInspectors.touched && fInfo.numInspectors.invalid" class="mt-2">
+                        <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required"> Number of inspectors is required. </nb-alert>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button type="submit" nbButton nbStepperNext>next</button>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </form>
+      </nb-step>
+      <nb-step [stepControl]="configForm" label="Configuration">
+        <form [formGroup]="configForm" (ngSubmit)="onConfigFormSubmit()" class="step-container">
+          <nb-card >
+            <nb-card-header>Configuration of Campaign</nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                  <div class="form-group">
+                    <label for="initialDate" class="label">Initial Date</label>
+                    <input
+                      id="initialDate"
+                      formControlName="initialDate"
+                      placeholder="Initial Date"
+                      [nbDatepicker]="dpInitialDate"
+                      nbInput
+                      fullWidth
+                    >
+                    <nb-datepicker #dpInitialDate></nb-datepicker>
+                    <div *ngIf="fConfig.initialDate.touched && fConfig.initialDate.invalid" class="mt-2">
+                      <nb-alert status="danger" *ngIf="fConfig.initialDate.errors.required"> Initial Date is required. </nb-alert>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-xl-16">
+                  <div class="form-group">
+                    <label for="finalDate" class="label">Final Date</label>
+                    <input
+                      id="finalDate"
+                      formControlName="finalDate"
+                      placeholder="Final Date"
+                      [nbDatepicker]="dpFinalDate"
+                      nbInput
+                      fullWidth
+                    >
+                    <nb-datepicker #dpFinalDate></nb-datepicker>
+                    <div *ngIf="fConfig.finalDate.touched && fConfig.finalDate.invalid" class="mt-2">
+                      <nb-alert status="danger" *ngIf="fConfig.finalDate.errors.required"> Final Date is required. </nb-alert>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                  <nb-card >
+                    <nb-card-header>Color Composition</nb-card-header>
+                    <nb-card-body>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-5 col-xl-5">
+                          <div class="form-group">
+                            <label for="satellite" class="label">Satellite</label>
+                            <nb-select
+                              id="satellite"
+                              formControlName="satellite"
+                              placeholder="Select a satellite"
+                              fullWidth
+                              filled
+                            >
+                              <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">{{satellite.name}}</nb-option>
+                            </nb-select>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-5 col-xl-5">
+                          <div class="form-group">
+                            <label for="_colors" class="label">Colors</label>
+                            <nb-select
+                              id="_colors"
+                              formControlName="_colors"
+                              placeholder="Select colors"
+                              fullWidth
+                              filled
+                              multiple
+                            >
+                                <nb-option *ngFor="let colorComp of colorsComposition" value="{{colorComp.id}}">{{colorComp.name}}</nb-option>
+                            </nb-select>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-2 col-xl-2">
+                          <div class="mb-1"></div>
+                          <button (click)="addComposition()" class="mt-4" nbButton status="success" size="small">
+                            <nb-icon icon="plus-outline" ></nb-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <nb-list>
+                          <nb-list-item class="actions-item-list" *ngFor="let composition of compositions; let i = index">
+                            <span >
+                              {{ composition.satellite.name }} - {{composition.colors}}
+                            </span>
+                            <button class="mt-1" nbButton status="danger" size="small" (click)="removeComposition(i)">
+                              <nb-icon icon="close-outline" ></nb-icon>
+                            </button>
+                          </nb-list-item>
+                        </nb-list>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                  <nb-card >
+                    <nb-card-header>Use classes</nb-card-header>
+                    <nb-card-body>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-10 col-xl-10">
+                          <div class="form-group">
+                            <label for="useClass" class="label">Class</label>
+                            <nb-select
+                              id="useClass"
+                              formControlName="useClass"
+                              placeholder="Select a Class"
+                              fullWidth
+                              filled
+                            >
+                              <nb-option *ngFor="let useClass of useClasses" value="{{useClass.id}}">{{useClass.name}}</nb-option>
+                            </nb-select>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-2 col-xl-2">
+                          <div class="mb-1"></div>
+                          <button (click)="addClass()" class="mt-4" nbButton status="success" size="small">
+                            <nb-icon icon="plus-outline" ></nb-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <nb-list>
+                          <nb-list-item class="actions-item-list" *ngFor="let useClass of useClassesSelected; let i = index">
+                            <span >
+                              {{ useClass.name }}
+                            </span>
+                            <button class="mt-1" nbButton status="danger" size="small" (click)="removeClass(i)">
+                              <nb-icon icon="close-outline" ></nb-icon>
+                            </button>
+                          </nb-list-item>
+                        </nb-list>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>
+              <div class="actions">
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </form>
+      </nb-step>
+      <nb-step [stepControl]="pointsForm" label="Points">
+        <form [formGroup]="pointsForm" (ngSubmit)="onPointsFormSubmit()" class="step-container">
+          <nb-card>
+            <nb-card-header>Points of Campaign</nb-card-header>
+            <nb-card-body>
+              <div class="row mt-3">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="pointsFile" class="label">File of Points</label>
+                    <input
+                      id="pointsFile"
+                      accept="text/csv"
+                      formControlName="pointsFile"
+                      placeholder="CSV with points of campaign"
+                      type="file"
+                      (change)="handlePointsFile($event.target.files[0])"
+                      nbInput
+                      fullWidth
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="points.length > 0">
+                <div class="col-sm-12">
+                  <ngx-ol-map
+                    [center]="[4.984761,34.337429]"
+                    [zoom]="4"
+                    [points]="points"
+                    (mapReady)="onMapReady($event)"
+                  ></ngx-ol-map>
+                </div>
+              </div>
+              <div class="row mt-3" *ngIf="points.length > 0">
+                <div class="col-sm-12">
+                  <nb-card size="medium">
+                    <nb-card-header class="header-flex">
+                      <span>
+                        <h6>  Points from file </h6>
+                      </span>
+                      <span>
+                       <button (click)="shufflePoints()"  nbButton status="warning" size="medium">
+                         shuffle points
+                       </button>
+                      </span>
+                      <span>
+                         <h6> Total of points: {{points.length}} </h6>
+                      </span>
+                    </nb-card-header>
+                    <nb-card-body>
+                      <nb-list >
+                        <nb-list-item class="actions-item-list" >
+                          <span > ID </span>
+                          <span > LATITUDE</span>
+                          <span > LONGITUDE </span>
+                          <span > INFO </span>
+                        </nb-list-item>
+                        <nb-list-item class="actions-item-list" *ngFor="let point of points; let i = index">
+                          <span > {{ point.id }} </span>
+                          <span > {{ point.latitude }} </span>
+                          <span > {{ point.longitude }} </span>
+                          <span > {{ point.info }} </span>
+                        </nb-list-item>
+                      </nb-list>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>
+              <div class="actions">
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </form>
+      </nb-step>
       <nb-step [stepControl]="usersForm" label="Users">
         <form [formGroup]="usersForm" (ngSubmit)="onUsersFormSubmit()" class="step-container">
           <div class="row">
@@ -311,10 +311,10 @@
                   <div class="row">
                     <div class="col-sm-12 col-md-5 col-xl-5">
                       <div class="form-group">
-                        <label for="users" class="label">Users</label>
+                        <label for="user" class="label">User</label>
                         <nb-select
-                          id="users"
-                          formControlName="users"
+                          id="user"
+                          formControlName="user"
                           placeholder="Select a user"
                           fullWidth
                           filled
@@ -339,18 +339,26 @@
                     </div>
                     <div class="col-sm-12 col-md-2 col-xl-2">
                       <div class="mb-1"></div>
-                      <button (click)="addClass()" class="mt-4" nbButton status="success" size="small">
+                      <button (click)="addUserOnCampaign()" class="mt-4" nbButton status="success" size="small">
                         <nb-icon icon="plus-outline"></nb-icon>
                       </button>
                     </div>
                   </div>
                   <div class="row">
                     <nb-list>
-                      <nb-list-item class="actions-item-list" *ngFor="let useClass of useClassesSelected; let i = index">
+                      <nb-list-item class="actions-item-list" *ngIf="usersOnCampaign.length > 0">
+                        <span>NAME</span>
+                        <span>PERMISSION</span>
+                        <span>ACTION</span>
+                      </nb-list-item>
+                      <nb-list-item class="actions-item-list" *ngFor="let userOnCampaign of usersOnCampaign; let i = index">
                         <span >
-                          {{ useClass.name }}
+                          {{ userOnCampaign.user.name }}
                         </span>
-                        <button class="mt-1" nbButton status="danger" size="small" (click)="removeClass(i)">
+                        <span >
+                          {{ userOnCampaign.typeUserInCampaign }}
+                        </span>
+                        <button class="mt-1" nbButton status="danger" size="small" (click)="removeUserOnCampaign(i)">
                           <nb-icon icon="close-outline" ></nb-icon>
                         </button>
                       </nb-list-item>
@@ -368,16 +376,91 @@
       </nb-step>
       <nb-step [stepControl]="imagesForm" label="Images">
         <form [formGroup]="imagesForm" (ngSubmit)="onImagesFormSubmit()" class="step-container">
-          <p class="lorem">
-            Things boom shackalack rhoncus yo. In fo shizzle my nizzle gangsta platea dictumst. Check it out pot.
-          </p>
-          <div class="input-group">
-            <input type="text" placeholder="Enter something" class="form-control" formControlName="thirdCtrl"
-                   [ngClass]="{'form-control-danger': imagesForm.invalid && (imagesForm.dirty || imagesForm.touched)}">
-          </div>
-          <div class="actions">
-            <button nbButton nbStepperPrevious>prev</button>
-            <button nbButton nbStepperNext>next</button>
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-xl-12">
+              <nb-card >
+                <nb-card-header>Custom Images of campaign</nb-card-header>
+                <nb-card-body>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-2 col-xl-2">
+                      <div class="form-group">
+                        <label for="imgSatellite" class="label">Satellite</label>
+                        <nb-select
+                          id="imgSatellite"
+                          formControlName="imgSatellite"
+                          placeholder="Select a satellite"
+                          fullWidth
+                          filled
+                        >
+                          <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">{{satellite.name}}</nb-option>
+                        </nb-select>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-xl-2">
+                      <div class="form-group">
+                        <label for="dataImg" class="label">Date</label>
+                        <input
+                          id="dataImg"
+                          formControlName="dataImg"
+                          placeholder="Date image"
+                          [nbDatepicker]="dataImg"
+                          nbInput
+                          fullWidth
+                        >
+                        <nb-datepicker #dataImg></nb-datepicker>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-6">
+                      <div class="form-group">
+                        <label for="url" class="label">URL</label>
+                        <input
+                          id="url"
+                          formControlName="url"
+                          placeholder="URL of image"
+                          type="text"
+                          nbInput
+                          fullWidth
+                        >
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-xl-2">
+                      <div class="mb-1"></div>
+                      <button (click)="addImage()" class="mt-4" nbButton status="success" size="small">
+                        <nb-icon icon="plus-outline"></nb-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <nb-list>
+                      <nb-list-item class="actions-item-list" *ngIf="images.length > 0" class="mt-2">
+                        <span>SATELLITE</span>
+                        <span>DATE</span>
+                        <span>URL</span>
+                        <span>ACTION</span>
+                      </nb-list-item>
+                      <nb-list-item class="actions-item-list" *ngFor="let img of images; let i = index">
+                        <span >
+                          {{ img.satellite.name }}
+                        </span>
+                        <span >
+                          {{ img.date }}
+                        </span>
+                        <span >
+                          {{ img.url }}
+                        </span>
+                        <button class="mt-1" nbButton status="danger" size="small" (click)="removeImage(i)">
+                          <nb-icon icon="close-outline" ></nb-icon>
+                        </button>
+                      </nb-list-item>
+                    </nb-list>
+                  </div>
+                  <div class="actions">
+                    <button nbButton nbStepperPrevious>prev</button>
+                    <button nbButton nbStepperNext>next</button>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+            </div>
           </div>
         </form>
       </nb-step>
