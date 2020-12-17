@@ -11,18 +11,22 @@
   .form-inline > * {
     margin: 0 1.5rem 1.5rem 0;
   }
+
   .actions {
     display: flex;
     justify-content: flex-end;
   }
+
   .header-flex {
     display: flex;
     justify-content: space-between;
   }
+
   .actions button  {
     cursor: pointer;
     margin: 0.5rem;
   }
+
   .actions-item-list {
     display: flex;
     justify-content: space-between;
