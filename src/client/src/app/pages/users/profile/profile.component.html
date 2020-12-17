@@ -1,0 +1,81 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <div class="col-10">
+        <h5>Account</h5>
+      </div>
+      <div class="col-2 button-save-profile ">
+        <button nbButton status="primary" size="large"> Save Changes</button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <form aria-labelledby="title">
+      <div class="container">
+        <div class="row">
+          <div class="col-4">
+              <img src="../../../../assets/images/user-avatar.png" width="150">
+          </div>
+
+        </div>
+        <div class="row form-control-group">
+          <div class="col">
+            <h6>Account information</h6>
+            <label class="label" for="input-name">Full name:</label>
+            <input nbInput id="input-name" name="fullName"
+              placeholder="Full name" autofocus fullWidth fieldSize="large">
+          </div>
+          <div class="col">
+            <h6>Change password</h6>
+             <label class="label" for="input-password">New Password:</label>
+             <input nbInput type="password" id="input-password" name="password" placeholder="Password" fullWidth
+               fieldSize="large">
+          </div>
+        </div>
+    
+        <div class="row form-control-group">
+          <div class="col">
+            <label class="label" for="input-email">Email address:</label>
+            <input nbInput id="input-email" name="email" pattern=".+@.+..+"
+              placeholder="email@gmail.com" fullWidth fieldSize="large">
+          </div>
+          <div class="col">
+            <label class="label" for="input-re-password">Confirm new password:</label>
+            <input nbInput type="password" id="input-re-password" name="rePass" placeholder="Confirm Password" fullWidth
+              fieldSize="large">
+          </div>
+        </div>
+  
+        <div class="row form-control-group">
+          <div class="col">
+            <label class="label" for="input-name">Organization</label>
+            <input nbInput id="input-name" name="fullName" placeholder="Organization name" autofocus fullWidth fieldSize="large">
+          </div>
+          <div class="col">
+            <label class="label" for="input-name">Google Earth Engine Key</label>
+            <input nbInput id="input-name" name="fullName" placeholder="Key" autofocus fullWidth fieldSize="large">
+          </div>
+        </div>
+        
+        <div class="form-control-group form-shipping-address">
+          <h6>Shipping address</h6>
+          <div class="row">
+            <div class="col-2">
+              <label class="label" for="input-name">City</label>
+              <input nbInput id="input-name" name="fullName" autofocus fullWidth fieldSize="large">
+            </div>
+            <div class="col-2">
+              <label class="label" for="input-name">State</label>
+              <input nbInput id="input-name" name="fullName" autofocus fullWidth fieldSize="large">
+            </div>
+            <div class="col-2">
+              <label class="label" for="input-name">Country</label>
+              <input nbInput id="input-name" name="fullName" autofocus fullWidth fieldSize="large">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </nb-card-body>
+</nb-card>
