@@ -106,12 +106,68 @@ export class CreateComponent implements OnInit {
       },
       columns: {
         satellite: {
-          name: {
-            title: 'Name',
+          title: 'Name',
+          valuePrepareFunction: (satellite) => {
+            return satellite.name;
           },
         },
         colors: {
           title: 'Colors',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableUsers = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: {
+        position: 'right',
+        edit: false,
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        user: {
+          title: 'Name',
+          valuePrepareFunction: (user) => {
+            return user.name;
+          },
+        },
+        typeUserInCampaign: {
+          title: 'Permission',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableImages = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: {
+        position: 'right',
+        edit: false,
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        satellite: {
+          title: 'Name',
+          valuePrepareFunction: (satellite) => {
+            return satellite.name;
+          },
+        },
+        date: {
+          title: 'Date',
+        },
+        url: {
+          title: 'URL',
         },
       },
     },
@@ -236,8 +292,10 @@ export class CreateComponent implements OnInit {
       user: '',
       permission: '',
     });
+    this.tableUsers.source.reset();
+    await this.tableUsers.source.load(this.usersOnCampaign);
   }
-  addImage() {
+  async addImage() {
     const imgSatellite = this.imagesForm.get('imgSatellite').value;
     const dataImg = this.imagesForm.get('dataImg').value;
     const url  = this.imagesForm.get('url').value;
@@ -268,10 +326,12 @@ export class CreateComponent implements OnInit {
       dataImg: '',
       url: '',
     });
+    this.tableImages.source.reset();
+    await this.tableImages.source.load(this.images);
   }
 
   async removeComposition(event) {
-    const index = event.data.index;
+    const index = event.index;
     this.compositions = this.compositions.filter(function(item, i) {
       return i !== index;
     });
@@ -288,16 +348,22 @@ export class CreateComponent implements OnInit {
     await this.tableUseClass.source.load(this.useClassesSelected);
   }
 
-  removeUserOnCampaign(index) {
+  async removeUserOnCampaign(event) {
+    const index = event.index;
     this.usersOnCampaign = this.usersOnCampaign.filter(function(item, i) {
       return i !== index;
     });
+    this.tableUsers.source.reset();
+    await this.tableUsers.source.load(this.usersOnCampaign);
   }
 
-  removeImage(index) {
+  async removeImage(event) {
+    const index = event.index;
     this.images = this.images.filter(function(item, i) {
       return i !== index;
     });
+    this.tableImages.source.reset();
+    await this.tableImages.source.load(this.images);
   }
 
   goTo(url) {
