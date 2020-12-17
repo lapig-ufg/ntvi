@@ -13,6 +13,4 @@ const routes: Routes = [
 })
 export class UsersRoutingModule { }
 
-export const routedComponents = [
-  ProfileComponent,
-]
+export const routedComponents = [ProfileComponent];
