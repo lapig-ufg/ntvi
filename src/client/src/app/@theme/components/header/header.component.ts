@@ -120,12 +120,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['auth/login']);
   }
 
+  profile () {
+    this.router.navigate(['pages/users/profile']);
+  }
+
   handleMenu(evt) {
     const self = this;
     this.menuService.onItemClick().subscribe(result => {
       const { item } = result;
       if (item.title === 'Log out') {
         self.logout();
+      } else {
+        self.profile();
       }
     });
   }
