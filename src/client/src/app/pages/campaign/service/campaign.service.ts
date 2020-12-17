@@ -22,16 +22,23 @@ export class CampaignService {
   constructor(private httpClient: HttpClient) { }
 
   getAll(): Observable<Campaign[]> {
-    return this.httpClient.get<Campaign[]>(this.apiURL + '/organizations/')
+    return this.httpClient.get<Campaign[]>(this.apiURL + '/campaigns/')
       .pipe(
         catchError(this.errorHandler),
       );
   }
 
-  create(useClass): Observable<Campaign> {
+  getPointInfo(): Observable<Campaign[]> {
+    return this.httpClient.get<Campaign[]>(this.apiURL + '/campaigns/')
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
+  create(campaign): Observable<Campaign> {
     return this.httpClient.post<Campaign>(
-      this.apiURL + '/organizations/',
-      JSON.stringify(useClass),
+      this.apiURL + '/campaigns/',
+      JSON.stringify(campaign),
       this.httpOptions,
     )
       .pipe(
@@ -40,7 +47,7 @@ export class CampaignService {
   }
 
   find(id): Observable<Campaign> {
-    return this.httpClient.get<Campaign>(this.apiURL + '/organizations/' + id)
+    return this.httpClient.get<Campaign>(this.apiURL + '/campaigns/' + id)
       .pipe(
         catchError(this.errorHandler),
       );
@@ -48,7 +55,7 @@ export class CampaignService {
 
   update(id, organization): Observable<Campaign> {
     return this.httpClient.put<Campaign>(
-      this.apiURL + '/organizations/' + id,
+      this.apiURL + '/campaigns/' + id,
       JSON.stringify(organization),
       this.httpOptions,
     )
@@ -58,7 +65,7 @@ export class CampaignService {
   }
 
   delete(id) {
-    return this.httpClient.delete<Campaign>(this.apiURL + '/organizations/' + id, this.httpOptions)
+    return this.httpClient.delete<Campaign>(this.apiURL + '/campaigns/' + id, this.httpOptions)
       .pipe(
         catchError(this.errorHandler),
       );
