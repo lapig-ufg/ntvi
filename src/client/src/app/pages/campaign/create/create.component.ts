@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { requiredFileType } from '../../../validators/upload-file-validators';
@@ -46,14 +46,14 @@ export class CreateComponent implements OnInit {
   customImages = false as boolean;
   previewCampaign: any;
   permissions = [
-    {id: 'ADMIN',  name: 'ADMIN'},
-    {id: 'INSPETOR', name: 'INSPETOR'},
-    {id: 'SUPERVISOR',  name: 'SUPERVISOR'},
+    { id: 'ADMIN', name: 'ADMIN' },
+    { id: 'INSPETOR', name: 'INSPETOR' },
+    { id: 'SUPERVISOR', name: 'SUPERVISOR' },
   ];
   colorsComposition = [
-    {id: 'NIR',  name: 'NIR'},
-    {id: 'SWIR', name: 'SWIR'},
-    {id: 'RED',  name: 'RED'},
+    { id: 'NIR', name: 'NIR' },
+    { id: 'SWIR', name: 'SWIR' },
+    { id: 'RED', name: 'RED' },
   ];
   tablePoints = {
     settings: {
@@ -206,8 +206,8 @@ export class CreateComponent implements OnInit {
     this.infoForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      organizationId:  ['', Validators.required],
-      numInspectors:  ['', Validators.required],
+      organizationId: ['', Validators.required],
+      numInspectors: ['', Validators.required],
     });
 
     this.configForm = this.fb.group({
@@ -300,7 +300,7 @@ export class CreateComponent implements OnInit {
   async addImage() {
     const imgSatellite = this.imagesForm.get('imgSatellite').value;
     const dataImg = this.imagesForm.get('dataImg').value;
-    const url  = this.imagesForm.get('url').value;
+    const url = this.imagesForm.get('url').value;
 
     if (!imgSatellite) {
       this.showToast('danger', 'You need to choose a satellite.', 'top-right');
@@ -334,7 +334,7 @@ export class CreateComponent implements OnInit {
 
   async removeComposition(event) {
     const index = event.index;
-    this.compositions = this.compositions.filter(function(item, i) {
+    this.compositions = this.compositions.filter(function (item, i) {
       return i !== index;
     });
     this.tableCompositions.source.reset();
@@ -343,7 +343,7 @@ export class CreateComponent implements OnInit {
 
   async removeClass(event) {
     const index = parseInt(event.data.id, 0);
-    this.useClassesSelected = this.useClassesSelected.filter(function(item, i) {
+    this.useClassesSelected = this.useClassesSelected.filter(function (item, i) {
       return item.id !== index;
     });
     this.tableUseClass.source.reset();
@@ -352,7 +352,7 @@ export class CreateComponent implements OnInit {
 
   async removeUserOnCampaign(event) {
     const index = event.index;
-    this.usersOnCampaign = this.usersOnCampaign.filter(function(item, i) {
+    this.usersOnCampaign = this.usersOnCampaign.filter(function (item, i) {
       return i !== index;
     });
     this.tableUsers.source.reset();
@@ -361,7 +361,7 @@ export class CreateComponent implements OnInit {
 
   async removeImage(event) {
     const index = event.index;
-    this.images = this.images.filter(function(item, i) {
+    this.images = this.images.filter(function (item, i) {
       return i !== index;
     });
     this.tableImages.source.reset();
@@ -404,6 +404,7 @@ export class CreateComponent implements OnInit {
       this.campaign = res;
     });
   }
+
   onConfigFormSubmit() {
     this.configForm.markAsDirty();
 
@@ -435,12 +436,30 @@ export class CreateComponent implements OnInit {
   }
   onPointsFormSubmit() {
     this.pointsForm.markAsDirty();
+
+    this.campaign.points = (this.points.length > 0 ? this.points : null);
+
+    this.campaignService.createPointsForm(this.campaign).subscribe(res => {
+    });
   }
+
   onUsersFormSubmit() {
     this.pointsForm.markAsDirty();
+
+    this.campaign.usersOnCampaign = this.usersOnCampaign
+
+    this.campaignService.createUsersOnCampaignForm(this.campaign).subscribe(res => {
+    });
+
   }
+
   onImagesFormSubmit() {
     this.imagesForm.markAsDirty();
+
+    this.campaign.images = (this.images.length > 0 ? this.images : null);
+
+    this.campaignService.createImagesForm(this.campaign).subscribe(res => {
+    });
   }
   showToast(status: NbComponentStatus, massage, position) {
     this.toastService.show(status, massage, { status, position });
@@ -469,13 +488,13 @@ export class CreateComponent implements OnInit {
     const fileReader = new FileReader();
     fileReader.onload = async function (e) {
       self.points = self.csvToArray(fileReader.result);
-      self.points = self.points.filter(function(item, i) {
+      self.points = self.points.filter(function (item, i) {
         return (item.latitude !== null && item.longitude !== null && item.info !== null);
       });
       for (const [index, point] of self.points.entries()) {
         const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
         const location = data.results[0].locations[0];
-        self.points[index].info = location.adminArea5 + ' - ' +  location.adminArea3 + ' - ' + location.adminArea1;
+        self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
       }
       await self.tablePoints.source.load(self.points);
       self.loadingPoints = false;
