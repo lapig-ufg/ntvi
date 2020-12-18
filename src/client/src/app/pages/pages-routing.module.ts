@@ -47,7 +47,7 @@ const routes: Routes = [{
     },
     {
       path: '',
-      redirectTo: 'campaign',
+      redirectTo: 'campaign/index',
       pathMatch: 'full',
     },
     {

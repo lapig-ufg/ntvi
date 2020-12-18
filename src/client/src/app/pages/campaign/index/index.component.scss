@@ -1,47 +1,27 @@
 @import '../../../../../node_modules/bootstrap/scss/mixins/breakpoints';
 @import '../../../../../node_modules/@nebular/theme/styles/global/breakpoints';
 @import '../../../@theme/styles/themes';
+@import '../../../@theme/styles/mixins';
 
-@include nb-install-component() {
-  overflow: auto;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: auto;
+  grid-gap: 1rem;
 
-  .item {
+  @include tablet(){
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile(){
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .nb-actions {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    > * {
-      flex: 1;
-    }
-
-    &:first-child {
-      border-top: none;
+    justify-content: space-around;
+    .actions {
+      border-left: unset !important;
     }
   }
-
-  .delta {
-    display: flex;
-    align-items: center;
-
-    &.down {
-      color: nb-theme(color-danger-default);
-    }
-
-    &.up {
-      color: nb-theme(color-success-default);
-    }
-  }
-
-  @include media-breakpoint-down(is) {
-    ngx-traffic-bar {
-      display: none;
-    }
-  }
-}
-
-
-
-.search-inline {
-  display: flex;
-  justify-content: space-between;
 }
