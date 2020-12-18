@@ -37,6 +37,16 @@ export class CampaignService {
       );
   }
 
+  getAllCampaigns(userId): Observable<Campaign[]> {
+    return this.httpClient.get<Campaign[]>(
+      this.apiURL + '/campaign/campaignsFromUser/' + userId,
+      this.httpOptions,
+    ).pipe(
+      catchError(this.errorHandler),
+    );
+  }
+
+
   create(campaign): Observable<Campaign> {
     return this.httpClient.post<Campaign>(
       this.apiURL + '/campaign/create',
