@@ -270,18 +270,23 @@ export class CreateComponent implements OnInit {
     this.campaign.initialDate = this.configForm.get('initialDate').value;
     this.campaign.finalDate = this.configForm.get('finalDate').value;
 
-    // for (let ob of this.useClassesSelected) {
-    //   delete ob.id;
-    // }
+    let auxUseClasses = []
 
-    // for (let ob of this.compositions) {
-    //   delete ob.id;
-    //   delete ob.satellite.id;
-    // }
+    for (let ob of this.useClassesSelected) {
+      auxUseClasses.push({ id: ob.id })
+    }
 
+    let auxCompositions = []
 
-    this.campaign.compositions = this.compositions;
-    this.campaign.classes = this.useClassesSelected;
+    for (let ob of this.compositions) {
+      auxCompositions.push({
+        satellite: ob.satellite.id,
+        colors: ob.colors
+      })
+    }
+
+    this.campaign.compositions = auxCompositions;
+    this.campaign.classes = auxUseClasses;
 
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
     });
