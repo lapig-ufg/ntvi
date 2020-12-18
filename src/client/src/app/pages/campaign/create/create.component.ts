@@ -446,7 +446,7 @@ export class CreateComponent implements OnInit {
   onUsersFormSubmit() {
     this.pointsForm.markAsDirty();
 
-    this.campaign.usersOnCampaign = this.usersOnCampaign
+    this.campaign.usersOnCampaign = this.usersOnCampaign;
 
     this.campaignService.createUsersOnCampaignForm(this.campaign).subscribe(res => {
     });
