@@ -28,9 +28,9 @@ module.exports = function (app) {
         try {
             const classes = await prisma.useClass.findMany();
             response.json(classes)
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({error: true, message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
 
@@ -47,12 +47,12 @@ module.exports = function (app) {
             response.json(_class)
         } catch (e) {
             console.error(e)
-            response.status(500).json({error: true, message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
 
     Controller.createClass = async function (request, response) {
-        const { name, description} = request.body
+        const { name, description } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -61,15 +61,15 @@ module.exports = function (app) {
                 data: { name: name, description: description },
             })
             response.status(200).json(_class);
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({error: true,message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
 
     Controller.updateClass = async function (request, response) {
-        const {id} = request.params
-        const {name, description} = request.body
+        const { id } = request.params
+        const { name, description } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -81,26 +81,26 @@ module.exports = function (app) {
             })
             response.status(200).json(_class);
 
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
         }
     }
 
-    Controller.deleteClass    = async function (request, response) {
+    Controller.deleteClass = async function (request, response) {
         const { id } = request.params
         let { lang } = request.headers;
         const texts = language.getLang(lang);
         try {
 
             const _class = await prisma.useClass.delete({
-                where: { id: parseInt(id)},
+                where: { id: parseInt(id) },
             })
 
             response.status(200).json(_class);
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
         }
     }
 
