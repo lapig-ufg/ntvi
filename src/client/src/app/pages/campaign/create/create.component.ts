@@ -44,6 +44,7 @@ export class CreateComponent implements OnInit {
   usersOnCampaign = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
   customImages = false as boolean;
+  previewCampaign: any;
   permissions = [
     {id: 'ADMIN',  name: 'ADMIN'},
     {id: 'INSPETOR', name: 'INSPETOR'},
