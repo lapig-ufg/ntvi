@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Location} from '../models/location';
+import { Location } from '../models/location';
 import { Campaign } from '../models/campaign';
 
 @Injectable({
@@ -51,6 +51,39 @@ export class CampaignService {
   createConfigForm(campaign): Observable<Campaign> {
     return this.httpClient.put<Campaign>(
       this.apiURL + '/campaign/createConfigForm/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    )
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
+  createPointsForm(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/createPointsForm/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    )
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
+  createUsersOnCampaignForm(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/createUsersCampaignForm/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    )
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
+  createImagesForm(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/createImagesForm/' + campaign.id,
       JSON.stringify(campaign),
       this.httpOptions,
     )

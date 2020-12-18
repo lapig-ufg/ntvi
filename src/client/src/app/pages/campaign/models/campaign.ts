@@ -3,6 +3,7 @@ import { Organization } from '../../organization/model/organization';
 import { Composition } from './composition';
 import { Image } from './image';
 import { Point } from './point';
+import { UsersOnCampaigns } from './usersOnCampaigns';
 
 export interface Campaign {
   id?: number;
@@ -19,4 +20,5 @@ export interface Campaign {
   compositions?: Composition[];
   points?: Point[];
   images?: Image[];
+  usersOnCampaign?: UsersOnCampaigns[];
 }
