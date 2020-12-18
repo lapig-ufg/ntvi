@@ -394,42 +394,70 @@ module.exports = function (app) {
         }
     }
 
-    Controller.updateOrganization = async function (request, response) {
+    Controller.getCampaignInfo = async function (request, response) {
         const { id } = request.params
-        const { name, description } = request.body
-        let { lang } = request.headers;
+        const { lang } = request.headers;
         const texts = language.getLang(lang);
 
         try {
-
-            const _organization = await prisma.organization.update({
-                where: { id: parseInt(id) },
-                data: { name: name, description: description },
+            const _campaign = await prisma.campaign.findUnique({
+                where: {
+                    id: parseInt(id),
+                },
+                include: {
+                    points: true,
+                    images: true,
+                    UsersOnCampaigns: true,
+                    classes: true,
+                    compositions: true,
+                    organization: true
+                }
             })
-            response.status(200).json(_organization);
-
+            response.json(_campaign)
         } catch (e) {
             console.error(e)
-            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
-    }
 
-    Controller.deleteOrganization = async function (request, response) {
-        const { id } = request.params
-        let { lang } = request.headers;
-        const texts = language.getLang(lang);
         try {
+            const campaigns = await prisma.campaign.findMany({
+                where: {
+                    UsersOnCampaigns: {
+                        some: {
+                            user: { id: parseInt(id) }
+                        }
+                    }
+                },
+                include: {
+                    points: true,
+                    images: true
+                }
 
-            const _organization = await prisma.organization.delete({
-                where: { id: parseInt(id) },
-            })
-
-            response.status(200).json(_organization);
+            });
+            response.json(campaigns)
         } catch (e) {
             console.error(e)
-            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
+
+
+    // Controller.deleteOrganization = async function (request, response) {
+    //     const { id } = request.params
+    //     let { lang } = request.headers;
+    //     const texts = language.getLang(lang);
+    //     try {
+
+    //         const _organization = await prisma.organization.delete({
+    //             where: { id: parseInt(id) },
+    //         })
+
+    //         response.status(200).json(_organization);
+    //     } catch (e) {
+    //         console.error(e)
+    //         response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+    //     }
+    // }
 
     return Controller;
 }
