@@ -37,6 +37,8 @@ export class MapComponent implements AfterViewInit {
   @Input() center: Coordinate;
   @Input() zoom: number;
   @Input() points = [] as Point[];
+  @Input() mapId = 'map' as string;
+  @Input() height = '345px' as string;
   view: View;
   projection: Projection;
   extent: Extent = [-304.038676, -74.719954, 314.008199, 85.717737];
@@ -101,7 +103,7 @@ export class MapComponent implements AfterViewInit {
         baseLayer,
         layerPoints ? layerPoints : null,
       ],
-      target: 'map',
+      target: this.mapId,
       view: this.view,
       controls: DefaultControls().extend([
         new FullScreen(),

@@ -44,7 +44,7 @@ export class CreateComponent implements OnInit {
   usersOnCampaign = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
   customImages = false as boolean;
-  previewCampaign: any;
+  reviewCampaign = {} as any;
   permissions = [
     {id: 'ADMIN',  name: 'ADMIN'},
     {id: 'INSPETOR', name: 'INSPETOR'},
@@ -102,6 +102,46 @@ export class CreateComponent implements OnInit {
         position: 'right',
         edit: false,
       },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        satellite: {
+          title: 'Name',
+          valuePrepareFunction: (satellite) => {
+            return satellite.name;
+          },
+        },
+        colors: {
+          title: 'Colors',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableUseClassReview = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: false,
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        name: {
+          title: 'Name',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableCompositionsReview = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
         confirmDelete: false,
@@ -430,23 +470,36 @@ export class CreateComponent implements OnInit {
 
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
     });
-
-
   }
   onPointsFormSubmit() {
     this.pointsForm.markAsDirty();
   }
-  onUsersFormSubmit() {
+  async onUsersFormSubmit() {
     this.pointsForm.markAsDirty();
+    this.loadInputs();
   }
-  onImagesFormSubmit() {
+  async onImagesFormSubmit() {
     this.imagesForm.markAsDirty();
+    this.loadInputs();
   }
   showToast(status: NbComponentStatus, massage, position) {
     this.toastService.show(status, massage, { status, position });
   }
   onMapReady(ev) {
     // console.log(ev)
+  }
+
+  async loadInputs() {
+    this.reviewCampaign.name           = this.infoForm.get('name').value;
+    this.reviewCampaign.description    = this.infoForm.get('description').value;
+    this.reviewCampaign.organizationId = this.infoForm.get('organizationId').value;
+    this.reviewCampaign.numInspectors  = this.infoForm.get('numInspectors').value;
+    this.reviewCampaign.initialDate    = this.configForm.get('initialDate').value;
+    this.reviewCampaign.finalDate      = this.configForm.get('finalDate').value;
+    this.tableUseClassReview.source.reset();
+    await this.tableUseClassReview.source.load(this.useClassesSelected);
+    this.tableCompositionsReview.source.reset();
+    await this.tableCompositionsReview.source.load(this.compositions);
   }
   shufflePoints() {
     let ctr = this.points.length, temp, index;

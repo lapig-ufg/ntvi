@@ -1,7 +1,7 @@
 <nb-card>
   <nb-card-header>Create New Campaign</nb-card-header>
   <nb-card-body>
-    <nb-stepper #stepper  orientation="vertical">
+    <nb-stepper #stepper  orientation="vertical" >
       <nb-step [stepControl]="infoForm" label="Information">
         <form id="infoForm" [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit()" class="step-container">
           <nb-card >
@@ -443,7 +443,7 @@
           </div>
         </form>
       </nb-step>
-      <nb-step [stepControl]="imagesForm" label="Confirmation">
+      <nb-step  label="Confirmation">
         <div class="step-container">
           <h3 class="m-2">Campaign data!</h3>
           <nb-card >
@@ -458,6 +458,7 @@
                   nbInput
                   disabled
                   fullWidth
+                  [(ngModel)]="reviewCampaign.name"
                 >
               </div>
               <div class="form-group">
@@ -470,6 +471,8 @@
                   nbInput
                   disabled
                   fullWidth
+                  [(ngModel)]="reviewCampaign.description"
+
                 ></textarea>
               </div>
               <div class="row">
@@ -482,6 +485,7 @@
                       fullWidth
                       disabled
                       filled
+                      [(ngModel)]="reviewCampaign.organizationId"
                     >
                       <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>
                     </nb-select>
@@ -495,7 +499,9 @@
                       placeholder="Number of Inspectors"
                       type="number"
                       nbInput
+                      disabled
                       fullWidth
+                      [(ngModel)]="reviewCampaign.numInspectors"
                     >
                     <div *ngIf="fInfo.numInspectors.touched && fInfo.numInspectors.invalid" class="mt-2">
                       <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required"> Number of inspectors is required. </nb-alert>
@@ -514,6 +520,7 @@
                       nbInput
                       disabled
                       fullWidth
+                      [(ngModel)]="reviewCampaign.initialDate"
                     >
                     <nb-datepicker #_dpInitialDate></nb-datepicker>
                   </div>
@@ -528,6 +535,7 @@
                       nbInput
                       disabled
                       fullWidth
+                      [(ngModel)]="reviewCampaign.finalDate"
                     >
                     <nb-datepicker #_dpFinalDate></nb-datepicker>
                   </div>
@@ -542,8 +550,8 @@
                         <div class="col-sm-12 col-md-12 col-xl-12">
                           <ng2-smart-table
                             *ngIf="compositions.length > 0"
-                            [settings]="tableCompositions.settings"
-                            [source]="tableCompositions.source"
+                            [settings]="tableCompositionsReview.settings"
+                            [source]="tableCompositionsReview.source"
                             (delete)="removeComposition($event)"
                           >
                           </ng2-smart-table>
@@ -560,8 +568,8 @@
                         <div class="col-sm-12 col-md-12 col-xl-12">
                           <ng2-smart-table
                             *ngIf="useClassesSelected.length > 0"
-                            [settings]="tableUseClass.settings"
-                            [source]="tableUseClass.source"
+                            [settings]="tableUseClassReview.settings"
+                            [source]="tableUseClassReview.source"
                             (delete)="removeClass($event)"
                           >
                           </ng2-smart-table>
@@ -573,27 +581,13 @@
               </div>
               <div class="row m-3" *ngIf="points.length > 0">
                 <div class="col-sm-12">
-                  <ngx-ol-map
-                    [center]="[4.984761,34.337429]"
-                    [zoom]="4"
-                    [points]="points"
-                  ></ngx-ol-map>
-                </div>
-              </div>
-              <div class="row m-3" *ngIf="points.length > 0">
-                <div class="col-sm-12">
                   <div class="header-flex">
-                      <span>
-                        <h6>  Points from file </h6>
-                      </span>
                     <span>
-                       <button (click)="shufflePoints()"  nbButton status="warning" size="medium">
-                         shuffle points
-                       </button>
-                      </span>
+                      <h6>  Points from file </h6>
+                    </span>
                     <span>
-                         <h6> Total of points: {{points.length}} </h6>
-                      </span>
+                      <h6> Total of points: {{points.length}} </h6>
+                    </span>
                   </div>
                   <ng2-smart-table
                     [settings]="tablePoints.settings"
@@ -604,6 +598,7 @@
               </div>
               <div class="row m-3">
                 <div class="col-sm-12 col-md-12 col-xl-12">
+                  <h6 class="m-3">  Users </h6>
                   <ng2-smart-table
                     *ngIf="usersOnCampaign.length > 0"
                     [settings]="tableUsers.settings"
@@ -614,6 +609,7 @@
                 </div>
               </div>
               <div *ngIf="customImages" class="row m-3">
+                <h6>  Custom images </h6>
                 <div class="col-sm-12 col-md-12 col-xl-12">
                   <ng2-smart-table
                     *ngIf="images.length > 0"

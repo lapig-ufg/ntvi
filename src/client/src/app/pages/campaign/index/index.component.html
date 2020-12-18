@@ -1,0 +1,42 @@
+<div class="cards">
+    <nb-card size="medium">
+      <nb-card-header>
+        <h6>Title</h6>
+        <p>Description</p>
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-ol-map
+          [center]="[4.984761,34.337429]"
+          [zoom]="4"
+          [mapId]="'map1'"
+          [points]="[{ latitude: '', longitude: ''}]"
+        ></ngx-ol-map>
+      </nb-card-body>
+      <nb-card-footer>
+        <nb-actions class="nb-actions" size="medium">
+          <nb-action
+            class="action"
+            disabled
+            icon="pin-outline"
+            badgeText="251"
+            badgeDot="true"
+            badgePosition="top right"
+            badgeStatus="warning" >
+          </nb-action>
+          <nb-action
+            disabled
+            class="action"
+            icon="person-outline"
+            badgeText="5"
+            badgeDot="true"
+            badgePosition="top right"
+            badgeStatus="info" >
+          </nb-action>
+          <nb-action
+            class="action"
+            icon="eye-outline">
+          </nb-action>
+        </nb-actions>
+      </nb-card-footer>
+    </nb-card>
+</div>

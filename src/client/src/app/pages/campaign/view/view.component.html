@@ -1,23 +1,169 @@
-
-<nb-card id="view-use-class">
-  <nb-card-header>{{ organization.name }} organization</nb-card-header>
+<nb-card >
+  <nb-card-header>Information of Campaign</nb-card-header>
   <nb-card-body>
-    <form >
-      <div class="form-group">
-        <label for="id" class="label">ID</label>
-        <input type="text" nbInput fullWidth id="id" disabled [value]="organization.id" >
+    <div class="form-group">
+      <label for="_name" class="label">Name</label>
+      <input
+        id="_name"
+        placeholder="Name of Campaign"
+        type="text"
+        nbInput
+        disabled
+        fullWidth
+        [(ngModel)]="reviewCampaign.name"
+      >
+    </div>
+    <div class="form-group">
+      <label for="_description" class="label">Description</label>
+      <textarea
+        id="_description"
+        placeholder="Description of Campaign"
+        rows="5"
+        fieldSize="large"
+        nbInput
+        disabled
+        fullWidth
+        [(ngModel)]="reviewCampaign.description"
+
+      ></textarea>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-6">
+        <div class="">
+          <label for="_organizationId" class="label">Organization</label>
+          <nb-select
+            id="_organizationId"
+            placeholder="Select a organization"
+            fullWidth
+            disabled
+            filled
+            [(ngModel)]="reviewCampaign.organizationId"
+          >
+            <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>
+          </nb-select>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="name" class="label">Name</label>
-        <input type="text" nbInput fullWidth id="name"  disabled [value]="organization.name" >
+      <div class="col-sm-12 col-md-6 col-xl-16">
+        <div class="form-group">
+          <label for="_numInspectors" class="label">Inspectors</label>
+          <input
+            id="_numInspectors"
+            placeholder="Number of Inspectors"
+            type="number"
+            nbInput
+            disabled
+            fullWidth
+            [(ngModel)]="reviewCampaign.numInspectors"
+          >
+        </div>
       </div>
-      <div class="form-group">
-        <label for="description" class="label">Description</label>
-        <textarea fieldSize="large" nbInput fullWidth id="description" disabled [value]="organization.description" ></textarea>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-6">
+        <div class="form-group">
+          <label for="_initialDate" class="label">Initial Date</label>
+          <input
+            id="_initialDate"
+            placeholder="Initial Date"
+            [nbDatepicker]="_dpInitialDate"
+            nbInput
+            disabled
+            fullWidth
+            [(ngModel)]="reviewCampaign.initialDate"
+          >
+          <nb-datepicker #_dpInitialDate></nb-datepicker>
+        </div>
       </div>
-      <div class="actions">
-        <button (click)="goTo('/pages/organization/index')" nbButton >Back</button>
+      <div class="col-sm-12 col-md-6 col-xl-16">
+        <div class="form-group">
+          <label for="_finalDate" class="label">Final Date</label>
+          <input
+            id="_finalDate"
+            placeholder="Final Date"
+            [nbDatepicker]="_dpFinalDate"
+            nbInput
+            disabled
+            fullWidth
+            [(ngModel)]="reviewCampaign.finalDate"
+          >
+          <nb-datepicker #_dpFinalDate></nb-datepicker>
+        </div>
       </div>
-    </form>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-6">
+        <nb-card >
+          <nb-card-header>Color Composition</nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-sm-12 col-md-12 col-xl-12">
+                <ng2-smart-table
+                  *ngIf="compositions.length > 0"
+                  [settings]="tableCompositionsReview.settings"
+                  [source]="tableCompositionsReview.source"
+                >
+                </ng2-smart-table>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-sm-12 col-md-6 col-xl-6">
+        <nb-card >
+          <nb-card-header>Use classes</nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-sm-12 col-md-12 col-xl-12">
+                <ng2-smart-table
+                  *ngIf="useClassesSelected.length > 0"
+                  [settings]="tableUseClassReview.settings"
+                  [source]="tableUseClassReview.source"
+                >
+                </ng2-smart-table>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+    <div class="row m-3" *ngIf="points.length > 0">
+      <div class="col-sm-12">
+        <div class="header-flex">
+                    <span>
+                      <h6>  Points from file </h6>
+                    </span>
+          <span>
+                      <h6> Total of points: {{points.length}} </h6>
+                    </span>
+        </div>
+        <ng2-smart-table
+          [settings]="tablePoints.settings"
+          [source]="tablePoints.source"
+        >
+        </ng2-smart-table>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col-sm-12 col-md-12 col-xl-12">
+        <h6 class="m-3">  Users </h6>
+        <ng2-smart-table
+          *ngIf="usersOnCampaign.length > 0"
+          [settings]="tableUsers.settings"
+          [source]="tableUsers.source"
+        >
+        </ng2-smart-table>
+      </div>
+    </div>
+    <div *ngIf="customImages" class="row m-3">
+      <h6>  Custom images </h6>
+      <div class="col-sm-12 col-md-12 col-xl-12">
+        <ng2-smart-table
+          *ngIf="images.length > 0"
+          [settings]="tableImages.settings"
+          [source]="tableImages.source"
+        >
+        </ng2-smart-table>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>
