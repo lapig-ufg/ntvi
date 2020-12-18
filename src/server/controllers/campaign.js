@@ -62,16 +62,35 @@ module.exports = function (app) {
         const texts = language.getLang(lang);
 
         try {
+            let arrayQueries = []
 
-            const _campaign = await prisma.campaign.update({
+
+            arrayQueries.push(prisma.composition.deleteMany({
+                where: { campaignId: parseInt(id) },
+            }))
+
+            for (obj of compositions) {
+                arrayQueries.push(prisma.composition.create({
+                    data: {
+                        colors: obj.colors,
+                        satellite: { connect: { id: obj.satellite } },
+                        campaign: { connect: { id: parseInt(id) } }
+                    }
+                })
+                )
+            }
+
+            arrayQueries.push(prisma.campaign.update({
                 where: { id: parseInt(id) },
                 data: {
                     initialDate: initialDate, finalDate: finalDate,
-                    compositions: { create: compositions }, classes: { create: classes },
-                },
-            })
-            response.status(200).json(_campaign);
+                    classes: { connect: classes },
+                }
+            }))
 
+            const resultQueries = await prisma.$transaction(arrayQueries)
+
+            response.status(200).json(resultQueries);
         } catch (e) {
             console.error(e)
             response.status(500).json({ message: texts.login_msg_erro + e + '.' });
