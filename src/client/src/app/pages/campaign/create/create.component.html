@@ -302,7 +302,7 @@
           </nb-card>
         </form>
       </nb-step>
-      <nb-step [stepControl]="usersForm" label="Users">
+      <nb-step [stepControl]="usersForm"  label="Users">
         <form [formGroup]="usersForm" (ngSubmit)="onUsersFormSubmit()" class="step-container">
           <div class="row">
             <div class="col-sm-12 col-md-12 col-xl-12">
@@ -443,9 +443,9 @@
           </div>
         </form>
       </nb-step>
-      <nb-step [stepControl]="imagesForm" [hidden]="true" label="Confirmation">
+      <nb-step [stepControl]="imagesForm" label="Confirmation">
         <div class="step-container">
-          <h3>Campaign data!</h3>
+          <h3 class="m-2">Campaign data!</h3>
           <nb-card >
             <nb-card-header>Information of Campaign</nb-card-header>
             <nb-card-body>
@@ -489,10 +489,9 @@
                 </div>
                 <div class="col-sm-12 col-md-6 col-xl-16">
                   <div class="form-group">
-                    <label for="numInspectors" class="label">Inspectors</label>
+                    <label for="_numInspectors" class="label">Inspectors</label>
                     <input
-                      id="numInspectors"
-                      formControlName="numInspectors"
+                      id="_numInspectors"
                       placeholder="Number of Inspectors"
                       type="number"
                       nbInput
@@ -511,12 +510,12 @@
                     <input
                       id="_initialDate"
                       placeholder="Initial Date"
-                      [nbDatepicker]="dpInitialDate"
+                      [nbDatepicker]="_dpInitialDate"
                       nbInput
                       disabled
                       fullWidth
                     >
-                    <nb-datepicker #dpInitialDate></nb-datepicker>
+                    <nb-datepicker #_dpInitialDate></nb-datepicker>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-xl-16">
@@ -525,12 +524,12 @@
                     <input
                       id="_finalDate"
                       placeholder="Final Date"
-                      [nbDatepicker]="dpFinalDate"
+                      [nbDatepicker]="_dpFinalDate"
                       nbInput
                       disabled
                       fullWidth
                     >
-                    <nb-datepicker #dpFinalDate></nb-datepicker>
+                    <nb-datepicker #_dpFinalDate></nb-datepicker>
                   </div>
                 </div>
               </div>
@@ -572,7 +571,7 @@
                   </nb-card>
                 </div>
               </div>
-              <div class="row" *ngIf="points.length > 0">
+              <div class="row m-3" *ngIf="points.length > 0">
                 <div class="col-sm-12">
                   <ngx-ol-map
                     [center]="[4.984761,34.337429]"
@@ -581,7 +580,7 @@
                   ></ngx-ol-map>
                 </div>
               </div>
-              <div class="row" *ngIf="points.length > 0">
+              <div class="row m-3" *ngIf="points.length > 0">
                 <div class="col-sm-12">
                   <div class="header-flex">
                       <span>
@@ -603,7 +602,7 @@
                   </ng2-smart-table>
                 </div>
               </div>
-              <div class="row">
+              <div class="row m-3">
                 <div class="col-sm-12 col-md-12 col-xl-12">
                   <ng2-smart-table
                     *ngIf="usersOnCampaign.length > 0"
@@ -614,7 +613,7 @@
                   </ng2-smart-table>
                 </div>
               </div>
-              <div *ngIf="customImages" class="row">
+              <div *ngIf="customImages" class="row m-3">
                 <div class="col-sm-12 col-md-12 col-xl-12">
                   <ng2-smart-table
                     *ngIf="images.length > 0"
