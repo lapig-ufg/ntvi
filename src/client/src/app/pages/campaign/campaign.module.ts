@@ -12,7 +12,7 @@ import {
   NbAlertModule,
   NbCheckboxModule, NbDatepickerModule, NbIconModule,
   NbInputModule, NbRadioModule, NbSelectModule,
-  NbUserModule, NbListModule, NbStepperModule, NbBadgeModule, NbSpinnerModule,
+  NbUserModule, NbListModule, NbStepperModule, NbBadgeModule, NbSpinnerModule, NbToggleModule,
 } from '@nebular/theme';
 
 
@@ -46,6 +46,7 @@ import {
         MapModule,
         NbBadgeModule,
         NbSpinnerModule,
+        NbToggleModule,
     ],
 })
 export class CampaignModule { }
