@@ -405,8 +405,9 @@ export class CreateComponent implements OnInit {
     });
 
     const currentUser = JSON.parse(localStorage.getItem('user'));
-    this.campaignService.getAllCampaigns(currentUser.id).subscribe(res => {
+    this.campaignService.getAllCampaignsFromUser(currentUser.id).subscribe(res => {
     });
+
 
   }
 
@@ -435,6 +436,9 @@ export class CreateComponent implements OnInit {
     this.campaign.classes = auxUseClasses;
 
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
+    });
+
+    this.campaignService.getCampaignInfo(this.campaign).subscribe(res => {
     });
 
 

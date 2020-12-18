@@ -37,13 +37,20 @@ export class CampaignService {
       );
   }
 
-  getAllCampaigns(userId): Observable<Campaign[]> {
+  getAllCampaignsFromUser(userId): Observable<Campaign[]> {
     return this.httpClient.get<Campaign[]>(
       this.apiURL + '/campaign/campaignsFromUser/' + userId,
       this.httpOptions,
     ).pipe(
       catchError(this.errorHandler),
     );
+  }
+
+  getCampaignInfo(campaign): Observable<Campaign> {
+    return this.httpClient.get<Campaign>(
+      this.apiURL + '/campaign/info/' + campaign.id).pipe(
+        catchError(this.errorHandler),
+      );
   }
 
 
