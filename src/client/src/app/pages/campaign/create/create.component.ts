@@ -403,6 +403,11 @@ export class CreateComponent implements OnInit {
     this.campaignService.create(this.infoForm.value).subscribe(res => {
       this.campaign = res;
     });
+
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    this.campaignService.getAllCampaigns(currentUser.id).subscribe(res => {
+    });
+
   }
 
   onConfigFormSubmit() {

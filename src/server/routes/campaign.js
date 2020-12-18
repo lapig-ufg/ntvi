@@ -4,7 +4,7 @@ module.exports = function (app) {
 
     app.post('/service/campaign/create', JWT.verifyJWT, control.createCampaignInfoForm);
     app.put('/service/campaign/updateInfoForm/:id', JWT.verifyJWT, control.updateCampaignInfoForm);
-    // app.get('/service/organizations/:id', JWT.verifyJWT, control.getOrganization);
+    app.get('/service/campaign/campaignsFromUser/:id', JWT.verifyJWT, control.getCampaignsByUser);
     // app.post('/service/organizations', JWT.verifyJWT, control.createOrganization);
     app.put('/service/campaign/createConfigForm/:id', JWT.verifyJWT, control.createConfigForm);
     app.put('/service/campaign/updateConfigForm/:id', JWT.verifyJWT, control.updateConfigForm);
