@@ -368,6 +368,31 @@ module.exports = function (app) {
         }
     }
 
+    Controller.getCampaignsByUser = async function (request, response) {
+        const { id } = request.params
+        const { lang } = request.headers;
+        const texts = language.getLang(lang);
+        try {
+            const campaigns = await prisma.campaign.findMany({
+                where: {
+                    UsersOnCampaigns: {
+                        some: {
+                            user: { id: parseInt(id) }
+                        }
+                    }
+                },
+                include: {
+                    points: true,
+                    images: true
+                }
+
+            });
+            response.json(campaigns)
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
+        }
+    }
 
     Controller.updateOrganization = async function (request, response) {
         const { id } = request.params
