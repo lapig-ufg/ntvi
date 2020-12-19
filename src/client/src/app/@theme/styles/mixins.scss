@@ -2,42 +2,42 @@
     position: relative;
 
     &:#{$el} {
-        content: "";
+        content: '';
         position: absolute;
 
-        @if (str-index($position, "bottom")) {
+        @if (str-index($position, 'bottom')) {
             bottom: 0;
         }
 
-        @if (str-index($position, "top")) {
+        @if (str-index($position, 'top')) {
             top: 0;
         }
 
-        @if (str-index($position, "left")) {
+        @if (str-index($position, 'left')) {
             left: 0;
         }
 
-        @if (str-index($position, "right")) {
+        @if (str-index($position, 'right')) {
             right: 0;
         }
 
-        @if (str-index($position, "center")) {
-            @if ($orientation=="horizontal") {
+        @if (str-index($position, 'center')) {
+            @if ($orientation=='horizontal') {
                 left: 50%;
                 transform: translateX(-50%);
             }
 
-            @if ($orientation=="vertical") {
+            @if ($orientation=='vertical') {
                 top: 50%;
                 transform: translateY(-50%);
             }
         }
 
-        @if (not str-index($position, "center") and $orientation=="horizontal") {
+        @if (not str-index($position, 'center') and $orientation=='horizontal') {
             width: 100%;
         }
 
-        @if (not str-index($position, "center") and $orientation=="vertical") {
+        @if (not str-index($position, 'center') and $orientation=='vertical') {
             height: 100%;
         }
 
@@ -117,7 +117,7 @@ $medium-width: 1200px;
 }
 
 @mixin triangle($direction, $sizeH, $sizeV, $color) {
-    content: "";
+    content: '';
     display: block;
     width: 0;
     height: 0;
@@ -194,13 +194,22 @@ $base-size: 16;
 @mixin opacity($value) {
     $ievalue: $value*100;
     opacity: $value;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity="+$ievalue+")";
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity='+$ievalue+')';
     filter: alpha(opacity=$ievalue);
 }
 
-@mixin fluid-type($min-font-size: 12px, $max-font-size: 21px, $lower-range: 420px, $upper-range: 900px) {
+@mixin fluid-type(
+   $min-font-size: 12px,
+   $max-font-size: 21px,
+   $lower-range: 420px,
+   $upper-range: 900px
+) {
 
-    font-size: calc(#{$min-font-size} + #{(($max-font-size / ($max-font-size * 0 + 1)) - ($min-font-size / ($min-font-size * 0 + 1)))} * ( (100vw - #{$lower-range}) / #{(($upper-range / ($upper-range * 0 + 1)) - ($lower-range / ($lower-range * 0 + 1)))}));
+    font-size: calc(#{$min-font-size}
+    + #{(($max-font-size / ($max-font-size * 0 + 1))
+    - ($min-font-size / ($min-font-size * 0 + 1)))}
+    * ( (100vw - #{$lower-range}) / #{(($upper-range / ($upper-range * 0 + 1))
+    - ($lower-range / ($lower-range * 0 + 1)))}));
 
     @media screen and (max-width: $lower-range) {
         font-size: $min-font-size;
