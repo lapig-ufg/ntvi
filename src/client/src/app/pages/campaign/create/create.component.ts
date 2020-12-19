@@ -401,7 +401,6 @@ export class CreateComponent implements OnInit {
   onInfoFormSubmit() {
     this.infoForm.markAsDirty();
 
-    console.log(this.infoForm.value)
     this.campaignService.create(this.infoForm.value).subscribe(res => {
       this.campaign = res;
     });
