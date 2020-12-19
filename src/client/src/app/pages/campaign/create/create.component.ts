@@ -442,7 +442,7 @@ export class CreateComponent implements OnInit {
     this.infoForm.markAsDirty();
     let data: any = this.infoForm.value;
     const currentUser = JSON.parse(localStorage.getItem('user'));
-    data.role = { userId: currentUser.id, typeUserInCampaign: 'ADMIN'};
+    data.permisson = { userId: currentUser.id, typeUserInCampaign: 'ADMIN'};
     this.campaignService.create(data).subscribe(res => {
       this.campaign = res;
     });
