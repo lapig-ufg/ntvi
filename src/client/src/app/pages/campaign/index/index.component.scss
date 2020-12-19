@@ -20,16 +20,16 @@
 }
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 33%);
   grid-auto-rows: auto;
   grid-gap: 1rem;
 
   @include tablet() {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 50%);
   }
 
   @include mobile() {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 100%);
   }
 
   .nb-actions {
