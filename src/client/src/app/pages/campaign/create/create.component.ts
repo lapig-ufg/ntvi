@@ -246,7 +246,7 @@ export class CreateComponent implements OnInit {
     this.infoForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      organizationId: ['', Validators.required],
+      organization: ['', Validators.required],
       numInspectors: ['', Validators.required],
     });
 
@@ -440,6 +440,7 @@ export class CreateComponent implements OnInit {
 
   onInfoFormSubmit() {
     this.infoForm.markAsDirty();
+
     this.campaignService.create(this.infoForm.value).subscribe(res => {
       this.campaign = res;
     });

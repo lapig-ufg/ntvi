@@ -26,13 +26,13 @@
                   <div class="col-sm-12 col-md-6 col-xl-6">
                     <div class="">
                       <label for="name" class="label">Organization</label>
-                      <nb-select id="organizationId" formControlName="organizationId"
-                        placeholder="Select a organization" fullWidth filled>
+                      <nb-select id="organization" formControlName="organization" placeholder="Select a organization"
+                        fullWidth filled>
                         <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">
                           {{organization.name}}</nb-option>
                       </nb-select>
-                      <div *ngIf="fInfo.organizationId.touched && fInfo.organizationId.invalid" class="mt-2">
-                        <nb-alert status="danger" *ngIf="fInfo.organizationId.errors.required"> Organization is
+                      <div *ngIf="fInfo.organization.touched && fInfo.organization.invalid" class="mt-2">
+                        <nb-alert status="danger" *ngIf="fInfo.organization.errors.required"> Organization is
                           required. </nb-alert>
                       </div>
                     </div>
