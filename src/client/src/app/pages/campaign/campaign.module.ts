@@ -6,6 +6,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { MapModule } from '../map/map.module';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { NbMomentDateModule } from '@nebular/moment';
 import {
   NbActionsModule,
   NbButtonModule,
@@ -15,6 +16,7 @@ import {
   NbInputModule, NbRadioModule, NbSelectModule,
   NbUserModule, NbListModule, NbStepperModule, NbBadgeModule, NbSpinnerModule, NbToggleModule, NbSearchModule,
 } from '@nebular/theme';
+
 
 
 @NgModule({
@@ -50,6 +52,7 @@ import {
         NbToggleModule,
         NbSearchModule,
         Ng2SearchPipeModule,
+        NbMomentDateModule,
     ],
 })
 export class CampaignModule { }

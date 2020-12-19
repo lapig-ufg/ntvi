@@ -1,26 +1,521 @@
-<nb-card id="edit-use-class">
-  <nb-card-header>Update New Campaign</nb-card-header>
+<nb-card>
+  <nb-card-header>Create New Campaign</nb-card-header>
   <nb-card-body>
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="form-group">
-        <label for="name" class="label">Name</label>
-        <input type="text" nbInput fullWidth id="name" formControlName="name" [(ngModel)]="organization.name" placeholder="Name of class">
-        <div *ngIf="f.name.touched && f.name.invalid" class="mt-2">
-          <nb-alert status="danger" *ngIf="f.name.errors.required"> Name is required. </nb-alert>
+    <nb-stepper #stepper orientation="vertical">
+      <nb-step [stepControl]="infoForm" label="Information">
+        <form id="infoForm" [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit()" class="step-container">
+          <nb-card>
+            <nb-card-header>Information of Campaign</nb-card-header>
+            <nb-card-body>
+              <div class="form-group">
+                <label for="name" class="label">Name</label>
+                <input id="name" formControlName="name" placeholder="Name of Campaign" type="text" nbInput fullWidth>
+                <div *ngIf="fInfo.name.touched && fInfo.name.invalid" class="mt-2">
+                  <nb-alert status="danger" *ngIf="fInfo.name.errors.required"> Name is required. </nb-alert>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description" class="label">Description</label>
+                <textarea id="description" formControlName="description" placeholder="Description of Campaign" rows="10"
+                          fieldSize="large" nbInput fullWidth></textarea>
+                <div *ngIf="fInfo.description.touched && fInfo.description.invalid" class="mt-2">
+                  <nb-alert status="danger" *ngIf="fInfo.description.errors.required"> Description is required.
+                  </nb-alert>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-6 col-xl-6">
+                    <div class="">
+                      <label for="name" class="label">Organization</label>
+                      <nb-select id="organization" formControlName="organization" placeholder="Select a organization"
+                                 fullWidth filled>
+                        <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">
+                          {{organization.name}}</nb-option>
+                      </nb-select>
+                      <div *ngIf="fInfo.organization.touched && fInfo.organization.invalid" class="mt-2">
+                        <nb-alert status="danger" *ngIf="fInfo.organization.errors.required"> Organization is
+                          required. </nb-alert>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-xl-16">
+                    <div class="form-group">
+                      <label for="numInspectors" class="label">Inspectors</label>
+                      <input id="numInspectors" formControlName="numInspectors" placeholder="Number of Inspectors"
+                             type="number" nbInput fullWidth>
+                      <div *ngIf="fInfo.numInspectors.touched && fInfo.numInspectors.invalid" class="mt-2">
+                        <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required"> Number of inspectors is
+                          required. </nb-alert>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-6 col-xl-6">
+                    <nb-toggle status="basic" labelPosition="left" [(checked)]="customImages">Will you insert custom
+                      images?</nb-toggle>
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+          <div class="actions">
+            <button type="submit" nbButton nbStepperNext (click)="onInfoFormSubmit()">next</button>
+          </div>
+        </form>
+      </nb-step>
+      <nb-step [stepControl]="configForm" label="Configuration">
+        <form id="configForm" [formGroup]="configForm" (ngSubmit)="onConfigFormSubmit()" class="step-container">
+          <nb-card>
+            <nb-card-header>Configuration of Campaign</nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                  <div class="form-group">
+                    <label for="initialDate" class="label">Initial Date</label>
+                    <input id="initialDate" formControlName="initialDate" placeholder="Initial Date"
+                           [nbDatepicker]="dpInitialDate" nbInput fullWidth>
+                    <nb-datepicker #dpInitialDate [format]="'yyyy'"></nb-datepicker>
+                    <div *ngIf="fConfig.initialDate.touched && fConfig.initialDate.invalid" class="mt-2">
+                      <nb-alert status="danger" *ngIf="fConfig.initialDate.errors.required"> Initial Date is required.
+                      </nb-alert>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-xl-16">
+                  <div class="form-group">
+                    <label for="finalDate" class="label">Final Date</label>
+                    <input id="finalDate" formControlName="finalDate" placeholder="Final Date"
+                           [nbDatepicker]="dpFinalDate" nbInput fullWidth>
+                    <nb-datepicker #dpFinalDate [format]="'yyyy'"></nb-datepicker>
+                    <div *ngIf="fConfig.finalDate.touched && fConfig.finalDate.invalid" class="mt-2">
+                      <nb-alert status="danger" *ngIf="fConfig.finalDate.errors.required"> Final Date is required.
+                      </nb-alert>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                  <nb-card>
+                    <nb-card-header>Color Composition</nb-card-header>
+                    <nb-card-body>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-5 col-xl-5">
+                          <div class="form-group">
+                            <label for="satellite" class="label">Satellite</label>
+                            <nb-select id="satellite" formControlName="satellite" placeholder="Select a satellite"
+                                       fullWidth filled>
+                              <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">
+                                {{satellite.name}}</nb-option>
+                            </nb-select>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-5 col-xl-5">
+                          <div class="form-group">
+                            <label for="_colors" class="label">Colors</label>
+                            <nb-select id="_colors" formControlName="_colors" placeholder="Select colors" fullWidth
+                                       filled multiple>
+                              <nb-option *ngFor="let colorComp of colorsComposition" value="{{colorComp.id}}">
+                                {{colorComp.name}}</nb-option>
+                            </nb-select>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-2 col-xl-2">
+                          <div class="mb-1"></div>
+                          <button (click)="addComposition()" type="button" class="mt-4" nbButton status="success"
+                                  size="small">
+                            <nb-icon icon="plus-outline"></nb-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-12 col-xl-12">
+                          <ng2-smart-table *ngIf="compositions.length > 0" [settings]="tableCompositions.settings"
+                                           [source]="tableCompositions.source" (delete)="removeComposition($event)">
+                          </ng2-smart-table>
+                        </div>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                  <nb-card>
+                    <nb-card-header>Use classes</nb-card-header>
+                    <nb-card-body>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-10 col-xl-10">
+                          <div class="form-group">
+                            <label for="useClass" class="label">Class</label>
+                            <nb-select id="useClass" formControlName="useClass" placeholder="Select a Class" fullWidth
+                                       filled>
+                              <nb-option *ngFor="let useClass of useClasses" value="{{useClass.id}}">{{useClass.name}}
+                              </nb-option>
+                            </nb-select>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 col-md-2 col-xl-2">
+                          <div class="mb-1"></div>
+                          <button (click)="addClass()" type="button" class="mt-4" nbButton status="success"
+                                  size="small">
+                            <nb-icon icon="plus-outline"></nb-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12 col-md-12 col-xl-12">
+                          <ng2-smart-table *ngIf="useClassesSelected.length > 0" [settings]="tableUseClass.settings"
+                                           [source]="tableUseClass.source" (delete)="removeClass($event)">
+                          </ng2-smart-table>
+                        </div>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>
+              <div class="actions">
+                <button type="button" nbButton nbStepperPrevious>prev</button>
+                <button nbButton type="submit" nbStepperNext (click)="onConfigFormSubmit()">next</button>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </form>
+      </nb-step>
+      <nb-step [stepControl]="pointsForm" label="Points">
+        <form [formGroup]="pointsForm" (ngSubmit)="onPointsFormSubmit()" class="step-container">
+          <nb-card [nbSpinner]="loadingPoints" nbSpinnerStatus="danger" nbSpinnerSize="giant"
+                   nbSpinnerMessage="Loading points">
+            <nb-card-header>Points of Campaign</nb-card-header>
+            <nb-card-body>
+              <div class="row mt-3">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="pointsFile" class="label">File of Points</label>
+                    <input id="pointsFile" accept="text/csv" formControlName="pointsFile"
+                           placeholder="CSV with points of campaign" type="file"
+                           (change)="handlePointsFile($event.target.files[0])" nbInput fullWidth>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="points.length > 0 && !loadingPoints">
+                <div class="col-sm-12">
+                  <ngx-ol-map [center]="[4.984761,34.337429]" [zoom]="4" [points]="points"
+                              (mapReady)="onMapReady($event)"></ngx-ol-map>
+                </div>
+              </div>
+              <div class="row mt-3" *ngIf="points.length > 0 && !loadingPoints">
+                <div class="col-sm-12">
+                  <nb-card>
+                    <nb-card-header class="header-flex">
+                      <span>
+                        <h6> Points from file </h6>
+                      </span>
+                      <span>
+                        <button (click)="shufflePoints()" nbButton status="warning" size="medium">
+                          shuffle points
+                        </button>
+                      </span>
+                      <span>
+                        <h6> Total of points: {{points.length}} </h6>
+                      </span>
+                    </nb-card-header>
+                    <nb-card-body>
+                      <ng2-smart-table [settings]="tablePoints.settings" [source]="tablePoints.source">
+                      </ng2-smart-table>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>
+              <div class="actions">
+                <button nbButton nbStepperPrevious>prev</button>
+                <button type="button" (click)="onPointsFormSubmit()" nbButton nbStepperNext>next</button>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </form>
+      </nb-step>
+      <nb-step [stepControl]="usersForm" label="Users">
+        <form [formGroup]="usersForm" (ngSubmit)="onUsersFormSubmit()" class="step-container">
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-xl-12">
+              <nb-card>
+                <nb-card-header>Users of campaign</nb-card-header>
+                <nb-card-body>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-5 col-xl-5">
+                      <div class="form-group">
+                        <label for="user" class="label">User</label>
+                        <nb-select id="user" formControlName="user" placeholder="Select a user" fullWidth filled>
+                          <nb-option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</nb-option>
+                        </nb-select>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-5 col-xl-5">
+                      <div class="form-group">
+                        <label for="permission" class="label">Permissions</label>
+                        <nb-select id="permission" formControlName="permission" placeholder="Select a permission"
+                                   fullWidth filled>
+                          <nb-option *ngFor="let permission of permissions" value="{{permission.id}}">
+                            {{permission.name}}</nb-option>
+                        </nb-select>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-xl-2">
+                      <div class="mb-1"></div>
+                      <button (click)="addUserOnCampaign()" type="button" class="mt-4" nbButton status="success"
+                              size="small">
+                        <nb-icon icon="plus-outline"></nb-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 col-xl-12">
+                      <ng2-smart-table *ngIf="UsersOnCampaigns.length > 0" [settings]="tableUsers.settings"
+                                       [source]="tableUsers.source" (delete)="removeUserOnCampaign($event)">
+                      </ng2-smart-table>
+                    </div>
+                  </div>
+                  <div class="actions">
+                    <button nbButton nbStepperPrevious>prev</button>
+                    <button nbButton nbStepperNext (click)="onUsersFormSubmit()" type="submit">next</button>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+            </div>
+          </div>
+        </form>
+      </nb-step>
+      <nb-step [stepControl]="imagesForm" *ngIf="customImages" label="Images">
+        <form [formGroup]="imagesForm" (ngSubmit)="onImagesFormSubmit()" class="step-container">
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-xl-12">
+              <nb-card>
+                <nb-card-header>Custom Images of campaign</nb-card-header>
+                <nb-card-body>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-2 col-xl-2">
+                      <div class="form-group">
+                        <label for="imgSatellite" class="label">Satellite</label>
+                        <nb-select id="imgSatellite" formControlName="imgSatellite" placeholder="Select a satellite"
+                                   fullWidth filled>
+                          <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">{{satellite.name}}
+                          </nb-option>
+                        </nb-select>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-xl-2">
+                      <div class="form-group">
+                        <label for="dataImg" class="label">Date</label>
+                        <input id="dataImg" formControlName="dataImg" placeholder="Date image" [nbDatepicker]="dataImg"
+                               nbInput fullWidth>
+                        <nb-datepicker #dataImg></nb-datepicker>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-6">
+                      <div class="form-group">
+                        <label for="url" class="label">URL</label>
+                        <input id="url" formControlName="url" placeholder="URL of image" type="text" nbInput fullWidth>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-xl-2">
+                      <div class="mb-1"></div>
+                      <button (click)="addImage()" type="button" class="mt-4" nbButton status="success" size="small">
+                        <nb-icon icon="plus-outline"></nb-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 col-xl-12">
+                      <ng2-smart-table *ngIf="images.length > 0" [settings]="tableImages.settings"
+                                       [source]="tableImages.source" (delete)="removeImage($event)">
+                      </ng2-smart-table>
+                    </div>
+                  </div>
+                  <div class="actions mt-3">
+                    <button nbButton nbStepperPrevious>prev</button>
+                    <button nbButton nbStepperNext type="submit" (click)="onImagesFormSubmit()">next</button>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+            </div>
+          </div>
+        </form>
+      </nb-step>
+      <nb-step  label="Confirmation">
+        <div class="step-container">
+          <h3 class="m-2">Campaign data!</h3>
+          <!--          <nb-card>-->
+          <!--            <nb-card-header>Information of Campaign</nb-card-header>-->
+          <!--            <nb-card-body>-->
+          <!--              <div class="form-group">-->
+          <!--                <label for="_name" class="label">Name</label>-->
+          <!--                <input-->
+          <!--                  id="_name"-->
+          <!--                  placeholder="Name of Campaign"-->
+          <!--                  type="text"-->
+          <!--                  nbInput-->
+          <!--                  disabled-->
+          <!--                  fullWidth-->
+          <!--                  [(ngModel)]="reviewCampaign.name"-->
+          <!--                >-->
+          <!--              </div>-->
+          <!--              <div class="form-group">-->
+          <!--                <label for="_description" class="label">Description</label>-->
+          <!--                <textarea-->
+          <!--                  id="_description"-->
+          <!--                  placeholder="Description of Campaign"-->
+          <!--                  rows="5"-->
+          <!--                  fieldSize="large"-->
+          <!--                  nbInput-->
+          <!--                  disabled-->
+          <!--                  fullWidth-->
+          <!--                  [(ngModel)]="reviewCampaign.description"-->
+
+          <!--                ></textarea>-->
+          <!--              </div>-->
+          <!--              <div class="row">-->
+          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
+          <!--                  <div class="">-->
+          <!--                    <label for="_organizationId" class="label">Organization</label>-->
+          <!--                    <nb-select-->
+          <!--                      id="_organizationId"-->
+          <!--                      placeholder="Select a organization"-->
+          <!--                      fullWidth-->
+          <!--                      disabled-->
+          <!--                      filled-->
+          <!--                      [(selected)]="reviewCampaign.organizationId"-->
+          <!--                    >-->
+          <!--                      <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>-->
+          <!--                    </nb-select>-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--                <div class="col-sm-12 col-md-6 col-xl-16">-->
+          <!--                  <div class="form-group">-->
+          <!--                    <label for="_numInspectors" class="label">Inspectors</label>-->
+          <!--                    <input-->
+          <!--                      id="_numInspectors"-->
+          <!--                      placeholder="Number of Inspectors"-->
+          <!--                      type="number"-->
+          <!--                      nbInput-->
+          <!--                      disabled-->
+          <!--                      fullWidth-->
+          <!--                      [(ngModel)]="reviewCampaign.numInspectors"-->
+          <!--                    >-->
+          <!--                    <div *ngIf="fInfo.numInspectors.touched && fInfo.numInspectors.invalid" class="mt-2">-->
+          <!--                      <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required"> Number of inspectors is-->
+          <!--                        required. </nb-alert>-->
+          <!--                    </div>-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="row">-->
+          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
+          <!--                  <div class="form-group">-->
+          <!--                    <label for="_initialDate" class="label">Initial Date</label>-->
+          <!--                    <input-->
+          <!--                      id="_initialDate"-->
+          <!--                      placeholder="Initial Date"-->
+          <!--                      [nbDatepicker]="_dpInitialDate"-->
+          <!--                      nbInput-->
+          <!--                      disabled-->
+          <!--                      fullWidth-->
+          <!--                      [(ngModel)]="reviewCampaign.initialDate"-->
+          <!--                    >-->
+          <!--                    <nb-datepicker #_dpInitialDate></nb-datepicker>-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--                <div class="col-sm-12 col-md-6 col-xl-16">-->
+          <!--                  <div class="form-group">-->
+          <!--                    <label for="_finalDate" class="label">Final Date</label>-->
+          <!--                    <input-->
+          <!--                      id="_finalDate"-->
+          <!--                      placeholder="Final Date"-->
+          <!--                      [nbDatepicker]="_dpFinalDate"-->
+          <!--                      nbInput-->
+          <!--                      disabled-->
+          <!--                      fullWidth-->
+          <!--                      [(ngModel)]="reviewCampaign.finalDate"-->
+          <!--                    >-->
+          <!--                    <nb-datepicker #_dpFinalDate></nb-datepicker>-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="row">-->
+          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
+          <!--                  <nb-card>-->
+          <!--                    <nb-card-header>Color Composition</nb-card-header>-->
+          <!--                    <nb-card-body>-->
+          <!--                      <div class="row">-->
+          <!--                        <div class="col-sm-12 col-md-12 col-xl-12">-->
+          <!--                          <ng2-smart-table-->
+          <!--                            *ngIf="compositions.length > 0"-->
+          <!--                            [settings]="tableCompositionsReview.settings"-->
+          <!--                            [source]="tableCompositionsReview.source"-->
+          <!--                          >-->
+          <!--                          </ng2-smart-table>-->
+          <!--                        </div>-->
+          <!--                      </div>-->
+          <!--                    </nb-card-body>-->
+          <!--                  </nb-card>-->
+          <!--                </div>-->
+          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
+          <!--                  <nb-card>-->
+          <!--                    <nb-card-header>Use classes</nb-card-header>-->
+          <!--                    <nb-card-body>-->
+          <!--                      <div class="row">-->
+          <!--                        <div class="col-sm-12 col-md-12 col-xl-12">-->
+          <!--                          <ng2-smart-table-->
+          <!--                            *ngIf="useClassesSelected.length > 0"-->
+          <!--                            [settings]="tableUseClassReview.settings"-->
+          <!--                            [source]="tableUseClassReview.source"-->
+          <!--                          >-->
+          <!--                          </ng2-smart-table>-->
+          <!--                        </div>-->
+          <!--                      </div>-->
+          <!--                    </nb-card-body>-->
+          <!--                  </nb-card>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="row m-3" *ngIf="points.length > 0">-->
+          <!--                <div class="col-sm-12">-->
+          <!--                  <div class="header-flex">-->
+          <!--                    <span>-->
+          <!--                      <h6>  Points from file </h6>-->
+          <!--                    </span>-->
+          <!--                    <span>-->
+          <!--                      <h6> Total of points: {{points.length}} </h6>-->
+          <!--                    </span>-->
+          <!--                  </div>-->
+          <!--                  <ng2-smart-table [settings]="tablePoints.settings" [source]="tablePoints.source">-->
+          <!--                  </ng2-smart-table>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="row m-3">-->
+          <!--                <div class="col-sm-12 col-md-12 col-xl-12">-->
+          <!--                  <h6 class="m-3">  Users </h6>-->
+          <!--                  <ng2-smart-table-->
+          <!--                    *ngIf="UsersOnCampaigns.length > 0"-->
+          <!--                    [settings]="tableUsers.settings"-->
+          <!--                    [source]="tableUsers.source"-->
+          <!--                    (delete)="removeUserOnCampaign($event)"-->
+          <!--                  >-->
+          <!--                  </ng2-smart-table>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div *ngIf="customImages" class="row m-3">-->
+          <!--                <h6>  Custom images </h6>-->
+          <!--                <div class="col-sm-12 col-md-12 col-xl-12">-->
+          <!--                  <ng2-smart-table *ngIf="images.length > 0" [settings]="tableImages.settings"-->
+          <!--                    [source]="tableImages.source" (delete)="removeImage($event)">-->
+          <!--                  </ng2-smart-table>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </nb-card-body>-->
+          <!--          </nb-card>-->
+          <div class="actions">
+            <button nbButton (click)="router.navigateByUrl('pages/campaign/index')">FINISH</button>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="description" class="label">Description</label>
-        <textarea rows="10" fieldSize="large" nbInput fullWidth id="description" formControlName="description" [(ngModel)]="organization.description" placeholder="Description of class" ></textarea>
-        <br>
-        <div *ngIf="f.description.touched && f.description.invalid" class="mt-2">
-          <nb-alert status="danger" *ngIf="f.description.errors.required"> Description is required. </nb-alert>
-        </div>
-      </div>
-      <div class="actions">
-        <button (click)="goTo('/pages/organization/index')" nbButton >Back</button>
-        <button type="submit" nbButton status="danger" [disabled]="!form.valid">Submit</button>
-      </div>
-    </form>
+      </nb-step>
+    </nb-stepper>
   </nb-card-body>
 </nb-card>

@@ -15,6 +15,7 @@ export interface Campaign {
   initialDate?: Date;
   finalDate?: Date;
   publish?: boolean;
+  organizationId?: number;
   organization?: Organization;
   classes?: UseClass[];
   compositions?: Composition[];

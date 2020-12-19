@@ -1,6 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import {ActivatedRoute, Router, RouterModule, Routes} from '@angular/router';
+import { environment as env } from '../../environments/environment';
 import {
   NbAuthComponent,
   NbAuthJWTToken,
@@ -37,7 +38,7 @@ export const routes: Routes = [
 
 const socialLinks = [
   {
-    url: 'http://localhost:4200/auth/oauth',
+    url: env.oauthGoogleUrl,
     target: '_blank',
     icon: 'google',
   },
@@ -82,14 +83,13 @@ const socialLinks = [
         }),
         NbOAuth2AuthStrategy.setup({
           name: 'google',
-          clientId: '750256806057-52odg19a6lkgbjuu67f3a12o0vq5aipq.apps.googleusercontent.com',
-          clientSecret: '-59HNErVLJfZkM_RAH4s4l8N',
+          clientId: env.clientId,
+          clientSecret: env.clientSecret,
           authorize: {
             endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
             responseType: NbOAuth2ResponseType.TOKEN,
             scope: 'email profile',
-            redirectUri: 'http://localhost:4200/auth/oauth2/callback',
-            // redirectUri: 'https://ntvi.lapig.iesa.ufg.br/auth/oauth2/callback',
+            redirectUri: env.redirectUri,
           },
           redirect: {
             success: '/pages',

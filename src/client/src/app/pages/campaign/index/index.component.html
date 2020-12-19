@@ -9,9 +9,11 @@
 </div>
 <div class="cards mt-4">
   <nb-card size="medium" *ngFor=" let campaign of campaigns | filter:filterTerm; let i = index ">
-    <nb-card-header>
+    <nb-card-header style="position: relative;" >
+      <nb-badge text="{{campaign.points.length}}" title="points" status="success" position="top right"></nb-badge>
+      <nb-badge text="{{campaign.numInspectors}}" title="inspectors" status="danger" position="top left"></nb-badge>
       <h6>{{campaign.name}}</h6>
-      <p>{{campaign.description}}</p>
+      <p class="description">{{campaign.description}}</p>
     </nb-card-header>
     <nb-card-body>
       <ngx-ol-map
@@ -21,26 +23,8 @@
         [points]="campaign.points"
       ></ngx-ol-map>
     </nb-card-body>
-    <nb-card-footer>
-      <nb-actions class="nb-actions" size="medium">
-        <nb-action
-          class="action"
-          disabled
-          icon="pin-outline"
-          badgeText="{{campaign.points.length}}"
-          badgeDot="true"
-          badgePosition="top right"
-          badgeStatus="warning" >
-        </nb-action>
-        <nb-action
-          disabled
-          class="action"
-          icon="person-outline"
-          badgeText="{{campaign.numInspectors}}"
-          badgeDot="true"
-          badgePosition="top right"
-          badgeStatus="info" >
-        </nb-action>
+    <nb-card-footer >
+      <nb-actions class="nb-actions" size="small">
         <nb-action
           title="View Campaign"
           class="action"
@@ -48,12 +32,33 @@
           icon="eye-outline">
         </nb-action>
         <nb-action
+          *ngIf="campaign.status === 'INCOMPLETE'"
+          title="Edit Campaign"
+          class="action"
+          (click)="router.navigateByUrl('pages/campaign/' + campaign.id + '/edit')"
+          icon="edit-2-outline">
+        </nb-action>
+        <nb-action
+          title="Publish Campaign?"
+          class="action"
+          (click)="publishCampaign(campaign)"
+          badgeDot="true"
+          badgePosition="top right"
+          badgeText=" "
+          [badgeStatus]="campaign.publish ? 'success' : 'danger' "
+          icon="book-open-outline">
+        </nb-action>
+        <nb-action
           *ngIf="canGenerateCache(campaign)"
           title="Start Caching Images"
           class="action"
+          badgeDot="true"
+          badgeText=" "
+          badgePosition="top right"
+          [disabled]="campaign.status === 'READY'"
+          [badgeStatus]="campaign.status === 'READY' ? 'success' : 'danger' "
           (click)="startCache(campaign)"
-          fullWidth
-          icon="hard-drive">
+          [icon]="campaign.status === 'READY' ? 'hard-drive' : 'hard-drive-outline' ">
         </nb-action>
       </nb-actions>
     </nb-card-footer>

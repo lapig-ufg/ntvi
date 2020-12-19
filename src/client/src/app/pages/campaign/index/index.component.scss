@@ -7,6 +7,17 @@
   display: flex;
   justify-content: space-between;
 }
+.description {
+  font-size: 0.8rem;
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  height: 42px;
+  margin-top: 2px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
