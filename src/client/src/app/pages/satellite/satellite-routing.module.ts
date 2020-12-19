@@ -6,7 +6,7 @@ import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
 
 const routes: Routes = [
-  { path: '/', redirectTo: 'post/index', pathMatch: 'full'},
+  { path: '/', redirectTo: 'satellite/index', pathMatch: 'full'},
   { path: 'index', component: IndexComponent },
   { path: ':satelliteId/view', component: ViewComponent },
   { path: 'create', component: CreateComponent },

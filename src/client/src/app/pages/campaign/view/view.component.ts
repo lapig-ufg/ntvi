@@ -9,6 +9,7 @@ import { Composition } from '../models/composition';
 import { UsersOnCampaigns } from '../models/usersOnCampaigns';
 import { UseClass } from '../../use-class/model/use-class';
 import { Point } from '../models/point';
+import { OrganizationService } from '../../organization/service/organization.service';
 
 @Component({
   selector: 'ngx-view',
@@ -16,14 +17,10 @@ import { Point } from '../models/point';
   styleUrls: ['./view.component.scss'],
 })
 export class ViewComponent implements OnInit {
-  compositions = [] as Composition[];
+  id: number;
+  campaign = {} as Campaign;
   organizations = [] as Organization[];
-  usersOnCampaign = [] as UsersOnCampaigns[];
-  useClassesSelected = [] as UseClass[];
-  points = [] as Point[];
-  images = [] as Image[];
   customImages = false as boolean;
-  reviewCampaign = {} as any;
   tablePoints = {
     settings: {
       mode: 'external',
@@ -43,7 +40,7 @@ export class ViewComponent implements OnInit {
     },
     source: new LocalDataSource(),
   };
-  tableUseClassReview = {
+  tableUseClass = {
     settings: {
       mode: 'external',
       hideSubHeader: true,
@@ -133,19 +130,26 @@ export class ViewComponent implements OnInit {
     source: new LocalDataSource(),
   };
   constructor(
-    public organizationService: CampaignService,
+    public campaignService: CampaignService,
     private route: ActivatedRoute,
     private router: Router,
+    public organizationService: OrganizationService,
   ) { }
 
-  ngOnInit(): void {
-    // this.id = this.route.snapshot.params['useClassId'];
-    //
-    // this.organizationService.find(this.id).subscribe((data: Campaign) => {
-    //   this.organization = data;
-    // });
-  }
-  goTo(url) {
-    this.router.navigateByUrl(url);
+  async ngOnInit() {
+    this.id = this.route.snapshot.params['campaignId'];
+    this.organizationService.getAll().subscribe((data: Organization[]) => {
+      this.organizations = data;
+    });
+
+    this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
+      this.campaign = data;
+      this.tablePoints.source.load(data.points);
+      this.tableUseClass.source.load(data.classes);
+      this.tableImages.source.load(data.images);
+      this.tableUsers.source.load(data.UsersOnCampaigns);
+      this.tableCompositionsReview.source.load(data.compositions);
+    });
+
   }
 }

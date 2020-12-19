@@ -20,5 +20,5 @@ export interface Campaign {
   compositions?: Composition[];
   points?: Point[];
   images?: Image[];
-  usersOnCampaign?: UsersOnCampaigns[];
+  UsersOnCampaigns?: UsersOnCampaigns[];
 }

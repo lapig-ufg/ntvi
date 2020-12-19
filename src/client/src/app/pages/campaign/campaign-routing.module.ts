@@ -7,7 +7,7 @@ import { EditComponent } from './edit/edit.component';
 import {NbThemeService} from '@nebular/theme';
 
 const routes: Routes = [
-  { path: '/', redirectTo: 'post/index', pathMatch: 'full'},
+  { path: '', redirectTo: 'campaign/index', pathMatch: 'full'},
   { path: 'index', component: IndexComponent },
   { path: ':campaignId/view', component: ViewComponent },
   { path: 'create', component: CreateComponent },

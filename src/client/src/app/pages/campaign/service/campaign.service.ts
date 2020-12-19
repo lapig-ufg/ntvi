@@ -46,11 +46,20 @@ export class CampaignService {
     );
   }
 
-  getCampaignInfo(campaign): Observable<Campaign> {
+  getCampaignInfo(campaignId): Observable<Campaign> {
     return this.httpClient.get<Campaign>(
-      this.apiURL + '/campaign/info/' + campaign.id).pipe(
+      this.apiURL + '/campaign/info/' + campaignId).pipe(
         catchError(this.errorHandler),
       );
+  }
+
+  starCampaignCache(campaignId): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/starCampaignCache/' + campaignId,
+      this.httpOptions,
+    ).pipe(
+      catchError(this.errorHandler),
+    );
   }
 
 
@@ -111,6 +120,12 @@ export class CampaignService {
 
   find(id): Observable<Campaign> {
     return this.httpClient.get<Campaign>(this.apiURL + '/campaigns/' + id)
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+  findCampaignsByUser(id): Observable<Campaign> {
+    return this.httpClient.get<Campaign>(this.apiURL + '/campaign/getAllCampaignsByUser/' + id)
       .pipe(
         catchError(this.errorHandler),
       );

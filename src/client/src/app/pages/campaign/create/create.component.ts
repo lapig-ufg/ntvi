@@ -221,9 +221,9 @@ export class CreateComponent implements OnInit {
     public organizationService: OrganizationService,
     public useClassService: UseClassService,
     public userService: UserService,
-    private toastService: NbToastrService,
-    private router: Router,
-    private fb: FormBuilder,
+    public toastService: NbToastrService,
+    public router: Router,
+    public fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {

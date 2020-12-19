@@ -383,7 +383,11 @@ module.exports = function (app) {
                 },
                 include: {
                     points: true,
-                    images: true
+                    images: true,
+                    classes: true,
+                    compositions: true,
+                    organization: true,
+                    UsersOnCampaigns: true,
                 }
 
             });
@@ -407,9 +411,21 @@ module.exports = function (app) {
                 include: {
                     points: true,
                     images: true,
-                    UsersOnCampaigns: true,
+                    UsersOnCampaigns: {
+                        include:{
+                            user: {
+                                select: {
+                                    name: true,
+                                }
+                            }
+                        }
+                    },
                     classes: true,
-                    compositions: true,
+                    compositions: {
+                      include:{
+                          satellite: true,
+                      }
+                    },
                     organization: true
                 }
             })
@@ -440,6 +456,28 @@ module.exports = function (app) {
             response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
+
+    Controller.starCampaignCache = async function (request, response) {
+        const { id } = request.params
+        const { status } = request.body
+        let { lang } = request.headers;
+        const texts = language.getLang(lang);
+
+        try {
+            const campaign = await prisma.campaign.update({
+                where: {id: parseInt(id)},
+                data: {
+                    status: status
+                }
+            });
+
+            response.status(200).json(campaign);
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+        }
+    }
+
 
 
     // Controller.deleteOrganization = async function (request, response) {
