@@ -2,7 +2,9 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { Campaign } from '../models/campaign';
 import { Router } from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { NbSearchService } from '@nebular/theme';
+import { User } from '../models/user';
+
 
 @Component({
   selector: 'ngx-index',
@@ -10,46 +12,44 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit {
-  infoForm: FormGroup;
-  configForm: FormGroup;
-  pointsForm: FormGroup;
-  usersForm: FormGroup;
-  imagesForm: FormGroup;
+  campaigns = [] as Campaign[];
+  user: User;
+  filterTerm: string;
 
   constructor(
-    public organizationService: CampaignService,
-    private router: Router,
-    private fb: FormBuilder,
+    public campaignService: CampaignService,
+    public router: Router,
+    private searchService: NbSearchService,
   ) { }
 
   ngOnInit(): void {
-    this.infoForm = this.fb.group({
-      name: ['Name is required!', Validators.required],
-      description: ['Description is required', Validators.required],
+    const self = this;
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.campaignService.getAllCampaignsFromUser(this.user.id).subscribe((data: Campaign[]) => {
+      this.campaigns = data;
     });
-
-    this.configForm = this.fb.group({
-      secondCtrl: ['', Validators.required],
-    });
-
-    this.pointsForm = this.fb.group({
-      thirdCtrl: ['', Validators.required],
-    });
-
-    this.usersForm = this.fb.group({
-      thirdCtrl: ['', Validators.required],
-    });
-
-    this.imagesForm = this.fb.group({
-      thirdCtrl: ['', Validators.required],
-    });
+    this.searchService.onSearchInput()
+      .subscribe((data: any) => {
+        this.filterTerm = data.term;
+      });
   }
 
-  goTo(url) {
-    this.router.navigateByUrl(url);
+  resetSearch() {
+    this.filterTerm = '';
   }
-
-
+  canGenerateCache(campaign) {
+    return (
+      campaign.classes.length > 0 &&
+      campaign.points.length > 0 &&
+      campaign.compositions.length > 0 &&
+      campaign.UsersOnCampaigns.length > 0
+    );
+  }
+  startCache(campaign) {
+    campaign.status = 'CACHING';
+    this.campaignService.starCampaignCache(campaign).subscribe((data: Campaign) => {
+    });
+  }
   // deleteClass(id) {
   //   this.organizationService.delete(id).subscribe(res => {
   //     this.classes = this.classes.filter(item => item.id !== id);

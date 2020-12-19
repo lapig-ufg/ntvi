@@ -74,7 +74,7 @@
                     <label for="initialDate" class="label">Initial Date</label>
                     <input id="initialDate" formControlName="initialDate" placeholder="Initial Date"
                       [nbDatepicker]="dpInitialDate" nbInput fullWidth>
-                    <nb-datepicker #dpInitialDate></nb-datepicker>
+                    <nb-datepicker #dpInitialDate [format]="'yyyy'"></nb-datepicker>
                     <div *ngIf="fConfig.initialDate.touched && fConfig.initialDate.invalid" class="mt-2">
                       <nb-alert status="danger" *ngIf="fConfig.initialDate.errors.required"> Initial Date is required.
                       </nb-alert>
@@ -86,7 +86,7 @@
                     <label for="finalDate" class="label">Final Date</label>
                     <input id="finalDate" formControlName="finalDate" placeholder="Final Date"
                       [nbDatepicker]="dpFinalDate" nbInput fullWidth>
-                    <nb-datepicker #dpFinalDate></nb-datepicker>
+                    <nb-datepicker #dpFinalDate [format]="'yyyy'"></nb-datepicker>
                     <div *ngIf="fConfig.finalDate.touched && fConfig.finalDate.invalid" class="mt-2">
                       <nb-alert status="danger" *ngIf="fConfig.finalDate.errors.required"> Final Date is required.
                       </nb-alert>
@@ -514,7 +514,7 @@
             </nb-card-body>
           </nb-card>
           <div class="actions">
-            <button nbButton>Start Caching Images</button>
+            <button nbButton (click)="router.navigateByUrl('pages/campaign/index')">Start Caching Images</button>
           </div>
         </div>
       </nb-step>

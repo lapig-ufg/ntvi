@@ -10,7 +10,7 @@
         nbInput
         disabled
         fullWidth
-        [(ngModel)]="reviewCampaign.name"
+        [(ngModel)]="campaign.name"
       >
     </div>
     <div class="form-group">
@@ -23,7 +23,7 @@
         nbInput
         disabled
         fullWidth
-        [(ngModel)]="reviewCampaign.description"
+        [(ngModel)]="campaign.description"
 
       ></textarea>
     </div>
@@ -37,7 +37,7 @@
             fullWidth
             disabled
             filled
-            [(ngModel)]="reviewCampaign.organizationId"
+            [selected]="campaign.organization?.id"
           >
             <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>
           </nb-select>
@@ -53,7 +53,7 @@
             nbInput
             disabled
             fullWidth
-            [(ngModel)]="reviewCampaign.numInspectors"
+            [(ngModel)]="campaign.numInspectors"
           >
         </div>
       </div>
@@ -69,9 +69,9 @@
             nbInput
             disabled
             fullWidth
-            [(ngModel)]="reviewCampaign.initialDate"
+            [(ngModel)]="campaign.initialDate"
           >
-          <nb-datepicker #_dpInitialDate></nb-datepicker>
+          <nb-datepicker #_dpInitialDate [format]="'yyyy'"></nb-datepicker>
         </div>
       </div>
       <div class="col-sm-12 col-md-6 col-xl-16">
@@ -84,9 +84,9 @@
             nbInput
             disabled
             fullWidth
-            [(ngModel)]="reviewCampaign.finalDate"
+            [(ngModel)]="campaign.finalDate"
           >
-          <nb-datepicker #_dpFinalDate></nb-datepicker>
+          <nb-datepicker #_dpFinalDate [format]="'yyyy'"></nb-datepicker>
         </div>
       </div>
     </div>
@@ -98,7 +98,6 @@
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xl-12">
                 <ng2-smart-table
-                  *ngIf="compositions.length > 0"
                   [settings]="tableCompositionsReview.settings"
                   [source]="tableCompositionsReview.source"
                 >
@@ -115,9 +114,8 @@
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xl-12">
                 <ng2-smart-table
-                  *ngIf="useClassesSelected.length > 0"
-                  [settings]="tableUseClassReview.settings"
-                  [source]="tableUseClassReview.source"
+                  [settings]="tableUseClass.settings"
+                  [source]="tableUseClass.source"
                 >
                 </ng2-smart-table>
               </div>
@@ -126,14 +124,14 @@
         </nb-card>
       </div>
     </div>
-    <div class="row m-3" *ngIf="points.length > 0">
+    <div class="row m-3" >
       <div class="col-sm-12">
         <div class="header-flex">
                     <span>
                       <h6>  Points from file </h6>
                     </span>
           <span>
-                      <h6> Total of points: {{points.length}} </h6>
+                      <h6> Total of points: {{campaign.points?.length}} </h6>
                     </span>
         </div>
         <ng2-smart-table
@@ -147,7 +145,6 @@
       <div class="col-sm-12 col-md-12 col-xl-12">
         <h6 class="m-3">  Users </h6>
         <ng2-smart-table
-          *ngIf="usersOnCampaign.length > 0"
           [settings]="tableUsers.settings"
           [source]="tableUsers.source"
         >
@@ -158,7 +155,6 @@
       <h6>  Custom images </h6>
       <div class="col-sm-12 col-md-12 col-xl-12">
         <ng2-smart-table
-          *ngIf="images.length > 0"
           [settings]="tableImages.settings"
           [source]="tableImages.source"
         >

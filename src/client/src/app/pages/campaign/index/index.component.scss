@@ -3,6 +3,10 @@
 @import '../../../@theme/styles/themes';
 @import '../../../@theme/styles/mixins';
 
+.btn-header {
+  display: flex;
+  justify-content: space-between;
+}
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
