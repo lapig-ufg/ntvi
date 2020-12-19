@@ -10,34 +10,6 @@ module.exports = function (app) {
         log: ['query'],
     })
 
-    // Controller.getAllOrganizations = async function (request, response) {
-    //     const { lang } = request.headers;
-    //     const texts = language.getLang(lang);
-    //     try {
-    //         const organizations = await prisma.organization.findMany();
-    //         response.json(organizations)
-    //     }catch (e) {
-    //         console.error(e)
-    //         response.status(500).json({error: true, message: texts.login_msg_erro + e + '.'});
-    //     }
-    // }
-
-    // Controller.getOrganization = async function (request, response) {
-    //     const { lang } = request.headers;
-    //     const texts = language.getLang(lang);
-
-    //     try {
-    //         const _organization = await prisma.organization.findUnique({
-    //             where: {
-    //                 id: parseInt(request.params.id),
-    //             }
-    //         })
-    //         response.json(_organization)
-    //     } catch (e) {
-    //         console.error(e)
-    //         response.status(500).json({error: true, message: texts.login_msg_erro + e + '.'});
-    //     }
-    // }
 
     Controller.createCampaignInfoForm = async function (request, response) {
         const { name, description, organization, numInspectors } = request.body
@@ -46,7 +18,7 @@ module.exports = function (app) {
 
         try {
             const _campaign = await prisma.campaign.create({
-                data: { name: name, description: description, organization: organization, numInspectors: numInspectors },
+                data: { name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors },
             })
             response.status(200).json(_campaign);
         } catch (e) {
@@ -65,7 +37,7 @@ module.exports = function (app) {
             const _campaign = await prisma.campaign.update({
                 where: { id: parseInt(id) },
                 data: {
-                    name: name, description: description, organization: organization, numInspectors: numInspectors,
+                    name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors,
                 }
             })
             response.status(200).json(_campaign);
