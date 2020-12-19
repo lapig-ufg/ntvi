@@ -53,14 +53,25 @@ export class CampaignService {
       );
   }
 
-  starCampaignCache(campaignId): Observable<Campaign> {
+  startCampaignCache(campaign): Observable<Campaign> {
     return this.httpClient.put<Campaign>(
-      this.apiURL + '/campaign/starCampaignCache/' + campaignId,
+      this.apiURL + '/campaign/startCampaignCache/' + campaign.id,
+      JSON.stringify(campaign),
       this.httpOptions,
     ).pipe(
       catchError(this.errorHandler),
     );
   }
+  publishCampaign(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/publishCampaign/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    ).pipe(
+      catchError(this.errorHandler),
+    );
+  }
+
 
 
   create(campaign): Observable<Campaign> {

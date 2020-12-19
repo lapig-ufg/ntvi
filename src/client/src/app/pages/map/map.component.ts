@@ -6,6 +6,7 @@ import { Component,
   Input,
   EventEmitter,
   ChangeDetectorRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {View, Feature, Map} from 'ol';
@@ -31,6 +32,7 @@ import FullScreen from 'ol/control/FullScreen';
   selector: 'ngx-ol-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements AfterViewInit {
 
@@ -46,7 +48,10 @@ export class MapComponent implements AfterViewInit {
   features = [] as Feature[];
   @Output() mapReady = new EventEmitter<Map>();
 
-  constructor(private zone: NgZone, private cd: ChangeDetectorRef) { }
+  constructor(
+    private zone: NgZone,
+    private cd: ChangeDetectorRef,
+  ) { }
 
   ngAfterViewInit(): void {
     if (!this.Map) {

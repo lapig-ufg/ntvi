@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit} from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { Campaign} from '../models/campaign';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { OrganizationService } from '../../organization/service/organization.ser
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss'],
 })
-export class ViewComponent implements OnInit {
+export class ViewComponent implements AfterViewInit {
   id: number;
   campaign = {} as Campaign;
   organizations = [] as Organization[];
@@ -131,12 +131,12 @@ export class ViewComponent implements OnInit {
   };
   constructor(
     public campaignService: CampaignService,
-    private route: ActivatedRoute,
-    private router: Router,
+    public route: ActivatedRoute,
+    public router: Router,
     public organizationService: OrganizationService,
   ) { }
 
-  async ngOnInit() {
+  ngAfterViewInit() {
     this.id = this.route.snapshot.params['campaignId'];
     this.organizationService.getAll().subscribe((data: Organization[]) => {
       this.organizations = data;

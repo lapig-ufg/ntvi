@@ -1,5 +1,5 @@
 <nb-card >
-  <nb-card-header>Information of Campaign</nb-card-header>
+  <nb-card-header><h6 class="m-3">Information of Campaign</h6></nb-card-header>
   <nb-card-body>
     <div class="form-group">
       <label for="_name" class="label">Name</label>
@@ -31,16 +31,14 @@
       <div class="col-sm-12 col-md-6 col-xl-6">
         <div class="">
           <label for="_organizationId" class="label">Organization</label>
-          <nb-select
+          <input
             id="_organizationId"
-            placeholder="Select a organization"
-            fullWidth
+            type="text"
+            nbInput
             disabled
-            filled
-            [selected]="campaign.organization?.id"
+            fullWidth
+           [value]="campaign.organization?.name"
           >
-            <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>
-          </nb-select>
         </div>
       </div>
       <div class="col-sm-12 col-md-6 col-xl-16">
@@ -93,7 +91,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-6 col-xl-6">
         <nb-card >
-          <nb-card-header>Color Composition</nb-card-header>
+          <nb-card-header><h6 class="m-3">Color Composition</h6></nb-card-header>
           <nb-card-body>
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xl-12">
@@ -109,7 +107,7 @@
       </div>
       <div class="col-sm-12 col-md-6 col-xl-6">
         <nb-card >
-          <nb-card-header>Use classes</nb-card-header>
+          <nb-card-header><h6 class="m-3">Use classes</h6></nb-card-header>
           <nb-card-body>
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xl-12">
@@ -127,12 +125,12 @@
     <div class="row m-3" >
       <div class="col-sm-12">
         <div class="header-flex">
-                    <span>
-                      <h6>  Points from file </h6>
-                    </span>
-          <span>
-                      <h6> Total of points: {{campaign.points?.length}} </h6>
-                    </span>
+            <span>
+              <h6>  Points from file </h6>
+            </span>
+            <span>
+              <h6> Total of points: {{campaign.points?.length}} </h6>
+            </span>
         </div>
         <ng2-smart-table
           [settings]="tablePoints.settings"
@@ -162,4 +160,7 @@
       </div>
     </div>
   </nb-card-body>
+  <nb-card-footer>
+    <button  *ngIf="campaign.status === 'INCOMPLETE'" nbButton size="giant" status="warning" (click)="router.navigateByUrl('pages/campaign/' + id + '/edit')" type="button">EDIT CAMPAIGN</button>
+  </nb-card-footer>
 </nb-card>

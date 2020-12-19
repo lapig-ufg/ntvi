@@ -10,4 +10,8 @@
 
 export const environment = {
   production: false,
+  clientId: '750256806057-52odg19a6lkgbjuu67f3a12o0vq5aipq.apps.googleusercontent.com',
+  clientSecret: '-59HNErVLJfZkM_RAH4s4l8N',
+  redirectUri: 'http://localhost:4200/auth/oauth2/callback',
+  oauthGoogleUrl: 'http://localhost:4200/auth/oauth',
 };

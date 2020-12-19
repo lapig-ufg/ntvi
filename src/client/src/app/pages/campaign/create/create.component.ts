@@ -440,16 +440,12 @@ export class CreateComponent implements OnInit {
 
   onInfoFormSubmit() {
     this.infoForm.markAsDirty();
-
-    this.campaignService.create(this.infoForm.value).subscribe(res => {
+    let data: any = this.infoForm.value;
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    data.role = { userId: currentUser.id, typeUserInCampaign: 'ADMIN'};
+    this.campaignService.create(data).subscribe(res => {
       this.campaign = res;
     });
-
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    this.campaignService.getAllCampaignsFromUser(currentUser.id).subscribe(res => {
-    });
-
-
   }
 
   onConfigFormSubmit() {
@@ -478,11 +474,6 @@ export class CreateComponent implements OnInit {
 
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
     });
-
-    this.campaignService.getCampaignInfo(this.campaign).subscribe(res => {
-    });
-
-
   }
   onPointsFormSubmit() {
     this.pointsForm.markAsDirty();
@@ -513,7 +504,8 @@ export class CreateComponent implements OnInit {
     this.loadInputs();
   }
   showToast(status: NbComponentStatus, massage, position) {
-    this.toastService.show(status, massage, { status, position });
+    const duration = 4000;
+    this.toastService.show(status, massage, { status, position, duration });
   }
   onMapReady(ev) {
     // console.log(ev)
@@ -543,7 +535,8 @@ export class CreateComponent implements OnInit {
       temp = this.points[ctr];
       this.points[ctr] = this.points[index];
       this.points[index] = temp;
-      this.tablePoints.source.reset();
+      this.tablePoints.source.empty();
+      this.tablePoints.source.load(this.points);
     }
   }
   handlePointsFile(file) {
