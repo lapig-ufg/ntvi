@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { User } from '../model/users';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
 
@@ -30,7 +30,6 @@ export class UsersService {
   }
 
   find(id): Observable<User> {
-    console.log('id::', id)
     return this.httpClient.get<User>(this.apiURL + '/user/' + id)
       .pipe(
         catchError(this.errorHandler),
