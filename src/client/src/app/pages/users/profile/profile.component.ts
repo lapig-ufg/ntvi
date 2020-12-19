@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
       this.selectedItem = data.organization.id.toString();
       this.user = data;
     });
-    
+
     this.organizationService.getAll().subscribe((data: Organization[]) => {
       this.organizations = data;
     });
