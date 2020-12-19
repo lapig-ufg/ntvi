@@ -14,6 +14,7 @@
       }
     ],
     "arrow-return-shorthand": true,
+    "unit-allowed-list": ["fr", "dpi", "dppx"],
     "callable-types": true,
     "class-name": true,
     "comment-format": [
