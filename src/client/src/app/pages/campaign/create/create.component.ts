@@ -41,7 +41,7 @@ export class CreateComponent implements OnInit {
   users = [] as User[];
   images = [] as Image[];
   campaign: Campaign;
-  usersOnCampaign = [] as UsersOnCampaigns[];
+  UsersOnCampaigns = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
   customImages = false as boolean;
   reviewCampaign = {} as any;
@@ -329,13 +329,13 @@ export class CreateComponent implements OnInit {
       typeUserInCampaign: permission,
       user: user,
     };
-    this.usersOnCampaign.push(userOnCampaign);
+    this.UsersOnCampaigns.push(userOnCampaign);
     this.usersForm.patchValue({
       user: '',
       permission: '',
     });
     this.tableUsers.source.reset();
-    await this.tableUsers.source.load(this.usersOnCampaign);
+    await this.tableUsers.source.load(this.UsersOnCampaigns);
   }
   async addImage() {
     const imgSatellite = this.imagesForm.get('imgSatellite').value;
@@ -392,11 +392,11 @@ export class CreateComponent implements OnInit {
 
   async removeUserOnCampaign(event) {
     const index = event.index;
-    this.usersOnCampaign = this.usersOnCampaign.filter(function (item, i) {
+    this.UsersOnCampaigns = this.UsersOnCampaigns.filter(function (item, i) {
       return i !== index;
     });
     this.tableUsers.source.reset();
-    await this.tableUsers.source.load(this.usersOnCampaign);
+    await this.tableUsers.source.load(this.UsersOnCampaigns);
   }
 
   async removeImage(event) {
@@ -495,7 +495,7 @@ export class CreateComponent implements OnInit {
   onUsersFormSubmit() {
     this.pointsForm.markAsDirty();
 
-    this.campaign.usersOnCampaign = this.usersOnCampaign;
+    this.campaign.UsersOnCampaigns = this.UsersOnCampaigns;
 
     this.campaignService.createUsersOnCampaignForm(this.campaign).subscribe(res => {
     });
