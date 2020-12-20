@@ -56,7 +56,7 @@ module.exports = function (app) {
         const { name, email, password, city, state, country, geeKey, organization } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
-
+        console.log(organization.id);
         try {
             let arrayQueries = [];
 
@@ -73,7 +73,7 @@ module.exports = function (app) {
                         state: state != null ? state : undefined,
                         country: country != null ? country : undefined,
                         geeKey: geeKey != null ? geeKey : undefined,
-                        organization: { connect: {id: parseInt(organization)} },
+                        organization: { connect: {id: parseInt(organization.id)} },
                     }
                 }))
             }else{
@@ -86,7 +86,7 @@ module.exports = function (app) {
                         state: state != null ? state : undefined,
                         country: country != null ? country : undefined,
                         geeKey: geeKey != null ? geeKey : undefined,
-                        organization: { connect: {id: parseInt(organization)} },
+                        organization: { connect: {id: parseInt(organization.id)} },
                     }
                 }))
             }
