@@ -5,19 +5,16 @@
   <nb-card-body>
     <form aria-labelledby="title">
       <div class="container">
-        <!-- <div class="row">
+        <div class="row">
           <div class="row col-6">
             <div class="col-2">
-                <img src="../../../../assets/images/user-avatar.png" width="100">
-            </div>
-            <div class="col-8">
-              <input type="file" nbInput fullWidth>
+                <img class="profile" [src]="user.picture? user.picture : '../../../../assets/images/user-avatar.png'" width="100">
             </div>
           </div>
-        </div> -->
+        </div>
         <div class="row">
           <div class="form-control-group col">
-            <h6>Account information</h6>
+            <h6>Profile information</h6>
             <label class="label" for="input-name">Full name:</label>
             <input nbInput id="input-name" #fullName="ngModel" [(ngModel)]="user.name" name="name"
               placeholder="Full name" autofocus fullWidth fieldSize="large">
@@ -25,12 +22,12 @@
                 <p class="caption status-danger" *ngIf="fullName.errors?.required">
                   Full name is required!
                 </p>
-                <p class="caption status-danger" *ngIf="fullName.errors?.minlength || fullName.errors?.maxlength">
-                  Full name should contains
-                  from {{getConfigValue('forms.validation.fullName.minLength')}}
-                  to {{getConfigValue('forms.validation.fullName.maxLength')}}
-                  characters
-                </p>
+<!--                <p class="caption status-danger" *ngIf="fullName.errors?.minlength || fullName.errors?.maxlength">-->
+<!--                  Full name should contains-->
+<!--                  from {{getConfigValue('forms.validation.fullName.minLength')}}-->
+<!--                  to {{getConfigValue('forms.validation.fullName.maxLength')}}-->
+<!--                  characters-->
+<!--                </p>-->
               </ng-container>
           </div>
           <div class="form-control-group col">
@@ -44,16 +41,16 @@
                  <p class="caption status-danger" *ngIf="password.errors?.required">
                    Password is required!
                  </p>
-                 <p class="caption status-danger" *ngIf="password.errors?.minlength || password.errors?.maxlength">
-                   Password should contain
-                   from {{ getConfigValue('forms.validation.password.minLength') }}
-                   to {{ getConfigValue('forms.validation.password.maxLength') }}
-                   characters
-                 </p>
+<!--                 <p class="caption status-danger" *ngIf="password.errors?.minlength || password.errors?.maxlength">-->
+<!--                   Password should contain-->
+<!--                   from {{ getConfigValue('forms.validation.password.minLength') }}-->
+<!--                   to {{ getConfigValue('forms.validation.password.maxLength') }}-->
+<!--                   characters-->
+<!--                 </p>-->
                </ng-container>
           </div>
         </div>
-    
+
         <div class="row">
           <div class="form-control-group col">
             <label class="label" for="input-email">Email address:</label>
@@ -70,7 +67,7 @@
           </div>
           <div class="form-control-group col">
             <label class="label" for="input-re-password">Confirm new password:</label>
-            <input nbInput type="password" id="input-re-password" #rePass="ngModel" [(ngModel)]="user.confirmPassword"
+            <input nbInput type="password" (blur)="checkPassword()" id="input-re-password" #rePass="ngModel" [(ngModel)]="confirmPassword"
               name="rePass"
               placeholder="Confirm Password" fullWidth
               fieldSize="large">
@@ -84,11 +81,11 @@
               </ng-container>
           </div>
         </div>
-  
+
         <div class="row form-control-group">
           <div class="col">
             <label class="label" for="organizationId">Organization</label>
-            <nb-select id="organizationId" [(selected)]="user.organization"
+            <nb-select id="organizationId" [(selected)]="selectedItem"
               placeholder="Select a organization"
               fullWidth filled>
               <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}
@@ -102,7 +99,7 @@
               fieldSize="large">
           </div>
         </div>
-        
+
         <div class="form-control-group form-shipping-address">
           <h6> Address</h6>
           <div class="row">
