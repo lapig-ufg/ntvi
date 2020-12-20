@@ -12,9 +12,20 @@ import {
   NbButtonModule,
   NbCardModule,
   NbAlertModule,
-  NbCheckboxModule, NbDatepickerModule, NbIconModule,
-  NbInputModule, NbRadioModule, NbSelectModule,
-  NbUserModule, NbListModule, NbStepperModule, NbBadgeModule, NbSpinnerModule, NbToggleModule, NbSearchModule,
+  NbCheckboxModule,
+  NbDatepickerModule,
+  NbIconModule,
+  NbInputModule,
+  NbRadioModule,
+  NbSelectModule,
+  NbUserModule,
+  NbListModule,
+  NbStepperModule,
+  NbBadgeModule,
+  NbSpinnerModule,
+  NbToggleModule,
+  NbSearchModule,
+  NbTabsetModule,
 } from '@nebular/theme';
 
 
@@ -53,6 +64,7 @@ import {
         NbSearchModule,
         Ng2SearchPipeModule,
         NbMomentDateModule,
+        NbTabsetModule,
     ],
 })
 export class CampaignModule { }
