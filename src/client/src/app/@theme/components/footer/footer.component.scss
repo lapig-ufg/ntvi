@@ -21,7 +21,14 @@
       }
     }
   }
-
+  .created-by {
+    width: 100%;
+    .partners {
+      display: flex;
+      max-width: 50%;
+      margin: 0 auto;
+    }
+  }
   @include media-breakpoint-down(is) {
     .socials {
       font-size: 1.5rem;

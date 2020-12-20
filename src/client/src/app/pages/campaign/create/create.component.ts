@@ -41,10 +41,10 @@ export class CreateComponent implements OnInit {
   users = [] as User[];
   images = [] as Image[];
   campaign: Campaign;
-  usersOnCampaign = [] as UsersOnCampaigns[];
+  UsersOnCampaigns = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
   customImages = false as boolean;
-  previewCampaign: any;
+  reviewCampaign = {} as any;
   permissions = [
     { id: 'ADMIN', name: 'ADMIN' },
     { id: 'INSPETOR', name: 'INSPETOR' },
@@ -102,6 +102,46 @@ export class CreateComponent implements OnInit {
         position: 'right',
         edit: false,
       },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        satellite: {
+          title: 'Name',
+          valuePrepareFunction: (satellite) => {
+            return satellite.name;
+          },
+        },
+        colors: {
+          title: 'Colors',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableUseClassReview = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: false,
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: false,
+      },
+      columns: {
+        name: {
+          title: 'Name',
+        },
+      },
+    },
+    source: new LocalDataSource(),
+  };
+  tableCompositionsReview = {
+    settings: {
+      mode: 'external',
+      hideSubHeader: true,
+      actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
         confirmDelete: false,
@@ -181,9 +221,9 @@ export class CreateComponent implements OnInit {
     public organizationService: OrganizationService,
     public useClassService: UseClassService,
     public userService: UserService,
-    private toastService: NbToastrService,
-    private router: Router,
-    private fb: FormBuilder,
+    public toastService: NbToastrService,
+    public router: Router,
+    public fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
@@ -289,13 +329,13 @@ export class CreateComponent implements OnInit {
       typeUserInCampaign: permission,
       user: user,
     };
-    this.usersOnCampaign.push(userOnCampaign);
+    this.UsersOnCampaigns.push(userOnCampaign);
     this.usersForm.patchValue({
       user: '',
       permission: '',
     });
     this.tableUsers.source.reset();
-    await this.tableUsers.source.load(this.usersOnCampaign);
+    await this.tableUsers.source.load(this.UsersOnCampaigns);
   }
   async addImage() {
     const imgSatellite = this.imagesForm.get('imgSatellite').value;
@@ -352,11 +392,11 @@ export class CreateComponent implements OnInit {
 
   async removeUserOnCampaign(event) {
     const index = event.index;
-    this.usersOnCampaign = this.usersOnCampaign.filter(function (item, i) {
+    this.UsersOnCampaigns = this.UsersOnCampaigns.filter(function (item, i) {
       return i !== index;
     });
     this.tableUsers.source.reset();
-    await this.tableUsers.source.load(this.usersOnCampaign);
+    await this.tableUsers.source.load(this.UsersOnCampaigns);
   }
 
   async removeImage(event) {
@@ -400,16 +440,12 @@ export class CreateComponent implements OnInit {
 
   onInfoFormSubmit() {
     this.infoForm.markAsDirty();
-
-    this.campaignService.create(this.infoForm.value).subscribe(res => {
+    const data: any = this.infoForm.value;
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    data.permisson = { userId: currentUser.id, typeUserInCampaign: 'ADMIN'};
+    this.campaignService.create(data).subscribe(res => {
       this.campaign = res;
     });
-
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    this.campaignService.getAllCampaignsFromUser(currentUser.id).subscribe(res => {
-    });
-
-
   }
 
   onConfigFormSubmit() {
@@ -438,11 +474,6 @@ export class CreateComponent implements OnInit {
 
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
     });
-
-    this.campaignService.getCampaignInfo(this.campaign).subscribe(res => {
-    });
-
-
   }
   onPointsFormSubmit() {
     this.pointsForm.markAsDirty();
@@ -456,11 +487,11 @@ export class CreateComponent implements OnInit {
   onUsersFormSubmit() {
     this.pointsForm.markAsDirty();
 
-    this.campaign.usersOnCampaign = this.usersOnCampaign;
+    this.campaign.UsersOnCampaigns = this.UsersOnCampaigns;
 
     this.campaignService.createUsersOnCampaignForm(this.campaign).subscribe(res => {
     });
-
+    this.loadInputs();
   }
 
   onImagesFormSubmit() {
@@ -470,12 +501,27 @@ export class CreateComponent implements OnInit {
 
     this.campaignService.createImagesForm(this.campaign).subscribe(res => {
     });
+    this.loadInputs();
   }
   showToast(status: NbComponentStatus, massage, position) {
-    this.toastService.show(status, massage, { status, position });
+    const duration = 4000;
+    this.toastService.show(status, massage, { status, position, duration });
   }
   onMapReady(ev) {
     // console.log(ev)
+  }
+
+  async loadInputs() {
+    this.reviewCampaign.name           = this.infoForm.get('name').value;
+    this.reviewCampaign.description    = this.infoForm.get('description').value;
+    this.reviewCampaign.organizationId = this.infoForm.get('organizationId').value;
+    this.reviewCampaign.numInspectors  = this.infoForm.get('numInspectors').value;
+    this.reviewCampaign.initialDate    = this.configForm.get('initialDate').value;
+    this.reviewCampaign.finalDate      = this.configForm.get('finalDate').value;
+    this.tableUseClassReview.source.reset();
+    await this.tableUseClassReview.source.load(this.useClassesSelected);
+    this.tableCompositionsReview.source.reset();
+    await this.tableCompositionsReview.source.load(this.compositions);
   }
   shufflePoints() {
     let ctr = this.points.length, temp, index;
@@ -489,7 +535,8 @@ export class CreateComponent implements OnInit {
       temp = this.points[ctr];
       this.points[ctr] = this.points[index];
       this.points[index] = temp;
-      this.tablePoints.source.reset();
+      this.tablePoints.source.empty();
+      this.tablePoints.source.load(this.points);
     }
   }
   handlePointsFile(file) {

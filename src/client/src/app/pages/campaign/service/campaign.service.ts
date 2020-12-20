@@ -46,12 +46,32 @@ export class CampaignService {
     );
   }
 
-  getCampaignInfo(campaign): Observable<Campaign> {
+  getCampaignInfo(campaignId): Observable<Campaign> {
     return this.httpClient.get<Campaign>(
-      this.apiURL + '/campaign/info/' + campaign.id).pipe(
+      this.apiURL + '/campaign/info/' + campaignId).pipe(
         catchError(this.errorHandler),
       );
   }
+
+  startCampaignCache(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/startCampaignCache/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    ).pipe(
+      catchError(this.errorHandler),
+    );
+  }
+  publishCampaign(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/publishCampaign/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    ).pipe(
+      catchError(this.errorHandler),
+    );
+  }
+
 
 
   create(campaign): Observable<Campaign> {
@@ -111,6 +131,12 @@ export class CampaignService {
 
   find(id): Observable<Campaign> {
     return this.httpClient.get<Campaign>(this.apiURL + '/campaigns/' + id)
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+  findCampaignsByUser(id): Observable<Campaign> {
+    return this.httpClient.get<Campaign>(this.apiURL + '/campaign/getAllCampaignsByUser/' + id)
       .pipe(
         catchError(this.errorHandler),
       );

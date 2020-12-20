@@ -6,6 +6,7 @@ import { Component,
   Input,
   EventEmitter,
   ChangeDetectorRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {View, Feature, Map} from 'ol';
@@ -31,12 +32,15 @@ import FullScreen from 'ol/control/FullScreen';
   selector: 'ngx-ol-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements AfterViewInit {
 
   @Input() center: Coordinate;
   @Input() zoom: number;
   @Input() points = [] as Point[];
+  @Input() mapId = 'map' as string;
+  @Input() height = '345px' as string;
   view: View;
   projection: Projection;
   extent: Extent = [-304.038676, -74.719954, 314.008199, 85.717737];
@@ -44,7 +48,10 @@ export class MapComponent implements AfterViewInit {
   features = [] as Feature[];
   @Output() mapReady = new EventEmitter<Map>();
 
-  constructor(private zone: NgZone, private cd: ChangeDetectorRef) { }
+  constructor(
+    private zone: NgZone,
+    private cd: ChangeDetectorRef,
+  ) { }
 
   ngAfterViewInit(): void {
     if (!this.Map) {
@@ -101,7 +108,7 @@ export class MapComponent implements AfterViewInit {
         baseLayer,
         layerPoints ? layerPoints : null,
       ],
-      target: 'map',
+      target: this.mapId,
       view: this.view,
       controls: DefaultControls().extend([
         new FullScreen(),

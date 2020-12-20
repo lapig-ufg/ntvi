@@ -15,5 +15,7 @@ module.exports = function (app) {
     app.put('/service/campaign/updateUsersCampaignForm/:id', JWT.verifyJWT, control.updateUserCampaignForm);
     app.put('/service/campaign/createImagesForm/:id', JWT.verifyJWT, control.createImagesForm);
     app.put('/service/campaign/updateImagesForm/:id', JWT.verifyJWT, control.updateImagesForm);
+    app.put('/service/campaign/startCampaignCache/:id', JWT.verifyJWT, control.starCampaignCache);
+    app.put('/service/campaign/publishCampaign/:id', JWT.verifyJWT, control.publishCampaign);
     // app.delete('/service/organizations/:id', JWT.verifyJWT, control.deleteOrganization);
 }

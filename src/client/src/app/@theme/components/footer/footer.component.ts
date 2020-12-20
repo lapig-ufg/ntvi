@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   template: `
     <span class="created-by">
-     Visual Inspection Tool - LAPIG/UFG
+     <img class="partners" src="../../../assets/images/parceiros.png">
     </span>
   `,
 })
