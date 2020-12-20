@@ -6,7 +6,6 @@ module.exports = function (app) {
     app.put('/service/campaign/updateInfoForm/:id', JWT.verifyJWT, control.updateCampaignInfoForm);
     app.get('/service/campaign/campaignsFromUser/:id', JWT.verifyJWT, control.getCampaignsByUser);
     app.get('/service/campaign/info/:id', JWT.verifyJWT, control.getCampaignInfo);
-    // app.post('/service/organizations', JWT.verifyJWT, control.createOrganization);
     app.put('/service/campaign/createConfigForm/:id', JWT.verifyJWT, control.createConfigForm);
     app.put('/service/campaign/updateConfigForm/:id', JWT.verifyJWT, control.updateConfigForm);
     app.put('/service/campaign/createPointsForm/:id', JWT.verifyJWT, control.createPointsForm);
@@ -17,5 +16,5 @@ module.exports = function (app) {
     app.put('/service/campaign/updateImagesForm/:id', JWT.verifyJWT, control.updateImagesForm);
     app.put('/service/campaign/startCampaignCache/:id', JWT.verifyJWT, control.starCampaignCache);
     app.put('/service/campaign/publishCampaign/:id', JWT.verifyJWT, control.publishCampaign);
-    // app.delete('/service/organizations/:id', JWT.verifyJWT, control.deleteOrganization);
+    app.delete('/service/campaign/delete/:id', JWT.verifyJWT, control.deleteCampaign);
 }

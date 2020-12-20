@@ -474,22 +474,22 @@ module.exports = function (app) {
         }
     }
 
-    // Controller.deleteOrganization = async function (request, response) {
-    //     const { id } = request.params
-    //     let { lang } = request.headers;
-    //     const texts = language.getLang(lang);
-    //     try {
+    Controller.deleteCampaign = async function (request, response) {
+        const { id } = request.params
+        let { lang } = request.headers;
+        const texts = language.getLang(lang);
+        try {
 
-    //         const _organization = await prisma.organization.delete({
-    //             where: { id: parseInt(id) },
-    //         })
+            const _campaign = await prisma.campaign.delete({
+                where: { id: parseInt(id) },
+            })
 
-    //         response.status(200).json(_organization);
-    //     } catch (e) {
-    //         console.error(e)
-    //         response.status(500).json({ message: texts.login_msg_erro + e + '.' });
-    //     }
-    // }
+            response.status(200).json(_campaign);
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+        }
+    }
 
     return Controller;
 }
