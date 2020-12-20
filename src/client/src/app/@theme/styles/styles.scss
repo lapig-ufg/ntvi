@@ -42,3 +42,10 @@
   display: flex;
   justify-content: space-between;
 }
+
+.ol-attribution {
+  display: none;
+  .ol-uncollapsible {
+    display: none;
+  }
+}
