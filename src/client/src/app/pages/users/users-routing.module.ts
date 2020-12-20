@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
-  { path: '/', redirectTo: 'post/index', pathMatch: 'full'},
+  { path: '/', redirectTo: 'users/index', pathMatch: 'full'},
   { path: 'profile', component: ProfileComponent },
 ];
 

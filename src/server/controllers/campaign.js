@@ -189,7 +189,7 @@ module.exports = function (app) {
 
     Controller.createUserCampaignForm = async function (request, response) {
         const { id } = request.params
-        const { usersOnCampaign } = request.body
+        const { UsersOnCampaigns } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -198,7 +198,7 @@ module.exports = function (app) {
 
             let newVet = []
 
-            for (let obj of usersOnCampaign) {
+            for (let obj of UsersOnCampaigns) {
                 obj.user = obj.user.id
                 delete obj.userId
                 obj.campaign = parseInt(id)
@@ -355,7 +355,11 @@ module.exports = function (app) {
                 },
                 include: {
                     points: true,
-                    images: true
+                    images: true,
+                    classes: true,
+                    compositions: true,
+                    organization: true,
+                    UsersOnCampaigns: true,
                 }
 
             });
@@ -379,9 +383,21 @@ module.exports = function (app) {
                 include: {
                     points: true,
                     images: true,
-                    UsersOnCampaigns: true,
+                    UsersOnCampaigns: {
+                        include:{
+                            user: {
+                                select: {
+                                    name: true,
+                                }
+                            }
+                        }
+                    },
                     classes: true,
-                    compositions: true,
+                    compositions: {
+                      include:{
+                          satellite: true,
+                      }
+                    },
                     organization: true
                 }
             })
@@ -413,6 +429,47 @@ module.exports = function (app) {
         }
     }
 
+    Controller.starCampaignCache = async function (request, response) {
+        const { id } = request.params
+        const { status } = request.body
+        let { lang } = request.headers;
+        const texts = language.getLang(lang);
+
+        try {
+            const campaign = await prisma.campaign.update({
+                where: {id: parseInt(id)},
+                data: {
+                    status: status
+                }
+            });
+
+            response.status(200).json(campaign);
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+        }
+    }
+
+    Controller.publishCampaign = async function (request, response) {
+        const { id } = request.params
+        const { publish } = request.body
+        let { lang } = request.headers;
+        const texts = language.getLang(lang);
+
+        try {
+            const campaign = await prisma.campaign.update({
+                where: {id: parseInt(id)},
+                data: {
+                    publish: publish
+                }
+            });
+
+            response.status(200).json(campaign);
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+        }
+    }
 
     // Controller.deleteOrganization = async function (request, response) {
     //     const { id } = request.params

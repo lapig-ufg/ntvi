@@ -1,47 +1,42 @@
 @import '../../../../../node_modules/bootstrap/scss/mixins/breakpoints';
 @import '../../../../../node_modules/@nebular/theme/styles/global/breakpoints';
 @import '../../../@theme/styles/themes';
+@import '../../../@theme/styles/mixins';
 
-@include nb-install-component() {
-  overflow: auto;
-
-  .item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    > * {
-      flex: 1;
-    }
-
-    &:first-child {
-      border-top: none;
-    }
-  }
-
-  .delta {
-    display: flex;
-    align-items: center;
-
-    &.down {
-      color: nb-theme(color-danger-default);
-    }
-
-    &.up {
-      color: nb-theme(color-success-default);
-    }
-  }
-
-  @include media-breakpoint-down(is) {
-    ngx-traffic-bar {
-      display: none;
-    }
-  }
-}
-
-
-
-.search-inline {
+.btn-header {
   display: flex;
   justify-content: space-between;
+}
+.description {
+  font-size: 0.8rem;
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  height: 42px;
+  margin-top: 2px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+  grid-auto-rows: auto;
+  grid-gap: 1rem;
+
+  @include tablet() {
+    grid-template-columns: repeat(2, 50%);
+  }
+
+  @include mobile() {
+    grid-template-columns: repeat(1, 100%);
+  }
+
+  .nb-actions {
+    display: flex;
+    justify-content: space-around;
+    .actions {
+      border-left: unset !important;
+    }
+  }
 }

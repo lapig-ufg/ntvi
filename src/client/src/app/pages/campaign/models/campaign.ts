@@ -15,10 +15,11 @@ export interface Campaign {
   initialDate?: Date;
   finalDate?: Date;
   publish?: boolean;
+  organizationId?: number;
   organization?: Organization;
   classes?: UseClass[];
   compositions?: Composition[];
   points?: Point[];
   images?: Image[];
-  usersOnCampaign?: UsersOnCampaigns[];
+  UsersOnCampaigns?: UsersOnCampaigns[];
 }
