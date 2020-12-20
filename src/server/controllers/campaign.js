@@ -12,13 +12,16 @@ module.exports = function (app) {
 
 
     Controller.createCampaignInfoForm = async function (request, response) {
-        const { name, description, organization, numInspectors } = request.body
+        const { name, description, organization, numInspectors, permisson } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
         try {
             const _campaign = await prisma.campaign.create({
-                data: { name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors },
+                data: {
+                    name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors,
+                    UsersOnCampaigns: { create: { user: { connect: { id: parseInt(permisson.userId) } }, typeUserInCampaign: permisson.typeUserInCampaign } }
+                },
             })
             response.status(200).json(_campaign);
         } catch (e) {
@@ -29,7 +32,7 @@ module.exports = function (app) {
 
     Controller.updateCampaignInfoForm = async function (request, response) {
         const { id } = request.params
-        const { name, description, organization, numInspectors } = request.body
+        const { name, description, organization, numInspectors, permisson } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -384,7 +387,7 @@ module.exports = function (app) {
                     points: true,
                     images: true,
                     UsersOnCampaigns: {
-                        include:{
+                        include: {
                             user: {
                                 select: {
                                     name: true,
@@ -394,9 +397,9 @@ module.exports = function (app) {
                     },
                     classes: true,
                     compositions: {
-                      include:{
-                          satellite: true,
-                      }
+                        include: {
+                            satellite: true,
+                        }
                     },
                     organization: true
                 }
@@ -437,7 +440,7 @@ module.exports = function (app) {
 
         try {
             const campaign = await prisma.campaign.update({
-                where: {id: parseInt(id)},
+                where: { id: parseInt(id) },
                 data: {
                     status: status
                 }
@@ -458,7 +461,7 @@ module.exports = function (app) {
 
         try {
             const campaign = await prisma.campaign.update({
-                where: {id: parseInt(id)},
+                where: { id: parseInt(id) },
                 data: {
                     publish: publish
                 }
@@ -471,22 +474,22 @@ module.exports = function (app) {
         }
     }
 
-    // Controller.deleteOrganization = async function (request, response) {
-    //     const { id } = request.params
-    //     let { lang } = request.headers;
-    //     const texts = language.getLang(lang);
-    //     try {
+    Controller.deleteCampaign = async function (request, response) {
+        const { id } = request.params
+        let { lang } = request.headers;
+        const texts = language.getLang(lang);
+        try {
 
-    //         const _organization = await prisma.organization.delete({
-    //             where: { id: parseInt(id) },
-    //         })
+            const _campaign = await prisma.campaign.delete({
+                where: { id: parseInt(id) },
+            })
 
-    //         response.status(200).json(_organization);
-    //     } catch (e) {
-    //         console.error(e)
-    //         response.status(500).json({ message: texts.login_msg_erro + e + '.' });
-    //     }
-    // }
+            response.status(200).json(_campaign);
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+        }
+    }
 
     return Controller;
 }
