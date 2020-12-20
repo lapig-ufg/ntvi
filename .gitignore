@@ -37,3 +37,4 @@ db/dump/
 src/server/bin/GeoJSON/
 *.out
 src/server/.env
+src/server/bin/teste/*
