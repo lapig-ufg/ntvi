@@ -46,7 +46,7 @@ export class MapComponent implements AfterViewInit {
   @Input() zoom = 3 as number;
   @Input() minZoom = 4 as number;
   @Input() maxZoom = 18 as number;
-  @Input() points = [] as Coordinate[];
+  @Input() points = [] as any[];
   @Input() mapId = 'map' as string;
   @Input() height = '345px' as string;
   @Input() showBaseMapGoogle = true as boolean;
@@ -97,6 +97,7 @@ export class MapComponent implements AfterViewInit {
         '+title=NAD83 (long/lat) +proj=longlat +a=6378137.0 +b=6356752.31414036 +ellps=GRS80 +datum=NAD83 +units=degrees',
       ],
     ]);
+
     register(proj4);
     this.projection = GetProjection('EPSG:4326');
     this.projection.setExtent(this.ext);
@@ -105,6 +106,8 @@ export class MapComponent implements AfterViewInit {
       zoom: this.zoom,
       maxZoom: this.maxZoom,
       minZoom: this.minZoom,
+      resolution: 2,
+      maxResolution: 2,
       projection: this.projection,
     });
     const baseMapGoogle = new OlTileLayer({
@@ -135,26 +138,30 @@ export class MapComponent implements AfterViewInit {
       controls: DefaultControls().extend(controls),
     });
 
-    if (this.points.length > 0) {
-      this.addPoints();
-    }
-
     if (this.imgUrl) {
       this.addImage();
     }
-
+    if (this.hasVales(this.points)) {
+      this.addPoints();
+    }
+  }
+  hasVales(array) {
+    let values = 0;
+    for (const item of array) {
+      values++;
+    }
+    return (values > 0 ? true : false);
   }
 
   addImage() {
     const projection = new Projection({
-      code: 'xkcd-image',
+      code: 'EPSG:4326',
       units: 'pixels',
       extent: this.ext,
     });
     const layerImage = new ImageLayer({
       source: new Static({
         url: this.imgUrl,
-        imageSize: [350, 350],
         projection: projection,
         imageExtent: this.ext,
       }),
@@ -164,28 +171,26 @@ export class MapComponent implements AfterViewInit {
   addPoints() {
     const self = this;
     let source = null as VectorSource;
-    if (this.points.length > 0) {
-      this.points.forEach(function (item) {
-        self.features.push(new Feature(new OPoint(item)));
-      });
-      source = new VectorSource({
-        features: self.features,
-      });
-      const style = new Style({
-        image: new Circle({
-          radius: 3,
-          fill: new Fill({ color: 'red' }),
-        }),
-      });
-      this.layerPoints = new VectorLayer({
-        source: source,
-        style: style,
-      });
-      this.Map.addLayer(this.layerPoints);
-      if (this.points.length > 1) {
-        const ext = source.getExtent();
-        this.Map.getView().fit(ext, { duration: 1500 });
-      }
+    this.points.forEach(function (item) {
+      self.features.push(new Feature(new OPoint(item)));
+    });
+    source = new VectorSource({
+      features: self.features,
+    });
+    const style = new Style({
+      image: new Circle({
+        radius: 8,
+        fill: new Fill({ color: '#b30059' }),
+      }),
+    });
+    this.layerPoints = new VectorLayer({
+      source: source,
+      style: style,
+    });
+    this.Map.addLayer(this.layerPoints);
+    if (this.points.length > 1) {
+      const ext = source.getExtent();
+      this.Map.getView().fit(ext, { duration: 1500 });
     }
   }
 }

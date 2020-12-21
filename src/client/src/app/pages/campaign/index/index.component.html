@@ -61,13 +61,13 @@
           badgePosition="top right"
           (click)="beginInspection(campaign)">
         </nb-action>
-        <nb-action
-          *ngIf="canRemove(campaign)"
-          title="REMOVE"
-          class="action"
-          icon="trash-2-outline"
-          (click)="removeCampaign(campaign)">
-        </nb-action>
+<!--        <nb-action-->
+<!--          *ngIf="canRemove(campaign)"-->
+<!--          title="REMOVE"-->
+<!--          class="action"-->
+<!--          icon="trash-2-outline"-->
+<!--          (click)="removeCampaign(campaign)">-->
+<!--        </nb-action>-->
         <nb-action
           *ngIf="canGenerateCache(campaign)"
           title="Start Caching Images"

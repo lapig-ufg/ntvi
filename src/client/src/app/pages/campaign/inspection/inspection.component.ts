@@ -36,12 +36,15 @@ export class InspectionComponent implements OnInit, OnDestroy {
   pointEnabled = true as boolean;
   tmsIdListWet = [];
   tmsIdListDry = [];
-  images = [] as any[];
+  imagesDry = [] as any[];
+  imagesWet = [] as any[];
   center = [] as number[];
   extent = [] as any[];
   cameras: Camera[];
-  selectedCamera: Camera;
-  isSingleView = false;
+  image = 'DRY';
+  answers = [] as any[];
+  counter = 0 as number;
+  optionYears = [] as any[];
   actionSize: NbComponentSize = 'medium';
   campaign = {} as Campaign;
   user = {} as User;
@@ -63,13 +66,6 @@ export class InspectionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.canInspect();
-    this.securityCamerasService.getCamerasData()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cameras: Camera[]) => {
-        this.cameras = cameras;
-        this.selectedCamera = this.cameras[0];
-      });
-
     const breakpoints = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(map(([, breakpoint]) => breakpoint.width))
@@ -77,7 +73,7 @@ export class InspectionComponent implements OnInit, OnDestroy {
         this.actionSize = width > breakpoints.md ? 'medium' : 'small';
       });
   }
-  canInspect() {
+  async canInspect() {
     this.id = this.route.snapshot.params['campaignId'];
     this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
       this.campaign = data;
@@ -90,36 +86,27 @@ export class InspectionComponent implements OnInit, OnDestroy {
       }
     });
   }
-  swicthPeriod(period) {
-    this.period = period;
-    this.generateImages();
-  }
-  getPoint() {
-    const self = this;
+  async getPoint() {
     const currentUser = JSON.parse(localStorage.getItem('user'));
     const user = this.normalizeUser(currentUser);
+    // const access = { campaign: '44', name: user, senha: 'teste123' };
     const access = { campaign: this.campaign.id, name: user, senha: 'teste123' };
-    this.pointService.login(access).subscribe((data: any) => {
-      self.login = data;
-
-      this.pointService.getPoint().subscribe((_data: any) => {
-        self.info = _data;
-        self.points.push([_data.point.lon, _data.point.lat]);
-        self.center.push(_data.point.lon);
-        self.center.push(_data.point.lat);
-        self.extent.push(_data.point.bounds[0][1]);
-        self.extent.push(_data.point.bounds[1][0]);
-        self.extent.push(_data.point.bounds[1][1]);
-        self.extent.push(_data.point.bounds[0][0]);
-
-        self.isDataAvailable = true;
-        self.generateImages();
-      });
-    });
+    this.login = await this.pointService.login(access).toPromise();
+    this.info = await this.pointService.getPoint().toPromise();
+    this.points.push([this.info.point.lon, this.info.point.lat]);
+    this.center.push(this.info.point.lon);
+    this.center.push(this.info.point.lat);
+    this.extent.push(this.info.point.bounds[0][1]);
+    this.extent.push(this.info.point.bounds[1][0]);
+    this.extent.push(this.info.point.bounds[1][1]);
+    this.extent.push(this.info.point.bounds[0][0]);
+    this.initFormViewVariables();
+    this.generateOptionYears(this.login.campaign.initialYear, this.login.campaign.finalYear);
+    this.generateImages();
   }
-
   generateImages() {
-    this.images = [];
+    this.imagesDry = [];
+    this.imagesWet = [];
     for (let year = this.login.campaign.initialYear; year <= this.login.campaign.finalYear; year++) {
       let sattelite = 'L7';
       if (year > 2012) {
@@ -130,21 +117,39 @@ export class InspectionComponent implements OnInit, OnDestroy {
         sattelite = 'L5';
       }
 
-      const tmsId = sattelite + '_' + year + '_' + this.period;
+      const tmsId = sattelite + '_' + year + '_' + 'DRY';
       const tmsIdDry = sattelite + '_' + year + '_DRY';
-      const tmsIdWet = sattelite + '_' + year + '_WET';
 
       this.tmsIdListDry.push(tmsIdDry);
-      this.tmsIdListWet.push(tmsIdWet);
       const url = `https://tvi.lapig.iesa.ufg.br/image/${tmsId}/${this.info.point._id}?campaign=${this.login.campaign._id}`;
-      this.images.push({
+      this.imagesDry.push({
         date: (this.info.point.dates[tmsId]) ? this.info.point.dates[tmsId] : null,
         year: year,
         url: url,
       });
     }
-  }
+    for (let year = this.login.campaign.initialYear; year <= this.login.campaign.finalYear; year++) {
+      let sattelite = 'L7';
+      if (year > 2012) {
+        sattelite = 'L8';
+      } else if (year > 2011) {
+        sattelite = 'L7';
+      } else if (year > 2003 || year < 2000) {
+        sattelite = 'L5';
+      }
 
+      const tmsId = sattelite + '_' + year + '_' + 'WET';
+      const tmsIdWet = sattelite + '_' + year + '_WET';
+      this.tmsIdListWet.push(tmsIdWet);
+      const url = `https://tvi.lapig.iesa.ufg.br/image/${tmsId}/${this.info.point._id}?campaign=${this.login.campaign._id}`;
+      this.imagesWet.push({
+        date: (this.info.point.dates[tmsId]) ? this.info.point.dates[tmsId] : null,
+        year: year,
+        url: url,
+      });
+    }
+    this.isDataAvailable = true;
+  }
   normalizeUser(user) {
     let name = user.name.toLowerCase();
     name = name.normalize('NFD')
@@ -153,18 +158,80 @@ export class InspectionComponent implements OnInit, OnDestroy {
     name = user.id + '_' + name;
     return name;
   }
-
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  selectCamera(camera: any) {
-    this.selectedCamera = camera;
-    this.isSingleView = true;
+  showImage(image) {
+    this.image = image;
   }
   showToast(status: NbComponentStatus, massage, position) {
     const duration = 4000;
     this.toastService.show(status, massage, { status, position, duration });
+  }
+  generateOptionYears(initialYear, finalYear) {
+    const options = [];
+    for (let year = initialYear; year <= finalYear; year++) {
+      options.push(year);
+    }
+    this.optionYears.push(options);
+  }
+  getDateImages() {
+    const dates = [];
+    for (let i = 0; i < this.imagesWet.length; i++) {
+      dates.push(new Date( this.imagesWet[i].date));
+    }
+    return dates;
+  }
+  initFormViewVariables() {
+    this.optionYears = [];
+    const landUseIndex = 1;
+    this.answers = [
+      {
+        initialYear: this.login.campaign.initialYear,
+        finalYear: this.login.campaign.finalYear,
+        landUse: this.login.campaign.landUse[landUseIndex],
+        pixelBorder: false,
+      },
+    ];
+  }
+  formPlus() {
+    const prevIndex = this.answers.length - 1;
+    const initialYear = this.answers[prevIndex].finalYear + 1;
+
+    if (this.answers[prevIndex].finalYear === this.login.finalYear) return;
+
+    const finalYear = this.login.finalYear;
+
+    this.generateOptionYears(initialYear, finalYear);
+
+    this.answers.push(
+      {
+        initialYear: initialYear,
+        finalYear: finalYear,
+        landUse: this.login.campaign.landUse[1],
+        pixelBorder: false,
+      },
+    );
+  }
+  formSubtraction() {
+    if (this.answers.length >= 1) {
+      this.answers.splice(-1, 1);
+      this.optionYears.splice(-1, 1);
+    }
+  }
+  submitForm() {
+    const formPoint = {
+      _id: this.info.point._id,
+      inspection: {
+        counter: this.login.counter,
+        form: this.answers,
+      },
+    };
+    this.onSubmission = true;
+  }
+  initCounter() {
+    this.counter = 0;
+    setInterval(() => this.counter++, 1000);
   }
 }

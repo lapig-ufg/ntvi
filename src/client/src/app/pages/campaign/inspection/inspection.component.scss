@@ -59,23 +59,12 @@
   .grid-view {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 
     .camera {
-      flex: 1 0 25%;
-      height: 300px;
-      border: 0.7px solid white;
+      flex-basis: 332px;
+      border: 0.1px solid white;
 
-      @include desktop() {
-        flex: 1 0 50%;
-      }
-
-      @include tablet() {
-        flex: 1 0 50%;
-      }
-
-      @include mobile() {
-        flex: 1 0 90%;
-      }
     }
   }
 
@@ -108,7 +97,7 @@
     bottom: 0;
     width: 100%;
     color: white;
-    background: nb-theme(overlay-backdrop-background-color);
+    background: rgba(0, 0, 0, 0.65);
     padding: 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
@@ -166,7 +155,15 @@
 }
 
 .header-point {
-  padding: 0.4rem;
+  padding: 0.1rem;
   border-radius: 5px;
   margin-bottom: 10px;
+}
+
+.show-img{
+  cursor: pointer;
+}
+
+.btn-actions-class {
+  display: contents;
 }
