@@ -260,8 +260,11 @@ module.exports = function (app) {
 						.split(" ")
 						.join(",").split(",");
 
-					result.point.bounds[0] = [parseFloat(tmp[1]), parseFloat(tmp[0])]
-					result.point.bounds[1] = [parseFloat(tmp[3]), parseFloat(tmp[2])]
+					tmp.forEach(x => {
+						x = parseFloat(x)
+					})
+
+					result.point.bbox = tmp
 					response.send(result);
 					response.end();
 				}
