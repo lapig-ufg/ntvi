@@ -7,6 +7,7 @@ import { EditComponent } from './edit/edit.component';
 import { PublicComponent } from './public/public.component';
 import { InspectionComponent } from './inspection/inspection.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ResultComponent } from './result/result.component';
 import { NbThemeService } from '@nebular/theme';
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: ':campaignId/edit', component: EditComponent },
   { path: ':campaignId/inspect', component: InspectionComponent },
   { path: ':campaignId/dashboard', component: DashboardComponent },
+  { path: ':campaignId/result', component: ResultComponent },
 ];
 
 @NgModule({
@@ -42,4 +44,5 @@ export const routedComponents = [
   InspectionComponent,
   DashboardComponent,
   PublicComponent,
+  ResultComponent,
 ];
