@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   user = {} as User;
 
   settings: any;
-  data: any
+  data: any;
 
   dataChart: any;
   options: any;
@@ -109,12 +109,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       const colors: any = config.variables;
       const chartjs: any = config.variables.chartjs;
-      this.campaignService.returnNDVISeries("-46.440074", "-12.007367").subscribe(
+      this.campaignService.returnNDVISeries('-46.440074', '-12.007367').subscribe(
         result => {
           this.tmpModis = result;
         },
         err => {
-          console.log('Error: ', err);
+          // console.log('Error: ', err);
         },
         () => {
 
@@ -129,7 +129,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               hidden: false,
               pointRadius: 1,
               pointHoverRadius: 3,
-              pointStyle: 'rect'
+              pointStyle: 'rect',
             }
               // , {
               //   data: [28, 48, 40, 19, 86, 27, 90],
@@ -163,7 +163,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                   ticks: {
                     fontColor: chartjs.textColor,
                     autoSkip: true,
-                    stepSize: 0.2
+                    stepSize: 0.2,
                   },
                   type: 'time',
                 },
@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                   ticks: {
                     fontColor: chartjs.textColor,
                     autoSkip: true,
-                    stepSize: 0.2
+                    stepSize: 0.2,
                   },
                 },
               ],
@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               labels: {
                 fontColor: chartjs.textColor,
               },
-              position: 'bottom'
+              position: 'bottom',
             },
           };
         });
@@ -310,7 +310,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       },
     ];
 
-    source: new LocalDataSource();
+    source: new LocalDataSource(),
   }
 
 }

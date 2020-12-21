@@ -171,7 +171,7 @@ export class CampaignService {
 
   returnNDVISeries(long, lat): Observable<any> {
     return this.httpClient.get<any>(
-      this.apiURL + '/campaign/dashboard/modis?long=' + long + "&lat=" + lat).pipe(
+      this.apiURL + '/campaign/dashboard/modis?long=' + long + '&lat=' + lat).pipe(
         catchError(this.errorHandler),
       );
   }
