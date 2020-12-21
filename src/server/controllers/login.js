@@ -30,8 +30,6 @@ module.exports = function (app) {
 		var name = request.param('name');
 		var senha = request.param('senha');
 
-		console.log(campaignId, name, senha)
-
 		campaigns.findOne({ "_id": campaignId.toString() }, function (err, campaign) {
 
 			var result = {

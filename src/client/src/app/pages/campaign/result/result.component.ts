@@ -131,17 +131,6 @@ export class ResultComponent implements OnInit, OnDestroy {
               pointHoverRadius: 3,
               pointStyle: 'rect',
             },
-              // , {
-              //   data: [28, 48, 40, 19, 86, 27, 90],
-              //   label: 'Series B',
-              //   backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.3),
-              //   borderColor: colors.danger,
-              // }, {
-              //   data: [18, 48, 77, 9, 100, 27, 40],
-              //   label: 'Series C',
-              //   backgroundColor: NbColorHelper.hexToRgbA(colors.info, 0.3),
-              //   borderColor: colors.info,
-              // },
             ],
           };
 

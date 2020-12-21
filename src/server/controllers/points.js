@@ -2,12 +2,27 @@ var ejs = require('ejs');
 var fs = require('fs')
 var schedule = require('node-schedule');
 
+const { Pool, Client } = require('pg')
+
+var configJS = require('../config.js')()
+
+var pool = new Pool(configJS["pg"])
+const { PrismaClient } = require('@prisma/client')
+
 module.exports = function (app) {
+
+	const config = app.config;
 
 	var Points = {};
 	var points = app.repository.collections.points;
 	var mosaics = app.repository.collections.mosaics;
 	var status = app.repository.collections.status;
+
+	const prisma = new PrismaClient({
+		errorFormat: 'pretty',
+		log: ['query'],
+	})
+
 
 	var getImageDates = function (path, row, callback) {
 		var filterMosaic = { 'dates.path': path, 'dates.row': row };
@@ -188,12 +203,73 @@ module.exports = function (app) {
 	Points.getCurrentPoint = function (request, response) {
 		var user = request.session.user;
 
+		var r = {}
+
 		findPoint(user.campaign, user.name, function (result) {
 			request.session.currentPointId = result.point._id;
 
-			response.send(result);
-			response.end();
+			let INSERT_STATEMENT = 'select rect_bbox(ST_SetSRID(ST_MAKEPOINT( cast($1 as float), cast($2 as float)), 4326))::TEXT as queryResult';
+
+			(async () => {
+
+				// 	const client = await pool.connect()
+				// 	console.log("entrou")
+				// 	try {
+				// 		await client.query('BEGIN')
+
+				// 		var rowValues = [parseFloat(result.point.lon), parseFloat(result.point.lat)]
+				// 		const res = await client.query(INSERT_STATEMENT, rowValues)
+
+
+				// 		console.log('last update: ', res)
+
+
+				// 		console.log("Doing commit")
+				// 		await client.query('COMMIT')
+
+				// 	} catch (e) {
+				// 		console.log("Doing rollback")
+				// 		await client.query('ROLLBACK')
+				// 		throw e
+				// 	} finally {
+				// 		client.release()
+				// 		response.send(result);
+				// 		response.end();
+				// 	}
+				// })().catch(e => console.error(e.stack))
+				let t = []
+				await prisma.$connect()
+				try {
+
+					var q = await prisma.$queryRaw(
+						INSERT_STATEMENT, (result.point.lon), (result.point.lat)) // PostgreSQL variables, represented by $1 and $2
+
+					q.forEach(x => {
+						t.push(x.queryresult)
+					})
+
+				}
+				catch (e) {
+					throw e
+				}
+				finally {
+					await prisma.$disconnect()
+
+					let tmp = t[0].replace("BOX(", "")
+						.replace(")", "")
+						.split(" ")
+						.join(",").split(",");
+
+					result.point.bounds[0] = [parseFloat(tmp[1]), parseFloat(tmp[0])]
+					result.point.bounds[1] = [parseFloat(tmp[3]), parseFloat(tmp[2])]
+					response.send(result);
+					response.end();
+				}
+			})().catch(e => console.error(e.stack))
 		})
+
+		// console.log(r.point.lon, r.point.lat)
+
 	};
 
 	Points.updatePoint = function (request, response) {
