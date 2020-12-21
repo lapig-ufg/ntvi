@@ -1,6 +1,7 @@
 @import '../../../@theme/styles/themes';
 @import '~@nebular/theme/styles/global/breakpoints';
 @import '~bootstrap/scss/mixins/breakpoints';
+@import '../../../@theme/styles/mixins';
 
 @include nb-install-component() {
 
@@ -57,9 +58,25 @@
     flex-wrap: wrap;
 
     .camera {
-      flex: 1 0 33%;
+      flex: 1 0 25%;
       height: 300px;
       border: 0.7px solid white;
+
+      @include large() {
+        flex: 1 0 33%;
+      }
+
+      @include desktop() {
+        flex: 1 0 25%;
+      }
+
+      @include tablet() {
+        flex: 1 0 50%;
+      }
+
+      @include mobile() {
+        flex: 1 0 90%;
+      }
     }
   }
 
@@ -94,6 +111,8 @@
     color: white;
     background: nb-theme(overlay-backdrop-background-color);
     padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
   }
 
   nb-action {
@@ -138,3 +157,17 @@
 .img-satellite {
   padding: unset;
 }
+.location {
+  font-family: Open Sans, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+}
+
+.header-point {
+  padding: 0.4rem;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+

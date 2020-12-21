@@ -38,6 +38,7 @@ export class CreateComponent implements OnInit {
   useClasses = [] as UseClass[];
   useClassesSelected = [] as UseClass[];
   points = [] as Point[];
+  mapPoints = [] as any[];
   users = [] as User[];
   images = [] as Image[];
   campaign: Campaign;
@@ -551,6 +552,7 @@ export class CreateComponent implements OnInit {
       for (const [index, point] of self.points.entries()) {
         const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
         const location = data.results[0].locations[0];
+        self.mapPoints.push([parseFloat(point.longitude), parseFloat(point.latitude)]);
         self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
       }
       await self.tablePoints.source.load(self.points);

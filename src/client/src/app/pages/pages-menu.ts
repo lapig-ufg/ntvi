@@ -10,17 +10,17 @@ const grantMenu = function (roles) {
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Campaign',
+    title: 'Campaigns',
     icon: 'map',
     home: true,
     hidden: grantMenu(['ROOT', 'ADMIN', 'USER', 'DEFAULT']),
     link: '/pages/campaign/index',
-    // children: [
-    //   {
-    //     title: 'Register',
-    //     link: '/pages/campaign',
-    //   },
-    // ],
+  },
+  {
+    title: 'Public campaigns',
+    icon: 'map',
+    hidden: grantMenu(['ROOT', 'ADMIN', 'USER', 'DEFAULT']),
+    link: '/pages/campaign/public',
   },
   {
     title: 'Organizations',
@@ -29,7 +29,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     hidden: grantMenu(['ROOT']),
   },
   {
-    title: 'Use Class',
+    title: 'Classes',
     icon: 'map',
     link: '/pages/use-class/index',
     hidden: grantMenu(['ROOT']),

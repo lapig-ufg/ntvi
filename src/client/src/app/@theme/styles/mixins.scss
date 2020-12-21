@@ -65,7 +65,8 @@
 
 $tablet-width: 830px;
 $desktop-width: 1025px;
-$large-width: 1600px;
+$large-width: 1200px;
+$giant-width: 1600px;
 $medium-width: 1200px;
 
 
@@ -97,6 +98,12 @@ $medium-width: 1200px;
     @media (min-width: #{$large-width}) {
         @content;
     }
+}
+
+@mixin giant {
+  @media (min-width: #{$large-width}) {
+    @content;
+  }
 }
 
 @mixin retina {

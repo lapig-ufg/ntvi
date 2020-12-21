@@ -6,6 +6,7 @@ module.exports = function (app) {
     app.put('/service/campaign/updateInfoForm/:id', JWT.verifyJWT, control.updateCampaignInfoForm);
     app.get('/service/campaign/campaignsFromUser/:id', JWT.verifyJWT, control.getCampaignsByUser);
     app.get('/service/campaign/info/:id', JWT.verifyJWT, control.getCampaignInfo);
+    app.get('/service/campaign/publicCampaigns', JWT.verifyJWT, control.getPublicCampaigns);
     app.put('/service/campaign/createConfigForm/:id', JWT.verifyJWT, control.createConfigForm);
     app.put('/service/campaign/updateConfigForm/:id', JWT.verifyJWT, control.updateConfigForm);
     app.put('/service/campaign/createPointsForm/:id', JWT.verifyJWT, control.createPointsForm);

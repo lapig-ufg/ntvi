@@ -19,9 +19,10 @@
       <ngx-ol-map
         [center]="[4.984761,34.337429]"
         [zoom]="4"
+        [mouseWheelZoom]="true"
         [height]="'250px'"
         [mapId]="'map' + i"
-        [points]="campaign.points"
+        [points]="handlePoints(campaign)"
       ></ngx-ol-map>
     </nb-card-body>
     <nb-card-footer >
@@ -48,6 +49,17 @@
           badgeText=" "
           [badgeStatus]="campaign.publish ? 'success' : 'danger' "
           icon="book-open-outline">
+        </nb-action>
+        <nb-action
+          *ngIf="canInspect(campaign)"
+          title="INSPECT"
+          class="action"
+          badgeDot="true"
+          icon="book-open-outline"
+          badgeStatus="success"
+          badgeText="INSPECT"
+          badgePosition="top right"
+          (click)="beginInspection(campaign)">
         </nb-action>
         <nb-action
           *ngIf="canGenerateCache(campaign)"

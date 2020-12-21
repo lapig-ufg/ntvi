@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var execSync = require('child_process').execSync;
 
-var url = "mongodb://localhost:27017/tvi";
+var url = "mongodb://localhost:27017/ntvi";
 
 var index = process.argv[2]
 var campaign = process.argv[3]
@@ -13,7 +13,7 @@ MongoClient.connect(url, function(err, db) {
   	var lon = result.lon
 		var lat = result.lat
 		
-		var IMG_DIR = '/data/cache-tvi'
+		var IMG_DIR = '/data/cache-ntvi'
 		var zoom = 13;
 		var periods = ['DRY','WET']
 

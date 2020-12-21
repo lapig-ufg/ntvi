@@ -32,11 +32,11 @@
     grid-template-columns: repeat(1, 100%);
   }
 
-  nb-actions {
+  .nb-actions {
     display: flex;
     justify-content: space-around;
-    .status-success {
-      cursor: pointer;
+    .actions {
+      border-left: unset !important;
     }
   }
 }

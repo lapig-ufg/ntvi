@@ -37,6 +37,7 @@ export class EditComponent implements OnInit {
   useClasses = [] as UseClass[];
   useClassesSelected = [] as UseClass[];
   points = [] as Point[];
+  mapPoints = [] as any[];
   users = [] as User[];
   images = [] as Image[];
   UsersOnCampaigns = [] as UsersOnCampaigns[];
@@ -567,6 +568,7 @@ export class EditComponent implements OnInit {
       });
       for (const [index, point] of self.points.entries()) {
         const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
+        self.mapPoints.push([parseFloat(point.longitude), parseFloat(point.latitude)]);
         const location = data.results[0].locations[0];
         self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
       }

@@ -21,8 +21,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     public usersService: UsersService,
     public organizationService: OrganizationService,
-    private route: ActivatedRoute,
-    private router: Router,
+    public route: ActivatedRoute,
+    public router: Router,
     public toastService: NbToastrService,
     ) {
     }
@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges() {
-    this.user.organization.id = parseInt(this.selectedItem, 0);
+    this.user.organization = { id : parseInt(this.selectedItem, 0) };
     if (this.user.password !== this.confirmPassword) {
       this.user.password = null;
     }
