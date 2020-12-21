@@ -34,6 +34,7 @@ src/server/images/*
 src/server/integration/py/gee-keys/
 db/dump/
 src/server/bin/GeoJSON/
+src/server/bin/SHP
 *.out
 src/server/.env
 src/server/bin/teste/*
