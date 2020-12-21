@@ -99,13 +99,10 @@ export class InspectionComponent implements OnInit, OnDestroy {
     const currentUser = JSON.parse(localStorage.getItem('user'));
     const user = this.normalizeUser(currentUser);
     const access = { campaign: this.campaign.id, name: user, senha: 'teste123' };
-    // console.log(access)
     this.pointService.login(access).subscribe((data: any) => {
       self.login = data;
 
-      // console.log("camp - ", data)
       this.pointService.getPoint().subscribe((_data: any) => {
-        console.log("point - ", _data)
         self.info = _data;
         self.points.push([_data.point.lon, _data.point.lat]);
         self.center.push(_data.point.lon);
@@ -115,7 +112,6 @@ export class InspectionComponent implements OnInit, OnDestroy {
         self.extent.push(_data.point.bounds[1][1]);
         self.extent.push(_data.point.bounds[0][0]);
 
-        // console.log("ext - ", self.extent)
         self.isDataAvailable = true;
         self.generateImages();
       });

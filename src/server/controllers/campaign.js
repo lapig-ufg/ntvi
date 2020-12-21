@@ -218,8 +218,6 @@ module.exports = function (app) {
 
             }
 
-            console.log(newVet)
-
             arrayQueries.push(prisma.campaign.update({
                 where: { id: parseInt(id) },
                 data: {
@@ -381,7 +379,7 @@ module.exports = function (app) {
         try {
             const campaigns = await prisma.campaign.findMany({
                 where: {
-                   publish: true
+                    publish: true
                 },
                 include: {
                     points: true,

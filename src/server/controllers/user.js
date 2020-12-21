@@ -35,7 +35,6 @@ module.exports = function (app) {
     }
 
     Controller.getAllUsers = async function (request, response) {
-        console.log('passei')
         try {
             const users = await prisma.user.findMany({
                 select: {
@@ -56,7 +55,6 @@ module.exports = function (app) {
         const { name, email, password, city, state, country, geeKey, organization } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
-        console.log(organization.id);
         try {
             let arrayQueries = [];
 

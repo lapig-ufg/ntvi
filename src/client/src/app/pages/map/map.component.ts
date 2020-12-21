@@ -86,7 +86,6 @@ export class MapComponent implements AfterViewInit {
       }
     }
 
-    // console.log("extent no map - ", this.ext)
     const controls = [];
     const layers = [];
     proj4.defs([
