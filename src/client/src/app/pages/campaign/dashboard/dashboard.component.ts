@@ -130,7 +130,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               pointRadius: 1,
               pointHoverRadius: 3,
               pointStyle: 'rect',
-            }
+            },
               // , {
               //   data: [28, 48, 40, 19, 86, 27, 90],
               //   label: 'Series B',
@@ -235,7 +235,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 value: '<b>Samantha</b>',
                 title: 'Samantha',
               }],
-            }
+            },
           },
         },
       },
