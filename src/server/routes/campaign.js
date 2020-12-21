@@ -17,4 +17,5 @@ module.exports = function (app) {
     app.put('/service/campaign/startCampaignCache/:id', JWT.verifyJWT, control.starCampaignCache);
     app.put('/service/campaign/publishCampaign/:id', JWT.verifyJWT, control.publishCampaign);
     app.delete('/service/campaign/delete/:id', JWT.verifyJWT, control.deleteCampaign);
+    app.get('/service/campaign/dashboard/modis', JWT.verifyJWT, control.getMODIS);
 }

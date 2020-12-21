@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule, FormsModule as ngFormsModule} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormsModule as ngFormsModule } from '@angular/forms';
 import { CampaignRoutingModule, routedComponents } from './campaign-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
@@ -27,6 +27,8 @@ import {
   NbSearchModule,
   NbTabsetModule,
 } from '@nebular/theme';
+import { ChartModule } from 'angular2-chartjs';
+
 
 
 
@@ -34,37 +36,38 @@ import {
   declarations: [
     ...routedComponents,
   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-    imports: [
-        CommonModule,
-        CampaignRoutingModule,
-        ReactiveFormsModule,
-        Ng2SmartTableModule,
-        FormsModule,
-        NbAlertModule,
-        NbInputModule,
-        NbCardModule,
-        NbButtonModule,
-        NbActionsModule,
-        NbUserModule,
-        NbCheckboxModule,
-        NbRadioModule,
-        NbDatepickerModule,
-        NbSelectModule,
-        NbIconModule,
-        ngFormsModule,
-        NbListModule,
-        NbStepperModule,
-        NbDatepickerModule,
-        NbEvaIconsModule,
-        MapModule,
-        NbBadgeModule,
-        NbSpinnerModule,
-        NbToggleModule,
-        NbSearchModule,
-        Ng2SearchPipeModule,
-        NbMomentDateModule,
-        NbTabsetModule,
-    ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [
+    ChartModule,
+    CommonModule,
+    CampaignRoutingModule,
+    ReactiveFormsModule,
+    Ng2SmartTableModule,
+    FormsModule,
+    NbAlertModule,
+    NbInputModule,
+    NbCardModule,
+    NbButtonModule,
+    NbActionsModule,
+    NbUserModule,
+    NbCheckboxModule,
+    NbRadioModule,
+    NbDatepickerModule,
+    NbSelectModule,
+    NbIconModule,
+    ngFormsModule,
+    NbListModule,
+    NbStepperModule,
+    NbDatepickerModule,
+    NbEvaIconsModule,
+    MapModule,
+    NbBadgeModule,
+    NbSpinnerModule,
+    NbToggleModule,
+    NbSearchModule,
+    Ng2SearchPipeModule,
+    NbMomentDateModule,
+    NbTabsetModule,
+  ],
 })
 export class CampaignModule { }

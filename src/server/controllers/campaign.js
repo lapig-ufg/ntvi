@@ -1,9 +1,12 @@
 const { PrismaClient } = require('@prisma/client')
+const rp = require("request-promise");
 
 module.exports = function (app) {
     var Controller = {}
 
     let language = app.util.language;
+
+    const config = app.config;
 
     const prisma = new PrismaClient({
         errorFormat: 'pretty',
@@ -488,6 +491,39 @@ module.exports = function (app) {
         } catch (e) {
             console.error(e)
             response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+        }
+    }
+
+    Controller.getMODIS = async function (request, response) {
+        // const { long, lat } = request.params
+
+        const { lang } = request.headers;
+        const texts = language.getLang(lang);
+        let returnObject = [];
+
+        var lat = request.param('lat');
+        var long = request.param('long');
+
+        let url = config.ndvi_domain + "/service/deforestation/modist?id=MOD13Q1_NDVI" + "&longitude=" + Number(long) + "&latitude=" + Number(lat) + "&mode=series";
+
+        try {
+            let responseReq = await rp({ url: url });
+
+            let bd = JSON.parse(responseReq);
+
+            for (let index = 0; index < bd.values.length; index++) {
+                returnObject.push({
+                    date: bd.values[index][0],
+                    ndvi_original: bd.values[index][1],
+                    ndvi_wiener: bd.values[index][2],
+                    ndvi_golay: bd.values[index][3]
+                })
+            }
+
+            response.send(returnObject)
+            response.end();
+        } catch (e) {
+            console.log(e)
         }
     }
 

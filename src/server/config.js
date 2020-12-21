@@ -24,6 +24,7 @@ module.exports = function (app) {
 			"parallelRequestsBusyTime": 9,
 			"parallelRequestsDawnTime": 18
 		},
+		"ndvi_domain": env.NDVI_DOMAIN,
 		"pg": {
 			"user": env.PG_USER,
 			"host": env.PG_HOST,

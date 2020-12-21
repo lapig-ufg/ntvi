@@ -16,9 +16,9 @@ module.exports = function (app) {
         try {
             const satellites = await prisma.satellite.findMany();
             response.json(satellites)
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({error: true, message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
 
@@ -35,12 +35,12 @@ module.exports = function (app) {
             response.json(satellite)
         } catch (e) {
             console.error(e)
-            response.status(500).json({error: true, message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
 
     Controller.createSatellite = async function (request, response) {
-        const { name, description} = request.body
+        const { name, description } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -49,15 +49,15 @@ module.exports = function (app) {
                 data: { name: name, description: description },
             })
             response.status(200).json(satellite);
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({error: true,message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
 
     Controller.updateSatellite = async function (request, response) {
-        const {id} = request.params
-        const {name, description} = request.body
+        const { id } = request.params
+        const { name, description } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -69,9 +69,9 @@ module.exports = function (app) {
             })
             response.status(200).json(satellite);
 
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
         }
     }
 
@@ -82,13 +82,13 @@ module.exports = function (app) {
         try {
 
             const satellite = await prisma.satellite.delete({
-                where: { id: parseInt(id)},
+                where: { id: parseInt(id) },
             })
 
             response.status(200).json(satellite);
-        }catch (e) {
+        } catch (e) {
             console.error(e)
-            response.status(500).json({message: texts.login_msg_erro + e + '.'});
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
         }
     }
 

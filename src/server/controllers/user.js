@@ -8,7 +8,7 @@ module.exports = function (app) {
 
     Controller.getUserByID = async function (request, response) {
 
-        const {id} = request.params;
+        const { id } = request.params;
         // const { id } = request.params
         try {
             const us = await prisma.user.findUnique({
@@ -22,14 +22,14 @@ module.exports = function (app) {
                     geeKey: true,
                     typeUser: true,
                     picture: true,
-                    organization:true,
+                    organization: true,
                 },
                 where: {
                     id: parseInt(id),
                 },
             });
             response.json(us)
-        }catch (e) {
+        } catch (e) {
             console.error(e)
         }
     }
@@ -41,11 +41,11 @@ module.exports = function (app) {
                 select: {
                     id: true,
                     name: true,
-                    organization:true
+                    organization: true
                 },
             })
             response.json(users)
-        }catch (e) {
+        } catch (e) {
             console.error(e)
         }
 
@@ -60,7 +60,7 @@ module.exports = function (app) {
         try {
             let arrayQueries = [];
 
-            if(password){
+            if (password) {
                 const hash = CryptoJS.MD5(password).toString();
 
                 arrayQueries.push(prisma.user.update({
@@ -69,24 +69,24 @@ module.exports = function (app) {
                         name: name,
                         email: email != null ? email : undefined,
                         password: hash,
-                        city: city != null ? email : undefined,
+                        city: city != null ? city : undefined,
                         state: state != null ? state : undefined,
                         country: country != null ? country : undefined,
                         geeKey: geeKey != null ? geeKey : undefined,
-                        organization: { connect: {id: parseInt(organization.id)} },
+                        organization: { connect: { id: parseInt(organization.id) } },
                     }
                 }))
-            }else{
+            } else {
                 arrayQueries.push(prisma.user.update({
                     where: { id: parseInt(id) },
                     data: {
                         name: name,
                         email: email != null ? email : undefined,
-                        city: city != null ? email : undefined,
+                        city: city != null ? city : undefined,
                         state: state != null ? state : undefined,
                         country: country != null ? country : undefined,
                         geeKey: geeKey != null ? geeKey : undefined,
-                        organization: { connect: {id: parseInt(organization.id)} },
+                        organization: { connect: { id: parseInt(organization.id) } },
                     }
                 }))
             }

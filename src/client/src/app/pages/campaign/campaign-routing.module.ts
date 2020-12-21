@@ -5,15 +5,17 @@ import { ViewComponent } from './view/view.component';
 import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
 import { InspectionComponent } from './inspection/inspection.component';
-import {NbThemeService} from '@nebular/theme';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { NbThemeService } from '@nebular/theme';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'campaign/index', pathMatch: 'full'},
+  { path: '', redirectTo: 'campaign/index', pathMatch: 'full' },
   { path: 'index', component: IndexComponent },
   { path: ':campaignId/view', component: ViewComponent },
   { path: 'create', component: CreateComponent },
   { path: ':campaignId/edit', component: EditComponent },
   { path: ':campaignId/inspect', component: InspectionComponent },
+  { path: ':campaignId/dashboard', component: DashboardComponent },
 ];
 
 @NgModule({
@@ -21,7 +23,7 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class CampaignRoutingModule {
-  constructor( private themeService: NbThemeService) {
+  constructor(private themeService: NbThemeService) {
     let theme = localStorage.getItem('theme');
     if (theme === null || theme === undefined) {
       theme = 'default';
@@ -36,4 +38,5 @@ export const routedComponents = [
   CreateComponent,
   EditComponent,
   InspectionComponent,
+  DashboardComponent
 ];
