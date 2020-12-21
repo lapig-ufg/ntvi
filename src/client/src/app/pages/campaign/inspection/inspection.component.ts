@@ -36,7 +36,7 @@ export class InspectionComponent implements OnInit, OnDestroy {
   pointEnabled = true as boolean;
   tmsIdListWet = [];
   tmsIdListDry = [];
-  images = [] as any[]
+  images = [] as any[];
   center = [] as number[];
   extent = [] as any[];
   cameras: Camera[];
@@ -131,8 +131,8 @@ export class InspectionComponent implements OnInit, OnDestroy {
       const tmsIdDry = sattelite + '_' + year + '_DRY';
       const tmsIdWet = sattelite + '_' + year + '_WET';
 
-      this.tmsIdListDry.push(tmsIdDry)
-      this.tmsIdListWet.push(tmsIdWet)
+      this.tmsIdListDry.push(tmsIdDry);
+      this.tmsIdListWet.push(tmsIdWet);
       const url = `https://tvi.lapig.iesa.ufg.br/image/${tmsId}/${this.info.point._id}?campaign=${this.login.campaign._id}`;
       this.images.push({
         date: (this.info.point.dates[tmsId]) ? this.info.point.dates[tmsId] : null,
