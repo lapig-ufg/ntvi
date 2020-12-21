@@ -1,8 +1,8 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { PointService } from '../service/point.service';
 import { Campaign } from '../models/campaign';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   NbComponentSize,
   NbComponentStatus,
@@ -12,10 +12,10 @@ import {
   NbToastrService,
 } from '@nebular/theme';
 import { User } from '../models/user';
-import {Subject} from 'rxjs';
-import {Camera, SecurityCamerasData } from '../../../@core/data/security-cameras';
-import {map, takeUntil} from 'rxjs/operators';
-import {LayoutService} from '../../../@core/utils';
+import { Subject } from 'rxjs';
+import { Camera, SecurityCamerasData } from '../../../@core/data/security-cameras';
+import { map, takeUntil } from 'rxjs/operators';
+import { LayoutService } from '../../../@core/utils';
 
 @Component({
   selector: 'ngx-inspection',
@@ -81,6 +81,7 @@ export class InspectionComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.params['campaignId'];
     this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
       this.campaign = data;
+      // console.log(data)
       if (this.campaign.status !== 'READY') {
         this.router.navigateByUrl('pages/campaign/index');
         this.showToast('danger', 'Campaign not ready to inspect!', 'top-right');
@@ -98,28 +99,34 @@ export class InspectionComponent implements OnInit, OnDestroy {
     const currentUser = JSON.parse(localStorage.getItem('user'));
     const user = this.normalizeUser(currentUser);
     const access = { campaign: this.campaign.id, name: user, senha: 'teste123' };
+    // console.log(access)
     this.pointService.login(access).subscribe((data: any) => {
       self.login = data;
+
+      // console.log("camp - ", data)
       this.pointService.getPoint().subscribe((_data: any) => {
+        console.log("point - ", _data)
         self.info = _data;
-        self.points.push([ _data.point.lon, _data.point.lat]);
+        self.points.push([_data.point.lon, _data.point.lat]);
         self.center.push(_data.point.lon);
         self.center.push(_data.point.lat);
         self.extent.push(_data.point.bounds[0][1]);
-        self.extent.push(_data.point.bounds[0][0]);
-        self.extent.push(_data.point.bounds[1][1]);
         self.extent.push(_data.point.bounds[1][0]);
+        self.extent.push(_data.point.bounds[1][1]);
+        self.extent.push(_data.point.bounds[0][0]);
+
+        // console.log("ext - ", self.extent)
         self.isDataAvailable = true;
         self.generateImages();
       });
     });
   }
 
- generateImages() {
-   this.images = [];
+  generateImages() {
+    this.images = [];
     for (let year = this.login.campaign.initialYear; year <= this.login.campaign.finalYear; year++) {
       let sattelite = 'L7';
-      if ( year > 2012) {
+      if (year > 2012) {
         sattelite = 'L8';
       } else if (year > 2011) {
         sattelite = 'L7';

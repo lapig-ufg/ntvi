@@ -1,28 +1,53 @@
 <div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+
+    <nb-tabset fullWidth>
+      <nb-tab tabTitle="UsersResults" tabIcon="person-outline" responsive>
+        <nb-card size="small">
+          <nb-card-header>Table with Results for Users</nb-card-header>
+          <nb-card-body class="classification">
+            <ng2-smart-table [settings]="settings" [source]="data" (editConfirm)="onSaveConfirm($event)">
+            </ng2-smart-table>
+          </nb-card-body>
+        </nb-card>
+      </nb-tab>
+      <nb-tab tabTitle="PointsResults" tabIcon="pin-outline" responsive>
+        <nb-card size="small">
+          <nb-card-header>Table with Results for Points</nb-card-header>
+          <nb-card-body class="classification">
+            <ng2-smart-table [settings]="settings" [source]="data" (editConfirm)="onSaveConfirm($event)">
+            </ng2-smart-table>
+          </nb-card-body>
+        </nb-card>
+      </nb-tab>
+    </nb-tabset>
+
+  </div>
+</div>
+
+
+<div class="row">
   <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
-    <div class="header-point">
-      <h6 class="title-point" *ngIf="isDataAvailable">Point {{info.current}} / {{info.total}} </h6>
-      <span class="mt-2 mb-2 location">Location</span>
-    </div>
-    <!-- <ngx-ol-map *ngIf="isDataAvailable" [showBaseMapGoogle]="false" [showBaseMapsEsri]="true" [height]="'140px'"
-      [mouseWheelZoom]="true" [zoom]="1" [mapId]="'map_point'" [center]="center" [points]="points"></ngx-ol-map> -->
-    <div class="mt-2 mb-2" *ngIf="isDataAvailable">
+    <h6 class="title-point">Point 1 / 250</h6>
+    <strong class="m-3">Location</strong>
+    <ngx-ol-map showBaseMapGoogle="false" showBaseMapsEnsri="true" enableZoomMouse="true" height="140px"
+      [center]="[40.866667, 34.566667]" [zoom]="4" [mapId]="'map'"
+      [points]="[{latitude:40.866667, longitude: 34.566667}]"></ngx-ol-map>
+    <div class="mt-2 mb-2">
       <div class="">
         <label for="biome" class="label">Biome</label>
-        <input id="biome" disabled fieldSize="tiny" type="text" [value]="info.point.biome" nbInput fullWidth>
+        <input id="biome" disabled fieldSize="tiny" type="text" nbInput fullWidth>
       </div>
       <div class="">
         <label for="municipality" class="label">Municipality</label>
-        <input id="municipality" disabled fieldSize="tiny" type="text"
-          [value]="info.point.county  + ' - ' + info.point.uf | uppercase" nbInput fullWidth>
+        <input id="municipality" disabled fieldSize="tiny" type="text" nbInput fullWidth>
       </div>
       <div class="">
         <label for="coordinate" class="label">Coordinate</label>
-        <input id="coordinate" disabled [value]="info.point.lat + ' ' + info.point.lon" fieldSize="tiny" type="text"
-          nbInput fullWidth>
+        <input id="coordinate" disabled fieldSize="tiny" type="text" nbInput fullWidth>
       </div>
     </div>
-    <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="small">
+    <nb-card size="small">
       <nb-card-header>Land Use and Coverage</nb-card-header>
       <nb-card-body class="classification">
         <nb-card size="tiny">
@@ -66,39 +91,37 @@
     </nb-card>
   </div>
 
-
-</div>
-
-<div class="row">
-  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
-    <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="giant">
+  <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
+    <nb-card size="giant">
       <nb-card-header>
         <strong>Imagens Landsat </strong> &nbsp; <small>RBG(NIR,SWIR,RED)</small>
       </nb-card-header>
       <nb-card-body class="img-satellite">
         <div class="grid-container">
-          <div class="grid-view">
-            <div class="camera" *ngFor="let img of images; let i = index">
-              <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
-                [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
-                [mapId]="'map' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
-              </ngx-ol-map>
-              <!-- <img [src]="img.url"> -->
-              <div class="camera-name">
-                <span>{{ img.date | date }}</span>
-                <span>{{ period }}</span>
-              </div>
+          <div class="single-view" *ngIf="isSingleView">
+            <div class="camera" (click)="isSingleView = false"
+              [style.background-image]="'url(' + selectedCamera.source + ')'">
+              <ngx-ol-map [center]="[40.866667, 34.566667]" [zoom]="4" [height]="'500px'" [mapId]="'map' + isSingleView"
+                [points]="[{latitude:40.866667, longitude: 34.566667}]"></ngx-ol-map>
+              <span class="camera-name">{{ selectedCamera.title }}</span>
+            </div>
+          </div>
+          <div class="grid-view" *ngIf="!isSingleView">
+            <div class="camera" *ngFor="let camera of cameras; let i = index">
+              <ngx-ol-map [center]="[40.866667, 34.566667]" [zoom]="4" [showFullscreen]="false" [height]="'300px'"
+                [mapId]="'map' + i" [points]="[{latitude:40.866667, longitude: 34.566667}]"></ngx-ol-map>
+              <span class="camera-name">{{ camera.title }}</span>
             </div>
           </div>
         </div>
       </nb-card-body>
       <nb-card-footer>
         <nb-actions [size]="actionSize" fullWidth>
-          <nb-action (click)="swicthPeriod('WET')">
+          <nb-action>
             <nb-icon icon="image-outline" pack="eva"></nb-icon>
             WET
           </nb-action>
-          <nb-action (click)="swicthPeriod('DRY')">
+          <nb-action>
             <nb-icon icon="image-outline" pack="eva"></nb-icon>
             DRY
           </nb-action>
@@ -106,5 +129,15 @@
       </nb-card-footer>
     </nb-card>
   </div>
+</div>
 
+<div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+    <nb-card size="small">
+      <nb-card-header>MODIS NDVI Series </nb-card-header>
+      <nb-card-body class="classification">
+        <chart type="line" [data]="dataChart" [options]="options"></chart>
+      </nb-card-body>
+    </nb-card>
+  </div>
 </div>

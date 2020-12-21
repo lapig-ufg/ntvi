@@ -1,4 +1,5 @@
-import { Component,
+import {
+  Component,
   NgZone,
   AfterViewInit,
   Output,
@@ -8,25 +9,25 @@ import { Component,
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-import {View, Feature, Map} from 'ol';
+import { View, Feature, Map } from 'ol';
 import { defaults as defaultInteractions } from 'ol/interaction';
 import { boundingExtent } from 'ol/extent';
 import { Coordinate } from 'ol/coordinate';
-import {toLonLat, transformExtent} from 'ol/proj';
-import {defaults as DefaultControls} from 'ol/control';
+import { toLonLat, transformExtent } from 'ol/proj';
+import { defaults as DefaultControls } from 'ol/control';
 import * as proj4x from 'proj4';
-const  proj4 = (proj4x as any).default;
+const proj4 = (proj4x as any).default;
 import VectorLayer from 'ol/layer/Vector';
 import Projection from 'ol/proj/Projection';
-import {register} from 'ol/proj/proj4';
-import {get as GetProjection} from 'ol/proj';
+import { register } from 'ol/proj/proj4';
+import { get as GetProjection } from 'ol/proj';
 import { Extent } from 'ol/extent';
 import VectorSource from 'ol/source/Vector';
-import {Circle, Style} from 'ol/style';
+import { Circle, Style } from 'ol/style';
 import OlTileLayer from 'ol/layer/Tile';
 import OlXYZ from 'ol/source/XYZ';
 import Fill from 'ol/style/Fill';
-import { Point as OPoint} from 'ol/geom';
+import { Point as OPoint } from 'ol/geom';
 import FullScreen from 'ol/control/FullScreen';
 import ImageLayer from 'ol/layer/Image';
 import Static from 'ol/source/ImageStatic';
@@ -43,7 +44,7 @@ export class MapComponent implements AfterViewInit {
 
   @Input() center: Coordinate;
   @Input() zoom = 3 as number;
-  @Input() minZoom =  4 as number;
+  @Input() minZoom = 4 as number;
   @Input() maxZoom = 18 as number;
   @Input() points = [] as Coordinate[];
   @Input() mapId = 'map' as string;
@@ -78,6 +79,14 @@ export class MapComponent implements AfterViewInit {
   }
   private initMap(): void {
     this.ext = [-304.038676, -74.719954, 314.008199, 85.717737];
+
+    if (this.extent && this.extent.hasOwnProperty('length')) {
+      if (this.extent.length > 0) {
+        this.ext = this.extent;
+      }
+    }
+
+    // console.log("extent no map - ", this.ext)
     const controls = [];
     const layers = [];
     proj4.defs([
@@ -127,7 +136,7 @@ export class MapComponent implements AfterViewInit {
       controls: DefaultControls().extend(controls),
     });
 
-    if ( this.points.length > 0) {
+    if (this.points.length > 0) {
       this.addPoints();
     }
 
@@ -156,7 +165,7 @@ export class MapComponent implements AfterViewInit {
   addPoints() {
     const self = this;
     let source = null as VectorSource;
-    if ( this.points.length > 0) {
+    if (this.points.length > 0) {
       this.points.forEach(function (item) {
         self.features.push(new Feature(new OPoint(item)));
       });
@@ -164,19 +173,19 @@ export class MapComponent implements AfterViewInit {
         features: self.features,
       });
       const style = new Style({
-        image:  new Circle({
+        image: new Circle({
           radius: 3,
-          fill: new Fill({color: 'red'}),
+          fill: new Fill({ color: 'red' }),
         }),
       });
-      this.layerPoints =  new VectorLayer({
+      this.layerPoints = new VectorLayer({
         source: source,
         style: style,
       });
       this.Map.addLayer(this.layerPoints);
       if (this.points.length > 1) {
         const ext = source.getExtent();
-        this.Map.getView().fit(ext, {duration: 1500});
+        this.Map.getView().fit(ext, { duration: 1500 });
       }
     }
   }
