@@ -372,6 +372,30 @@ module.exports = function (app) {
             response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
+    Controller.getPublicCampaigns = async function (request, response) {
+        const { lang } = request.headers;
+        const texts = language.getLang(lang);
+        try {
+            const campaigns = await prisma.campaign.findMany({
+                where: {
+                   publish: true
+                },
+                include: {
+                    points: true,
+                    images: true,
+                    classes: true,
+                    compositions: true,
+                    organization: true,
+                    UsersOnCampaigns: true,
+                }
+
+            });
+            response.json(campaigns)
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
+        }
+    }
 
     Controller.getCampaignInfo = async function (request, response) {
         const { id } = request.params
@@ -410,26 +434,26 @@ module.exports = function (app) {
             response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
 
-        try {
-            const campaigns = await prisma.campaign.findMany({
-                where: {
-                    UsersOnCampaigns: {
-                        some: {
-                            user: { id: parseInt(id) }
-                        }
-                    }
-                },
-                include: {
-                    points: true,
-                    images: true
-                }
-
-            });
-            response.json(campaigns)
-        } catch (e) {
-            console.error(e)
-            response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
-        }
+        // try {
+        //     const campaigns = await prisma.campaign.findMany({
+        //         where: {
+        //             UsersOnCampaigns: {
+        //                 some: {
+        //                     user: { id: parseInt(id) }
+        //                 }
+        //             }
+        //         },
+        //         include: {
+        //             points: true,
+        //             images: true
+        //         }
+        //
+        //     });
+        //     response.json(campaigns)
+        // } catch (e) {
+        //     console.error(e)
+        //     response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
+        // }
     }
 
     Controller.starCampaignCache = async function (request, response) {

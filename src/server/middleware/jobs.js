@@ -36,7 +36,6 @@ module.exports = function(app) {
 		
 		var onEach = function(key, next) {
 			var cmd = params.cmd + " " + key.file + " " + key.startYear + " " + params.keys.length;
-			console.log(cmd)
 			exec(cmd, function (error, stdout, stderr) {
 				  
 				  if(error || stderr) {

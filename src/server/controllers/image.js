@@ -91,7 +91,7 @@ module.exports = function(app) {
 		var pointId = request.param('pointId')
 		var campaignId = request.param('campaign')
 
-		var sourceUrl = 'http://localhost:5000/source/'+layerId+'?campaign='+campaignId
+		var sourceUrl = 'http://localhost:3000/source/'+layerId+'?campaign='+campaignId
 		
 		points.findOne({ _id:pointId }, function(err, point) {
 
@@ -176,7 +176,7 @@ module.exports = function(app) {
 					request(url, params, callback);
 				});
 			});
-
+			console.log('TASKS', requestTasks)
 			return requestTasks;
  		}
 

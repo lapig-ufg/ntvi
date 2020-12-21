@@ -198,7 +198,7 @@
               </div>
               <div class="row" *ngIf="points.length > 0 && !loadingPoints">
                 <div class="col-sm-12">
-                  <ngx-ol-map [center]="[4.984761,34.337429]" [zoom]="4" [points]="points"
+                  <ngx-ol-map [center]="[4.984761,34.337429]" [zoom]="4" [points]="mapPoints"
                     (mapReady)="onMapReady($event)"></ngx-ol-map>
                 </div>
               </div>

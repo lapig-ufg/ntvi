@@ -11,7 +11,7 @@ EE_ACCOUNT = EE_PRIVATE_KEY_FILE[0:len(EE_PRIVATE_KEY_FILE)-5]
 START_YEAR = int(sys.argv[2])
 STRIDE_YEAR = int(sys.argv[3])
 
-print 'values: ',sys.argv[1]
+print('values: ',sys.argv[1]);
 EE_CREDENTIALS = ee.ServiceAccountCredentials(EE_ACCOUNT, EE_PRIVATE_KEY_FILE)
 ee.Initialize(EE_CREDENTIALS)
 
@@ -120,7 +120,7 @@ def processPeriod(tiles, periods, suffix = ''):
 			print(mosaicId + ' exists and is valid.');
 
 client = MongoClient('localhost', 27017);
-db = client.tvi;
+db = client.ntvi;
 
 for year in range(START_YEAR,2018+1,STRIDE_YEAR):
 	for satellite in SATELLITES:

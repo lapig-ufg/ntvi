@@ -46,6 +46,15 @@ export class CampaignService {
     );
   }
 
+  getAllPublicCampaigns(): Observable<Campaign[]> {
+    return this.httpClient.get<Campaign[]>(
+      this.apiURL + '/campaign/publicCampaigns',
+      this.httpOptions,
+    ).pipe(
+      catchError(this.errorHandler),
+    );
+  }
+
   getCampaignInfo(campaignId): Observable<Campaign> {
     return this.httpClient.get<Campaign>(
       this.apiURL + '/campaign/info/' + campaignId).pipe(
