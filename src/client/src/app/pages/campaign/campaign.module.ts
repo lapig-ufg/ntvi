@@ -26,11 +26,9 @@ import {
   NbToggleModule,
   NbSearchModule,
   NbTabsetModule,
+  NbContextMenuModule,
 } from '@nebular/theme';
 import { ChartModule } from 'angular2-chartjs';
-
-
-
 
 @NgModule({
   declarations: [
@@ -68,6 +66,7 @@ import { ChartModule } from 'angular2-chartjs';
     Ng2SearchPipeModule,
     NbMomentDateModule,
     NbTabsetModule,
+    NbContextMenuModule,
   ],
 })
 export class CampaignModule { }

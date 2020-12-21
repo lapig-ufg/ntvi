@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Location } from '../models/location';
 import { Campaign } from '../models/campaign';
+import {NbComponentStatus, NbToastrService} from '@nebular/theme';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class CampaignService {
     }),
   };
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, public toastService: NbToastrService) { }
 
   getAll(): Observable<Campaign[]> {
     return this.httpClient.get<Campaign[]>(this.apiURL + '/campaigns/')
@@ -163,7 +164,7 @@ export class CampaignService {
   }
 
   delete(id) {
-    return this.httpClient.delete<Campaign>(this.apiURL + '/campaigns/' + id, this.httpOptions)
+    return this.httpClient.delete<Campaign>(this.apiURL + '/campaign/delete/' + id, this.httpOptions)
       .pipe(
         catchError(this.errorHandler),
       );
@@ -184,6 +185,12 @@ export class CampaignService {
     } else {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+    this.showToast('danger', errorMessage, 'top-right');
     return throwError(errorMessage);
+  }
+
+  showToast(status: NbComponentStatus, massage, position) {
+    const duration = 4000;
+    this.toastService.show(status, massage, { status, position, duration });
   }
 }

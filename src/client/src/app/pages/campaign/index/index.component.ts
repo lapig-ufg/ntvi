@@ -15,6 +15,13 @@ export class IndexComponent implements OnInit {
   campaigns = [] as Campaign[];
   user: User;
   filterTerm: string;
+  itemsActions = [
+    { title: 'EDIT' },
+    { title: 'INSPECT' },
+    { title: 'PUBLISH' },
+    { title: 'REMOVE' },
+    { title: 'START CHACHE' },
+  ];
 
   constructor(
     public campaignService: CampaignService,
@@ -62,9 +69,14 @@ export class IndexComponent implements OnInit {
       this.showToast('success', 'Campaign image cache has started!', 'top-right');
     });
   }
+  removeCampaign(campaign) {
+    this.campaignService.delete(campaign.id).subscribe((data: Campaign) => {
+      this.showToast('success', 'Campaign ' + campaign.name + ' was removed!', 'top-right');
+    });
+  }
   publishCampaign(campaign) {
     campaign.publish = !campaign.publish;
-    const msg = campaign.publish ? 'Campaign ' + campaign.name + ' published!' : 'Campaign ' + campaign.name + ' is not publish!';
+    const msg = campaign.publish ? 'Campaign ' + campaign.name + ' published!' : 'Campaign ' + campaign.name + ' was not publish!';
     this.campaignService.publishCampaign(campaign).subscribe((data: Campaign) => {
       this.showToast('success', msg, 'top-right');
     });
@@ -79,6 +91,11 @@ export class IndexComponent implements OnInit {
   canInspect(campaign) {
     return (
       campaign.status === 'READY'
+    );
+  }
+  canRemove(campaign) {
+    return (
+      campaign.status !== 'READY' && campaign.status !== 'CACHING'
     );
   }
   beginInspection(campaign) {
