@@ -40,4 +40,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/satellite/index',
     hidden: grantMenu(['ROOT']),
   },
+  {
+    title: 'Admin Users',
+    icon: 'people-outline',
+    link: '/pages/users/admin',
+    hidden: grantMenu(['ROOT']),
+  },
 ];

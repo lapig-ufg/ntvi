@@ -4,7 +4,10 @@ const CryptoJS = require("crypto-js");
 module.exports = function (app) {
     var Controller = {}
     let language = app.util.language;
-    const prisma = new PrismaClient()
+    const prisma = new PrismaClient({
+        errorFormat: 'pretty',
+        log: ['query', 'info', 'warn'],
+    })
 
     Controller.getUserByID = async function (request, response) {
 
@@ -41,6 +44,7 @@ module.exports = function (app) {
                 select: {
                     id: true,
                     name: true,
+                    email: true,
                     organization: true
                 },
             })
@@ -56,7 +60,7 @@ module.exports = function (app) {
         const { name, email, password, city, state, country, geeKey, organization } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
-        console.log(organization.id);
+
         try {
             let arrayQueries = [];
 
