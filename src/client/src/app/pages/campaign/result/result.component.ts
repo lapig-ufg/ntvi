@@ -138,8 +138,7 @@ export class ResultComponent implements OnInit, OnDestroy {
           title: 'Average time of all points inpection duration(s)',
           filter: false,
         },
-
-      }
+      },
 
     };
 
@@ -148,10 +147,10 @@ export class ResultComponent implements OnInit, OnDestroy {
     for (let i = 0; i < information.length; i++) {
 
       arrData.push({
-        user: (information[i].name == 'Tempo médio' ? 'Average Time' : information[i].name),
+        user: (information[i].name === 'Tempo médio' ? 'Average Time' : information[i].name),
         duration: information[i].totalPointTime + ' secs',
         meantime: parseFloat(information[i].meanPointTime).toFixed(1) + ' secs',
-      })
+      });
     }
 
 
@@ -338,8 +337,8 @@ export class ResultComponent implements OnInit, OnDestroy {
       const ob = {
         index: event.newData.index,
         class: event.newData.classConsolidated,
-        _id: this.infoP.current + "_" + this.login.campaign._id
-      }
+        _id: this.infoP.current + '_' + this.login.campaign._id
+      };
 
       const t = await this.pointService.updateSingleClassConsolidated(ob).toPromise();
 
