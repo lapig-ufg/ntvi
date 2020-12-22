@@ -26,7 +26,7 @@
                   <div class="col-sm-12 col-md-6 col-xl-6">
                     <div class="">
                       <label for="name" class="label">Organization</label>
-                      <nb-select id="organization" formControlName="organization" placeholder="Select a organization"
+                      <nb-select id="organization" formControlName="organization" [selected]="reviewCampaign.organizationId" placeholder="Select a organization"
                                  fullWidth filled>
                         <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">
                           {{organization.name}}</nb-option>
@@ -210,7 +210,7 @@
                         <h6> Points from file </h6>
                       </span>
                       <span>
-                        <button (click)="shufflePoints()" nbButton status="warning" size="medium">
+                        <button  type="button" (click)="shufflePoints()" nbButton status="warning" size="medium">
                           shuffle points
                         </button>
                       </span>

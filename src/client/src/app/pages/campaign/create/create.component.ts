@@ -525,20 +525,22 @@ export class CreateComponent implements OnInit {
     await this.tableCompositionsReview.source.load(this.compositions);
   }
   shufflePoints() {
-    let ctr = this.points.length, temp, index;
-    // While there are elements in the array
-    while (ctr > 0) {
-      // Pick a random index
-      index = Math.floor(Math.random() * ctr);
-      // Decrease ctr by 1
-      ctr--;
-      // And swap the last element with it
-      temp = this.points[ctr];
-      this.points[ctr] = this.points[index];
-      this.points[index] = temp;
-      this.tablePoints.source.empty();
-      this.tablePoints.source.load(this.points);
-    }
+    // let ctr = this.points.length, temp, index;
+    // // While there are elements in the array
+    // while (ctr > 0) {
+    //   // Pick a random index
+    //   index = Math.floor(Math.random() * ctr);
+    //   // Decrease ctr by 1
+    //   ctr--;
+    //   // And swap the last element with it
+    //   temp = this.points[ctr];
+    //   this.points[ctr] = this.points[index];
+    //   this.points[index] = temp;
+    //
+    // }
+    this.points = this.points.sort(() => Math.random() - 0.5);
+    this.tablePoints.source.empty();
+    this.tablePoints.source.load(this.points);
   }
   handlePointsFile(file) {
     const self = this;

@@ -98,6 +98,16 @@ export class IndexComponent implements OnInit {
       campaign.status !== 'READY' && campaign.status !== 'CACHING'
     );
   }
+  canOpenResults(campaign) {
+    let can = false;
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    campaign.UsersOnCampaigns.forEach(function (item) {
+      if (item.userId.toString() === currentUser.id.toString() && item.typeUserInCampaign === 'ADMIN') {
+        can = true;
+      }
+    });
+    return can;
+  }
   beginInspection(campaign) {
     this.router.navigateByUrl('/pages/campaign/' + campaign.id + '/inspect');
   }

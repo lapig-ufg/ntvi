@@ -165,5 +165,7 @@
 }
 
 .btn-actions-class {
-  display: contents;
+  display: flex;
+  justify-content: space-between;
+  margin: 14px;
 }

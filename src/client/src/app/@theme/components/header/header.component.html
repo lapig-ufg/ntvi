@@ -4,7 +4,7 @@
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
     <a class="logo" href="#" (click)="navigateHome()">
-      <img class="logo-tvi" src="../../../assets/images/logos/Favicon_TVI_1.png">
+      <img class="logo-tvi" src="../../../assets/images/logos/logo_tvi.png">
     </a>
   </div>
 <!--  <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">-->
@@ -22,7 +22,7 @@
 <!--    <nb-action class="control-item" icon="bell-outline"></nb-action>-->
 
     <nb-action class="control-item">
-      <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
+      <nb-select fullWidth [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
         <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
       </nb-select>
     </nb-action>

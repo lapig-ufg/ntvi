@@ -66,8 +66,15 @@
 <!--          title="REMOVE"-->
 <!--          class="action"-->
 <!--          icon="trash-2-outline"-->
-<!--          (click)="removeCampaign(campaign)">-->
+<!--          -->
 <!--        </nb-action>-->
+        <nb-action
+          *ngIf="canOpenResults(campaign)"
+          title="SHOW RESULTS"
+          class="action"
+          icon="bar-chart-2-outline"
+         (click)="router.navigateByUrl('pages/campaign/' + campaign.id + '/result')">
+        </nb-action>
         <nb-action
           *ngIf="canGenerateCache(campaign)"
           title="Start Caching Images"

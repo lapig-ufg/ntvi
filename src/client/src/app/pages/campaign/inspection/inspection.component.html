@@ -9,12 +9,12 @@
     <div class="mt-2 mb-2" *ngIf="isDataAvailable">
       <div class="">
         <label for="biome" class="label">Biome</label>
-        <input id="biome" disabled fieldSize="tiny" type="text" [value]="info.point.biome" nbInput fullWidth>
+        <input id="biome" disabled fieldSize="tiny" type="text" [value]="info.point?.biome" nbInput fullWidth>
       </div>
       <div class="">
         <label for="municipality" class="label">Municipality</label>
         <input id="municipality" disabled fieldSize="tiny" type="text"
-          [value]="info.point.county  + ' - ' + info.point.uf | uppercase" nbInput fullWidth>
+          [value]="info.point?.county  + ' - ' + info.point?.uf | uppercase" nbInput fullWidth>
       </div>
       <div class="">
         <label for="coordinate" class="label">Coordinate</label>
@@ -22,9 +22,17 @@
           nbInput fullWidth>
       </div>
     </div>
-    <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="small">
+    <nb-card *ngIf="isDataAvailable"  size="medium">
       <nb-card-header>Land Use and Coverage</nb-card-header>
       <nb-card-body class="classification">
+        <div class="btn-actions-class">
+          <button type="button" size="medium" status="danger" nbButton [disabled]="answers.length == 1"  (click)="formSubtraction()">
+            <nb-icon icon="trash-2-outline"></nb-icon>
+          </button>
+          <button type="button" size="medium" status="success" nbButton  [disabled]="answers[answers.length - 1].finalYear != login.campaign.finalYear" (click)="submitForm()">
+            <nb-icon icon="save-outline"></nb-icon>
+          </button>
+        </div>
         <nb-card size="tiny" *ngFor="let answer of answers; let i = index">
           <nb-card-body class="classification">
             <div class="row">
@@ -44,22 +52,14 @@
             <div class="row">
               <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
                 <label class="label ">Class</label>
-                <nb-select fullWidth filled size="small" [(selected)]="answer.landUse" (change)="formPlus()">
+                <nb-select fullWidth filled size="small" [(selected)]="answer.landUse" (selectedChange)="formPlus()">
                   <nb-option *ngFor="let class of login.campaign.landUse; let i = index" [value]="class">{{class}}</nb-option>
                 </nb-select>
               </div>
             </div>
             <div class="row mt-3 ">
-              <div class="col-xxxl-8 col-xxl-8 col-lg-8 col-md-8">
+              <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
                 <nb-checkbox [disabled]="answers.length != (i + 1)" [(ngModel)]="answer.pixelBorder">Border pixel</nb-checkbox>
-              </div>
-              <div class="col-xxxl-4 col-xxl-4 col-lg-4 col-md-4 btn-actions-class">
-                <button type="button" size="medium" status="success" nbButton  [disabled]="answers[answers.length - 1].finalYear != login.campaign.finalYear || onSubmission" (click)="submitForm()">
-                  <nb-icon icon="save-outline"></nb-icon>
-                </button>
-                <button class="ml-2" type="button" size="medium" status="danger" [disabled]="answers.length == 1" nbButton  [disabled]="answers[answers.length - 1].finalYear != login.finalYear || onSubmission" (click)="formSubtraction()">
-                  <nb-icon icon="trash-2-outline"></nb-icon>
-                </button>
               </div>
             </div>
           </nb-card-body>
@@ -74,7 +74,7 @@
         </nb-card-header>
         <nb-card-body class="img-satellite">
           <div *ngIf="image === 'DRY'" class="grid-container">
-            <div class="grid-view">
+            <div class="grid-view" *ngIf="isDataAvailable">
               <div class="camera" *ngFor="let img of imagesDry; let i = index">
                 <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
                             [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
@@ -88,9 +88,9 @@
             </div>
           </div>
           <div *ngIf="image === 'WET'" class="grid-container">
-            <div class="grid-view">
+            <div class="grid-view" *ngIf="isDataAvailable">
               <div class="camera" *ngFor="let img of imagesWet; let i = index">
-                <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
+                <ngx-ol-map [showFullscreen]="false" [mouseWheelZoom]="false"
                             [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
                             [mapId]="'map_images_wet' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
                 </ngx-ol-map>
@@ -117,5 +117,16 @@
       </nb-card>
   </div>
 </div>
+<div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+    <nb-card [nbSpinner]="!isDataAvailable" size="tiny">
+      <nb-card-header>MODIS NDVI Series </nb-card-header>
+      <nb-card-body class="classification">
+        <chart  *ngIf="isDataAvailable" type="line" [data]="dataChart" [options]="options"></chart>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
 
 

@@ -152,10 +152,10 @@ export class CampaignService {
       );
   }
 
-  update(id, organization): Observable<Campaign> {
+  update(id, campaign): Observable<Campaign> {
     return this.httpClient.put<Campaign>(
-      this.apiURL + '/campaigns/' + id,
-      JSON.stringify(organization),
+      this.apiURL + '/campaign/updateInfoForm/' + id,
+      JSON.stringify(campaign),
       this.httpOptions,
     )
       .pipe(
@@ -179,13 +179,13 @@ export class CampaignService {
 
 
   errorHandler(error) {
+    const self = this;
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       errorMessage = error.error.message;
     } else {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    this.showToast('danger', errorMessage, 'top-right');
     return throwError(errorMessage);
   }
 

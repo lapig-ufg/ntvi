@@ -458,15 +458,9 @@ export class EditComponent implements OnInit {
   }
   onInfoFormSubmit() {
     // this.infoForm.markAsDirty();
-
-    this.campaignService.create(this.infoForm.value).subscribe(res => {
+    this.campaignService.update(this.id, this.infoForm.value).subscribe(res => {
       this.campaign = res;
     });
-
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    this.campaignService.getAllCampaignsFromUser(currentUser.id).subscribe(res => {
-    });
-
 
   }
   onConfigFormSubmit() {
@@ -571,6 +565,7 @@ export class EditComponent implements OnInit {
         self.mapPoints.push([parseFloat(point.longitude), parseFloat(point.latitude)]);
         const location = data.results[0].locations[0];
         self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
+
       }
       await self.tablePoints.source.load(self.points);
       self.loadingPoints = false;

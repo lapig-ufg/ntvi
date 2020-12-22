@@ -94,8 +94,14 @@ app.middleware.repository.init(function () {
 	app.use(cors(corsOptions))
 
 	app.use(responseTime());
-	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(bodyParser.json({
+		limit: '50mb'
+	}));
+	app.use(bodyParser.urlencoded({
+		limit: '50mb',
+		parameterLimit: 100000,
+		extended: true
+	}));
 	app.use(multer());
 
 	io.on('connection', function (socket) {

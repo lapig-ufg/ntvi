@@ -28,6 +28,16 @@ export class PointService {
         catchError(this.errorHandler),
       );
   }
+  getNextPoint(form): Observable<any> {
+    return this.httpClient.post<any>(
+      this.apiURL + '/points/next-point',
+      JSON.stringify(form),
+      this.httpOptions,
+    )
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
   getPoint(): Observable<any> {
     return this.httpClient.get<any>(this.apiURL + '/points/next-point')
       .pipe(

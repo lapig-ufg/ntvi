@@ -49,13 +49,19 @@ export class InspectionComponent implements OnInit, OnDestroy {
   campaign = {} as Campaign;
   user = {} as User;
   isDataAvailable = false as boolean;
+  settings: any;
 
+  dataChart: any;
+  options: any;
+  themeSubscription: any;
+  tmpModis: any;
   constructor(
     private themeService: NbThemeService,
     private breakpointService: NbMediaBreakpointsService,
     private securityCamerasService: SecurityCamerasData,
     public campaignService: CampaignService,
     public router: Router,
+    private theme: NbThemeService,
     public route: ActivatedRoute,
     public toastService: NbToastrService,
     private layoutService: LayoutService,
@@ -103,6 +109,28 @@ export class InspectionComponent implements OnInit, OnDestroy {
     this.initFormViewVariables();
     this.generateOptionYears(this.login.campaign.initialYear, this.login.campaign.finalYear);
     this.generateImages();
+    this.modisChart(this.info.point.lon.toString(), this.info.point.lat.toString());
+    this.initCounter();
+  }
+
+  async loadNextPoint(formPoint) {
+    this.points = [];
+    this.center = [];
+    this.extent = [];
+    this.info   = {};
+    this.info = await this.pointService.getNextPoint({ 'point': formPoint }).toPromise();
+    this.points.push([this.info.point.lon, this.info.point.lat]);
+    this.center.push(this.info.point.lon);
+    this.center.push(this.info.point.lat);
+    this.extent.push(this.info.point.bounds[0][1]);
+    this.extent.push(this.info.point.bounds[1][0]);
+    this.extent.push(this.info.point.bounds[1][1]);
+    this.extent.push(this.info.point.bounds[0][0]);
+    this.initFormViewVariables();
+    this.generateOptionYears(this.login.campaign.initialYear, this.login.campaign.finalYear);
+    this.generateImages();
+    this.modisChart(this.info.point.lon.toString(), this.info.point.lat.toString());
+    this.initCounter();
   }
   generateImages() {
     this.imagesDry = [];
@@ -148,7 +176,7 @@ export class InspectionComponent implements OnInit, OnDestroy {
         url: url,
       });
     }
-    this.isDataAvailable = true;
+
   }
   normalizeUser(user) {
     let name = user.name.toLowerCase();
@@ -199,12 +227,11 @@ export class InspectionComponent implements OnInit, OnDestroy {
     const prevIndex = this.answers.length - 1;
     const initialYear = this.answers[prevIndex].finalYear + 1;
 
-    if (this.answers[prevIndex].finalYear === this.login.finalYear) return;
-
-    const finalYear = this.login.finalYear;
+    if (this.answers[prevIndex].finalYear === this.login.campaign.finalYear)
+      return;
+    const finalYear = this.login.campaign.finalYear;
 
     this.generateOptionYears(initialYear, finalYear);
-
     this.answers.push(
       {
         initialYear: initialYear,
@@ -224,14 +251,95 @@ export class InspectionComponent implements OnInit, OnDestroy {
     const formPoint = {
       _id: this.info.point._id,
       inspection: {
-        counter: this.login.counter,
+        counter: this.counter,
         form: this.answers,
       },
     };
     this.onSubmission = true;
+    this.isDataAvailable = false;
+    this.loadNextPoint(formPoint);
   }
   initCounter() {
     this.counter = 0;
     setInterval(() => this.counter++, 1000);
+  }
+
+  modisChart(lon, lat) {
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+
+      const colors: any = config.variables;
+      const chartjs: any = config.variables.chartjs;
+      this.campaignService.returnNDVISeries(lon, lat).subscribe(
+        result => {
+          this.tmpModis = result;
+          this.isDataAvailable = true;
+        },
+        err => {
+          // console.log('Error: ', err);
+        },
+        () => {
+
+          this.dataChart = {
+            labels: this.tmpModis.map(element => element.date),
+            datasets: [{
+              data: this.tmpModis.map(element => element.ndvi_golay.toFixed(4)),
+              label: 'NDVI',
+              // backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
+              borderColor: colors.primary,
+              fill: false,
+              hidden: false,
+              pointRadius: 1,
+              pointHoverRadius: 3,
+              pointStyle: 'rect',
+            },
+            ],
+          };
+
+          this.options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            radius: 1,
+            tooltips: {
+              mode: 'index',
+              intersect: true,
+            },
+            scales: {
+              xAxes: [
+                {
+                  gridLines: {
+                    display: true,
+                    color: chartjs.axisLineColor,
+                  },
+                  ticks: {
+                    fontColor: chartjs.textColor,
+                    autoSkip: true,
+                    stepSize: 0.2,
+                  },
+                  type: 'time',
+                },
+              ],
+              yAxes: [
+                {
+                  gridLines: {
+                    display: true,
+                    color: chartjs.axisLineColor,
+                  },
+                  ticks: {
+                    fontColor: chartjs.textColor,
+                    autoSkip: true,
+                    stepSize: 0.2,
+                  },
+                },
+              ],
+            },
+            legend: {
+              labels: {
+                fontColor: chartjs.textColor,
+              },
+              position: 'bottom',
+            },
+          };
+        });
+    });
   }
 }
