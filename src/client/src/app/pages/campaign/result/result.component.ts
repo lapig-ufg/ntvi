@@ -127,7 +127,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       columns: {
         user: {
           title: 'Inspector',
-          filter: true
+          filter: true,
         },
         duration: {
           title: 'Point inspection duration(s)',
@@ -136,7 +136,7 @@ export class ResultComponent implements OnInit, OnDestroy {
         },
         meantime: {
           title: 'Average time of all points inpection duration(s)',
-          filter: false
+          filter: false,
         },
 
       }
@@ -148,7 +148,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     for (let i = 0; i < information.length; i++) {
 
       arrData.push({
-        user: (information[i].name == "Tempo médio" ? "Average Time" : information[i].name),
+        user: (information[i].name == 'Tempo médio' ? 'Average Time' : information[i].name),
         duration: information[i].totalPointTime + ' secs',
         meantime: parseFloat(information[i].meanPointTime).toFixed(1) + ' secs',
       })
@@ -335,7 +335,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     if (window.confirm('Are you sure you want to edit this Use Class?')) {
       event.confirm.resolve(event.newData);
 
-      let ob = {
+      const ob = {
         index: event.newData.index,
         class: event.newData.classConsolidated,
         _id: this.infoP.current + "_" + this.login.campaign._id
