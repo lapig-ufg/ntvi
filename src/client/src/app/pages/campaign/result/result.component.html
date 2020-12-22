@@ -14,9 +14,9 @@
       </nb-tab>
       <nb-tab tabTitle="Points Information" tabIcon="pin-outline" responsive>
         <nb-card size="small">
-          <nb-card-header>Table with Results for Points</nb-card-header>
+          <nb-card-header>Information on Inspection Duration on Point</nb-card-header>
           <nb-card-body class="classification">
-            <ng2-smart-table [settings]="settings" [source]="data" (editConfirm)="onSaveConfirm($event)">
+            <ng2-smart-table [settings]="pointsUsersInfoTable.settings" [source]="pointsUsersInfoTable.data">
             </ng2-smart-table>
           </nb-card-body>
         </nb-card>
