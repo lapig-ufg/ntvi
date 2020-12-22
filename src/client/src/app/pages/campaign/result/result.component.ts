@@ -129,7 +129,7 @@ export class ResultComponent implements OnInit, OnDestroy {
 
     for (const land of this.landUses) {
       arr.push({
-        value: land, title: land
+        value: land, title: land,
       });
     }
 
@@ -170,7 +170,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.info.point.years.length; i++) {
 
       const finalObject = Object.assign({}, myObj);
-      let secondObject = {};
+      const secondObject = {};
 
       for (const o of inspectobj) {
         if (finalObject.hasOwnProperty(o.userName)) {
@@ -426,7 +426,7 @@ export class ResultComponent implements OnInit, OnDestroy {
                   type: 'time',
                   time: {
                     tooltipFormat: 'DD/MM/YYYY', // <- HERE
-                  }
+                  },
                 },
               ],
               yAxes: [
