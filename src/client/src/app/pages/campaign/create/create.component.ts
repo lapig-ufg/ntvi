@@ -547,7 +547,7 @@ export class CreateComponent implements OnInit {
     fileReader.onload = async function (e) {
       self.points = self.csvToArray(fileReader.result);
       self.points = self.points.filter(function (item, i) {
-        return (item.latitude !== null && item.longitude !== null && item.info !== null);
+        return (item.latitude !== null && item.longitude !== null);
       });
       for (const [index, point] of self.points.entries()) {
         const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();

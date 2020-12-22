@@ -26,7 +26,7 @@
       ></ngx-ol-map>
     </nb-card-body>
     <nb-card-footer >
-      <nb-actions class="nb-actions" size="small">
+      <nb-actions class="nb-actions" size="tiny">
         <nb-action
           title="View Campaign"
           class="action"
@@ -61,6 +61,13 @@
           badgePosition="top right"
           (click)="beginInspection(campaign)">
         </nb-action>
+<!--        <nb-action-->
+<!--          *ngIf="canRemove(campaign)"-->
+<!--          title="REMOVE"-->
+<!--          class="action"-->
+<!--          icon="trash-2-outline"-->
+<!--          (click)="removeCampaign(campaign)">-->
+<!--        </nb-action>-->
         <nb-action
           *ngIf="canGenerateCache(campaign)"
           title="Start Caching Images"

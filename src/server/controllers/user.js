@@ -59,7 +59,6 @@ module.exports = function (app) {
         const { name, email, password, city, state, country, geeKey, organization } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
-
         try {
             let arrayQueries = [];
 
@@ -111,7 +110,6 @@ module.exports = function (app) {
             lang
         } = request.headers;
         const texts = language.getLang(lang);
-        console.log('_______________________',id)
         try {
 
             const users = await prisma.user.delete({
