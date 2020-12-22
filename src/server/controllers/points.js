@@ -208,67 +208,72 @@ module.exports = function (app) {
 		findPoint(user.campaign, user.name, function (result) {
 			request.session.currentPointId = result.point._id;
 
-			let INSERT_STATEMENT = 'select rect_bbox(ST_SetSRID(ST_MAKEPOINT( cast($1 as float), cast($2 as float)), 4326))::TEXT as queryResult';
+			// let INSERT_STATEMENT = 'select rect_bbox(ST_SetSRID(ST_MAKEPOINT( cast($1 as float), cast($2 as float)), 4326))::TEXT as queryResult';
 
-			(async () => {
+			// (async () => {
 
-				// 	const client = await pool.connect()
-				// 	console.log("entrou")
-				// 	try {
-				// 		await client.query('BEGIN')
+			// 	// 	const client = await pool.connect()
+			// 	// 	console.log("entrou")
+			// 	// 	try {
+			// 	// 		await client.query('BEGIN')
 
-				// 		var rowValues = [parseFloat(result.point.lon), parseFloat(result.point.lat)]
-				// 		const res = await client.query(INSERT_STATEMENT, rowValues)
-
-
-				// 		console.log('last update: ', res)
+			// 	// 		var rowValues = [parseFloat(result.point.lon), parseFloat(result.point.lat)]
+			// 	// 		const res = await client.query(INSERT_STATEMENT, rowValues)
 
 
-				// 		console.log("Doing commit")
-				// 		await client.query('COMMIT')
+			// 	// 		console.log('last update: ', res)
 
-				// 	} catch (e) {
-				// 		console.log("Doing rollback")
-				// 		await client.query('ROLLBACK')
-				// 		throw e
-				// 	} finally {
-				// 		client.release()
-				// 		response.send(result);
-				// 		response.end();
-				// 	}
-				// })().catch(e => console.error(e.stack))
-				let t = []
-				await prisma.$connect()
-				try {
 
-					var q = await prisma.$queryRaw(
-						INSERT_STATEMENT, (result.point.lon), (result.point.lat)) // PostgreSQL variables, represented by $1 and $2
+			// 	// 		console.log("Doing commit")
+			// 	// 		await client.query('COMMIT')
 
-					q.forEach(x => {
-						t.push(x.queryresult)
-					})
+			// 	// 	} catch (e) {
+			// 	// 		console.log("Doing rollback")
+			// 	// 		await client.query('ROLLBACK')
+			// 	// 		throw e
+			// 	// 	} finally {
+			// 	// 		client.release()
+			// 	// 		response.send(result);
+			// 	// 		response.end();
+			// 	// 	}
+			// 	// })().catch(e => console.error(e.stack))
+			// 	let t = []
+			// 	await prisma.$connect()
+			// 	try {
 
-				}
-				catch (e) {
-					throw e
-				}
-				finally {
-					await prisma.$disconnect()
+			// 		var q = await prisma.$queryRaw(
+			// 			INSERT_STATEMENT, (result.point.lon), (result.point.lat)) // PostgreSQL variables, represented by $1 and $2
 
-					let tmp = t[0].replace("BOX(", "")
-						.replace(")", "")
-						.split(" ")
-						.join(",").split(",");
+			// 		q.forEach(x => {
+			// 			t.push(x.queryresult)
+			// 		})
 
-					tmp.forEach(x => {
-						x = parseFloat(x)
-					})
+			// 		console.log(result, q)
 
-					result.point.bbox = tmp
-					response.send(result);
-					response.end();
-				}
-			})().catch(e => console.error(e.stack))
+			// 	}
+			// 	catch (e) {
+			// 		throw e
+			// 	}
+			// 	finally {
+			// 		await prisma.$disconnect()
+
+			// 		let tmp = t[0].replace("BOX(", "")
+			// 			.replace(")", "")
+			// 			.split(" ")
+			// 			.join(",").split(",");
+
+			// 		tmp.forEach(x => {
+			// 			x = parseFloat(x)
+			// 		})
+
+			// 		result.point.bbox = tmp
+			// 		response.send(result);
+			// 		response.end();
+			// 	}
+			// })().catch(e => console.error(e.stack))
+
+			response.send(result);
+			response.end();
 		})
 
 		// console.log(r.point.lon, r.point.lat)

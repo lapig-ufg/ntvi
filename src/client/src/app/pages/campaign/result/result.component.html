@@ -2,16 +2,17 @@
   <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
 
     <nb-tabset fullWidth>
-      <nb-tab tabTitle="UsersResults" tabIcon="person-outline" responsive>
-        <nb-card size="small">
+      <nb-tab tabTitle="Inspections per Users" tabIcon="person-outline" responsive>
+        <nb-card [nbSpinner]="!isDataTableAvailable" size="small">
           <nb-card-header>Table with Results for Users</nb-card-header>
           <nb-card-body class="classification">
-            <ng2-smart-table [settings]="settings" [source]="data" (editConfirm)="onSaveConfirm($event)">
+            <ng2-smart-table [settings]="usersInspectionsTable.settings" [source]="usersInspectionsTable.data"
+              (editConfirm)="onSaveConfirm($event)">
             </ng2-smart-table>
           </nb-card-body>
         </nb-card>
       </nb-tab>
-      <nb-tab tabTitle="PointsResults" tabIcon="pin-outline" responsive>
+      <nb-tab tabTitle="Points Information" tabIcon="pin-outline" responsive>
         <nb-card size="small">
           <nb-card-header>Table with Results for Points</nb-card-header>
           <nb-card-body class="classification">
@@ -28,102 +29,125 @@
 
 <div class="row">
   <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
-    <h6 class="title-point">Point 1 / 250</h6>
-    <strong class="m-3">Location</strong>
-    <ngx-ol-map showBaseMapGoogle="false" showBaseMapsEnsri="true" enableZoomMouse="true" height="140px"
-      [center]="[40.866667, 34.566667]" [zoom]="4" [mapId]="'map'"
-      [points]="[{latitude:40.866667, longitude: 34.566667}]"></ngx-ol-map>
-    <div class="mt-2 mb-2">
+    <div class="header-point">
+      <h6 class="title-point" *ngIf="isDataAvailable">Point {{info.current}} / {{info.total}} </h6>
+      <span class="mt-1 mb-1 location">Location</span>
+    </div>
+    <!--    <ngx-ol-map *ngIf="isDataAvailable" [showBaseMapGoogle]="true" [showBaseMapsEsri]="false" [height]="'140px'"-->
+    <!--      [mouseWheelZoom]="true" [zoom]="2" [minZoom]="2" [maxZoom]="18" [mapId]="'map_point' + info.current" [center]="center" [points]="points"></ngx-ol-map>-->
+    <div class="mt-2 mb-2" *ngIf="isDataAvailable">
       <div class="">
         <label for="biome" class="label">Biome</label>
-        <input id="biome" disabled fieldSize="tiny" type="text" nbInput fullWidth>
+        <input id="biome" disabled fieldSize="tiny" type="text" [value]="info.point.biome" nbInput fullWidth>
       </div>
       <div class="">
         <label for="municipality" class="label">Municipality</label>
-        <input id="municipality" disabled fieldSize="tiny" type="text" nbInput fullWidth>
+        <input id="municipality" disabled fieldSize="tiny" type="text"
+          [value]="info.point.county  + ' - ' + info.point.uf | uppercase" nbInput fullWidth>
       </div>
       <div class="">
         <label for="coordinate" class="label">Coordinate</label>
-        <input id="coordinate" disabled fieldSize="tiny" type="text" nbInput fullWidth>
+        <input id="coordinate" disabled [value]="info.point.lat + ' ' + info.point.lon" fieldSize="tiny" type="text"
+          nbInput fullWidth>
       </div>
     </div>
-    <nb-card size="small">
+    <!-- <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="small">
       <nb-card-header>Land Use and Coverage</nb-card-header>
       <nb-card-body class="classification">
-        <nb-card size="tiny">
+        <nb-card size="tiny" *ngFor="let answer of answers; let i = index">
           <nb-card-body class="classification">
             <div class="row">
               <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
                 <label class="label">From</label>
-                <input id="from" disabled fieldSize="small" value="1985" type="text" nbInput fullWidth>
+                <nb-select placeholder="" fullWidth filled size="small" [(selected)]="answer.initialYear"
+                  [disabled]="answers.length >= (i + 1)">
+                  <nb-option *ngFor="let year of optionYears[i]; let i = index" [value]="year">{{year}}</nb-option>
+                </nb-select>
               </div>
               <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
                 <label class="label">To</label>
-                <nb-select placeholder="Final year" fullWidth filled size="small">
-                  <!--                <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">-->
-                  <!--                  {{organization.name}}</nb-option>-->
-                  <nb-option [value]="1">2000</nb-option>
+                <nb-select placeholder="" fullWidth filled size="small" [(selected)]="answer.finalYear"
+                  [disabled]="answers.length != (i + 1)">
+                  <nb-option *ngFor="let year of optionYears[i]; let i = index" [value]="year">{{year}}</nb-option>
                 </nb-select>
               </div>
             </div>
             <div class="row">
               <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
                 <label class="label ">Class</label>
-                <nb-select fullWidth filled size="small">
-                  <!--                <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">-->
-                  <!--                  {{organization.name}}</nb-option>-->
-                  <nb-option [value]="1">Desmatamento</nb-option>
-                  <nb-option [value]="2">Agricultura</nb-option>
+                <nb-select fullWidth filled size="small" [(selected)]="answer.landUse" (change)="formPlus()">
+                  <nb-option *ngFor="let class of login.campaign.landUse; let i = index" [value]="class">{{class}}
+                  </nb-option>
                 </nb-select>
               </div>
             </div>
             <div class="row mt-3 ">
-              <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
-                <nb-checkbox [value]="true">Border pixel</nb-checkbox>
+              <div class="col-xxxl-8 col-xxl-8 col-lg-8 col-md-8">
+                <nb-checkbox [disabled]="answers.length != (i + 1)" [(ngModel)]="answer.pixelBorder">Border pixel
+                </nb-checkbox>
               </div>
-              <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
-                <button type="button" nbButton fullWidth>send</button>
+              <div class="col-xxxl-4 col-xxl-4 col-lg-4 col-md-4 btn-actions-class">
+                <button type="button" size="medium" status="success" nbButton
+                  [disabled]="answers[answers.length - 1].finalYear != login.campaign.finalYear || onSubmission"
+                  (click)="submitForm()">
+                  <nb-icon icon="save-outline"></nb-icon>
+                </button>
+                <button class="ml-2" type="button" size="medium" status="danger" [disabled]="answers.length == 1"
+                  nbButton [disabled]="answers[answers.length - 1].finalYear != login.finalYear || onSubmission"
+                  (click)="formSubtraction()">
+                  <nb-icon icon="trash-2-outline"></nb-icon>
+                </button>
               </div>
             </div>
           </nb-card-body>
         </nb-card>
       </nb-card-body>
-    </nb-card>
+    </nb-card> -->
   </div>
-
   <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
-    <nb-card size="giant">
+    <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="giant">
       <nb-card-header>
-        <strong>Imagens Landsat </strong> &nbsp; <small>RBG(NIR,SWIR,RED)</small>
+        <strong>Imagens </strong> &nbsp; <small>RBG(NIR,SWIR,RED)</small>
       </nb-card-header>
       <nb-card-body class="img-satellite">
-        <div class="grid-container">
-          <div class="single-view" *ngIf="isSingleView">
-            <div class="camera" (click)="isSingleView = false"
-              [style.background-image]="'url(' + selectedCamera.source + ')'">
-              <ngx-ol-map [center]="[40.866667, 34.566667]" [zoom]="4" [height]="'500px'" [mapId]="'map' + isSingleView"
-                [points]="[{latitude:40.866667, longitude: 34.566667}]"></ngx-ol-map>
-              <span class="camera-name">{{ selectedCamera.title }}</span>
+        <div *ngIf="image === 'DRY'" class="grid-container">
+          <div class="grid-view">
+            <div class="camera" *ngFor="let img of imagesDry; let i = index">
+              <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
+                [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
+                [mapId]="'map_images_dry' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
+              </ngx-ol-map>
+              <div class="camera-name">
+                <span>{{ img.date | date }}</span>
+                <span>{{ 'DRY' }}</span>
+              </div>
             </div>
           </div>
-          <div class="grid-view" *ngIf="!isSingleView">
-            <div class="camera" *ngFor="let camera of cameras; let i = index">
-              <ngx-ol-map [center]="[40.866667, 34.566667]" [zoom]="4" [showFullscreen]="false" [height]="'300px'"
-                [mapId]="'map' + i" [points]="[{latitude:40.866667, longitude: 34.566667}]"></ngx-ol-map>
-              <span class="camera-name">{{ camera.title }}</span>
+        </div>
+        <div *ngIf="image === 'WET'" class="grid-container">
+          <div class="grid-view">
+            <div class="camera" *ngFor="let img of imagesWet; let i = index">
+              <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
+                [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
+                [mapId]="'map_images_wet' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
+              </ngx-ol-map>
+              <div class="camera-name">
+                <span>{{ img.date | date }}</span>
+                <span>{{ 'WET' }}</span>
+              </div>
             </div>
           </div>
         </div>
       </nb-card-body>
       <nb-card-footer>
         <nb-actions [size]="actionSize" fullWidth>
-          <nb-action>
+          <nb-action class="show-img" (click)="showImage('DRY')">
             <nb-icon icon="image-outline" pack="eva"></nb-icon>
-            WET
+            LANDSAT DRY
           </nb-action>
-          <nb-action>
+          <nb-action class="show-img" (click)="showImage('WET')">
             <nb-icon icon="image-outline" pack="eva"></nb-icon>
-            DRY
+            LANDSAT WET
           </nb-action>
         </nb-actions>
       </nb-card-footer>
@@ -133,10 +157,10 @@
 
 <div class="row">
   <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
-    <nb-card size="small">
+    <nb-card [nbSpinner]="!isModisAvailable" size="small">
       <nb-card-header>MODIS NDVI Series </nb-card-header>
       <nb-card-body class="classification">
-        <chart type="line" [data]="dataChart" [options]="options"></chart>
+        <chart type="{{modisChart.type}}" [data]="modisChart.data" [options]="modisChart.options"></chart>
       </nb-card-body>
     </nb-card>
   </div>

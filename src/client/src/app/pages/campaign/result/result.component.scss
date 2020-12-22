@@ -4,6 +4,10 @@
 
 @include nb-install-component() {
 
+  /deep/ .ng2-smart-action-add-add {
+    display: none;
+  }
+
   nb-card-header {
     display: flex;
     align-items: center;
@@ -21,6 +25,7 @@
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
+
     @include nb-rtl {
       margin-right: auto;
       border-top-left-radius: 0;
@@ -37,6 +42,7 @@
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
+
     @include nb-rtl {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -48,18 +54,20 @@
     display: flex;
   }
 
-  .single-view, .grid-view {
+  .single-view,
+  .grid-view {
     flex: 1 0 100%;
   }
 
   .grid-view {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 
     .camera {
-      flex: 1 0 33%;
-      height: 300px;
-      border: 0.7px solid white;
+      flex-basis: 332px;
+      border: 0.1px solid white;
+
     }
   }
 
@@ -92,8 +100,10 @@
     bottom: 0;
     width: 100%;
     color: white;
-    background: nb-theme(overlay-backdrop-background-color);
+    background: rgba(0, 0, 0, 0.65);
     padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
   }
 
   nb-action {
@@ -137,4 +147,26 @@
 
 .img-satellite {
   padding: unset;
+}
+
+.location {
+  font-family: Open Sans, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+}
+
+.header-point {
+  padding: 0.1rem;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.show-img {
+  cursor: pointer;
+}
+
+.btn-actions-class {
+  display: contents;
 }

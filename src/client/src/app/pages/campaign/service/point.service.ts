@@ -35,6 +35,24 @@ export class PointService {
       );
   }
 
+  getPointResult(params): Observable<any> {
+    return this.httpClient.post<any>(this.apiURL + '/points/get-point',
+      JSON.stringify(params),
+      this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
+  getLandUses(): Observable<any[]> {
+    return this.httpClient.get<any[]>(
+      this.apiURL + '/points/landUses',
+      this.httpOptions,
+    ).pipe(
+      catchError(this.errorHandler),
+    );
+  }
+
   errorHandler(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
