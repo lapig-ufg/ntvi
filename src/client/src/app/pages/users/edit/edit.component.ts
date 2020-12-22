@@ -10,7 +10,7 @@ import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 @Component({
   selector: 'ngx-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.scss']
+  styleUrls: ['./edit.component.scss'],
 })
 export class EditComponent implements OnInit {
   id: number;
@@ -20,8 +20,8 @@ export class EditComponent implements OnInit {
   selectedItem: string;
   selectedTypeUser: string;
   confirmPassword: string;
-  
-  constructor( 
+
+  constructor(
     public usersService: UsersService,
     public organizationService: OrganizationService,
     private route: ActivatedRoute,
@@ -62,7 +62,6 @@ export class EditComponent implements OnInit {
   }
 
   saveChanges() {
-    console.log(this.selectedTypeUser);
     this.user.organization = { id : parseInt(this.selectedItem, 0) };
     // this.user.typeUser = this.selectedTypeUser;
     if (this.user.password !== this.confirmPassword) {
