@@ -123,9 +123,9 @@ export class ResultComponent implements OnInit, OnDestroy {
   getUsersInspections() {
 
     const inspectobj = this.info.point.inspection;
-    let myObj = new Object;
+    const myObj = new Object;
 
-    let arr = [];
+    const arr = [];
 
     for (const land of this.landUses) {
       arr.push({
@@ -156,7 +156,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       },
     };
 
-    let arrData = [];
+    const arrData = [];
 
     for (const o of inspectobj) {
       myObj[o.userName] = {
@@ -169,16 +169,16 @@ export class ResultComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i < this.info.point.years.length; i++) {
 
-      let finalObject = Object.assign({}, myObj);
+      const finalObject = Object.assign({}, myObj);
       let secondObject = {};
 
-      for (let o of inspectobj) {
+      for (const o of inspectobj) {
         if (finalObject.hasOwnProperty(o.userName)) {
           secondObject[o.userName] = o.landUse[i];
         }
       }
 
-      let later = {
+      const later = {
         year: this.info.point.years[i],
         classConsolidated: this.info.point.classConsolidated[i],
       };
