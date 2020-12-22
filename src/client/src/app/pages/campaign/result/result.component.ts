@@ -60,9 +60,9 @@ export class ResultComponent implements OnInit, OnDestroy {
   settings: any;
   data: any;
 
-  usersInspectionsTable = { data: {}, settings: {}, source: new LocalDataSource() }
+  usersInspectionsTable = { data: {}, settings: {}, source: new LocalDataSource() };
 
-  modisChart = { data: {}, options: {}, type: 'line' }
+  modisChart = { data: {}, options: {}, type: 'line' };
   themeSubscription: any;
   tmpModis: any;
 
@@ -122,12 +122,12 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   getUsersInspections() {
 
-    let inspectobj = this.info.point.inspection;
-    var myObj = new Object;
+    const inspectobj = this.info.point.inspection;
+    let myObj = new Object;
 
     let arr = [];
 
-    for (let land of this.landUses) {
+    for (const land of this.landUses) {
       arr.push({
         value: land, title: land
       });
@@ -158,8 +158,7 @@ export class ResultComponent implements OnInit, OnDestroy {
 
     let arrData = [];
 
-    let i = 0;
-    for (let o of inspectobj) {
+    for (const o of inspectobj) {
       myObj[o.userName] = {
         title: o.userName.toString(),
         filter: false,
@@ -170,7 +169,7 @@ export class ResultComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i < this.info.point.years.length; i++) {
 
-      var finalObject = Object.assign({}, myObj);
+      let finalObject = Object.assign({}, myObj);
       let secondObject = {};
 
       for (let o of inspectobj) {
@@ -179,12 +178,12 @@ export class ResultComponent implements OnInit, OnDestroy {
         }
       }
 
-      var later = {
+      let later = {
         year: this.info.point.years[i],
         classConsolidated: this.info.point.classConsolidated[i],
       };
 
-      var fin = Object.assign({}, later, secondObject);
+      let fin = Object.assign({}, later, secondObject);
 
       arrData.push(fin);
     }
@@ -454,7 +453,7 @@ export class ResultComponent implements OnInit, OnDestroy {
 
           this.modisChart.type = 'line';
 
-          this.isModisAvailable = true
+          this.isModisAvailable = true;
         });
     });
   }
