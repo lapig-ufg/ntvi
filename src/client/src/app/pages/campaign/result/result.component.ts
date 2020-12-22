@@ -56,11 +56,8 @@ export class ResultComponent implements OnInit, OnDestroy {
   isDataAvailable = false as boolean;
   isModisAvailable = false as boolean;
   isDataTableAvailable = false as boolean;
-
-  settings: any;
-  data: any;
-
   usersInspectionsTable = { data: {}, settings: {}, source: new LocalDataSource() };
+  pointsUsersInfoTable = { data: {}, settings: {}, source: new LocalDataSource() };
 
   modisChart = { data: {}, options: {}, type: 'line' };
   themeSubscription: any;
@@ -114,17 +111,61 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.initFormViewVariables();
     this.generateOptionYears(this.login.campaign.initialYear, this.login.campaign.finalYear);
     this.getUsersInspections();
+    this.getPointsUsersInformations();
     this.generateImages();
     this.initModisChart();
+
+  }
+
+  getPointsUsersInformations() {
+    const information = this.info.point.dataPointTime;
+
+    this.pointsUsersInfoTable.settings = {
+      // mode: 'inline',
+      hideSubHeader: true,
+      actions: false,
+      columns: {
+        user: {
+          title: 'Inspector',
+          filter: true,
+        },
+        duration: {
+          title: 'Point inspection duration(s)',
+          filter: false,
+          type: 'text', class: 'align-center',
+        },
+        meantime: {
+          title: 'Average time of all points inpection duration(s)',
+          filter: false,
+        },
+      },
+
+    };
+
+    const arrData = [];
+
+    for (let i = 0; i < information.length; i++) {
+
+      arrData.push({
+        user: (information[i].name === 'Tempo médio' ? 'Average Time' : information[i].name),
+        duration: information[i].totalPointTime + ' secs',
+        meantime: parseFloat(information[i].meanPointTime).toFixed(1) + ' secs',
+      });
+    }
+
+
+    this.pointsUsersInfoTable.data = arrData;
+
+    this.pointsUsersInfoTable.source = new LocalDataSource();
+
+    this.isDataTableAvailable = true;
 
 
   }
 
   getUsersInspections() {
-
     const inspectobj = this.info.point.inspection;
     const myObj = new Object;
-
     const arr = [];
 
     for (const land of this.landUses) {
@@ -133,10 +174,6 @@ export class ResultComponent implements OnInit, OnDestroy {
       });
     }
 
-    // list: [{ value: 'Antonette', title: 'Antonette' }, { value: 'Bret', title: 'Bret' }, {
-    //   value: '<b>Samantha</b>',
-    //   title: 'Samantha',
-    // }],
 
     myObj['year'] = {
       title: 'Year',
@@ -179,6 +216,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       }
 
       const later = {
+        index: i,
         year: this.info.point.years[i],
         classConsolidated: this.info.point.classConsolidated[i],
       };
@@ -187,9 +225,6 @@ export class ResultComponent implements OnInit, OnDestroy {
 
       arrData.push(fin);
     }
-
-    // let obj = this.info.point.reduce((ac,a) => ({...ac,[a]:''}),{});
-
 
     this.usersInspectionsTable.settings = {
       // mode: 'inline',
@@ -294,9 +329,19 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.toastService.show(status, massage, { status, position, duration });
   }
 
-  onSaveConfirm(event) {
+  async onSaveConfirm(event) {
     if (window.confirm('Are you sure you want to edit this Use Class?')) {
       event.confirm.resolve(event.newData);
+
+      const ob = {
+        index: event.newData.index,
+        class: event.newData.classConsolidated,
+        _id: this.infoP.current + '_' + this.login.campaign._id,
+      };
+
+      const t = await this.pointService.updateSingleClassConsolidated(ob).toPromise();
+
+
     } else {
       event.confirm.reject();
     }

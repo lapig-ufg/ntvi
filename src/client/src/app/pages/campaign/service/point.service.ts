@@ -63,6 +63,15 @@ export class PointService {
     );
   }
 
+  updateSingleClassConsolidated(params): Observable<any> {
+    return this.httpClient.post<any>(this.apiURL + '/points/updateSingleClassConsolidated',
+      JSON.stringify(params),
+      this.httpOptions)
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
   errorHandler(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
