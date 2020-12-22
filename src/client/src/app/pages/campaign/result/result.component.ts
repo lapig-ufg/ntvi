@@ -337,7 +337,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       const ob = {
         index: event.newData.index,
         class: event.newData.classConsolidated,
-        _id: this.infoP.current + '_' + this.login.campaign._id
+        _id: this.infoP.current + '_' + this.login.campaign._id,
       };
 
       const t = await this.pointService.updateSingleClassConsolidated(ob).toPromise();
