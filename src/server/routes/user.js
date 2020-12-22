@@ -5,4 +5,5 @@ module.exports = function (app) {
     app.get('/service/user/:id', JWT.verifyJWT, control.getUserByID);
     app.put('/service/user/:id', JWT.verifyJWT, control.updateUser);
     app.get('/service/users', JWT.verifyJWT, control.getAllUsers);
+    app.delete('/service/user/:id', JWT.verifyJWT, control.deleteUser);
 }

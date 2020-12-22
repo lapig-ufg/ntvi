@@ -71,7 +71,6 @@ export class AdminComponent implements OnInit {
   }
 
   onEdit(event) {
-    console.log(event)
     this.goTo('/pages/users/' + event.data.id + '/edit');
   }
 

@@ -38,7 +38,6 @@ module.exports = function (app) {
     }
 
     Controller.getAllUsers = async function (request, response) {
-        console.log('passei')
         try {
             const users = await prisma.user.findMany({
                 select: {
@@ -101,6 +100,32 @@ module.exports = function (app) {
         } catch (e) {
             console.error(e)
             response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+        }
+    }
+
+    Controller.deleteUser = async function (request, response) {
+        const {
+            id
+        } = request.params
+        let {
+            lang
+        } = request.headers;
+        const texts = language.getLang(lang);
+        console.log('_______________________',id)
+        try {
+
+            const users = await prisma.user.delete({
+                where: {
+                    id: parseInt(id)
+                },
+            })
+
+            response.status(200).json(users);
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({
+                message: texts.login_msg_erro + e + '.'
+            });
         }
     }
 
