@@ -5,7 +5,7 @@ import { AdminComponent } from './admin/admin.component';
 import { EditComponent } from './edit/edit.component';
 
 const routes: Routes = [
-  { path: '/', redirectTo: 'users/index', pathMatch: 'full'},
+  { path: '/', redirectTo: 'campaign/index', pathMatch: 'full'},
   { path: 'profile', component: ProfileComponent },
   { path: 'admin', component: AdminComponent },
   { path: ':userId/edit', component: EditComponent },
