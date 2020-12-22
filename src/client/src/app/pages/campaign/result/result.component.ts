@@ -96,7 +96,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     const currentUser = JSON.parse(localStorage.getItem('user'));
     const user = this.normalizeUser(currentUser);
     // const access = { campaign: '44', name: user, senha: 'teste123' };
-    const access = { campaign: this.campaign.id.toString(), name: 'admin', senha: 'TV1lapig' };
+    const access = { campaign: 'fip_validacao_2019_comp', name: 'admin', senha: 'TV1lapig' };
     this.login = await this.pointService.login(access).toPromise();
     this.infoP = await this.pointService.getPoint().toPromise();
     this.landUses = await this.pointService.getLandUses().toPromise();
