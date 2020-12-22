@@ -183,7 +183,7 @@ export class ResultComponent implements OnInit, OnDestroy {
         classConsolidated: this.info.point.classConsolidated[i],
       };
 
-      let fin = Object.assign({}, later, secondObject);
+      const fin = Object.assign({}, later, secondObject);
 
       arrData.push(fin);
     }
