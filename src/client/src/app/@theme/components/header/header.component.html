@@ -27,12 +27,17 @@
       </nb-select>
     </nb-action>
     <nb-action class="control-item" >
-      <nb-toggle
-        status="success"
-        labelPosition="right"
-        [(checked)]="english"
-        (click)="toggleEnglish()"
-      >EN</nb-toggle>
+<!--      <nb-toggle-->
+<!--        status="success"-->
+<!--        labelPosition="right"-->
+<!--        [(checked)]="english"-->
+<!--        (click)="toggleEnglish()"-->
+<!--      >EN</nb-toggle>-->
+      <nb-button-group ghost>
+        <button nbButtonToggle>EN</button>
+        <button nbButtonToggle>PT</button>
+      </nb-button-group>
+
     </nb-action>
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
       <nb-user [nbContextMenu]="userMenu"
