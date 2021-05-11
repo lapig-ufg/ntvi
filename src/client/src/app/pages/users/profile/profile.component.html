@@ -99,6 +99,26 @@
               fieldSize="large">
           </div>
         </div>
+        <div class="row form-control-group">
+          <div class="col">
+            <label class="label" for="themeId">Theme</label>
+            <nb-select id="themeId" [(selected)]="selectedTheme" (selectedChange)="onChangeTheme()"
+                       placeholder="Select a theme"
+                       fullWidth filled>
+              <nb-option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.name}}
+              </nb-option>
+            </nb-select>
+          </div>
+          <div class="col">
+            <label class="label" for="langId">Language</label>
+            <nb-select id="langId" [(selected)]="selectedLanguage" (selectedChange)="onChangeLang()"
+                       placeholder="Select a language"
+                       fullWidth filled>
+              <nb-option *ngFor="let language of languages" value="{{language.id}}">{{language.name}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
 
         <div class="form-control-group form-shipping-address">
           <h6> Address</h6>
@@ -122,7 +142,7 @@
         </div>
 
         <div class="form-shipping-address button-save-profile ">
-          <button nbButton status="basic" (click)="router.navigateByUrl('pages/campaign/index')" size="large">Go to Home</button>
+<!--          <button nbButton status="basic" (click)="router.navigateByUrl('pages/campaign/index')" size="large">Go to Home</button>-->
           <button nbButton status="primary" (click)="saveChanges()" size="large"> Save Changes</button>
         </div>
       </div>

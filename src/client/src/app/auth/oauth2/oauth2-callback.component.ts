@@ -13,7 +13,7 @@ import {
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import jwtDecode, {JwtPayload} from 'jwt-decode';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
 
 @Component({
   selector: 'ngx-oauth2-callback',

@@ -2,7 +2,6 @@ import { Component, Injector, OnDestroy} from '@angular/core';
 import {NbAuthJWTToken, NbAuthResult, NbLoginComponent} from '@nebular/auth';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import jwtDecode, {JwtPayload} from 'jwt-decode';
 
 @Component({
   selector: 'ngx-login',
@@ -12,7 +11,6 @@ import jwtDecode, {JwtPayload} from 'jwt-decode';
 export class LoginComponent extends NbLoginComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
-
   loginGoogle() {
     this.service.authenticate('google')
       .pipe(takeUntil(this.destroy$))
@@ -21,19 +19,11 @@ export class LoginComponent extends NbLoginComponent implements OnDestroy {
       });
   }
 
-  loginEmail() {
-    this.login();
+  async login() {
     localStorage.clear();
     localStorage.setItem('auth_type', 'email');
     localStorage.setItem('user', null);
-    this.service.getToken()
-      .subscribe((token: NbAuthJWTToken) => {
-        if (token.isValid()) {
-          const payload = jwtDecode<JwtPayload>(token.getValue());
-          localStorage.setItem('user', JSON.stringify(payload));
-          this.user = payload;
-        }
-      });
+    super.login();
   }
 
   ngOnDestroy(): void {

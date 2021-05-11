@@ -3,7 +3,7 @@ const CryptoJS = require("crypto-js");
 
 module.exports = function (app) {
     var Controller = {}
-    let language = app.util.language;
+    let _language = app.util.language;
     const prisma = new PrismaClient({
         errorFormat: 'pretty',
         log: ['query', 'info', 'warn'],
@@ -26,6 +26,8 @@ module.exports = function (app) {
                     typeUser: true,
                     picture: true,
                     organization: true,
+                    theme: true,
+                    language: true,
                 },
                 where: {
                     id: parseInt(id),
@@ -44,7 +46,9 @@ module.exports = function (app) {
                     id: true,
                     name: true,
                     email: true,
-                    organization: true
+                    organization: true,
+                    theme: true,
+                    language: true,
                 },
             })
             response.json(users)
@@ -56,40 +60,38 @@ module.exports = function (app) {
 
     Controller.updateUser = async function (request, response) {
         const { id } = request.params
-        const { name, email, password, city, state, country, geeKey, organization } = request.body
+        const { name, email, password, city, state, country, geeKey, organization, language, theme } = request.body
         let { lang } = request.headers;
-        const texts = language.getLang(lang);
+        const texts = _language.getLang(lang);
         try {
             let arrayQueries = [];
 
+            let data = {
+                name: name,
+                email: email != null ? email : undefined,
+                city: city != null ? city : undefined,
+                state: state != null ? state : undefined,
+                country: country != null ? country : undefined,
+                geeKey: geeKey != null ? geeKey : undefined,
+                language: language != null ? language : undefined,
+                theme: theme != null ? theme : undefined,
+            };
+
+            if (organization.id != null) {
+                data['organization'] = { connect: { id: parseInt(organization.id)} };
+            }
+
             if (password) {
                 const hash = CryptoJS.MD5(password).toString();
-
+                data['password'] = hash;
                 arrayQueries.push(prisma.user.update({
                     where: { id: parseInt(id) },
-                    data: {
-                        name: name,
-                        email: email != null ? email : undefined,
-                        password: hash,
-                        city: city != null ? city : undefined,
-                        state: state != null ? state : undefined,
-                        country: country != null ? country : undefined,
-                        geeKey: geeKey != null ? geeKey : undefined,
-                        organization: { connect: { id: parseInt(organization.id) } },
-                    }
+                    data: data
                 }))
             } else {
                 arrayQueries.push(prisma.user.update({
                     where: { id: parseInt(id) },
-                    data: {
-                        name: name,
-                        email: email != null ? email : undefined,
-                        city: city != null ? city : undefined,
-                        state: state != null ? state : undefined,
-                        country: country != null ? country : undefined,
-                        geeKey: geeKey != null ? geeKey : undefined,
-                        organization: { connect: { id: parseInt(organization.id) } },
-                    }
+                    data: data
                 }))
             }
 
@@ -109,7 +111,7 @@ module.exports = function (app) {
         let {
             lang
         } = request.headers;
-        const texts = language.getLang(lang);
+        const texts = _language.getLang(lang);
         try {
 
             const users = await prisma.user.delete({

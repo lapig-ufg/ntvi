@@ -7,8 +7,8 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import {NbTokenService, NbAuthService, NbAuthJWTToken} from '@nebular/auth';
-import {Router} from '@angular/router';
+import { NbTokenService, NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { Router } from '@angular/router';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 
 @Component({
@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: any;
   title: string;
-  english: boolean;
+  english: string;
   themes = [
     {
       value: 'default',
@@ -54,11 +54,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private http: HttpClient,
               private router: Router,
               private storage: StorageMap) {
-    this.english = false;
+    this.english = '';
   }
 
   ngOnInit() {
-    this.english = this.translate.currentLang === 'en' ? true : false;
+    this.english = this.translate.currentLang;
     this.title = this.translate.instant('title');
     this.getUser();
     this.currentTheme = this.themeService.currentTheme;
@@ -97,10 +97,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleEnglish() {
-    if (this.english) {
-      this.translate.reloadLang('en');
+    if (this.english === 'en') {
+      this.translate.use('en');
     } else {
-      this.translate.reloadLang('pt');
+      this.translate.use('pt');
     }
     this.title = this.translate.instant('title');
   }
@@ -114,6 +114,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout('email');
     this.storage.clear().subscribe(() => {});
     this.token.clear();
+    localStorage.clear();
+    localStorage.setItem('auth_type', 'email');
+    localStorage.setItem('user', null);
     this.router.navigate(['auth/login']);
   }
 
@@ -134,19 +137,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   getUser() {
     const self = this;
+    let payload = {};
     const auth_type = localStorage.getItem('auth_type');
     if ( auth_type === 'oauth' ) {
-      const token = localStorage.getItem('token');
-      const payload = jwtDecode<JwtPayload>(token.toString());
-      localStorage.setItem('user', JSON.stringify(payload));
-      this.user     = payload;
+      try {
+        const token = localStorage.getItem('token');
+        payload = jwtDecode<JwtPayload>(token.toString());
+        localStorage.setItem('user', JSON.stringify(payload));
+        this.user     = payload;
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       this.authService.getToken()
         .subscribe((token: NbAuthJWTToken) => {
           if (token.isValid()) {
-            const payload = jwtDecode<JwtPayload>(token.getValue());
-            localStorage.setItem('user', JSON.stringify(payload));
-            this.user = payload;
+            try {
+              payload =  jwtDecode<JwtPayload>(token.toString());
+              localStorage.setItem('user', JSON.stringify(payload));
+              this.user = payload;
+            } catch (error) {
+              console.error(error);
+            }
           }
         }, function (error) {
           // redirect o login

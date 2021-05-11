@@ -1,11 +1,13 @@
 import { NbMenuItem } from '@nebular/theme';
 
 const grantMenu = function (roles) {
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-
+  let currentUser;
+  let menuGranted;
+  currentUser = JSON.parse(localStorage.getItem('user'));
   const roleDefault = 'DEFAULT';
 
-  return !roles.includes((currentUser === undefined || currentUser === null) ? roleDefault : currentUser.role);
+  menuGranted = !roles.includes((currentUser === undefined || currentUser === null) ? roleDefault : currentUser.role);
+  return menuGranted;
 };
 
 export const MENU_ITEMS: NbMenuItem[] = [

@@ -5,7 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Organization } from '../../organization/model/organization';
 import { OrganizationService } from '../../organization/service/organization.service';
-import {NbComponentStatus, NbToastrService} from '@nebular/theme';
+import { NbComponentStatus, NbThemeService, NbToastrService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-profile',
@@ -16,6 +17,10 @@ export class ProfileComponent implements OnInit {
   id: number;
   user = {} as User;
   organizations = [] as Organization[];
+  themes = [];
+  languages = [];
+  selectedTheme: string;
+  selectedLanguage: string;
   selectedItem: string;
   confirmPassword: string;
   constructor(
@@ -23,8 +28,19 @@ export class ProfileComponent implements OnInit {
     public organizationService: OrganizationService,
     public route: ActivatedRoute,
     public router: Router,
-    public toastService: NbToastrService,
-    ) {
+    private themeService: NbThemeService,
+    public translate: TranslateService,
+    public toastService: NbToastrService ) {
+      this.themes = [
+        {id: 'default', name : 'Default' },
+        {id: 'cosmic', name : 'Cosmic' },
+        {id: 'corporate', name : 'Corporate' },
+        {id: 'dark', name : 'Dark' },
+      ];
+      this.languages = [
+        {id: 'en', name : 'English' },
+        {id: 'pt', name : 'Portuguese Brazil' },
+      ];
     }
 
   ngOnInit(): void {
@@ -33,6 +49,8 @@ export class ProfileComponent implements OnInit {
 
     this.usersService.find(this.id).subscribe((data: User) => {
       this.selectedItem = data.organization ? data.organization.id.toString() : null;
+      this.selectedTheme = data.theme ? data.theme.toString() : null;
+      this.selectedLanguage = data.language ? data.language.toString() : null;
       this.user = data;
     });
 
@@ -52,6 +70,8 @@ export class ProfileComponent implements OnInit {
     if (this.user.password !== this.confirmPassword) {
       this.user.password = null;
     }
+    this.user.language = this.selectedLanguage;
+    this.user.theme = this.selectedTheme;
     this.usersService.update(this.id, this.user).subscribe((data: User) => {
       this.router.navigateByUrl('pages/campaign/index');
     });
@@ -63,5 +83,17 @@ export class ProfileComponent implements OnInit {
   showToast(status: NbComponentStatus, massage, position) {
     const duration = 4000;
     this.toastService.show(status, massage, { status, position, duration });
+  }
+
+  onChangeLang() {
+    this.translate.use(this.selectedLanguage.match(/en|pt/) ? this.selectedLanguage : 'en');
+  }
+
+  onChangeTheme() {
+    let theme = this.selectedTheme;
+    if (theme === null || theme === undefined) {
+      theme = 'default';
+    }
+    this.themeService.changeTheme(theme);
   }
 }

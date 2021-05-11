@@ -57,6 +57,7 @@ const NB_MODULES = [
   NbEvaIconsModule,
   NbToggleModule,
   NbCheckboxModule,
+  TranslateModule,
 ];
 const COMPONENTS = [
   HeaderComponent,

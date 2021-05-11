@@ -100,7 +100,7 @@ const socialLinks = [
       forms: {
         login: {
           socialLinks: socialLinks,
-          redirectDelay: 500,
+          redirectDelay: 200,
           strategy: 'email',
           rememberMe: true,
           showMessages: {

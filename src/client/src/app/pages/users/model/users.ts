@@ -12,4 +12,6 @@ export interface User {
   typeUser?: string;
   picture: string;
   organization: Organization;
+  theme: string;
+  language: string;
 }

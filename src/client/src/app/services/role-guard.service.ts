@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 export class RoleGuardService implements CanActivate {
 
   private allowedRoles: string[];
-
   constructor(
     private router: Router,
     private toastService: NbToastrService,
@@ -19,7 +18,7 @@ export class RoleGuardService implements CanActivate {
     const roleDefault = 'DEFAULT';
     const allowed = this.allowedRoles.includes(
       (currentUser === undefined || currentUser === null) ? roleDefault : currentUser.role);
-    if (allowed === false) {
+    if (!allowed) {
       this.showToast('warning', 'Permission denied!', 'top-right');
     }
     return allowed;

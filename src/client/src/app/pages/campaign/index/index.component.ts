@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { Campaign } from '../models/campaign';
 import { Router } from '@angular/router';
@@ -11,10 +11,20 @@ import { User } from '../models/user';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent implements  AfterViewInit  {
   campaigns = [] as Campaign[];
   user: User;
   filterTerm: string;
+  asyncLocalStorage = {
+    setItem: async function (key, value) {
+      await null;
+      return localStorage.setItem(key, value);
+    },
+    getItem: async function (key) {
+      await null;
+      return localStorage.getItem(key);
+    },
+  };
   itemsActions = [
     { title: 'EDIT' },
     { title: 'INSPECT' },
@@ -30,14 +40,16 @@ export class IndexComponent implements OnInit {
     private searchService: NbSearchService,
   ) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     const self = this;
-    this.user = JSON.parse(localStorage.getItem('user'));
-    this.getCampaigns();
-    this.searchService.onSearchInput()
-      .subscribe((data: any) => {
-        this.filterTerm = data.term;
-      });
+    this.asyncLocalStorage.getItem('user').then(function (value) {
+      self.user = JSON.parse(value);
+      self.getCampaigns();
+      self.searchService.onSearchInput()
+        .subscribe((data: any) => {
+          self.filterTerm = data.term;
+        });
+    });
   }
 
   resetSearch() {
@@ -100,7 +112,7 @@ export class IndexComponent implements OnInit {
   }
   canOpenResults(campaign) {
     let can = false;
-    const currentUser = JSON.parse(localStorage.getItem('user'));
+    const currentUser = this.user;
     campaign.UsersOnCampaigns.forEach(function (item) {
       if (item.userId.toString() === currentUser.id.toString() && item.typeUserInCampaign === 'ADMIN') {
         can = true;

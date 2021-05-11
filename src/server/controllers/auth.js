@@ -15,7 +15,7 @@ const { parsed: env } = result;
 module.exports = function (app) {
     let Controller = {}
 
-    let language = app.util.language;
+    let _language = app.util.language;
 
     const prisma = new PrismaClient({
         errorFormat: 'pretty',
@@ -24,7 +24,7 @@ module.exports = function (app) {
 
     Controller.login = async function (request, response) {
         const { lang } = request.headers;
-        const texts = language.getLang(lang);
+        const texts = _language.getLang(lang);
 
         try {
             const { email, password } = request.body
@@ -43,6 +43,8 @@ module.exports = function (app) {
                     email: user.email,
                     picture: user.picture,
                     role: user.typeUser,
+                    theme: user.theme,
+                    language: user.language,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: '24h'
@@ -60,7 +62,7 @@ module.exports = function (app) {
 
     Controller.register = async function (request, response) {
         const { lang } = request.headers;
-        const texts = language.getLang(lang);
+        const texts = _language.getLang(lang);
 
         const {fullName, confirmPassword, email, terms } = request.body;
         const hash = CryptoJS.MD5(confirmPassword).toString();
@@ -79,6 +81,8 @@ module.exports = function (app) {
                 email: user.email,
                 picture: user.picture,
                 role: user.typeUser,
+                theme: user.theme,
+                language: user.language,
             };
             const token = jwt.sign(payload, env.SECRET, {
                 expiresIn: '24h'
@@ -103,7 +107,7 @@ module.exports = function (app) {
             lang = locale.includes('pt')? 'pt' : 'en';
         }
 
-        const texts = language.getLang(lang);
+        const texts = _language.getLang(lang);
         try {
 
             const user = await prisma.user.findUnique({
@@ -125,6 +129,8 @@ module.exports = function (app) {
                     email: user.email,
                     picture: user.picture,
                     role: user.typeUser,
+                    theme: user.theme,
+                    language: user.language,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: '24h'
@@ -148,6 +154,8 @@ module.exports = function (app) {
                     email: user.email,
                     picture: user.picture,
                     role: user.typeUser,
+                    theme: user.theme,
+                    language: user.language,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
                     expiresIn: '24h'

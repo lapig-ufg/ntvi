@@ -2,5 +2,6 @@
   "title": "TVI - PT",
   "login_msg_invalid": "Login inválido!",
   "login_msg_erro": "Erro ao consultar o usuário. ",
-  "login_msg_notfound": "Usuário não encontrado!"
+  "login_msg_notfound": "Usuário não encontrado!",
+  "lang": "Idioma"
 }

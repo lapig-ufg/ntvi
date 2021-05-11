@@ -117,6 +117,8 @@ model User {
   terms            Boolean            @default(false)
   picture          String?
   active           Boolean            @default(false)
+  language         TypeLanguage       @default(en)
+  theme            TypeTheme          @default(default)
   organizationId   Int?
   organization     Organization?      @relation(fields: [organizationId], references: [id])
   UsersOnCampaigns UsersOnCampaigns[]
@@ -144,3 +146,18 @@ enum TypeStatus {
   CACHING
   READY
 }
+
+enum TypeLanguage {
+  pt
+  en
+}
+
+enum TypeTheme {
+  default
+  cosmic
+  corporate
+  dark
+}
+
+
+
