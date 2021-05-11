@@ -1,4 +1,6 @@
 *.log
+*.logs
+*.csv
 *.sublime-project
 *.sublime-workspace
 *.pyc
@@ -32,6 +34,7 @@ lapig-ee-09144f43f3b5.json
 lapig-ee-09144f43f3b5.pem
 src/server/images/*
 src/server/integration/py/gee-keys/
+src/server/integration/py/credentials/
 db/dump/
 src/server/bin/GeoJSON/
 src/server/bin/SHP

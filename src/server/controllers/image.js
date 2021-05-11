@@ -34,7 +34,7 @@ module.exports = function(app) {
 					if(mosaic != undefined) {
 						var token = mosaic.ee_token;
 						var mapid = mosaic.ee_mapid;
-						url = "https://earthengine.googleapis.com/map/" + mapid + "/${z}/${x}/${y}?token=" + token
+						url = "https://earthengine.googleapis.com/v1alpha/" + mapid + "/tiles/${z}/${x}/${y}"
 					}
 
 					callback(url);
@@ -176,7 +176,7 @@ module.exports = function(app) {
 					request(url, params, callback);
 				});
 			});
-			console.log('TASKS', requestTasks)
+
 			return requestTasks;
  		}
 
