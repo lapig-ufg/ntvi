@@ -19,7 +19,7 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'pages',
-    pathMatch: 'full',
+    pathMatch: 'prefix',
     canActivate: [AuthGuard],
   },
   {
@@ -30,7 +30,7 @@ export const routes: Routes = [
 ];
 
 const config: ExtraOptions = {
-  useHash: false,
+  useHash: true,
 };
 
 @NgModule({

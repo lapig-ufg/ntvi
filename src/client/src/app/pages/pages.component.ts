@@ -32,8 +32,7 @@ export class PagesComponent implements  AfterViewInit {
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     public translate: TranslateService,
-    private authService: NbAuthService,
-  ) {
+    private authService: NbAuthService) {
   }
   ngAfterViewInit(): void {
     const self = this;
@@ -52,13 +51,15 @@ export class PagesComponent implements  AfterViewInit {
         self.themeService.changeTheme(theme);
       }
     });
+
+    this.menuService.onItemClick().subscribe(() => {
+    });
   }
   grantMenu = function (roles) {
     const self = this;
     let menuGranted;
 
     const roleDefault = 'DEFAULT';
-    console.log(this.user)
     menuGranted = !roles.includes((self.user === undefined || self.user === null) ? roleDefault : self.user.role);
     return menuGranted;
   };

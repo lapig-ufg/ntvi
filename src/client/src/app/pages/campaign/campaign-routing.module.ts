@@ -11,7 +11,7 @@ import { ResultComponent } from './result/result.component';
 import { NbThemeService } from '@nebular/theme';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'campaign/index', pathMatch: 'full' },
+  { path: '/', redirectTo: 'campaign/index', pathMatch: 'full' },
   { path: 'index', component: IndexComponent },
   { path: 'public', component: PublicComponent },
   { path: ':campaignId/view', component: ViewComponent },

@@ -1,7 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
+import {
+  NbMediaBreakpointsService,
+  NbMenuService,
+  NbSidebarService,
+  NbThemeService,
+  NbDialogService,
+} from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
@@ -10,6 +16,7 @@ import { Subject } from 'rxjs';
 import { NbTokenService, NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { Router } from '@angular/router';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
+import { ProfileComponent } from '../../../pages/users/profile/profile.component';
 
 @Component({
   selector: 'ngx-header',
@@ -40,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [ { id: 'profile', title: 'Profile' }, { title: 'Log out' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -53,7 +60,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private token: NbTokenService,
               private http: HttpClient,
               private router: Router,
-              private storage: StorageMap) {
+              private storage: StorageMap,
+              private dialogService: NbDialogService) {
     this.english = '';
   }
 
@@ -121,7 +129,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   profile () {
-    this.router.navigate(['pages/users/profile']);
+   this.dialogService.open(ProfileComponent, {
+     autoFocus: true,
+     closeOnEsc: true,
+     hasScroll: true,
+   });
   }
 
   handleMenu(evt) {
@@ -131,7 +143,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (item.title === 'Log out') {
         self.logout();
       } else {
-        self.profile();
+        if (item.hasOwnProperty('id')) {
+          self.profile();
+        }
       }
     });
   }

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { UsersService } from '../service/users.service';
 import { User } from '../model/users';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Organization } from '../../organization/model/organization';
 import { OrganizationService } from '../../organization/service/organization.service';
-import { NbComponentStatus, NbThemeService, NbToastrService } from '@nebular/theme';
+import {NbComponentStatus, NbDialogService, NbDialogRef, NbThemeService, NbToastrService} from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -30,7 +30,8 @@ export class ProfileComponent implements OnInit {
     public router: Router,
     private themeService: NbThemeService,
     public translate: TranslateService,
-    public toastService: NbToastrService ) {
+    public toastService: NbToastrService,
+    protected dialogRef: NbDialogRef<ProfileComponent>) {
       this.themes = [
         {id: 'default', name : 'Default' },
         {id: 'cosmic', name : 'Cosmic' },
@@ -66,6 +67,7 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges() {
+    const self = this;
     this.user.organization = { id : parseInt(this.selectedItem, 0) };
     if (this.user.password !== this.confirmPassword) {
       this.user.password = null;
@@ -73,13 +75,12 @@ export class ProfileComponent implements OnInit {
     this.user.language = this.selectedLanguage;
     this.user.theme = this.selectedTheme;
     this.usersService.update(this.id, this.user).subscribe((data: User) => {
-      this.router.navigateByUrl('pages/campaign/index');
+      if (data) {
+        self.dialogRef.close();
+      }
     });
   }
 
-  goTo(url) {
-    this.router.navigateByUrl(url);
-  }
   showToast(status: NbComponentStatus, massage, position) {
     const duration = 4000;
     this.toastService.show(status, massage, { status, position, duration });
