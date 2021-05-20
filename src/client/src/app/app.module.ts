@@ -3,6 +3,7 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
+import { APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -27,9 +28,8 @@ import {
   NbToastrModule, NbToastrService,
   NbWindowModule,
 } from '@nebular/theme';
-import {NbTokenLocalStorage, NbTokenStorage} from '@nebular/auth';
-import {LocationStrategy, PathLocationStrategy} from '@angular/common';
-
+import { NbTokenLocalStorage, NbTokenStorage } from '@nebular/auth';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -88,6 +88,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
+  ],
+  exports: [
+    TranslateModule
   ],
   bootstrap: [AppComponent],
 })

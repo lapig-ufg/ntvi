@@ -3,5 +3,9 @@
   "login_msg_invalid": "Login inválido!",
   "login_msg_erro": "Erro ao consultar o usuário. ",
   "login_msg_notfound": "Usuário não encontrado!",
-  "lang": "Idioma"
+  "login_subtitle": "Olá! Faça login com seu e-mail ou Conta Google.",
+  "login_email": "Endereço de email",
+  "login_email_placeholder": "Digite seu email",
+  "login_password": "Senha",
+  "login_password_placeholder": "Digite sua senha"
 }

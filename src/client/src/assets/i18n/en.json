@@ -1,7 +1,11 @@
 {
   "title": "TVI - EN",
   "login_msg_invalid": "Invalid login!",
-  "login_msg_erro": "Error querying user. ",
+  "login_msg_erro": "Error querying user.",
   "login_msg_notfound": "User not found",
-  "lang": "Language"
+  "login_subtitle": "Hello! Log in with your email or Google Account.",
+  "login_email": "Email address",
+  "login_email_placeholder": "Type your e-mail",
+  "login_password": "Password",
+  "login_password_placeholder": "Type your password"
 }
