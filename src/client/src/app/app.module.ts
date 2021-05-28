@@ -1,9 +1,4 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
-import { APP_INITIALIZER } from '@angular/core';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -18,7 +13,7 @@ import { LanguageInterceptor } from './interceptors/language.interceptor';
 import { StorageInterceptor } from './interceptors/storage.interceptor';
 import { JWTInterceptor  } from './interceptors/jwt.interceptor';
 import { AuthGuard } from './services/auth-guard.service';
-import { RoleGuardService} from './services/role-guard.service';
+import { RoleGuardService } from './services/role-guard.service';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -30,13 +25,14 @@ import {
 } from '@nebular/theme';
 import { NbTokenLocalStorage, NbTokenStorage } from '@nebular/auth';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

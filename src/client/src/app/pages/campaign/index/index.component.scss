@@ -2,7 +2,10 @@
 @import '../../../../../node_modules/@nebular/theme/styles/global/breakpoints';
 @import '../../../@theme/styles/themes';
 @import '../../../@theme/styles/mixins';
-
+.inspect{
+  cursor: pointer;
+  font-size: 8px;
+}
 .btn-header {
   display: flex;
   justify-content: space-between;

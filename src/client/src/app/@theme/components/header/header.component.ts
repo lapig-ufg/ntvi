@@ -6,9 +6,9 @@ import {
   NbMenuService,
   NbSidebarService,
   NbThemeService,
-  NbDialogService,
+  NbDialogService, NbMenuItem,
 } from '@nebular/theme';
-import { TranslateService } from '@ngx-translate/core';
+import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
@@ -23,12 +23,12 @@ import { ProfileComponent } from '../../../pages/users/profile/profile.component
   styleUrls: ['./header.component.scss'],
   templateUrl: './header.component.html',
 })
+
 export class HeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
-  title: string;
   english: string;
   themes = [
     {
@@ -47,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { id: 'profile', title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -66,8 +66,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const self = this;
     this.english = this.translate.currentLang;
-    this.title = this.translate.instant('title');
     this.getUser();
     this.currentTheme = this.themeService.currentTheme;
 
@@ -85,6 +85,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+    this.userMenu = this.getMenu();
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      self.userMenu = self.getMenu();
+    });
   }
 
   ngOnDestroy() {
@@ -97,20 +101,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.themeService.changeTheme(themeName);
   }
 
+  getMenu(){
+    return [ { id: 'profile', title: this.translate.instant('header_profile') }, { id: 'logout', title: this.translate.instant('header_logout') } ];
+  }
+
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
     this.layoutService.changeLayoutSize();
 
     return false;
-  }
-
-  toggleEnglish() {
-    if (this.english === 'en') {
-      this.translate.use('en');
-    } else {
-      this.translate.use('pt');
-    }
-    this.title = this.translate.instant('title');
   }
 
   navigateHome() {
@@ -133,17 +132,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
      autoFocus: true,
      closeOnEsc: true,
      hasScroll: true,
+     closeOnBackdropClick: true,
    });
   }
 
   handleMenu(evt) {
     const self = this;
-    this.menuService.onItemClick().subscribe(result => {
-      const { item } = result;
-      if (item.title === 'Log out') {
+    this.menuService.onItemSelect().subscribe((result) => {
+      const item: any = result.item;
+      console.log(item)
+      if (item.id === 'logout') {
         self.logout();
       } else {
-        if (item.hasOwnProperty('id')) {
+        if (item.id === 'profile') {
           self.profile();
         }
       }

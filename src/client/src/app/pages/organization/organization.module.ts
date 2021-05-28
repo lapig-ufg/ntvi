@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormsModule, FormsModule as ngFormsModule} from '@
 import { OrganizationRoutingModule, routedComponents } from './organization-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   NbActionsModule,
   NbButtonModule,
@@ -39,6 +40,7 @@ import {
     ngFormsModule,
     NbListModule,
     NbEvaIconsModule,
+    TranslateModule,
   ],
 })
 export class OrganizationModule { }

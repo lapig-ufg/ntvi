@@ -44,7 +44,6 @@ const socialLinks = [
   },
 ];
 
-
 // @ts-ignore
 @NgModule({
   imports: [
@@ -100,7 +99,7 @@ const socialLinks = [
       forms: {
         login: {
           socialLinks: socialLinks,
-          redirectDelay: 200,
+          redirectDelay: 900,
           strategy: 'email',
           rememberMe: true,
           showMessages: {
@@ -109,6 +108,7 @@ const socialLinks = [
           },
         },
         register: {
+          redirectDelay: 900,
           socialLinks: socialLinks,
           rememberMe: true,
         },
@@ -120,5 +120,7 @@ const socialLinks = [
     NbAuthModule,
   ],
 })
+
 export class AuthRoutingModule {
 }
+

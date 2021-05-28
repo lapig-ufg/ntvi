@@ -1,14 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import {Component, ElementRef, OnDestroy, AfterViewInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { StorageMap } from '@ngx-pwa/local-storage';
+import { TimelineLite } from 'gsap'
+import { interval } from 'rxjs';
 import {
-  NbAuthToken,
   NbAuthResult,
   NbAuthService,
-  NbTokenService,
-  NbAuthOAuth2JWTToken,
-  NbAuthOAuth2Token,
-  NbAuthJWTToken,
 } from '@nebular/auth';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -18,16 +14,19 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 @Component({
   selector: 'ngx-oauth2-callback',
   templateUrl: './oauth2-callback.component.html',
+  styleUrls: ['./oauth2-callback.component.scss'],
 })
 
-export class OAuth2CallbackComponent implements OnDestroy {
-
+export class OAuth2CallbackComponent implements OnDestroy, AfterViewInit {
+  protected gqTl:TimelineLite = new TimelineLite({paused:true, reversed:true})
   private destroy$ = new Subject<void>();
+  @ViewChild('box') box: ElementRef;
   constructor(
     private authService: NbAuthService,
     private router: Router,
     private http: HttpClient,
   ) {
+
     localStorage.clear();
     localStorage.setItem('auth_type', 'oauth');
     localStorage.setItem('user', null);
@@ -51,6 +50,13 @@ export class OAuth2CallbackComponent implements OnDestroy {
           });
         });
       });
+  }
+
+  ngAfterViewInit() {
+    const self = this;
+    const secondsCounter = interval(1000);
+    self.gqTl.staggerFromTo(self.box.nativeElement.children, 0.5, {autoAlpha: 0}, {autoAlpha: 1}, 0.1);
+    secondsCounter.subscribe( () => self.gqTl.reversed() ? self.gqTl.play() : self.gqTl.reverse());
   }
 
   ngOnDestroy(): void {

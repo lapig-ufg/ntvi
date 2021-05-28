@@ -38,12 +38,13 @@
 
 <!--    </nb-action>-->
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [nbContextMenu]="userMenu"
-               (click)="handleMenu($event)"
+      <nb-user 
+               (click)="profile()"
                [onlyPicture]="userPictureOnly"
                [name]="user?.name"
                [picture]="user?.picture">
       </nb-user>
     </nb-action>
+    <nb-action (click)="logout()" class="control-item" icon="log-out-outline"></nb-action>
   </nb-actions>
 </div>

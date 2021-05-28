@@ -7,6 +7,8 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { MapModule } from '../map/map.module';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NbMomentDateModule } from '@nebular/moment';
+
+import { TranslateModule } from '@ngx-translate/core';
 import {
   NbActionsModule,
   NbButtonModule,
@@ -67,6 +69,7 @@ import { ChartModule } from 'angular2-chartjs';
     NbMomentDateModule,
     NbTabsetModule,
     NbContextMenuModule,
-  ],
+    TranslateModule,
+ ],
 })
 export class CampaignModule { }

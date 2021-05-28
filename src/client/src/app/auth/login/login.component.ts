@@ -1,17 +1,20 @@
 import { Component, Injector, OnDestroy} from '@angular/core';
-import {NbAuthJWTToken, NbAuthResult, NbLoginComponent} from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthResult, NbLoginComponent } from '@nebular/auth';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-login',
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
 
 export class LoginComponent extends NbLoginComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
-  loginGoogle() {
+  loginGoogle(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
     this.service.authenticate('google')
       .pipe(takeUntil(this.destroy$))
       .subscribe((authResult: NbAuthResult) => {

@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, AfterViewInit, ViewChild} from '@angular/
 import { CampaignService } from '../service/campaign.service';
 import { Campaign } from '../models/campaign';
 import { Router } from '@angular/router';
-import {NbComponentStatus, NbSearchService, NbToastrService} from '@nebular/theme';
+import { NbComponentStatus, NbSearchService, NbToastrService } from '@nebular/theme';
 import { User } from '../models/user';
 
 
@@ -51,7 +51,6 @@ export class IndexComponent implements  AfterViewInit  {
         });
     });
   }
-
   resetSearch() {
     this.filterTerm = '';
   }

@@ -4,16 +4,18 @@
   <p class="sub-title">{{'login_subtitle' | translate}}</p>
 
   <nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
-    <p class="alert-title"><b>Oh snap!</b></p>
+    <p class="alert-title"><b>{{'login_msg_error_title' | translate}}</b></p>
     <ul class="alert-message-list">
-      <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+<!--      <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>-->
+      <li class="alert-message">{{ 'login_msg_error' | translate }}</li>
     </ul>
   </nb-alert>
 
   <nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
-    <p class="alert-title"><b>Hooray!</b></p>
+    <p class="alert-title"><b>{{'login_msg_success_title' | translate}}</b></p>
     <ul class="alert-message-list">
-      <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+<!--      <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>-->
+      <li class="alert-message">{{ 'login_msg_success' | translate }}</li>
     </ul>
   </nb-alert>
 
@@ -36,10 +38,10 @@
              [attr.aria-invalid]="email.invalid && email.touched ? true : null">
       <ng-container *ngIf="email.invalid && email.touched">
         <p class="caption status-danger" *ngIf="email.errors?.required">
-          Email is required!
+          {{'login_msg_email_required' | translate}}
         </p>
         <p class="caption status-danger" *ngIf="email.errors?.pattern">
-          Email should be the real one!
+          {{'login_msg_email_invalid' | translate}}
         </p>
       </ng-container>
     </div>
@@ -65,13 +67,10 @@
              [attr.aria-invalid]="password.invalid && password.touched ? true : null">
       <ng-container *ngIf="password.invalid && password.touched ">
         <p class="caption status-danger" *ngIf="password.errors?.required">
-          Password is required!
+          {{'login_msg_password_required' | translate}}
         </p>
         <p class="caption status-danger" *ngIf="password.errors?.minlength || password.errors?.maxlength">
-          Password should contain
-          from {{ getConfigValue('forms.validation.password.minLength') }}
-          to {{ getConfigValue('forms.validation.password.maxLength') }}
-          characters
+          {{'login_msg_password_validation' | translate:{minLength: getConfigValue('forms.validation.password.minLength'), maxLength: getConfigValue('forms.validation.password.maxLength')} }}
         </p>
       </ng-container>
     </div>
@@ -91,19 +90,12 @@
   </form>
 
   <section *ngIf="socialLinks && socialLinks.length > 0" class="links" aria-label="Social sign in">
-    or enter with:
+    {{'login_social_media' | translate}}
     <div class="socials" >
       <ng-container *ngFor="let socialLink of socialLinks">
-        <a *ngIf="socialLink.link"
-           (click)="loginGoogle()"
-           [attr.target]="socialLink.target"
-           [attr.class]="socialLink.icon"
-           [class.with-icon]="socialLink.icon">
-          <nb-icon *ngIf="socialLink.icon; else title" [icon]="socialLink.icon"></nb-icon>
-          <ng-template #title>{{ socialLink.title }}</ng-template>
-        </a>
         <a *ngIf="socialLink.url"
-           (click)="loginGoogle()"
+           (click)="loginGoogle($event)"
+           [attr.href]=""
            [attr.target]="socialLink.target"
            [attr.class]="socialLink.icon"
            [class.with-icon]="socialLink.icon">
@@ -113,8 +105,8 @@
       </ng-container>
     </div>
   </section>
-
-  <section class="another-action" aria-label="Register">
-    Don't have an account? <a class="text-link" routerLink="../register">Register</a>
+  <section class="another-action" aria-label="Register" >
+    {{'login_register_question' | translate}}
+    <a href="/auth/register" class="text-link">{{'login_register_link' | translate}}</a>
   </section>
 </section>

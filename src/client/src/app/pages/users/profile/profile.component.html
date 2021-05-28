@@ -1,119 +1,114 @@
 <nb-card>
     <nb-card-header>
-          <h5>Account</h5>
+          <h5>{{'profile_main_title' | translate}}</h5>
     </nb-card-header>
-    <nb-card-body>
+    <nb-card-body class="card-profile">
       <form aria-labelledby="title">
         <div class="container">
           <div class="row">
-            <div class="row col-6">
-              <div class="col-2">
+            <div class="row col-12">
+              <div class="col-12">
                   <img class="profile" [src]="user.picture? user.picture : '../../../../assets/images/user-avatar.png'" width="100">
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="form-control-group col">
-              <h6>Profile information</h6>
-              <label class="label" for="input-name">Full name:</label>
+            <h6>{{'profile_title' | translate}}</h6>
+          </div>
+          <div class="row form-control-group">
+            <div class="col-12">
+              <label class="label" for="input-name">{{'profile_field_name' | translate}}</label>
               <input nbInput id="input-name" #fullName="ngModel" [(ngModel)]="user.name" name="name"
-                placeholder="Full name" autofocus fullWidth fieldSize="large">
+                placeholder="{{'profile_field_name_placeholder' | translate}}" autofocus fullWidth fieldSize="large">
                 <ng-container *ngIf="fullName.invalid && fullName.touched">
                   <p class="caption status-danger" *ngIf="fullName.errors?.required">
-                    Full name is required!
+                    {{'profile_field_name_required' | translate}}
                   </p>
-  <!--                <p class="caption status-danger" *ngIf="fullName.errors?.minlength || fullName.errors?.maxlength">-->
-  <!--                  Full name should contains-->
-  <!--                  from {{getConfigValue('forms.validation.fullName.minLength')}}-->
-  <!--                  to {{getConfigValue('forms.validation.fullName.maxLength')}}-->
-  <!--                  characters-->
-  <!--                </p>-->
                 </ng-container>
-            </div>
-            <div class="form-control-group col">
-              <h6>Change password</h6>
-               <label class="label" for="input-password">New Password:</label>
-               <input nbInput #password="ngModel" type="password" id="input-password"
-                 [(ngModel)]="user.password" name="password"
-                 placeholder="Password" fullWidth
-                 fieldSize="large">
-                 <ng-container *ngIf="password.invalid && password.touched">
-                   <p class="caption status-danger" *ngIf="password.errors?.required">
-                     Password is required!
-                   </p>
-  <!--                 <p class="caption status-danger" *ngIf="password.errors?.minlength || password.errors?.maxlength">-->
-  <!--                   Password should contain-->
-  <!--                   from {{ getConfigValue('forms.validation.password.minLength') }}-->
-  <!--                   to {{ getConfigValue('forms.validation.password.maxLength') }}-->
-  <!--                   characters-->
-  <!--                 </p>-->
-                 </ng-container>
             </div>
           </div>
-
-          <div class="row">
-            <div class="form-control-group col">
-              <label class="label" for="input-email">Email address:</label>
+          <div class="row form-control-group">
+            <div class="col-12">
+              <label class="label" for="input-email">{{'profile_field_email' | translate}}</label>
               <input nbInput id="input-email" [(ngModel)]="user.email" name="email" pattern=".+@.+..+" #email="ngModel"
-                placeholder="email@gmail.com" fullWidth fieldSize="large">
+                placeholder="{{'profile_field_email_placeholder' | translate}}" fullWidth fieldSize="large">
                 <ng-container *ngIf="email.invalid">
                   <p class="caption status-danger" *ngIf="email.errors?.required">
-                    Email is required!
+                    {{'profile_field_email_required' | translate}}
                   </p>
                   <p class="caption status-danger" *ngIf="email.errors?.pattern">
-                    Email should be the real one!
+                    {{'profile_field_email_validation' | translate}}
                   </p>
                 </ng-container>
             </div>
-            <div class="form-control-group col">
-              <label class="label" for="input-re-password">Confirm new password:</label>
+          </div>
+          <div class="row form-control-group">
+            <div class="col-12">
+              <label class="label" for="input-password"> {{'profile_field_password' | translate}}</label>
+              <input nbInput #password="ngModel" type="password" id="input-password"
+                [(ngModel)]="user.password" name="password"
+                placeholder=" {{'profile_field_password_placeholder' | translate}}" fullWidth
+                fieldSize="large">
+                <ng-container *ngIf="password.invalid && password.touched">
+                  <p class="caption status-danger" *ngIf="password.errors?.required">
+                    {{'profile_field_password_required' | translate}}
+                  </p>
+                </ng-container>
+            </div>
+          </div>
+          <div class="row form-control-group">
+            <div class="col-12">
+              <label class="label" for="input-re-password">{{'profile_field_repass' | translate}}</label>
               <input nbInput type="password" (blur)="checkPassword()" id="input-re-password" #rePass="ngModel" [(ngModel)]="confirmPassword"
                 name="rePass"
-                placeholder="Confirm Password" fullWidth
+                placeholder="{{'profile_field_repass_placeholder' | translate}}" fullWidth
                 fieldSize="large">
                 <ng-container *ngIf="rePass.invalid && rePass.touched">
                   <p class="caption status-danger" *ngIf="rePass.errors?.required">
-                    Password confirmation is required!
+                    P{{'profile_field_repass_required' | translate}}
                   </p>
                   <p class="caption status-danger" *ngIf="password.value != rePass.value && !rePass.errors?.required">
-                    Password does not match the confirm password.
+                    {{'profile_field_repass_validation' | translate}}
                   </p>
                 </ng-container>
             </div>
           </div>
-
           <div class="row form-control-group">
-            <div class="col">
-              <label class="label" for="organizationId">Organization</label>
+            <div class="col-12">
+              <label class="label" for="organizationId"> {{'profile_field_organization' | translate}}</label>
               <nb-select id="organizationId" [(selected)]="selectedItem"
-                placeholder="Select a organization"
+                placeholder="{{'profile_field_organization_placeholder' | translate}}"
                 fullWidth filled>
                 <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}
                 </nb-option>
               </nb-select>
             </div>
-            <div class="col">
-              <label class="label" for="input-geekey">Google Earth Engine Key</label>
-              <input nbInput id="input-geekey" [(ngModel)]="user.geeKey" name="geekey" placeholder="Key" autofocus
+          </div>
+          <div class="row form-control-group">
+            <div class="col-12">
+              <label class="label" for="input-geekey">{{'profile_field_geekey' | translate}}</label>
+              <textarea nbInput id="input-geekey" [(ngModel)]="user.geeKey" name="geekey" placeholder="{{'profile_field_geekey_placeholder' | translate}}" autofocus
                 fullWidth
+                rows="6"
                 fieldSize="large">
+              </textarea>
             </div>
           </div>
           <div class="row form-control-group">
-            <div class="col">
-              <label class="label" for="themeId">Theme</label>
+            <div class="col-6">
+              <label class="label" for="themeId">{{'profile_field_theme' | translate}}</label>
               <nb-select id="themeId" [(selected)]="selectedTheme" (selectedChange)="onChangeTheme()"
-                         placeholder="Select a theme"
-                         fullWidth filled>
+                          placeholder="{{'profile_field_theme_placeholder' | translate}}"
+                          fullWidth filled>
                 <nb-option *ngFor="let theme of themes" value="{{theme.id}}">{{theme.name}}
                 </nb-option>
               </nb-select>
             </div>
-            <div class="col">
-              <label class="label" for="langId">Language</label>
+            <div class="col-6">
+              <label class="label" for="langId">{{'profile_field_language' | translate}}</label>
               <nb-select id="langId" [(selected)]="selectedLanguage" (selectedChange)="onChangeLang()"
-                         placeholder="Select a language"
-                         fullWidth filled>
+                          placeholder="{{'profile_field_language_placeholder' | translate}}"
+                          fullWidth filled>
                 <nb-option *ngFor="let language of languages" value="{{language.id}}">{{language.name}}
                 </nb-option>
               </nb-select>
@@ -121,20 +116,20 @@
           </div>
 
           <div class="form-control-group form-shipping-address">
-            <h6> Address</h6>
+            <h6>{{'profile_title_address' | translate}}</h6>
             <div class="row">
               <div class="col">
-                <label class="label" for="input-city">City</label>
+                <label class="label" for="input-city">{{'profile_field_city' | translate}}</label>
                 <input nbInput id="input-city" [(ngModel)]="user.city" name="city" autofocus fullWidth
                   fieldSize="large">
               </div>
               <div class="col">
-                <label class="label" for="input-state">State</label>
+                <label class="label" for="input-state">{{'profile_field_state' | translate}}</label>
                 <input nbInput id="input-state" [(ngModel)]="user.state" name="state" autofocus fullWidth
                   fieldSize="large">
               </div>
               <div class="col">
-                <label class="label" for="input-country">Country</label>
+                <label class="label" for="input-country">{{'profile_field_country' | translate}}</label>
                 <input nbInput id="input-country" [(ngModel)]="user.country" name="country" autofocus fullWidth
                   fieldSize="large">
               </div>
@@ -142,11 +137,9 @@
           </div>
 
           <div class="form-shipping-address button-save-profile ">
-  <!--          <button nbButton status="basic" (click)="router.navigateByUrl('pages/campaign/index')" size="large">Go to Home</button>-->
-            <button nbButton status="primary" (click)="saveChanges()" size="large"> Save Changes</button>
+            <button nbButton status="primary" (click)="saveChanges()" size="large">{{'profile_btn_save' | translate}}</button>
           </div>
         </div>
-
       </form>
     </nb-card-body>
 </nb-card>

@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 
-export function requiredFileType( type: string ) {
+export function requiredFileType(type: string) {
   return function ( control: FormControl ) {
     const file = control.value;
     if ( file != null ) {
@@ -10,10 +10,8 @@ export function requiredFileType( type: string ) {
           requiredFileType: true,
         };
       }
-
       return null;
     }
-
     return null;
   };
 }

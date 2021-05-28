@@ -1,9 +1,7 @@
-import {AfterViewInit, Component} from '@angular/core';
-import {NbMenuItem, NbMenuService, NbThemeService} from '@nebular/theme';
-import { MENU_ITEMS } from './pages-menu';
-import {TranslateService} from '@ngx-translate/core';
-import {NbAuthService} from '@nebular/auth';
-import {User} from './users/model/users';
+import { AfterViewInit, Component } from '@angular/core';
+import { NbMenuItem, NbMenuService, NbThemeService } from '@nebular/theme';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { User } from './users/model/users';
 
 @Component({
   selector: 'ngx-pages',
@@ -31,15 +29,10 @@ export class PagesComponent implements  AfterViewInit {
   constructor(
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    public translate: TranslateService,
-    private authService: NbAuthService) {
+    public translate: TranslateService) {
   }
   ngAfterViewInit(): void {
     const self = this;
-    this.asyncLocalStorage.getItem('user').then(function (value) {
-      self.user = JSON.parse(value);
-      self.menu = self.getMenu();
-    });
     this.asyncLocalStorage.getItem('user').then(function (value) {
       const user = JSON.parse(value);
       if (user) {
@@ -49,10 +42,12 @@ export class PagesComponent implements  AfterViewInit {
           theme = 'default';
         }
         self.themeService.changeTheme(theme);
+        self.user = user;
+        self.menu = self.getMenu();
       }
     });
-
-    this.menuService.onItemClick().subscribe(() => {
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      self.menu = self.getMenu();
     });
   }
   grantMenu = function (roles) {
@@ -66,38 +61,38 @@ export class PagesComponent implements  AfterViewInit {
   getMenu(): NbMenuItem[] {
     return [
       {
-        title: 'Campaigns',
+        title: this.translate.instant('menu_campaigns'),
         icon: 'map',
         home: true,
         hidden: this.grantMenu(['ROOT', 'ADMIN', 'USER', 'DEFAULT']),
         link: '/pages/campaign/index',
       },
       {
-        title: 'Public campaigns',
+        title: this.translate.instant('menu_public_campaigns'),
         icon: 'book-open-outline',
         hidden: this.grantMenu(['ROOT', 'ADMIN', 'USER', 'DEFAULT']),
         link: '/pages/campaign/public',
       },
       {
-        title: 'Organizations',
+        title: this.translate.instant('menu_organizations'),
         icon: 'home-outline',
         link: '/pages/organization/index',
         hidden: this.grantMenu(['ROOT']),
       },
       {
-        title: 'Classes',
+        title: this.translate.instant('menu_classes'),
         icon: 'list-outline',
         link: '/pages/use-class/index',
         hidden: this.grantMenu(['ROOT']),
       },
       {
-        title: 'Satellites',
+        title: this.translate.instant('menu_satellites'),
         icon: 'globe-2-outline',
         link: '/pages/satellite/index',
         hidden: this.grantMenu(['ROOT']),
       },
       {
-        title: 'Admin Users',
+        title: this.translate.instant('menu_users'),
         icon: 'people-outline',
         link: '/pages/users/admin',
         hidden: this.grantMenu(['ROOT']),

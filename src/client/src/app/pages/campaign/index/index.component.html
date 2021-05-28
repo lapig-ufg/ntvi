@@ -1,7 +1,7 @@
 <div class="btn-header">
-  <button nbButton status="success" (click)="router.navigateByUrl('pages/campaign/create')" type="submit">ADD NEW CAMPAIGN</button>
+  <button nbButton status="success" (click)="router.navigateByUrl('pages/campaign/create')" type="submit">{{'campaign_index_add_new' | translate}}</button>
   <div>
-    <nb-search type="rotate-layout"></nb-search>
+    <nb-search type="rotate-layout" [placeholder]="'campaign_index_search_placeholder' | translate" [hint]="'campaign_index_search_hint' | translate"></nb-search>
     <button (click)="resetSearch()" class="ml-2" nbButton status="primary" size="medium">
       <nb-icon icon="refresh-outline"></nb-icon>
     </button>
@@ -10,8 +10,8 @@
 <div class="cards mt-4">
   <nb-card size="medium" *ngFor=" let campaign of campaigns | filter:filterTerm; let i = index ">
     <nb-card-header style="position: relative;" >
-      <nb-badge text="{{campaign.points.length}}" title="points" status="success" position="top right"></nb-badge>
-      <nb-badge text="{{campaign.numInspectors}}" title="inspectors" status="danger" position="top left"></nb-badge>
+      <nb-badge text="{{campaign.points.length}}" [title]="'campaign_index_number_points' | translate" status="success" position="top right"></nb-badge>
+      <nb-badge text="{{campaign.numInspectors}}" [title]="'campaign_index_number_inspectors' | translate" status="danger" position="top left"></nb-badge>
       <h6>{{campaign.name}}</h6>
       <p class="description">{{campaign.description}}</p>
     </nb-card-header>
@@ -28,20 +28,20 @@
     <nb-card-footer >
       <nb-actions class="nb-actions" size="tiny">
         <nb-action
-          title="View Campaign"
+          [title]="'campaign_index_view' | translate"
           class="action"
           (click)="router.navigateByUrl('pages/campaign/' + campaign.id + '/view')"
           icon="eye-outline">
         </nb-action>
         <nb-action
           *ngIf="campaign.status === 'INCOMPLETE'"
-          title="Edit Campaign"
+          [title]="'campaign_index_edit' | translate"
           class="action"
           (click)="router.navigateByUrl('pages/campaign/' + campaign.id + '/edit')"
           icon="edit-2-outline">
         </nb-action>
         <nb-action
-          title="Publish Campaign?"
+          [title]="'campaign_index_publish' | translate"
           class="action"
           (click)="publishCampaign(campaign)"
           badgeDot="true"
@@ -51,13 +51,14 @@
           icon="book-open-outline">
         </nb-action>
         <nb-action
+          [class]="'inspect'"
           *ngIf="canInspect(campaign)"
-          title="INSPECT"
+          [title]="'campaign_index_inspect' | translate"
           class="action"
           badgeDot="true"
           icon="book-open-outline"
           badgeStatus="success"
-          badgeText="INSPECT"
+          [badgeText]="'campaign_index_inspect' | translate"
           badgePosition="top right"
           (click)="beginInspection(campaign)">
         </nb-action>
@@ -70,14 +71,14 @@
 <!--        </nb-action>-->
         <nb-action
           *ngIf="canOpenResults(campaign)"
-          title="SHOW RESULTS"
+          [title]="'campaign_index_results' | translate"
           class="action"
           icon="bar-chart-2-outline"
          (click)="router.navigateByUrl('pages/campaign/' + campaign.id + '/result')">
         </nb-action>
         <nb-action
           *ngIf="canGenerateCache(campaign)"
-          title="Start Caching Images"
+          [title]="'campaign_index_cache' | translate"
           class="action"
           badgeDot="true"
           badgeText=" "

@@ -13,6 +13,7 @@ import {
   NbInputModule, NbRadioModule, NbSelectModule,
   NbUserModule, NbListModule,
 } from '@nebular/theme';
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import {
     ngFormsModule,
     NbListModule,
     NbEvaIconsModule,
+    TranslateModule,
   ],
 })
 export class UsersModule { }

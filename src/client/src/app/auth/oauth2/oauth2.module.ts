@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { TranslateModule } from '@ngx-translate/core';
 import {
   NbCardModule,
   NbLayoutModule,
@@ -27,6 +27,7 @@ import { Oauth2RoutingModule } from './oauth2-routing.module';
     NbCardModule,
     NbLayoutModule,
     Oauth2RoutingModule,
+    TranslateModule,
   ],
   declarations: [
     OAuth2LoginComponent,
