@@ -100,7 +100,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   getMenu(){
-    return [ { id: 'profile', title: this.translate.instant('header_profile') }, { id: 'logout', title: this.translate.instant('header_logout') } ];
+    return [
+      { id: 'profile', title: this.translate.instant('header_profile') },
+      { id: 'logout', title: this.translate.instant('header_logout') } ];
   }
 
   toggleSidebar(): boolean {
@@ -138,7 +140,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const self = this;
     this.menuService.onItemSelect().subscribe((result) => {
       const item: any = result.item;
-      console.log(item)
       if (item.id === 'logout') {
         self.logout();
       } else {

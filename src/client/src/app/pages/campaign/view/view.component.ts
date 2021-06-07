@@ -3,14 +3,9 @@ import { CampaignService } from '../service/campaign.service';
 import { Campaign} from '../models/campaign';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { Image } from '../models/image';
 import { Organization } from '../../organization/model/organization';
-import { Composition } from '../models/composition';
-import { UsersOnCampaigns } from '../models/usersOnCampaigns';
-import { UseClass } from '../../use-class/model/use-class';
-import { Point } from '../models/point';
 import { OrganizationService } from '../../organization/service/organization.service';
-import { TranslateService } from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-view',

@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnDestroy, AfterViewInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TimelineLite } from 'gsap'
+import { TimelineLite } from 'gsap';
 import { interval } from 'rxjs';
 import {
   NbAuthResult,
@@ -18,7 +18,7 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 })
 
 export class OAuth2CallbackComponent implements OnDestroy, AfterViewInit {
-  protected gqTl:TimelineLite = new TimelineLite({paused:true, reversed:true})
+  protected gqTl:TimelineLite = new TimelineLite({paused:true, reversed:true} );
   private destroy$ = new Subject<void>();
   @ViewChild('box') box: ElementRef;
   constructor(
@@ -54,7 +54,7 @@ export class OAuth2CallbackComponent implements OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     const self = this;
-    const secondsCounter = interval(1000);
+    const secondsCounter = interval(900);
     self.gqTl.staggerFromTo(self.box.nativeElement.children, 0.5, {autoAlpha: 0}, {autoAlpha: 1}, 0.1);
     secondsCounter.subscribe( () => self.gqTl.reversed() ? self.gqTl.play() : self.gqTl.reverse());
   }

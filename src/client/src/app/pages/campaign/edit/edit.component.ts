@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { Campaign} from '../models/campaign';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Organization } from '../../organization/model/organization';
 import { Satellite } from '../../satellite/model/satellite';
 import { Composition } from '../models/composition';
@@ -17,7 +17,7 @@ import { OrganizationService } from '../../organization/service/organization.ser
 import { UseClassService } from '../../use-class/service/use-class.service';
 import { UserService } from '../service/user.service';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
-import { TranslateService } from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-edit',

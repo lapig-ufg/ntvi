@@ -86,7 +86,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
   ],
   exports: [
-    TranslateModule
+    TranslateModule,
   ],
   bootstrap: [AppComponent],
 })

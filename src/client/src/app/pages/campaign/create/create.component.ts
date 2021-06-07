@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
-import { requiredFileType } from '../../../validators/upload-file-validators';
 import { OrganizationService } from '../../organization/service/organization.service';
 import { SatelliteService } from '../../satellite/service/satellite.service';
 import { CampaignService } from '../service/campaign.service';
@@ -17,10 +16,9 @@ import { Point } from '../models/point';
 import { User } from '../models/user';
 import { UsersOnCampaigns } from '../models/usersOnCampaigns';
 import { Image } from '../models/image';
-import { Location } from '../models/location';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Campaign } from '../models/campaign';
-import { TranslateService } from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-create',
