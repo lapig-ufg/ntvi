@@ -18,7 +18,7 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 })
 
 export class OAuth2CallbackComponent implements OnDestroy, AfterViewInit {
-  protected gqTl:TimelineLite = new TimelineLite({ paused: true, reversed: true } );
+  protected gqTl:TimelineLite = new TimelineLite( { paused: true, reversed: true } );
   private destroy$ = new Subject<void>();
   @ViewChild('box') box: ElementRef;
   constructor(
