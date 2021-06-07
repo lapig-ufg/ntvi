@@ -94,15 +94,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  changeTheme(themeName: string) {
-    localStorage.setItem('theme', themeName);
-    this.themeService.changeTheme(themeName);
-  }
-
   getMenu(){
     return [
       { id: 'profile', title: this.translate.instant('header_profile') },
-      { id: 'logout', title: this.translate.instant('header_logout') } ];
+      { id: 'logout', title: this.translate.instant('header_logout') }
+    ];
   }
 
   toggleSidebar(): boolean {
