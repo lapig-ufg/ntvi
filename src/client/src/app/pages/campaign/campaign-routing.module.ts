@@ -28,11 +28,6 @@ const routes: Routes = [
 })
 export class CampaignRoutingModule {
   constructor(private themeService: NbThemeService) {
-    let theme = localStorage.getItem('theme');
-    if (theme === null || theme === undefined) {
-      theme = 'default';
-    }
-    this.themeService.changeTheme(theme);
   }
 }
 

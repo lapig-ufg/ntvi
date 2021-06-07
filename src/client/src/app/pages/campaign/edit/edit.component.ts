@@ -2,21 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { Campaign} from '../models/campaign';
 import { ActivatedRoute, Router } from '@angular/router';
-import {FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
-import {Organization} from '../../organization/model/organization';
-import {Satellite} from '../../satellite/model/satellite';
-import {Composition} from '../models/composition';
-import {UseClass} from '../../use-class/model/use-class';
-import {Point} from '../models/point';
-import {User} from '../models/user';
-import {Image} from '../models/image';
-import {UsersOnCampaigns} from '../models/usersOnCampaigns';
-import {LocalDataSource} from 'ng2-smart-table';
-import {SatelliteService} from '../../satellite/service/satellite.service';
-import {OrganizationService} from '../../organization/service/organization.service';
-import {UseClassService} from '../../use-class/service/use-class.service';
-import {UserService} from '../service/user.service';
-import {NbComponentStatus, NbToastrService} from '@nebular/theme';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Organization } from '../../organization/model/organization';
+import { Satellite } from '../../satellite/model/satellite';
+import { Composition } from '../models/composition';
+import { UseClass } from '../../use-class/model/use-class';
+import { Point } from '../models/point';
+import { User } from '../models/user';
+import { Image } from '../models/image';
+import { UsersOnCampaigns } from '../models/usersOnCampaigns';
+import { LocalDataSource } from 'ng2-smart-table';
+import { SatelliteService } from '../../satellite/service/satellite.service';
+import { OrganizationService } from '../../organization/service/organization.service';
+import { UseClassService } from '../../use-class/service/use-class.service';
+import { UserService } from '../service/user.service';
+import { NbComponentStatus, NbToastrService } from '@nebular/theme';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'ngx-edit',
@@ -61,13 +62,13 @@ export class EditComponent implements OnInit {
       actions: false,
       columns: {
         latitude: {
-          title: 'Latitude',
+          title: this.translate.instant('campaign_view_points_table_col_lat'),
         },
         longitude: {
-          title: 'Longitude',
+          title: this.translate.instant('campaign_view_points_table_col_lon'),
         },
         info: {
-          title: 'Location',
+          title: this.translate.instant('campaign_view_points_table_col_location'),
         },
       },
     },
@@ -87,7 +88,7 @@ export class EditComponent implements OnInit {
       },
       columns: {
         name: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_use_classes_table_col_name'),
         },
       },
     },
@@ -107,13 +108,13 @@ export class EditComponent implements OnInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_colors_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         colors: {
-          title: 'Colors',
+          title: this.translate.instant('campaign_view_colors_table_col_colors'),
         },
       },
     },
@@ -130,7 +131,7 @@ export class EditComponent implements OnInit {
       },
       columns: {
         name: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_use_classes_table_col_name'),
         },
       },
     },
@@ -147,13 +148,13 @@ export class EditComponent implements OnInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_colors_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         colors: {
-          title: 'Colors',
+          title: this.translate.instant('campaign_view_colors_table_col_colors'),
         },
       },
     },
@@ -173,13 +174,13 @@ export class EditComponent implements OnInit {
       },
       columns: {
         user: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_users_table_col_name'),
           valuePrepareFunction: (user) => {
             return user.name;
           },
         },
         typeUserInCampaign: {
-          title: 'Permission',
+          title: this.translate.instant('campaign_view_users_table_col_permission'),
         },
       },
     },
@@ -199,16 +200,16 @@ export class EditComponent implements OnInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_images_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         date: {
-          title: 'Date',
+          title: this.translate.instant('campaign_view_images_table_col_date'),
         },
         url: {
-          title: 'URL',
+          title: this.translate.instant('campaign_view_images_table_col_url'),
         },
       },
     },
@@ -224,6 +225,7 @@ export class EditComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public fb: FormBuilder,
+    public translate: TranslateService,
   ) { }
 
   ngOnInit(): void {

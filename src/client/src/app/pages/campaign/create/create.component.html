@@ -1,94 +1,102 @@
 <nb-card>
-  <nb-card-header>Create New Campaign</nb-card-header>
+  <nb-card-header>{{'campaign_create_edit_title' | translate}}</nb-card-header>
   <nb-card-body>
     <nb-stepper #stepper orientation="vertical">
-      <nb-step [stepControl]="infoForm" label="Information">
+      <nb-step [stepControl]="infoForm" label="{{'campaign_create_edit_tab_info_title' | translate}}">
         <form id="infoForm" [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit()" class="step-container">
           <nb-card>
-            <nb-card-header>Information of Campaign</nb-card-header>
+            <nb-card-header>{{'campaign_create_edit_tab_info_card_title' | translate}}</nb-card-header>
             <nb-card-body>
               <div class="form-group">
-                <label for="name" class="label">Name</label>
-                <input id="name" formControlName="name" placeholder="Name of Campaign" type="text" nbInput fullWidth>
+                <label for="name" class="label">{{'campaign_create_edit_tab_info_field_name' | translate}}</label>
+                <input id="name" formControlName="name" placeholder="{{'campaign_create_edit_tab_info_field_name_placeholder' | translate}}" type="text" nbInput fullWidth>
                 <div *ngIf="fInfo.name.touched && fInfo.name.invalid" class="mt-2">
-                  <nb-alert status="danger" *ngIf="fInfo.name.errors.required"> Name is required. </nb-alert>
+                  <nb-alert status="danger" *ngIf="fInfo.name.errors.required">{{'campaign_create_edit_tab_info_field_name_required' | translate}}</nb-alert>
                 </div>
               </div>
               <div class="form-group">
-                <label for="description" class="label">Description</label>
-                <textarea id="description" formControlName="description" placeholder="Description of Campaign" rows="10"
+                <label for="description" class="label">{{'campaign_create_edit_tab_info_field_description' | translate}}</label>
+                <textarea id="description" formControlName="description" placeholder="{{'campaign_create_edit_tab_info_field_description_placeholder' | translate}}" rows="10"
                   fieldSize="large" nbInput fullWidth></textarea>
                 <div *ngIf="fInfo.description.touched && fInfo.description.invalid" class="mt-2">
-                  <nb-alert status="danger" *ngIf="fInfo.description.errors.required"> Description is required.
+                  <nb-alert status="danger" *ngIf="fInfo.description.errors.required">
+                    {{'campaign_create_edit_tab_info_field_description_required' | translate}}
                   </nb-alert>
                 </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 col-xl-6">
                     <div class="">
-                      <label for="name" class="label">Organization</label>
-                      <nb-select id="organization" formControlName="organization" placeholder="Select a organization"
+                      <label for="name" class="label">{{'campaign_create_edit_tab_info_field_organization' | translate}}</label>
+                      <nb-select id="organization" formControlName="organization" placeholder="{{'campaign_create_edit_tab_info_field_organization_placeholder' | translate}}"
                         fullWidth filled>
                         <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">
                           {{organization.name}}</nb-option>
                       </nb-select>
                       <div *ngIf="fInfo.organization.touched && fInfo.organization.invalid" class="mt-2">
-                        <nb-alert status="danger" *ngIf="fInfo.organization.errors.required"> Organization is
-                          required. </nb-alert>
+                        <nb-alert status="danger" *ngIf="fInfo.organization.errors.required">
+                          {{'campaign_create_edit_tab_info_field_organization_required' | translate}}
+                        </nb-alert>
                       </div>
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6 col-xl-16">
                     <div class="form-group">
-                      <label for="numInspectors" class="label">Inspectors</label>
-                      <input id="numInspectors" formControlName="numInspectors" placeholder="Number of Inspectors"
+                      <label for="numInspectors" class="label">{{'campaign_create_edit_tab_info_field_inspectors' | translate}}</label>
+                      <input id="numInspectors" formControlName="numInspectors" placeholder="{{'campaign_create_edit_tab_info_field_inspectors_placeholder' | translate}}"
                         type="number" nbInput fullWidth>
                       <div *ngIf="fInfo.numInspectors.touched && fInfo.numInspectors.invalid" class="mt-2">
-                        <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required"> Number of inspectors is
-                          required. </nb-alert>
+                        <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required">
+                          {{'campaign_create_edit_tab_info_field_inspectors_required' | translate}}
+                        </nb-alert>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 col-xl-6">
-                    <nb-toggle status="basic" labelPosition="left" [(checked)]="customImages">Will you insert custom
-                      images?</nb-toggle>
+                    <nb-toggle status="basic" labelPosition="left" [(checked)]="customImages">
+                      {{'campaign_create_edit_tab_info_field_custom_images' | translate}}
+                    </nb-toggle>
                   </div>
                 </div>
               </div>
             </nb-card-body>
           </nb-card>
           <div class="actions">
-            <button type="submit" nbButton nbStepperNext (click)="onInfoFormSubmit()">next</button>
+            <button type="submit" nbButton nbStepperNext (click)="onInfoFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
           </div>
         </form>
       </nb-step>
-      <nb-step [stepControl]="configForm" label="Configuration">
+      <nb-step [stepControl]="configForm" label="{{'campaign_create_edit_tab_config_title' | translate}}">
         <form id="configForm" [formGroup]="configForm" (ngSubmit)="onConfigFormSubmit()" class="step-container">
           <nb-card>
-            <nb-card-header>Configuration of Campaign</nb-card-header>
+            <nb-card-header>
+              {{'campaign_create_edit_tab_config_card_title' | translate}}
+            </nb-card-header>
             <nb-card-body>
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-xl-6">
                   <div class="form-group">
-                    <label for="initialDate" class="label">Initial Date</label>
-                    <input id="initialDate" formControlName="initialDate" placeholder="Initial Date"
+                    <label for="initialDate" class="label">{{'campaign_create_edit_tab_config_field_initial_date' | translate}}</label>
+                    <input id="initialDate" formControlName="initialDate" placeholder="{{'campaign_create_edit_tab_config_field_initial_date_placeholder' | translate}}"
                       [nbDatepicker]="dpInitialDate" nbInput fullWidth>
                     <nb-datepicker #dpInitialDate [format]="'yyyy'"></nb-datepicker>
                     <div *ngIf="fConfig.initialDate.touched && fConfig.initialDate.invalid" class="mt-2">
-                      <nb-alert status="danger" *ngIf="fConfig.initialDate.errors.required"> Initial Date is required.
+                      <nb-alert status="danger" *ngIf="fConfig.initialDate.errors.required">
+                        {{'campaign_create_edit_tab_config_field_initial_date_required' | translate}}
                       </nb-alert>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-xl-16">
                   <div class="form-group">
-                    <label for="finalDate" class="label">Final Date</label>
-                    <input id="finalDate" formControlName="finalDate" placeholder="Final Date"
+                    <label for="finalDate" class="label">{{'campaign_create_edit_tab_config_field_final_date' | translate}}</label>
+                    <input id="finalDate" formControlName="finalDate" placeholder="{{'campaign_create_edit_tab_config_field_final_date_placeholder' | translate}}"
                       [nbDatepicker]="dpFinalDate" nbInput fullWidth>
                     <nb-datepicker #dpFinalDate [format]="'yyyy'"></nb-datepicker>
                     <div *ngIf="fConfig.finalDate.touched && fConfig.finalDate.invalid" class="mt-2">
-                      <nb-alert status="danger" *ngIf="fConfig.finalDate.errors.required"> Final Date is required.
+                      <nb-alert status="danger" *ngIf="fConfig.finalDate.errors.required">
+                        {{'campaign_create_edit_tab_config_field_final_date_required' | translate}}
                       </nb-alert>
                     </div>
                   </div>
@@ -97,13 +105,13 @@
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-xl-6">
                   <nb-card>
-                    <nb-card-header>Color Composition</nb-card-header>
+                    <nb-card-header>{{'campaign_create_edit_tab_config_card_colors_title' | translate}}</nb-card-header>
                     <nb-card-body>
                       <div class="row">
                         <div class="col-sm-12 col-md-5 col-xl-5">
                           <div class="form-group">
-                            <label for="satellite" class="label">Satellite</label>
-                            <nb-select id="satellite" formControlName="satellite" placeholder="Select a satellite"
+                            <label for="satellite" class="label">{{'campaign_create_edit_tab_config_field_satellite' | translate}}</label>
+                            <nb-select id="satellite" formControlName="satellite" placeholder="{{'campaign_create_edit_tab_config_field_satellite_placeholder' | translate}}"
                               fullWidth filled>
                               <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">
                                 {{satellite.name}}</nb-option>
@@ -112,8 +120,8 @@
                         </div>
                         <div class="col-sm-12 col-md-5 col-xl-5">
                           <div class="form-group">
-                            <label for="_colors" class="label">Colors</label>
-                            <nb-select id="_colors" formControlName="_colors" placeholder="Select colors" fullWidth
+                            <label for="_colors" class="label">{{'campaign_create_edit_tab_config_field_colors' | translate}}</label>
+                            <nb-select id="_colors" formControlName="_colors" placeholder="{{'campaign_create_edit_tab_config_field_colors_placeholder' | translate}}" fullWidth
                               filled multiple>
                               <nb-option *ngFor="let colorComp of colorsComposition" value="{{colorComp.id}}">
                                 {{colorComp.name}}</nb-option>
@@ -140,13 +148,13 @@
                 </div>
                 <div class="col-sm-12 col-md-6 col-xl-6">
                   <nb-card>
-                    <nb-card-header>Use classes</nb-card-header>
+                    <nb-card-header>{{'campaign_create_edit_tab_config_card_use_classes_title' | translate}}</nb-card-header>
                     <nb-card-body>
                       <div class="row">
                         <div class="col-sm-12 col-md-10 col-xl-10">
                           <div class="form-group">
-                            <label for="useClass" class="label">Class</label>
-                            <nb-select id="useClass" formControlName="useClass" placeholder="Select a Class" fullWidth
+                            <label for="useClass" class="label">{{'campaign_create_edit_tab_config_field_use_classes' | translate}}</label>
+                            <nb-select id="useClass" formControlName="useClass" placeholder="{{'campaign_create_edit_tab_config_field_use_classes_placeholder' | translate}}" fullWidth
                               filled>
                               <nb-option *ngFor="let useClass of useClasses" value="{{useClass.id}}">{{useClass.name}}
                               </nb-option>
@@ -173,25 +181,25 @@
                 </div>
               </div>
               <div class="actions">
-                <button type="button" nbButton nbStepperPrevious>prev</button>
-                <button nbButton type="submit" nbStepperNext (click)="onConfigFormSubmit()">next</button>
+                <button type="button" nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
+                <button nbButton type="submit" nbStepperNext (click)="onConfigFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
               </div>
             </nb-card-body>
           </nb-card>
         </form>
       </nb-step>
-      <nb-step [stepControl]="pointsForm" label="Points">
+      <nb-step [stepControl]="pointsForm" label="{{'campaign_create_edit_tab_points_title' | translate}}">
         <form [formGroup]="pointsForm" (ngSubmit)="onPointsFormSubmit()" class="step-container">
           <nb-card [nbSpinner]="loadingPoints" nbSpinnerStatus="danger" nbSpinnerSize="giant"
             nbSpinnerMessage="Loading points">
-            <nb-card-header>Points of Campaign</nb-card-header>
+            <nb-card-header>{{'campaign_create_edit_tab_points_card_title' | translate}}</nb-card-header>
             <nb-card-body>
               <div class="row mt-3">
                 <div class="col-sm-12">
                   <div class="form-group">
-                    <label for="pointsFile" class="label">File of Points</label>
+                    <label for="pointsFile" class="label">{{'campaign_create_edit_tab_points_field_file_points' | translate}}</label>
                     <input id="pointsFile" accept="text/csv" formControlName="pointsFile"
-                      placeholder="CSV with points of campaign" type="file"
+                      placeholder="{{'campaign_create_edit_tab_points_field_file_points_placeholder' | translate}}" type="file"
                       (change)="handlePointsFile($event.target.files[0])" nbInput fullWidth>
                   </div>
                 </div>
@@ -207,15 +215,15 @@
                   <nb-card>
                     <nb-card-header class="header-flex">
                       <span>
-                        <h6> Points from file </h6>
+                        <h6> {{'campaign_create_edit_tab_points_table_title' | translate}}</h6>
                       </span>
                       <span>
                         <button type="button" (click)="shufflePoints()" nbButton status="warning" size="medium">
-                          shuffle points
+                          {{'campaign_create_edit_tab_points_table_shuffle' | translate}}
                         </button>
                       </span>
                       <span>
-                        <h6> Total of points: {{points.length}} </h6>
+                        <h6>{{'campaign_create_edit_tab_points_table_total_points' | translate:{total:points.length} }}</h6>
                       </span>
                     </nb-card-header>
                     <nb-card-body>
@@ -226,33 +234,33 @@
                 </div>
               </div>
               <div class="actions">
-                <button nbButton nbStepperPrevious>prev</button>
-                <button type="button" (click)="onPointsFormSubmit()" nbButton nbStepperNext>next</button>
+                <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
+                <button type="button" (click)="onPointsFormSubmit()" nbButton nbStepperNext>{{'campaign_create_edit_tab_btn_next' | translate}}</button>
               </div>
             </nb-card-body>
           </nb-card>
         </form>
       </nb-step>
-      <nb-step [stepControl]="usersForm" label="Users">
+      <nb-step [stepControl]="usersForm" label="{{'campaign_create_edit_tab_users_title' | translate}}">
         <form [formGroup]="usersForm" (ngSubmit)="onUsersFormSubmit()" class="step-container">
           <div class="row">
             <div class="col-sm-12 col-md-12 col-xl-12">
               <nb-card>
-                <nb-card-header>Users of campaign</nb-card-header>
+                <nb-card-header>{{'campaign_create_edit_tab_users_card_title' | translate}}</nb-card-header>
                 <nb-card-body>
                   <div class="row">
                     <div class="col-sm-12 col-md-5 col-xl-5">
                       <div class="form-group">
-                        <label for="user" class="label">User</label>
-                        <nb-select id="user" formControlName="user" placeholder="Select a user" fullWidth filled>
+                        <label for="user" class="label">{{'campaign_create_edit_tab_users_field_user' | translate}}</label>
+                        <nb-select id="user" formControlName="user" placeholder="{{'campaign_create_edit_tab_users_field_user_placeholder' | translate}}" fullWidth filled>
                           <nb-option *ngFor="let user of users" value="{{user.id}}">{{user.name}}</nb-option>
                         </nb-select>
                       </div>
                     </div>
                     <div class="col-sm-12 col-md-5 col-xl-5">
                       <div class="form-group">
-                        <label for="permission" class="label">Permissions</label>
-                        <nb-select id="permission" formControlName="permission" placeholder="Select a permission"
+                        <label for="permission" class="label">{{'campaign_create_edit_tab_users_field_permission' | translate}}</label>
+                        <nb-select id="permission" formControlName="permission" placeholder="{{'campaign_create_edit_tab_users_field_permission_placeholder' | translate}}"
                           fullWidth filled>
                           <nb-option *ngFor="let permission of permissions" value="{{permission.id}}">
                             {{permission.name}}</nb-option>
@@ -275,8 +283,8 @@
                     </div>
                   </div>
                   <div class="actions">
-                    <button nbButton nbStepperPrevious>prev</button>
-                    <button nbButton nbStepperNext (click)="onUsersFormSubmit()" type="submit">next</button>
+                    <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
+                    <button nbButton nbStepperNext (click)="onUsersFormSubmit()" type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
                   </div>
                 </nb-card-body>
               </nb-card>
@@ -284,18 +292,18 @@
           </div>
         </form>
       </nb-step>
-      <nb-step [stepControl]="imagesForm" *ngIf="customImages" label="Images">
+      <nb-step [stepControl]="imagesForm" *ngIf="customImages" label="{{'campaign_create_edit_tab_images_title' | translate}}">
         <form [formGroup]="imagesForm" (ngSubmit)="onImagesFormSubmit()" class="step-container">
           <div class="row">
             <div class="col-sm-12 col-md-12 col-xl-12">
               <nb-card>
-                <nb-card-header>Custom Images of campaign</nb-card-header>
+                <nb-card-header>{{'campaign_create_edit_tab_images_card_title' | translate}}</nb-card-header>
                 <nb-card-body>
                   <div class="row">
                     <div class="col-sm-12 col-md-2 col-xl-2">
                       <div class="form-group">
-                        <label for="imgSatellite" class="label">Satellite</label>
-                        <nb-select id="imgSatellite" formControlName="imgSatellite" placeholder="Select a satellite"
+                        <label for="imgSatellite" class="label">{{'campaign_create_edit_tab_images_field_satellite' | translate}}</label>
+                        <nb-select id="imgSatellite" formControlName="imgSatellite" placeholder="{{'campaign_create_edit_tab_images_field_satellite_placeholder' | translate}}"
                           fullWidth filled>
                           <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">{{satellite.name}}
                           </nb-option>
@@ -304,16 +312,16 @@
                     </div>
                     <div class="col-sm-12 col-md-2 col-xl-2">
                       <div class="form-group">
-                        <label for="dataImg" class="label">Date</label>
-                        <input id="dataImg" formControlName="dataImg" placeholder="Date image" [nbDatepicker]="dataImg"
+                        <label for="dataImg" class="label">{{'campaign_create_edit_tab_images_field_date' | translate}}</label>
+                        <input id="dataImg" formControlName="dataImg" placeholder="{{'campaign_create_edit_tab_images_field_date_placeholder' | translate}}" [nbDatepicker]="dataImg"
                           nbInput fullWidth>
                         <nb-datepicker #dataImg></nb-datepicker>
                       </div>
                     </div>
                     <div class="col-sm-12 col-md-6 col-xl-6">
                       <div class="form-group">
-                        <label for="url" class="label">URL</label>
-                        <input id="url" formControlName="url" placeholder="URL of image" type="text" nbInput fullWidth>
+                        <label for="url" class="label">{{'campaign_create_edit_tab_images_field_url' | translate}}</label>
+                        <input id="url" formControlName="url" placeholder="{{'campaign_create_edit_tab_images_field_url_placeholder' | translate}}" type="text" nbInput fullWidth>
                       </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-xl-2">
@@ -331,8 +339,8 @@
                     </div>
                   </div>
                   <div class="actions mt-3">
-                    <button nbButton nbStepperPrevious>prev</button>
-                    <button nbButton nbStepperNext type="submit" (click)="onImagesFormSubmit()">next</button>
+                    <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
+                    <button nbButton nbStepperNext type="submit" (click)="onImagesFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
                   </div>
                 </nb-card-body>
               </nb-card>
@@ -340,9 +348,9 @@
           </div>
         </form>
       </nb-step>
-      <nb-step  label="Confirmation">
+      <nb-step label="{{'campaign_create_edit_tab_confirmation_title' | translate}}">
         <div class="step-container">
-          <h3 class="m-5" style="text-align: center">Finish!</h3>
+          <h3 class="m-5" style="text-align: center">{{'campaign_create_edit_finish_title' | translate}}</h3>
 <!--          <nb-card>-->
 <!--            <nb-card-header>Information of Campaign</nb-card-header>-->
 <!--            <nb-card-body>-->
@@ -512,7 +520,7 @@
 <!--            </nb-card-body>-->
 <!--          </nb-card>-->
           <div class="actions">
-            <button nbButton (click)="router.navigateByUrl('pages/campaign/index')">FINISH</button>
+            <button nbButton (click)="router.navigateByUrl('pages/campaign/index')">{{'campaign_create_edit_finish_btn' | translate}}</button>
           </div>
         </div>
       </nb-step>

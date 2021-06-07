@@ -10,6 +10,7 @@ import { UsersOnCampaigns } from '../models/usersOnCampaigns';
 import { UseClass } from '../../use-class/model/use-class';
 import { Point } from '../models/point';
 import { OrganizationService } from '../../organization/service/organization.service';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'ngx-view',
@@ -28,13 +29,13 @@ export class ViewComponent implements AfterViewInit {
       actions: false,
       columns: {
         latitude: {
-          title: 'Latitude',
+          title: this.translate.instant('campaign_view_points_table_col_lat'),
         },
         longitude: {
-          title: 'Longitude',
+          title: this.translate.instant('campaign_view_points_table_col_lon'),
         },
         info: {
-          title: 'Location',
+          title: this.translate.instant('campaign_view_points_table_col_location'),
         },
       },
     },
@@ -51,7 +52,7 @@ export class ViewComponent implements AfterViewInit {
       },
       columns: {
         name: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_use_classes_table_col_name'),
         },
       },
     },
@@ -68,13 +69,13 @@ export class ViewComponent implements AfterViewInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_colors_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         colors: {
-          title: 'Colors',
+          title: this.translate.instant('campaign_view_colors_table_col_colors'),
         },
       },
     },
@@ -91,13 +92,13 @@ export class ViewComponent implements AfterViewInit {
       },
       columns: {
         user: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_users_table_col_name'),
           valuePrepareFunction: (user) => {
             return user.name;
           },
         },
         typeUserInCampaign: {
-          title: 'Permission',
+          title: this.translate.instant('campaign_view_users_table_col_permission'),
         },
       },
     },
@@ -114,16 +115,16 @@ export class ViewComponent implements AfterViewInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_images_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         date: {
-          title: 'Date',
+          title: this.translate.instant('campaign_view_images_table_col_date'),
         },
         url: {
-          title: 'URL',
+          title: this.translate.instant('campaign_view_images_table_col_url'),
         },
       },
     },
@@ -133,6 +134,7 @@ export class ViewComponent implements AfterViewInit {
     public campaignService: CampaignService,
     public route: ActivatedRoute,
     public router: Router,
+    public translate: TranslateService,
     public organizationService: OrganizationService,
   ) { }
 

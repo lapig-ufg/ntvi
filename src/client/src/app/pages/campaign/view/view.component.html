@@ -1,11 +1,11 @@
 <nb-card >
-  <nb-card-header><h6 class="m-3">Information of Campaign</h6></nb-card-header>
+  <nb-card-header><h6 class="m-3">{{'campaign_view_title' | translate}}</h6></nb-card-header>
   <nb-card-body>
     <div class="form-group">
-      <label for="_name" class="label">Name</label>
+      <label for="_name" class="label">{{'campaign_view_field_name' | translate}}</label>
       <input
         id="_name"
-        placeholder="Name of Campaign"
+        placeholder="{{'campaign_view_field_name_placeholder' | translate}}"
         type="text"
         nbInput
         disabled
@@ -14,10 +14,10 @@
       >
     </div>
     <div class="form-group">
-      <label for="_description" class="label">Description</label>
+      <label for="_description" class="label">{{'campaign_view_field_description' | translate}}</label>
       <textarea
         id="_description"
-        placeholder="Description of Campaign"
+        placeholder="{{'campaign_view_field_description_placeholder' | translate}}"
         rows="5"
         fieldSize="large"
         nbInput
@@ -30,7 +30,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-6 col-xl-6">
         <div class="">
-          <label for="_organizationId" class="label">Organization</label>
+          <label for="_organizationId" class="label">{{'campaign_view_field_organization' | translate}}</label>
           <input
             id="_organizationId"
             type="text"
@@ -43,10 +43,10 @@
       </div>
       <div class="col-sm-12 col-md-6 col-xl-16">
         <div class="form-group">
-          <label for="_numInspectors" class="label">Inspectors</label>
+          <label for="_numInspectors" class="label">{{'campaign_view_field_inspectors' | translate}}</label>
           <input
             id="_numInspectors"
-            placeholder="Number of Inspectors"
+            placeholder="{{'campaign_view_field_inspectors' | translate}}"
             type="number"
             nbInput
             disabled
@@ -59,10 +59,10 @@
     <div class="row">
       <div class="col-sm-12 col-md-6 col-xl-6">
         <div class="form-group">
-          <label for="_initialDate" class="label">Initial Date</label>
+          <label for="_initialDate" class="label">{{'campaign_view_field_initial_date' | translate}}</label>
           <input
             id="_initialDate"
-            placeholder="Initial Date"
+            placeholder="{{'campaign_view_field_initial_date' | translate}}"
             [nbDatepicker]="_dpInitialDate"
             nbInput
             disabled
@@ -74,10 +74,10 @@
       </div>
       <div class="col-sm-12 col-md-6 col-xl-16">
         <div class="form-group">
-          <label for="_finalDate" class="label">Final Date</label>
+          <label for="_finalDate" class="label">{{'campaign_view_field_final_date' | translate}}</label>
           <input
             id="_finalDate"
-            placeholder="Final Date"
+            placeholder="{{'campaign_view_field_final_date' | translate}}"
             [nbDatepicker]="_dpFinalDate"
             nbInput
             disabled
@@ -91,7 +91,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-6 col-xl-6">
         <nb-card >
-          <nb-card-header><h6 class="m-3">Color Composition</h6></nb-card-header>
+          <nb-card-header><h6 class="m-3">{{'campaign_view_colors_title' | translate}}</h6></nb-card-header>
           <nb-card-body>
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xl-12">
@@ -107,7 +107,7 @@
       </div>
       <div class="col-sm-12 col-md-6 col-xl-6">
         <nb-card >
-          <nb-card-header><h6 class="m-3">Use classes</h6></nb-card-header>
+          <nb-card-header><h6 class="m-3">{{'campaign_view_use_classes_title' | translate}}</h6></nb-card-header>
           <nb-card-body>
             <div class="row">
               <div class="col-sm-12 col-md-12 col-xl-12">
@@ -126,10 +126,10 @@
       <div class="col-sm-12">
         <div class="header-flex">
             <span>
-              <h6>  Points from file </h6>
+              <h6>{{'campaign_view_points_title' | translate}}</h6>
             </span>
             <span>
-              <h6> Total of points: {{campaign.points?.length}} </h6>
+              <h6> {{'campaign_view_points_table_total' | translate:{total: campaign.points?.length} }} </h6>
             </span>
         </div>
         <ng2-smart-table
@@ -141,7 +141,7 @@
     </div>
     <div class="row m-3">
       <div class="col-sm-12 col-md-12 col-xl-12">
-        <h6 class="m-3">  Users </h6>
+        <h6 class="m-3"> {{'campaign_view_users_title' | translate}}</h6>
         <ng2-smart-table
           [settings]="tableUsers.settings"
           [source]="tableUsers.source"
@@ -150,7 +150,7 @@
       </div>
     </div>
     <div *ngIf="customImages" class="row m-3">
-      <h6>  Custom images </h6>
+      <h6>   </h6>
       <div class="col-sm-12 col-md-12 col-xl-12">
         <ng2-smart-table
           [settings]="tableImages.settings"
@@ -160,7 +160,4 @@
       </div>
     </div>
   </nb-card-body>
-  <nb-card-footer>
-<!--    <button  *ngIf="campaign.status === 'INCOMPLETE'" nbButton size="giant" status="warning" (click)="router.navigateByUrl('pages/campaign/' + id + '/edit')" type="button">EDIT CAMPAIGN</button>-->
-  </nb-card-footer>
 </nb-card>

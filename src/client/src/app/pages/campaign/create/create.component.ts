@@ -20,6 +20,7 @@ import { Image } from '../models/image';
 import { Location } from '../models/location';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Campaign } from '../models/campaign';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'ngx-create',
@@ -63,13 +64,13 @@ export class CreateComponent implements OnInit {
       actions: false,
       columns: {
         latitude: {
-          title: 'Latitude',
+          title: this.translate.instant('campaign_view_points_table_col_lat'),
         },
         longitude: {
-          title: 'Longitude',
+          title: this.translate.instant('campaign_view_points_table_col_lon'),
         },
         info: {
-          title: 'Location',
+          title: this.translate.instant('campaign_view_points_table_col_location'),
         },
       },
     },
@@ -89,7 +90,7 @@ export class CreateComponent implements OnInit {
       },
       columns: {
         name: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_use_classes_table_col_name'),
         },
       },
     },
@@ -109,13 +110,13 @@ export class CreateComponent implements OnInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_colors_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         colors: {
-          title: 'Colors',
+          title: this.translate.instant('campaign_view_colors_table_col_colors'),
         },
       },
     },
@@ -132,7 +133,7 @@ export class CreateComponent implements OnInit {
       },
       columns: {
         name: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_use_classes_table_col_name'),
         },
       },
     },
@@ -149,13 +150,13 @@ export class CreateComponent implements OnInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title: this.translate.instant('campaign_view_colors_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         colors: {
-          title: 'Colors',
+          title: this.translate.instant('campaign_view_colors_table_col_colors'),
         },
       },
     },
@@ -175,13 +176,13 @@ export class CreateComponent implements OnInit {
       },
       columns: {
         user: {
-          title: 'Name',
+          title:  this.translate.instant('campaign_view_users_table_col_name'),
           valuePrepareFunction: (user) => {
             return user.name;
           },
         },
         typeUserInCampaign: {
-          title: 'Permission',
+          title: this.translate.instant('campaign_view_users_table_col_permission'),
         },
       },
     },
@@ -201,16 +202,16 @@ export class CreateComponent implements OnInit {
       },
       columns: {
         satellite: {
-          title: 'Name',
+          title:  this.translate.instant('campaign_view_images_table_col_name'),
           valuePrepareFunction: (satellite) => {
             return satellite.name;
           },
         },
         date: {
-          title: 'Date',
+          title: this.translate.instant('campaign_view_images_table_col_date'),
         },
         url: {
-          title: 'URL',
+          title: this.translate.instant('campaign_view_images_table_col_url'),
         },
       },
     },
@@ -225,6 +226,7 @@ export class CreateComponent implements OnInit {
     public toastService: NbToastrService,
     public router: Router,
     public fb: FormBuilder,
+    public translate: TranslateService,
   ) { }
 
   ngOnInit(): void {

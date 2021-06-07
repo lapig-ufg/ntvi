@@ -27,7 +27,7 @@ module.exports = function (app) {
 
                 if (err) {
                     console.log(err)
-                    return response.status(500).json({ auth: false, message: 'Failed to authenticate token.' });
+                    return response.status(401).json({ auth: false, message: 'Failed to authenticate token.' });
                 }
 
                 // se tudo estiver ok, salva no request para uso posterior
@@ -36,7 +36,7 @@ module.exports = function (app) {
             });
         }catch (e) {
             console.error(e)
-            response.status(500).json({ auth: false, message: 'Failed to authenticate token.' });
+            response.status(401).json({ auth: false, message: 'Failed to authenticate token.' });
         }
     }
 
