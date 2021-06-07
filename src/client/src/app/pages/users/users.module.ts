@@ -13,8 +13,7 @@ import {
   NbInputModule, NbRadioModule, NbSelectModule,
   NbUserModule, NbListModule,
 } from '@nebular/theme';
-import {TranslateModule} from "@ngx-translate/core";
-
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [

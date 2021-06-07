@@ -1,7 +1,6 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { NbToastrService, NbComponentStatus } from '@nebular/theme';
 import { Injectable } from '@angular/core';
-import jwtDecode, {JwtPayload} from "jwt-decode";
 
 @Injectable()
 export class RoleGuardService implements CanActivate {
@@ -20,13 +19,14 @@ export class RoleGuardService implements CanActivate {
       const currentUser = JSON.parse(localStorage.getItem('user'));
       const roleDefault = 'DEFAULT';
       const userRole = currentUser.hasOwnProperty('role') ?  currentUser.role :  currentUser.typeUser;
-      const allowed = this.allowedRoles.includes((currentUser === undefined || currentUser === null) ? roleDefault : userRole);
+      const allowed = this.allowedRoles.includes(
+        (currentUser === undefined || currentUser === null) ? roleDefault : userRole);
       if (!allowed) {
         self.showToast('warning', 'Permission denied!', 'top-right');
       }
       return allowed;
     } catch (e) {
-      console.log(e)
+      console.error(e);
       return false;
     }
   }

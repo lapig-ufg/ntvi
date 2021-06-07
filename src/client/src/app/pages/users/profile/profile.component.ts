@@ -74,8 +74,8 @@ export class ProfileComponent implements OnInit {
     }
     this.user.language = this.selectedLanguage;
     this.user.theme = this.selectedTheme;
-    localStorage.setItem('user', null)
-    localStorage.setItem('user', JSON.stringify(this.user))
+    localStorage.setItem('user', null);
+    localStorage.setItem('user', JSON.stringify(this.user));
     this.usersService.update(this.id, this.user).subscribe((data: User) => {
       if (data) {
         self.dialogRef.close();
