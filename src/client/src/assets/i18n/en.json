@@ -89,6 +89,10 @@
   "campaign_index_cache": "Start Caching Campaign",
   "campaign_index_search_placeholder": "Search...",
   "campaign_index_search_hint": "Hit enter to search",
+  "campaign_index_msg_cache": "Campaign image cache has started!",
+  "campaign_index_msg_cache_removed": "Campaign {{name}} was removed!",
+  "campaign_index_msg_campaign_published": "Campaign {{name}} published!",
+  "campaign_index_msg_campaign_not_published": "Campaign was not {{name}} published!",
   "campaign_view_title": "Campaign Information",
   "campaign_view_field_name": "Name",
   "campaign_view_field_name_placeholder": "Name of Campaign",
@@ -188,5 +192,11 @@
   "campaign_inspection_images_wet": "WET",
   "campaign_inspection_images_landsat_dry": "LANDSAT DRY",
   "campaign_inspection_images_landsat_wet": "LANDSAT WET",
-  "campaign_inspection_point_modis_title": "MODIS NDVI Series"
+  "campaign_inspection_msg_not_ready": "The Campaign not ready to inspect!",
+  "campaign_inspection_msg_not_has_permission": "You do not have permission do inspect this campaign!",
+  "campaign_result_table_users_title": "Table with Results for Users",
+  "campaign_result_tab_users_title": "Inspections per Users",
+  "campaign_result_tab_points_title": "Points Information",
+  "campaign_result_table_points_title": "Information on Inspection Duration on Point",
+  "campaign_result_date_format": "yyyy-MM-dd"
 }

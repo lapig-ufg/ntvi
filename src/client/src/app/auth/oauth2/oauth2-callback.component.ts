@@ -43,7 +43,7 @@ export class OAuth2CallbackComponent implements OnDestroy, AfterViewInit {
             localStorage.setItem('token', auth.toString());
             const payload = jwtDecode<JwtPayload>(auth.toString());
             localStorage.setItem('user', JSON.stringify(payload));
-            this.router.navigate(['/pages/']);
+            this.router.navigate(['/modules/']);
           }, function (err) {
             localStorage.clear();
             this.router.navigate(['/auth/login']);

@@ -1,0 +1,26 @@
+<nb-card id="edit-use-class">
+  <nb-card-header>Update New Use Class</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label for="name" class="label">Name</label>
+        <input type="text" nbInput fullWidth id="name" formControlName="name" [(ngModel)]="useClass.name" placeholder="Name of class">
+        <div *ngIf="f.name.touched && f.name.invalid" class="mt-2">
+          <nb-alert status="danger" *ngIf="f.name.errors.required"> Name is required. </nb-alert>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description" class="label">Description</label>
+        <textarea rows="10" fieldSize="large" nbInput fullWidth id="description" formControlName="description" [(ngModel)]="useClass.description" placeholder="Description of class" ></textarea>
+        <br>
+        <div *ngIf="f.description.touched && f.description.invalid" class="mt-2">
+          <nb-alert status="danger" *ngIf="f.description.errors.required"> Description is required. </nb-alert>
+        </div>
+      </div>
+      <div class="actions">
+        <button (click)="goTo('/modules/use-class/index')" nbButton >Back</button>
+        <button type="submit" nbButton status="danger" [disabled]="!form.valid">Submit</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

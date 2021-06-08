@@ -1,0 +1,23 @@
+
+<nb-card id="view-use-class">
+  <nb-card-header>{{ useClass.name }} Use Class</nb-card-header>
+  <nb-card-body>
+    <form >
+      <div class="form-group">
+        <label for="id" class="label">ID</label>
+        <input type="text" nbInput fullWidth id="id" disabled [value]="useClass?.id" >
+      </div>
+      <div class="form-group">
+        <label for="name" class="label">Name</label>
+        <input type="text" nbInput fullWidth id="name"  disabled [value]="useClass?.name" >
+      </div>
+      <div class="form-group">
+        <label for="description" class="label">Description</label>
+        <textarea fieldSize="large" nbInput fullWidth id="description" disabled [value]="useClass?.description" ></textarea>
+      </div>
+      <div class="actions">
+        <button (click)="goTo('/modules/use-class/index')" nbButton >Back</button>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

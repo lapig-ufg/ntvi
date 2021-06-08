@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 import { NbTokenService, NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { Router } from '@angular/router';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
-import { ProfileComponent } from '../../../pages/users/profile/profile.component';
+import { ProfileComponent } from '../../../modules/users/profile/profile.component';
 
 @Component({
   selector: 'ngx-header',
@@ -146,36 +146,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
   getUser() {
-    const self = this;
-    let payload = {};
-    const auth_type = localStorage.getItem('auth_type');
-    if ( auth_type === 'oauth' ) {
-      try {
-        const token = localStorage.getItem('token');
-        payload = jwtDecode<JwtPayload>(token.toString());
-        localStorage.setItem('user', JSON.stringify(payload));
-        this.user     = payload;
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      this.authService.getToken()
-        .subscribe((token: NbAuthJWTToken) => {
-          if (token.isValid()) {
-            try {
-              payload =  jwtDecode<JwtPayload>(token.toString());
-              localStorage.setItem('user', JSON.stringify(payload));
-              this.user = payload;
-            } catch (error) {
-              console.error(error);
-            }
-          }
-        }, function (error) {
-          // redirect o login
-          self.authService.logout('email');
-          self.token.clear();
-          self.router.navigate(['auth/login']);
-        });
-    }
+    const appLocalStorage = JSON.parse(localStorage.getItem('auth_app_token'))
+    let access = appLocalStorage.ownerStrategyName === "google" ? localStorage.getItem('token') : appLocalStorage['value'];
+    const user = jwtDecode<JwtPayload>(access);
+    this.user = user;
+    localStorage.setItem('user', JSON.stringify(user));
+    // const auth_type = localStorage.getItem('auth_type');
+    // if ( auth_type === 'oauth' ) {
+    //   try {
+    //     const token = localStorage.getItem('token');
+    //     payload = jwtDecode<JwtPayload>(token.toString());
+    //     localStorage.setItem('user', JSON.stringify(payload));
+    //     this.user     = payload;
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // } else {
+    //   this.authService.getToken()
+    //     .subscribe((token: NbAuthJWTToken) => {
+    //       if (token.isValid()) {
+    //         try {
+    //           payload =  jwtDecode<JwtPayload>(token.toString());
+    //           console.log(payload)
+    //
+    //           this.user = payload;
+    //         } catch (error) {
+    //           console.error(error);
+    //         }
+    //       }
+    //     }, function (error) {
+    //       // redirect o login
+    //       self.authService.logout('email');
+    //       self.token.clear();
+    //       self.router.navigate(['auth/login']);
+    //     });
+    // }
   }
 }

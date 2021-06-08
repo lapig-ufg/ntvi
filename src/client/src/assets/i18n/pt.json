@@ -89,6 +89,10 @@
   "campaign_index_cache": "Iniciar cache de imagens da Campanha",
   "campaign_index_search_placeholder": "Pesquisar por...",
   "campaign_index_search_hint": "Pressione Enter para pesquisar",
+  "campaign_index_msg_cache": "O cache das imagens da Campanha foi INICIADO!",
+  "campaign_index_msg_cache_removed": " A Campanha {{name}} foi removida!",
+  "campaign_index_msg_campaign_published": "A Campanha {{name}} foi publicada!",
+  "campaign_index_msg_campaign_not_published": "A Campanha {{name}} não foi publicada!",
   "campaign_view_title": "Informações da Campanha",
   "campaign_view_field_name": "Nome",
   "campaign_view_field_name_placeholder": "Nome da Campanha",
@@ -188,5 +192,12 @@
   "campaign_inspection_images_wet": "Período Chuvoso",
   "campaign_inspection_images_landsat_dry": "LANDSAT Período Seco",
   "campaign_inspection_images_landsat_wet": "LANDSAT Período Chuvoso",
-  "campaign_inspection_point_modis_title": "MODIS NDVI Series"
+  "campaign_inspection_point_modis_title": "MODIS NDVI Series",
+  "campaign_inspection_msg_not_ready": "A campanha não está pronta para inspecionar!",
+  "campaign_inspection_msg_not_has_permission": "Você não tem permissão para inspecionar esta campanha!",
+  "campaign_result_tab_users_title": "Inspeções por Usuários",
+  "campaign_result_tab_points_title": "Informações do Ponto",
+  "campaign_result_table_users_title": "Tabela com resultados por usuários",
+  "campaign_result_table_points_title": "Informações sobre a duração de inspeções do ponto",
+  "campaign_result_date_format": "dd/MM/yyyy"
 }

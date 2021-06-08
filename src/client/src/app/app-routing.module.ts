@@ -6,10 +6,10 @@ import {AuthGuard} from './services/auth-guard.service';
 
 export const routes: Routes = [
   {
-    path: 'pages',
+    path: 'modules',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/pages.module')
-      .then(m => m.PagesModule),
+    loadChildren: () => import('./modules/modules.module')
+      .then(m => m.ModulesModule),
   },
   {
     path: 'auth',
@@ -18,13 +18,13 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'pages',
+    redirectTo: 'modules',
     pathMatch: 'prefix',
     canActivate: [AuthGuard],
   },
   {
     path: '**',
-    redirectTo: 'pages',
+    redirectTo: 'modules',
     canActivate: [AuthGuard],
   },
 ];

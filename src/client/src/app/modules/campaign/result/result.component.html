@@ -1,0 +1,165 @@
+<div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+    <nb-tabset fullWidth>
+      <nb-tab tabTitle="{{'campaign_result_tab_users_title' | translate}}" tabIcon="person-outline" responsive>
+        <nb-card [nbSpinner]="!isDataTableAvailable" size="small">
+          <nb-card-header>{{'campaign_result_table_users_title' | translate}}</nb-card-header>
+          <nb-card-body class="classification">
+            <ng2-smart-table [settings]="usersInspectionsTable.settings" [source]="usersInspectionsTable.data"
+              (editConfirm)="onSaveConfirm($event)">
+            </ng2-smart-table>
+          </nb-card-body>
+        </nb-card>
+      </nb-tab>
+      <nb-tab tabTitle="{{'campaign_result_tab_points_title' | translate}}" tabIcon="pin-outline" responsive>
+        <nb-card size="small">
+          <nb-card-header> {{'campaign_result_table_points_title' | translate}}</nb-card-header>
+          <nb-card-body class="classification">
+            <ng2-smart-table [settings]="pointsUsersInfoTable.settings" [source]="pointsUsersInfoTable.data">
+            </ng2-smart-table>
+          </nb-card-body>
+        </nb-card>
+      </nb-tab>
+    </nb-tabset>
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
+    <div class="header-point">
+      <h6 class="title-point" *ngIf="isDataAvailable"> {{'campaign_inspection_point_title' | translate:{current:info.current, total:info.total} }}</h6>
+      <span class="mt-1 mb-1 location">{{'campaign_inspection_location_title' | translate}}</span>
+    </div>
+    <!--    <ngx-ol-map *ngIf="isDataAvailable" [showBaseMapGoogle]="true" [showBaseMapsEsri]="false" [height]="'140px'"-->
+    <!--      [mouseWheelZoom]="true" [zoom]="2" [minZoom]="2" [maxZoom]="18" [mapId]="'map_point' + info.current" [center]="center" [points]="points"></ngx-ol-map>-->
+    <div class="mt-2 mb-2" *ngIf="isDataAvailable">
+      <div class="">
+        <label for="biome" class="label">{{'campaign_inspection_field_biome' | translate}}</label>
+        <input id="biome" disabled fieldSize="tiny" type="text" [value]="info.point.biome" nbInput fullWidth>
+      </div>
+      <div class="">
+        <label for="municipality" class="label">{{'campaign_inspection_field_municipality' | translate}}</label>
+        <input id="municipality" disabled fieldSize="tiny" type="text"
+          [value]="info.point.county  + ' - ' + info.point.uf | uppercase" nbInput fullWidth>
+      </div>
+      <div class="">
+        <label for="coordinate" class="label">{{'campaign_inspection_field_coordinate' | translate}}</label>
+        <input id="coordinate" disabled [value]="info.point.lat + ' ' + info.point.lon" fieldSize="tiny" type="text"
+          nbInput fullWidth>
+      </div>
+    </div>
+    <!-- <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="small">
+      <nb-card-header>Land Use and Coverage</nb-card-header>
+      <nb-card-body class="classification">
+        <nb-card size="tiny" *ngFor="let answer of answers; let i = index">
+          <nb-card-body class="classification">
+            <div class="row">
+              <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
+                <label class="label">From</label>
+                <nb-select placeholder="" fullWidth filled size="small" [(selected)]="answer.initialYear"
+                  [disabled]="answers.length >= (i + 1)">
+                  <nb-option *ngFor="let year of optionYears[i]; let i = index" [value]="year">{{year}}</nb-option>
+                </nb-select>
+              </div>
+              <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
+                <label class="label">To</label>
+                <nb-select placeholder="" fullWidth filled size="small" [(selected)]="answer.finalYear"
+                  [disabled]="answers.length != (i + 1)">
+                  <nb-option *ngFor="let year of optionYears[i]; let i = index" [value]="year">{{year}}</nb-option>
+                </nb-select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+                <label class="label ">Class</label>
+                <nb-select fullWidth filled size="small" [(selected)]="answer.landUse" (change)="formPlus()">
+                  <nb-option *ngFor="let class of login.campaign.landUse; let i = index" [value]="class">{{class}}
+                  </nb-option>
+                </nb-select>
+              </div>
+            </div>
+            <div class="row mt-3 ">
+              <div class="col-xxxl-8 col-xxl-8 col-lg-8 col-md-8">
+                <nb-checkbox [disabled]="answers.length != (i + 1)" [(ngModel)]="answer.pixelBorder">Border pixel
+                </nb-checkbox>
+              </div>
+              <div class="col-xxxl-4 col-xxl-4 col-lg-4 col-md-4 btn-actions-class">
+                <button type="button" size="medium" status="success" nbButton
+                  [disabled]="answers[answers.length - 1].finalYear != login.campaign.finalYear || onSubmission"
+                  (click)="submitForm()">
+                  <nb-icon icon="save-outline"></nb-icon>
+                </button>
+                <button class="ml-2" type="button" size="medium" status="danger" [disabled]="answers.length == 1"
+                  nbButton [disabled]="answers[answers.length - 1].finalYear != login.finalYear || onSubmission"
+                  (click)="formSubtraction()">
+                  <nb-icon icon="trash-2-outline"></nb-icon>
+                </button>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </nb-card-body>
+    </nb-card> -->
+  </div>
+  <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
+    <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="giant">
+      <nb-card-header [innerHTML]="'campaign_inspection_images_title' | translate:{colorCompositon: 'RBG(NIR,SWIR,RED)'}">
+      </nb-card-header>
+      <nb-card-body class="img-satellite">
+        <div *ngIf="image === 'DRY'" class="grid-container">
+          <div class="grid-view">
+            <div class="camera" *ngFor="let img of imagesDry; let i = index">
+              <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
+                [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
+                [mapId]="'map_images_dry' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
+              </ngx-ol-map>
+              <div class="camera-name">
+                <span>{{formatDate(img.date)}}</span>
+                <span>{{'campaign_inspection_images_dry' | translate}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="image === 'WET'" class="grid-container">
+          <div class="grid-view">
+            <div class="camera" *ngFor="let img of imagesWet; let i = index">
+              <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
+                [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
+                [mapId]="'map_images_wet' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
+              </ngx-ol-map>
+              <div class="camera-name">
+                <span>{{formatDate(img.date)}}</span>
+                <span>{{'campaign_inspection_images_wet' | translate}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <nb-actions [size]="actionSize" fullWidth>
+          <nb-action class="show-img" (click)="showImage('DRY')">
+            <nb-icon icon="image-outline" pack="eva"></nb-icon>
+            {{'campaign_inspection_images_landsat_dry' | translate}}
+          </nb-action>
+          <nb-action class="show-img" (click)="showImage('WET')">
+            <nb-icon icon="image-outline" pack="eva"></nb-icon>
+            {{'campaign_inspection_images_landsat_wet' | translate}}
+          </nb-action>
+        </nb-actions>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+    <nb-card [nbSpinner]="!isModisAvailable" size="tiny">
+      <nb-card-header>{{'campaign_inspection_point_modis_title' | translate}}</nb-card-header>
+      <nb-card-body class="classification">
+        <chart type="{{modisChart.type}}" [data]="modisChart.data" [options]="modisChart.options"></chart>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

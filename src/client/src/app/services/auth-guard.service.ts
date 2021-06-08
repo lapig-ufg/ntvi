@@ -29,20 +29,37 @@ export class AuthGuard implements CanActivate {
     return this.authService.isAuthenticated()
       .pipe(
         tap(async function (authenticated) {
-          let token = null;
-          const auth_type = localStorage.getItem('auth_type');
-          if (auth_type) {
-            if (auth_type === 'oauth') {
-              token = localStorage.getItem('token');
-            } else {
-              const temp = await self.authService.getToken().toPromise();
-              token = temp.getValue();
-            }
-            const payload = jwtDecode<JwtPayload>(token);
-            const isExpired = Date.now() >= payload.exp * 1000;
+          // const auth_type = localStorage.getItem('auth_type');
+          // if (auth_type) {
+          //   if (auth_type === 'oauth') {
+          //     token = localStorage.getItem('token');
+          //   } else {
+          //     const temp = await self.authService.getToken().toPromise();
+          //     token = temp.getValue();
+          //     if(!token){
+          //       await self.router.navigate(['auth/login']);
+          //     }
+          //   }
+          //   const payload = jwtDecode<JwtPayload>(token);
+          //   const isExpired = Date.now() >= payload.exp * 1000;
+          //   if (isExpired) {
+          //     await self.router.navigate(['auth/login']);
+          //   }
+          // } else {
+          //   await self.router.navigate(['auth/login']);
+          // }
+
+          const appLocalStorage = JSON.parse(localStorage.getItem('auth_app_token'))
+          if(appLocalStorage) {
+            let access = appLocalStorage.ownerStrategyName === "google" ?
+              localStorage.getItem('token') : appLocalStorage['value'];
+            const token = jwtDecode<JwtPayload>(access);
+            const isExpired = Date.now() >= token.exp * 1000;
             if (isExpired) {
               await self.router.navigate(['auth/login']);
+              return false;
             }
+            return true;
           } else {
             await self.router.navigate(['auth/login']);
           }

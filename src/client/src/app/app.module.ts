@@ -14,6 +14,7 @@ import { StorageInterceptor } from './interceptors/storage.interceptor';
 import { JWTInterceptor  } from './interceptors/jwt.interceptor';
 import { AuthGuard } from './services/auth-guard.service';
 import { RoleGuardService } from './services/role-guard.service';
+import { DatePipe } from '@angular/common';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -57,6 +58,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: LocationStrategy,
       useClass: PathLocationStrategy,
     },
+    DatePipe,
     AuthGuard,
     RoleGuardService,
     NbToastrService,
