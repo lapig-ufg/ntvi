@@ -25,26 +25,26 @@
     <nb-card-footer >
       <nb-actions class="nb-actions" size="small">
         <nb-action
-          title="View Campaign"
+          [title]="'campaign_index_view' | translate"
           class="action"
           (click)="router.navigateByUrl('modules/campaign/' + campaign.id + '/view')"
           icon="eye-outline">
         </nb-action>
         <nb-action
-          title="POINTS"
+          [title]="'campaign_index_number_inspectors' | translate"
           class="action"
           badgeDot="true"
           badgeStatus="success"
           badgePosition="top right"
-          badgeText="{{campaign.numInspectors}} INSPECTORS">
+          badgeText="{{campaign.numInspectors}} {{'campaign_public_inspector' | translate}}">
         </nb-action>
         <nb-action
-          title="POINTS"
+          [title]="'campaign_index_number_points' | translate"
           class="action"
           badgeDot="true"
           badgeStatus="primary"
           badgePosition="top right"
-          badgeText="{{campaign.points.length}} POINTS">
+          badgeText="{{campaign.points.length}} {{'campaign_public_points' | translate}}">
         </nb-action>
 
       </nb-actions>

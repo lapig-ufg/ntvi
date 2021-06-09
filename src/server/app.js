@@ -53,7 +53,6 @@ app.middleware.repository.init(function () {
 		cookie: {
 			httpOnly: false,
 			secure: false,
-			sameSite: 'none',
 			maxAge: 1000 * 60 * 60 * 24
 		}
 	})

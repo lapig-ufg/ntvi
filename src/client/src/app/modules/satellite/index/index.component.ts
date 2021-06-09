@@ -3,6 +3,9 @@ import { SatelliteService } from '../service/satellite.service';
 import { Satellite } from '../model/satellite';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
+import {DialogComponent} from "../../../@theme/components";
+import {TranslateService} from "@ngx-translate/core";
+import {NbDialogService} from "@nebular/theme";
 
 @Component({
   selector: 'ngx-index',
@@ -15,7 +18,9 @@ export class IndexComponent implements OnInit {
   settings = {
     mode: 'external',
     hideSubHeader: true,
+    noDataMessage: this.translate.instant('tables_no_data_msg'),
     actions: {
+      columnTitle: this.translate.instant('tables_actions'),
       position: 'right',
     },
     add: {
@@ -34,10 +39,11 @@ export class IndexComponent implements OnInit {
     },
     columns: {
       name: {
-        title: 'Name',
+        width: '30%',
+        title: this.translate.instant('satellite_index_table_column_name'),
       },
       description: {
-        title: 'Description',
+        title: this.translate.instant('satellite_index_table_column_description'),
       },
     },
   };
@@ -46,6 +52,8 @@ export class IndexComponent implements OnInit {
   constructor(
     public satelliteService: SatelliteService,
     private router: Router,
+    public translate: TranslateService,
+    private dialogService: NbDialogService
   ) { }
 
   ngOnInit(): void {
@@ -63,9 +71,10 @@ export class IndexComponent implements OnInit {
     this.router.navigateByUrl(url);
   }
 
-  deleteClass(id) {
+  deleteSatellite(id) {
     this.satelliteService.delete(id).subscribe(res => {
       this.satellites = this.satellites.filter(item => item.id !== id);
+      this.source.load(this.satellites);
     });
   }
 
@@ -74,10 +83,18 @@ export class IndexComponent implements OnInit {
   }
 
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      this.deleteClass(event.data.id);
+    const self = this;
+    const data = {
+      title: this.translate.instant('delete_msg_title'),
+      msg: this.translate.instant('satellite_delete_msg', {name:event.data.name})
     }
+    this.dialogService.open(DialogComponent, { context: data }).onClose.subscribe(function (confirmed) {
+      if (confirmed) {
+        self.deleteSatellite(event.data.id);
+      }
+    });
   }
+
 
   refresh() {
     this.search.nativeElement.value = '';
@@ -85,15 +102,17 @@ export class IndexComponent implements OnInit {
   }
 
   onSearch(query: string = '') {
-    this.source.setFilter([
-      {
-        field: 'name',
-        search: query,
-      },
-      {
-        field: 'description',
-        search: query,
-      },
-    ], false);
+    if(query != ''){
+      this.source.setFilter([
+        {
+          field: 'name',
+          search: query,
+        },
+        {
+          field: 'description',
+          search: query,
+        },
+      ], false);
+    }
   }
 }

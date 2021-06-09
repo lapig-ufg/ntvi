@@ -32,8 +32,8 @@
       <h6 class="title-point" *ngIf="isDataAvailable"> {{'campaign_inspection_point_title' | translate:{current:info.current, total:info.total} }}</h6>
       <span class="mt-1 mb-1 location">{{'campaign_inspection_location_title' | translate}}</span>
     </div>
-    <!--    <ngx-ol-map *ngIf="isDataAvailable" [showBaseMapGoogle]="true" [showBaseMapsEsri]="false" [height]="'140px'"-->
-    <!--      [mouseWheelZoom]="true" [zoom]="2" [minZoom]="2" [maxZoom]="18" [mapId]="'map_point' + info.current" [center]="center" [points]="points"></ngx-ol-map>-->
+        <ngx-ol-map *ngIf="isDataAvailable" [showBaseMapGoogle]="true" [showBaseMapsEsri]="false" [height]="'140px'"
+          [mouseWheelZoom]="true" [zoom]="2" [minZoom]="2" [maxZoom]="18" [mapId]="'map_point' + info.current" [center]="center" [points]="points"></ngx-ol-map>
     <div class="mt-2 mb-2" *ngIf="isDataAvailable">
       <div class="">
         <label for="biome" class="label">{{'campaign_inspection_field_biome' | translate}}</label>
@@ -50,58 +50,6 @@
           nbInput fullWidth>
       </div>
     </div>
-    <!-- <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="small">
-      <nb-card-header>Land Use and Coverage</nb-card-header>
-      <nb-card-body class="classification">
-        <nb-card size="tiny" *ngFor="let answer of answers; let i = index">
-          <nb-card-body class="classification">
-            <div class="row">
-              <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
-                <label class="label">From</label>
-                <nb-select placeholder="" fullWidth filled size="small" [(selected)]="answer.initialYear"
-                  [disabled]="answers.length >= (i + 1)">
-                  <nb-option *ngFor="let year of optionYears[i]; let i = index" [value]="year">{{year}}</nb-option>
-                </nb-select>
-              </div>
-              <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
-                <label class="label">To</label>
-                <nb-select placeholder="" fullWidth filled size="small" [(selected)]="answer.finalYear"
-                  [disabled]="answers.length != (i + 1)">
-                  <nb-option *ngFor="let year of optionYears[i]; let i = index" [value]="year">{{year}}</nb-option>
-                </nb-select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
-                <label class="label ">Class</label>
-                <nb-select fullWidth filled size="small" [(selected)]="answer.landUse" (change)="formPlus()">
-                  <nb-option *ngFor="let class of login.campaign.landUse; let i = index" [value]="class">{{class}}
-                  </nb-option>
-                </nb-select>
-              </div>
-            </div>
-            <div class="row mt-3 ">
-              <div class="col-xxxl-8 col-xxl-8 col-lg-8 col-md-8">
-                <nb-checkbox [disabled]="answers.length != (i + 1)" [(ngModel)]="answer.pixelBorder">Border pixel
-                </nb-checkbox>
-              </div>
-              <div class="col-xxxl-4 col-xxl-4 col-lg-4 col-md-4 btn-actions-class">
-                <button type="button" size="medium" status="success" nbButton
-                  [disabled]="answers[answers.length - 1].finalYear != login.campaign.finalYear || onSubmission"
-                  (click)="submitForm()">
-                  <nb-icon icon="save-outline"></nb-icon>
-                </button>
-                <button class="ml-2" type="button" size="medium" status="danger" [disabled]="answers.length == 1"
-                  nbButton [disabled]="answers[answers.length - 1].finalYear != login.finalYear || onSubmission"
-                  (click)="formSubtraction()">
-                  <nb-icon icon="trash-2-outline"></nb-icon>
-                </button>
-              </div>
-            </div>
-          </nb-card-body>
-        </nb-card>
-      </nb-card-body>
-    </nb-card> -->
   </div>
   <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
     <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="giant">

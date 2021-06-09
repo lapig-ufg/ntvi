@@ -16,6 +16,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { RoleGuardService } from './services/role-guard.service';
 import { DatePipe } from '@angular/common';
 import {
+  NbCardModule,
   NbChatModule,
   NbDatepickerModule,
   NbDialogModule,
@@ -86,6 +87,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
+    NbCardModule,
   ],
   exports: [
     TranslateModule,

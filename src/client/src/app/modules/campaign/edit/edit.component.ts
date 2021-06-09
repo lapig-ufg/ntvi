@@ -59,6 +59,7 @@ export class EditComponent implements OnInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       columns: {
         latitude: {
@@ -78,6 +79,7 @@ export class EditComponent implements OnInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: {
         position: 'right',
         edit: false,
@@ -98,6 +100,7 @@ export class EditComponent implements OnInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: {
         position: 'right',
         edit: false,
@@ -124,6 +127,7 @@ export class EditComponent implements OnInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -141,6 +145,7 @@ export class EditComponent implements OnInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -164,6 +169,7 @@ export class EditComponent implements OnInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: {
         position: 'right',
         edit: false,
@@ -190,6 +196,7 @@ export class EditComponent implements OnInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: {
         position: 'right',
         edit: false,
@@ -307,7 +314,7 @@ export class EditComponent implements OnInit {
   async addClass() {
     const useClassId = this.configForm.get('useClass').value;
     if (!useClassId) {
-      this.showToast('danger', 'You need to choose a use class', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_use_class'), 'top-right');
       return;
     }
     const useClass = this.useClasses.find(use => use.id === parseInt(useClassId, 0));
@@ -322,11 +329,11 @@ export class EditComponent implements OnInit {
     const satelliteId = this.configForm.get('satellite').value;
     const colors: [] = this.configForm.get('_colors').value;
     if (!satelliteId) {
-      this.showToast('danger', 'You need to choose a satellite', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_satellite'), 'top-right');
       return;
     }
     if (!colors || colors.length < 3) {
-      this.showToast('danger', 'You need to choose three colors', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_colors'), 'top-right');
       return;
     }
     const satellite = this.satellites.find(sat => sat.id === parseInt(satelliteId, 0));
@@ -347,11 +354,11 @@ export class EditComponent implements OnInit {
     const userId = this.usersForm.get('user').value;
     const permission = this.usersForm.get('permission').value;
     if (!userId) {
-      this.showToast('danger', 'You need to choose a user', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_permission'), 'top-right');
       return;
     }
     if (!permission) {
-      this.showToast('danger', 'You need to choose three a permission', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_permission_min'), 'top-right');
       return;
     }
     const user = this.users.find(us => us.id === parseInt(userId, 0));
@@ -374,15 +381,15 @@ export class EditComponent implements OnInit {
     const url = this.imagesForm.get('url').value;
 
     if (!imgSatellite) {
-      this.showToast('danger', 'You need to choose a satellite.', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_img_satellite'), 'top-right');
       return;
     }
     if (!dataImg) {
-      this.showToast('danger', 'You need to inform the date of the image.', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_img_date'), 'top-right');
       return;
     }
     if (!url) {
-      this.showToast('danger', 'You need to inform the url of the image.', 'top-right');
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_img_url'), 'top-right');
       return;
     }
     const satellite = this.satellites.find(sat => sat.id === parseInt(imgSatellite, 0));
@@ -520,7 +527,7 @@ export class EditComponent implements OnInit {
   }
   showToast(status: NbComponentStatus, massage, position) {
     const duration = 4000;
-    this.toastService.show(status, massage, { status, position, duration });
+    setTimeout(() => this.toastService.show(status, massage, { status, position, duration }), 900);
   }
   onMapReady(ev) {
     // console.log(ev)

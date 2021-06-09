@@ -1,33 +1,11 @@
-<!--<div class="container">-->
-<!--  <h1>Use Classes</h1>-->
-
-<!--  <button href="#" (click)="goTo('/modules/use-class/create')" class="btn btn-success">Create New Use Class</button>-->
-
-<!--  <table class="table table-bordered">-->
-<!--    <tr>-->
-<!--      <th>Name</th>-->
-<!--      <th>Description</th>-->
-<!--      <th width="220px">Actions</th>-->
-<!--    </tr>-->
-<!--    <tr *ngFor="let useClass of classes">-->
-<!--      <td>{{ useClass.name }}</td>-->
-<!--      <td>{{ useClass.description }}</td>-->
-<!--      <td>-->
-<!--        <button [routerLink]="['/modules/use-class/', useClass.id, 'view']" class="btn btn-info">View</button>-->
-<!--        <button [routerLink]="['/modules/use-class/', useClass.id, 'edit']" class="btn btn-primary">Edit</button>-->
-<!--        <button type="button" (click)="deleteClass(useClass.id)" class="btn btn-danger">Delete</button>-->
-<!--      </td>-->
-<!--    </tr>-->
-<!--  </table>-->
-<!--</div>-->
 
 <nb-card id="index-use-class">
-  <nb-card-header>Use Classes</nb-card-header>
+  <nb-card-header>{{'use_class_index_title' | translate}}</nb-card-header>
   <nb-card-body>
     <div class="row">
       <div class="col-md-12">
         <div class="search-inline">
-          <input #search class="search" nbInput fullWidth type="text"  class="mr-2 mb-2" placeholder="Search..." (keydown)="onSearch(search.value)">
+          <input #search class="search" nbInput fullWidth  (change)="search.value == '' ? refresh() : null" type="text"  class="mr-2 mb-2" placeholder="{{'use_class_index_field_search_placeholder' | translate}}" (keydown)="onSearch(search.value)">
           <button (click)="refresh()" class="mb-2 mr-2" nbButton status="primary" size="large">
             <nb-icon icon="refresh-outline"></nb-icon>
           </button>

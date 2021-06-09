@@ -1,0 +1,11 @@
+<nb-card [status]="status ? status : 'danger'">
+  <nb-card-header>{{title}}</nb-card-header>
+  <nb-card-body [innerHTML]="msg"></nb-card-body>
+  <nb-card-footer class="dialog-buttons">
+    <button class="cancel" nbButton  status="basic" (click)="cancel()">{{'btn_cancel' | translate}}</button>
+    <button nbButton [status]="status ? status : 'danger'" (click)="remove(true)">{{'btn_delete' | translate}}</button>
+  </nb-card-footer>
+</nb-card>
+
+
+

@@ -21,6 +21,7 @@ export class ViewComponent implements AfterViewInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       columns: {
         latitude: {
@@ -40,6 +41,7 @@ export class ViewComponent implements AfterViewInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -57,6 +59,7 @@ export class ViewComponent implements AfterViewInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -80,6 +83,7 @@ export class ViewComponent implements AfterViewInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -103,6 +107,7 @@ export class ViewComponent implements AfterViewInit {
     settings: {
       mode: 'external',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',

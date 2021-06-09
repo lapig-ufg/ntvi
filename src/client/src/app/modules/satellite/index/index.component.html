@@ -1,11 +1,11 @@
 
 <nb-card id="index-use-class">
-  <nb-card-header>Satellites</nb-card-header>
+  <nb-card-header>{{'satellite_index_title' | translate}}</nb-card-header>
   <nb-card-body>
     <div class="row">
       <div class="col-md-12">
         <div class="search-inline">
-          <input #search class="search" nbInput fullWidth type="text"  class="mr-2 mb-2" placeholder="Search..." (keydown)="onSearch(search.value)">
+          <input #search class="search" nbInput fullWidth (change)="search.value == '' ? refresh() : null" type="text"  class="mr-2 mb-2" placeholder="{{'satellite_index_field_search_placeholder' | translate}}" (keydown)="onSearch(search.value)">
           <button (click)="refresh()" class="mb-2 mr-2" nbButton status="primary" size="large">
             <nb-icon icon="refresh-outline"></nb-icon>
           </button>

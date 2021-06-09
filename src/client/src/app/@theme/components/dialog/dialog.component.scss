@@ -1,0 +1,11 @@
+@import '../../styles/themes';
+@import '~@nebular/theme/styles/global/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
+
+@include nb-install-component() {
+  max-height: 95vh;
+  .dialog-buttons{
+    display: flex;
+    justify-content: space-between;
+  }
+}

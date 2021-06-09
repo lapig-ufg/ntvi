@@ -13,7 +13,7 @@ import {
   NbIconModule,
   NbThemeModule,
   NbToggleModule,
-  NbCheckboxModule,
+  NbCheckboxModule, NbCardModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
@@ -23,6 +23,7 @@ import {
   HeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
+  DialogComponent,
 } from './components';
 import {
   CapitalizePipe,
@@ -67,6 +68,7 @@ const COMPONENTS = [
   OneColumnLayoutComponent,
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
+  DialogComponent,
 ];
 const PIPES = [
   CapitalizePipe,
@@ -77,7 +79,8 @@ const PIPES = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...NB_MODULES],
+  imports: [CommonModule, ...NB_MODULES, NbCardModule],
+  entryComponents: [DialogComponent],
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES],
 })
@@ -92,7 +95,7 @@ export class ThemeModule {
           {
             name: 'default',
           },
-          [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME ],
+          [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME],
         ).providers,
       ],
     };

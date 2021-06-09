@@ -3,6 +3,8 @@ import {CanActivate, Router} from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { tap } from 'rxjs/operators';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
+import { TranslateService } from '@ngx-translate/core';
+import {NbComponentStatus, NbToastrService} from '@nebular/theme';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,6 +23,8 @@ export class AuthGuard implements CanActivate {
   constructor(
     private authService: NbAuthService,
     private router: Router,
+    private toastService: NbToastrService,
+    public translate: TranslateService
     ) {
   }
 
@@ -57,14 +61,21 @@ export class AuthGuard implements CanActivate {
             const isExpired = Date.now() >= token.exp * 1000;
             if (isExpired) {
               await self.router.navigate(['auth/login']);
+              self.showToast('warning', self.translate.instant('session_expired'), 'top-right');
               return false;
             }
             return true;
           } else {
             await self.router.navigate(['auth/login']);
+            self.showToast('warning', self.translate.instant('session_expired'), 'top-right');
           }
 
         }),
       );
+  }
+
+  showToast(status: NbComponentStatus, massage, position) {
+    const duration = 4000;
+    setTimeout(() => this.toastService.show(status, massage, { status, position, duration }), 900);
   }
 }

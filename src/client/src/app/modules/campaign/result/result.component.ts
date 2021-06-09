@@ -127,19 +127,20 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.pointsUsersInfoTable.settings = {
       // mode: 'inline',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       actions: false,
       columns: {
         user: {
-          title: 'Inspector',
+          title: this.translate.instant('campaign_result_table_points_column_user'),
           filter: true,
         },
         duration: {
-          title: 'Point inspection duration(s)',
+          title: this.translate.instant('campaign_result_table_points_column_duration'),
           filter: false,
           type: 'text', class: 'align-center',
         },
         meantime: {
-          title: 'Average time of all points inpection duration(s)',
+          title: this.translate.instant('campaign_result_table_points_column_meantime'),
           filter: false,
         },
       },
@@ -179,13 +180,13 @@ export class ResultComponent implements OnInit, OnDestroy {
     }
 
     columns['year'] = {
-      title: 'Year',
+      title: this.translate.instant('campaign_result_table_users_column_year'),
       filter: false,
       editable: false,
     };
 
     columns['classConsolidated'] = {
-      title: 'Consolidated Class',
+      title: this.translate.instant('campaign_result_table_users_column_class_consolidated'),
       editable: true,
       type: 'html',
       editor: {
@@ -232,6 +233,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.usersInspectionsTable.settings = {
       // mode: 'inline',
       hideSubHeader: true,
+      noDataMessage: this.translate.instant('tables_no_data_msg'),
       edit: {
         confirmSave: true,
         editButtonContent: '<i class="nb-edit"></i>',
@@ -239,7 +241,7 @@ export class ResultComponent implements OnInit, OnDestroy {
         cancelButtonContent: '<i class="nb-close"></i>',
       },
       actions: {
-        columnTitle: 'Ações',
+        columnTitle: this.translate.instant('tables_actions'),
         position: 'right',
         add: false,
         delete: false,
@@ -261,7 +263,7 @@ export class ResultComponent implements OnInit, OnDestroy {
       this.campaign = data;
       if (this.campaign.status !== 'READY') {
         this.router.navigateByUrl('modules/campaign/index');
-        this.showToast('danger', 'Campaign has not started to be inspected!', 'top-right');
+        this.showToast('danger', this.translate.instant('campaign_result_msg_not_start_inspect'), 'top-right');
       } else {
         this.getPoint();
       }
@@ -335,11 +337,11 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   showToast(status: NbComponentStatus, massage, position) {
     const duration = 4000;
-    this.toastService.show(status, massage, { status, position, duration });
+    setTimeout(() => this.toastService.show(status, massage, { status, position, duration }), 900);
   }
 
   async onSaveConfirm(event) {
-    if (window.confirm('Are you sure you want to edit this Use Class?')) {
+    if (window.confirm(this.translate.instant('campaign_result_msg_edit_class_consolidated'))) {
       event.confirm.resolve(event.newData);
 
       const ob = {
@@ -479,7 +481,7 @@ export class ResultComponent implements OnInit, OnDestroy {
                   },
                   type: 'time',
                   time: {
-                    tooltipFormat: 'DD/MM/YYYY', // <- HERE
+                    tooltipFormat: this.translate.instant('campaign_result_chart_date_format'), // <- HERE
                   },
                 },
               ],

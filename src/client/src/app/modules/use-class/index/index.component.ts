@@ -3,6 +3,9 @@ import { UseClassService } from '../service/use-class.service';
 import { UseClass } from '../model/use-class';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
+import { TranslateService } from '@ngx-translate/core';
+import { NbDialogService } from '@nebular/theme';
+import {DialogComponent} from "../../../@theme/components";
 
 @Component({
   selector: 'ngx-index',
@@ -15,8 +18,10 @@ export class IndexComponent implements OnInit {
   settings = {
     mode: 'external',
     hideSubHeader: true,
+    noDataMessage: this.translate.instant('tables_no_data_msg'),
     actions: {
       position: 'right',
+      columnTitle: this.translate.instant('tables_actions'),
     },
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -34,10 +39,11 @@ export class IndexComponent implements OnInit {
     },
     columns: {
       name: {
-        title: 'Name',
+        width: '20%',
+        title: this.translate.instant('use_class_index_table_column_name'),
       },
       description: {
-        title: 'Description',
+        title: this.translate.instant('use_class_index_table_column_description'),
       },
     },
   };
@@ -46,11 +52,13 @@ export class IndexComponent implements OnInit {
   constructor(
     public classService: UseClassService,
     private router: Router,
+    public translate: TranslateService,
+    private dialogService: NbDialogService
   ) { }
 
   ngOnInit(): void {
     this.classService.getAll().subscribe((data: UseClass[]) => {
-      this.classes = data;
+      this.classes = data.sort((a, b) => (a.name > b.name) ? 1 : -1)
       this.source.load(this.classes);
     });
   }
@@ -70,10 +78,17 @@ export class IndexComponent implements OnInit {
   }
 
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      this.deleteClass(event.data.id);
-      this.source.load(this.classes);
+    const self = this;
+    const data = {
+      title: this.translate.instant('delete_msg_title'),
+      msg: this.translate.instant('use_class_delete_msg', {name:event.data.name})
     }
+    this.dialogService.open(DialogComponent, { context: data}).onClose.subscribe(function (confirmed) {
+      if (confirmed) {
+        self.deleteClass(event.data.id);
+        self.source.load(self.classes);
+      }
+    });
   }
 
   refresh() {
@@ -82,15 +97,17 @@ export class IndexComponent implements OnInit {
   }
 
   onSearch(query: string = '') {
-    this.source.setFilter([
-      {
-        field: 'name',
-        search: query,
-      },
-      {
-        field: 'description',
-        search: query,
-      },
-    ], false);
+    if(query != ''){
+      this.source.setFilter([
+        {
+          field: 'name',
+          search: query,
+        },
+        {
+          field: 'description',
+          search: query,
+        },
+      ], false);
+    }
   }
 }

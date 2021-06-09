@@ -49,7 +49,7 @@ export class RoleGuardService implements CanActivate {
       const allowed = this.allowedRoles.includes(
         (currentUser === undefined || currentUser === null) ? roleDefault : userRole);
       if (!allowed) {
-        self.showToast('warning', 'Permission denied!', 'top-right');
+        self.showToast('warning', this.translate.instant('permission_denied'), 'top-right');
       }
       return allowed;
     } catch (e) {

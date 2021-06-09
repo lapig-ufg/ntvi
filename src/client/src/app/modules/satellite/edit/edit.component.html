@@ -1,25 +1,25 @@
 <nb-card id="edit-use-class">
-  <nb-card-header>Update Satellite</nb-card-header>
+  <nb-card-header>{{'satellite_edit_title' | translate}}</nb-card-header>
   <nb-card-body>
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-group">
-        <label for="name" class="label">Name</label>
-        <input type="text" nbInput fullWidth id="name" formControlName="name" [(ngModel)]="satellite.name" placeholder="Name of class">
+        <label for="name" class="label">{{'satellite_create_edit_field_name' | translate}}</label>
+        <input type="text" nbInput fullWidth id="name" formControlName="name" [(ngModel)]="satellite.name" placeholder="{{'satellite_create_edit_field_name_placeholder' | translate}}">
         <div *ngIf="f.name.touched && f.name.invalid" class="mt-2">
-          <nb-alert status="danger" *ngIf="f.name.errors.required"> Name is required. </nb-alert>
+          <nb-alert status="danger" *ngIf="f.name.errors.required">{{'satellite_create_edit_field_name_required' | translate}}</nb-alert>
         </div>
       </div>
       <div class="form-group">
-        <label for="description" class="label">Description</label>
-        <textarea rows="10" fieldSize="large" nbInput fullWidth id="description" formControlName="description" [(ngModel)]="satellite.description" placeholder="Description of class" ></textarea>
+        <label for="description" class="label">{{'satellite_create_edit_field_description' | translate}}</label>
+        <textarea rows="10" fieldSize="large" nbInput fullWidth id="description" formControlName="description" [(ngModel)]="satellite.description" placeholder="{{'satellite_create_edit_field_description_placeholder' | translate}}" ></textarea>
         <br>
         <div *ngIf="f.description.touched && f.description.invalid" class="mt-2">
-          <nb-alert status="danger" *ngIf="f.description.errors.required"> Description is required. </nb-alert>
+          <nb-alert status="danger" *ngIf="f.description.errors.required"> {{'satellite_create_edit_field_description_required' | translate}}</nb-alert>
         </div>
       </div>
       <div class="actions">
-        <button (click)="goTo('/modules/satellite/index')" nbButton >Back</button>
-        <button type="submit" nbButton status="danger" [disabled]="!form.valid">Submit</button>
+        <button (click)="goTo('/modules/satellite/index')" nbButton >{{'btn_back' | translate}}</button>
+        <button type="submit" nbButton status="danger" [disabled]="!form.valid">{{'btn_submit' | translate}}</button>
       </div>
     </form>
   </nb-card-body>

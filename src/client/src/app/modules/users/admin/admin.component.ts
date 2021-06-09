@@ -3,6 +3,9 @@ import { UsersService } from '../service/users.service';
 import { User } from '../model/users';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
+import {TranslateService} from "@ngx-translate/core";
+import {NbDialogService} from "@nebular/theme";
+import {DialogComponent} from "../../../@theme/components";
 
 @Component({
   selector: 'ngx-admin',
@@ -16,8 +19,10 @@ export class AdminComponent implements OnInit {
   settings = {
     mode: 'external',
     hideSubHeader: true,
+    noDataMessage: this.translate.instant('tables_no_data_msg'),
     actions: {
       position: 'right',
+      columnTitle: this.translate.instant('tables_actions'),
     },
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -35,10 +40,11 @@ export class AdminComponent implements OnInit {
     },
     columns: {
       name: {
-        title: 'Name',
+        width: '20%',
+        title: this.translate.instant('users_admin_table_column_name'),
       },
       email: {
-        title: 'E-mail',
+        title: this.translate.instant('users_admin_table_column_email'),
       },
     },
   };
@@ -47,6 +53,8 @@ export class AdminComponent implements OnInit {
   constructor(
     public usersService: UsersService,
     private router: Router,
+    public translate: TranslateService,
+    private dialogService: NbDialogService
   ) { }
 
   ngOnInit(): void {
@@ -64,9 +72,10 @@ export class AdminComponent implements OnInit {
     this.router.navigateByUrl(url);
   }
 
-  deleteClass(id) {
+  deleteUser(id) {
     this.usersService.delete(id).subscribe(res => {
       this.users = this.users.filter(item => item.id !== id);
+      this.source.load(this.users);
     });
   }
 
@@ -75,9 +84,16 @@ export class AdminComponent implements OnInit {
   }
 
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      this.deleteClass(event.data.id);
+    const self = this;
+    const data = {
+      title: this.translate.instant('delete_msg_title'),
+      msg: this.translate.instant('users_admin_delete_msg', {name:event.data.name})
     }
+    this.dialogService.open(DialogComponent, { context: data}).onClose.subscribe(function (confirmed) {
+      if (confirmed) {
+        self.deleteUser(event.data.id);
+      }
+    });
   }
 
   refresh() {
@@ -86,16 +102,18 @@ export class AdminComponent implements OnInit {
   }
 
   onSearch(query: string = '') {
-    this.source.setFilter([
-      {
-        field: 'name',
-        search: query,
-      },
-      {
-        field: 'email',
-        search: query,
-      },
-    ], false);
+    if(query != ''){
+      this.source.setFilter([
+        {
+          field: 'name',
+          search: query,
+        },
+        {
+          field: 'description',
+          search: query,
+        },
+      ], false);
+    }
   }
 
 }

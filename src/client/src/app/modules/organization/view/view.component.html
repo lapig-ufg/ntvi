@@ -1,6 +1,6 @@
 
 <nb-card id="view-use-class">
-  <nb-card-header>{{ organization.name }} organization</nb-card-header>
+  <nb-card-header>{{ organization.name }}</nb-card-header>
   <nb-card-body>
     <form >
       <div class="form-group">
@@ -8,15 +8,15 @@
         <input type="text" nbInput fullWidth id="id" disabled [value]="organization.id" >
       </div>
       <div class="form-group">
-        <label for="name" class="label">Name</label>
+        <label for="name" class="label">{{'organizations_create_edit_field_name' | translate}}</label>
         <input type="text" nbInput fullWidth id="name"  disabled [value]="organization.name" >
       </div>
       <div class="form-group">
-        <label for="description" class="label">Description</label>
+        <label for="description" class="label">{{'organizations_create_edit_field_description' | translate}}</label>
         <textarea fieldSize="large" nbInput fullWidth id="description" disabled [value]="organization.description" ></textarea>
       </div>
       <div class="actions">
-        <button (click)="goTo('/modules/organization/index')" nbButton >Back</button>
+        <button (click)="goTo('/modules/organization/index')" nbButton >{{'btn_back' | translate}}</button>
       </div>
     </form>
   </nb-card-body>
