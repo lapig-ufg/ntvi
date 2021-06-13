@@ -74,6 +74,7 @@ model Campaign {
   id               Int                @id @default(autoincrement())
   name             String
   description      String
+  country          String             @default("BR")
   numInspectors    Int
   typePeriod       TypePeriod         @default(YEARLY)
   status           TypeStatus         @default(INCOMPLETE)
@@ -109,7 +110,7 @@ model User {
   city             String?
   state            String?
   country          String?
-  geeKey           String?
+  geeKey           Json?
   password         String?
   typeUser         TypeUser           @default(USER)
   createdAt        DateTime           @default(now())

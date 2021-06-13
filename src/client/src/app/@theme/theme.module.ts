@@ -30,6 +30,7 @@ import {
   PluralPipe,
   RoundPipe,
   TimingPipe,
+  SafePipe,
   NumberWithCommasPipe,
 } from './pipes';
 import {
@@ -75,6 +76,7 @@ const PIPES = [
   PluralPipe,
   RoundPipe,
   TimingPipe,
+  SafePipe,
   NumberWithCommasPipe,
 ];
 

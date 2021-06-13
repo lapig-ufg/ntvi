@@ -1,13 +1,4 @@
-
-const dotenv = require("dotenv-safe");
-const result = dotenv.config({
-    allowEmptyValues: true,
-    example: '.env'
-});
-if (result.error) {
-    throw result.error;
-}
-const { parsed: env } = result;
+const env = process.env;
 
 module.exports = function (app) {
     let JWT = {}

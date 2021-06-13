@@ -25,8 +25,7 @@ module.exports = function(app) {
 			callback(result)
 		})
 	}
-
-	getWindow = function(point) {
+	var getWindow = function(point) {
 		var buffer = 4000
 		var coordinates = proj4('EPSG:4326', 'EPSG:900913', [point.lon, point.lat])
 

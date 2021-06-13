@@ -5,11 +5,18 @@ import { ModulesComponent } from './modules.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from '../services/auth-guard.service';
 import { RoleGuardService} from '../services/role-guard.service';
+import { BrokerComponent } from './broker/broker.component';
 
 const routes: Routes = [{
   path: '',
   component: ModulesComponent,
   children: [
+    // {
+    //   path: 'broker',
+    //   data: { roles: ['ROOT'] },
+    //   canActivate: [AuthGuard, RoleGuardService],
+    //   component: BrokerComponent,
+    // },
     {
       path: 'campaign',
       data: { roles: ['ROOT', 'ADMIN', 'USER', 'DEFAULT'] },

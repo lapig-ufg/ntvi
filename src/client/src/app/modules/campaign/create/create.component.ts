@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { OrganizationService } from '../../organization/service/organization.service';
 import { SatelliteService } from '../../satellite/service/satellite.service';
@@ -19,6 +21,7 @@ import { Image } from '../models/image';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Campaign } from '../models/campaign';
 import { TranslateService } from '@ngx-translate/core';
+import { Country } from '../models/country';
 
 @Component({
   selector: 'ngx-create',
@@ -68,9 +71,9 @@ export class CreateComponent implements OnInit {
         longitude: {
           title: this.translate.instant('campaign_view_points_table_col_lon'),
         },
-        info: {
-          title: this.translate.instant('campaign_view_points_table_col_location'),
-        },
+        // info: {
+        //   title: this.translate.instant('campaign_view_points_table_col_location'),
+        // },
       },
     },
     source: new LocalDataSource(),
@@ -83,6 +86,7 @@ export class CreateComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -104,6 +108,7 @@ export class CreateComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -173,6 +178,7 @@ export class CreateComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -200,6 +206,7 @@ export class CreateComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -222,6 +229,10 @@ export class CreateComponent implements OnInit {
     },
     source: new LocalDataSource(),
   };
+  countries: Country[];
+  filteredCountries$: Observable<Country[]>;
+
+  @ViewChild('country') country;
   constructor(
     public campaignService: CampaignService,
     public satelliteService: SatelliteService,
@@ -235,6 +246,11 @@ export class CreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.campaignService.getCampaignCountries().subscribe((data: Country[]) => {
+      this.countries = data;
+      this.filteredCountries$ = of(this.countries);
+    });
+
     this.organizationService.getAll().subscribe((data: Organization[]) => {
       this.organizations = data;
     });
@@ -256,6 +272,7 @@ export class CreateComponent implements OnInit {
       description: ['', Validators.required],
       organization: ['', Validators.required],
       numInspectors: ['', Validators.required],
+      country: ['', Validators.required],
     });
 
     this.configForm = this.fb.group({
@@ -450,10 +467,18 @@ export class CreateComponent implements OnInit {
     this.infoForm.markAsDirty();
     const data: any = this.infoForm.value;
     const currentUser = JSON.parse(localStorage.getItem('user'));
-    data.permisson = { userId: currentUser.id, typeUserInCampaign: 'ADMIN'};
+    data.permission = { userId: currentUser.id, typeUserInCampaign: 'ADMIN'};
+
+    if(this.campaign){
+      if(this.campaign.id != null){
+        data.id = this.campaign.id;
+      }
+    }
+
     this.campaignService.create(data).subscribe(res => {
       this.campaign = res;
     });
+
   }
 
   onConfigFormSubmit() {
@@ -524,6 +549,7 @@ export class CreateComponent implements OnInit {
     this.reviewCampaign.description    = this.infoForm.get('description').value;
     this.reviewCampaign.organizationId = this.infoForm.get('organizationId').value;
     this.reviewCampaign.numInspectors  = this.infoForm.get('numInspectors').value;
+    this.reviewCampaign.country        = this.infoForm.get('country').value;
     this.reviewCampaign.initialDate    = this.configForm.get('initialDate').value;
     this.reviewCampaign.finalDate      = this.configForm.get('finalDate').value;
     this.tableUseClassReview.source.reset();
@@ -532,19 +558,6 @@ export class CreateComponent implements OnInit {
     await this.tableCompositionsReview.source.load(this.compositions);
   }
   shufflePoints() {
-    // let ctr = this.points.length, temp, index;
-    // // While there are elements in the array
-    // while (ctr > 0) {
-    //   // Pick a random index
-    //   index = Math.floor(Math.random() * ctr);
-    //   // Decrease ctr by 1
-    //   ctr--;
-    //   // And swap the last element with it
-    //   temp = this.points[ctr];
-    //   this.points[ctr] = this.points[index];
-    //   this.points[index] = temp;
-    //
-    // }
     this.points = this.points.sort(() => Math.random() - 0.5);
     this.tablePoints.source.empty();
     this.tablePoints.source.load(this.points);
@@ -555,15 +568,18 @@ export class CreateComponent implements OnInit {
     const fileReader = new FileReader();
     fileReader.onload = async function (e) {
       self.points = self.csvToArray(fileReader.result);
+
       self.points = self.points.filter(function (item, i) {
         return (item.latitude !== null && item.longitude !== null);
       });
+
       for (const [index, point] of self.points.entries()) {
-        const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
-        const location = data.results[0].locations[0];
+        // const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
+        // const location = data.results[0].locations[0];
         self.mapPoints.push([parseFloat(point.longitude), parseFloat(point.latitude)]);
-        self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
+        // self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
       }
+
       await self.tablePoints.source.load(self.points);
       self.loadingPoints = false;
     };
@@ -582,5 +598,26 @@ export class CreateComponent implements OnInit {
       });
       return row as Point;
     });
+  }
+
+  private filterCountries(value: string): Country[] {
+    const filterValue = value.toLowerCase();
+    if(this.countries){
+      return this.countries.filter(county => county.COUNTRY.toLowerCase().includes(filterValue));
+    }
+  }
+
+  getFilteredCountries(value: string): Observable<Country[]> {
+    return of(value).pipe(
+      map(filterString => this.filterCountries(filterString)),
+    );
+  }
+
+  onCountryChange() {
+    this.filteredCountries$ = this.getFilteredCountries(this.country.nativeElement.value);
+  }
+
+  onSelectionCountryChange($event) {
+    this.filteredCountries$ = this.getFilteredCountries($event);
   }
 }

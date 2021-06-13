@@ -16,9 +16,9 @@ if (cluster.isMaster) {
   }
 
   cluster.on('exit', function(worker, code, signal) {
-    console.log('Worker ' + worker.process.pid + ' died');
+    console.log('Broker worker ' + worker.process.pid + ' died');
   });
 
 } else {
-  require('./app.js');
+  require('./broker.js');
 }

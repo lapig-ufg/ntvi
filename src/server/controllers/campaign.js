@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
+import Queue from '../lib/Queue';
 const rp = require("request-promise");
 
 module.exports = function (app) {
@@ -13,19 +14,58 @@ module.exports = function (app) {
         log: ['query'],
     })
 
+    const getCampaign = async function (id) {
+        return await prisma.campaign.findUnique({
+            where: {
+                id: parseInt(id),
+            },
+            include: {
+                points: true,
+                images: true,
+                UsersOnCampaigns: {
+                    include: {
+                        user: {
+                            select: {
+                                name: true,
+                            }
+                        }
+                    }
+                },
+                classes: true,
+                compositions: {
+                    include: {
+                        satellite: true,
+                    }
+                },
+                organization: true
+            }
+        })
+    }
 
     Controller.createCampaignInfoForm = async function (request, response) {
-        const { name, description, organization, numInspectors, permisson } = request.body
+        const { name, description, organization, numInspectors, country, permission } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
+        let id = request.body.hasOwnProperty('id') ? request.body.id : null;
+        let _campaign = null;
         try {
-            const _campaign = await prisma.campaign.create({
-                data: {
-                    name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors,
-                    UsersOnCampaigns: { create: { user: { connect: { id: parseInt(permisson.userId) } }, typeUserInCampaign: permisson.typeUserInCampaign } }
-                },
-            })
+            if(id){
+                _campaign = await prisma.campaign.update({
+                    where: { id: parseInt(id) },
+                    data: {
+                        name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors, country:country
+                    },
+                })
+            } else {
+                _campaign = await prisma.campaign.create({
+                    data: {
+                        name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors, country:country,
+                        UsersOnCampaigns: { create: { user: { connect: { id: parseInt(permission.userId) } }, typeUserInCampaign: permission.typeUserInCampaign } }
+                    },
+                })
+            }
+
             response.status(200).json(_campaign);
         } catch (e) {
             console.error(e)
@@ -35,7 +75,7 @@ module.exports = function (app) {
 
     Controller.updateCampaignInfoForm = async function (request, response) {
         const { id } = request.params
-        const { name, description, organization, numInspectors, permisson } = request.body
+        const { name, description, organization, numInspectors, country, permisson } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -43,7 +83,7 @@ module.exports = function (app) {
             const _campaign = await prisma.campaign.update({
                 where: { id: parseInt(id) },
                 data: {
-                    name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors,
+                    name: name, description: description, organization: { connect: { id: parseInt(organization) } }, numInspectors: numInspectors, country:country,
                 }
             })
             response.status(200).json(_campaign);
@@ -62,15 +102,25 @@ module.exports = function (app) {
         try {
             let arrayQueries = []
 
-            for (obj of compositions) {
+            arrayQueries.push(prisma.composition.deleteMany({
+                where: { campaign: { id: parseInt(id) }},
+            }))
+
+            arrayQueries.push(prisma.campaign.update({
+                where: { id: parseInt(id) },
+                data: {
+                    classes: { deleteMany: {}},
+                }
+            }))
+
+            for (let obj of compositions) {
                 arrayQueries.push(prisma.composition.create({
                     data: {
                         colors: obj.colors,
                         satellite: { connect: { id: obj.satellite } },
                         campaign: { connect: { id: parseInt(id) } }
                     }
-                })
-                )
+                }))
             }
 
             arrayQueries.push(prisma.campaign.update({
@@ -103,7 +153,7 @@ module.exports = function (app) {
                 where: { campaignId: parseInt(id) },
             }))
 
-            for (obj of compositions) {
+            for (let obj of compositions) {
                 arrayQueries.push(prisma.composition.create({
                     data: {
                         colors: obj.colors,
@@ -152,7 +202,7 @@ module.exports = function (app) {
             }))
 
             const resultQueries = await prisma.$transaction(arrayQueries)
-
+            console.log("resultQueriesPoints", resultQueries)
             response.status(200).json(resultQueries);
         } catch (e) {
             console.error(e)
@@ -373,6 +423,7 @@ module.exports = function (app) {
             response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
     }
+
     Controller.getPublicCampaigns = async function (request, response) {
         const { lang } = request.headers;
         const texts = language.getLang(lang);
@@ -492,6 +543,7 @@ module.exports = function (app) {
                 }
             });
 
+            await Queue.add('UserReport', { campaign });
             response.status(200).json(campaign);
         } catch (e) {
             console.error(e)

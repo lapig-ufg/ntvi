@@ -1,0 +1,2243 @@
+[
+  {
+    "FID": 1,
+    "COUNTRY": "American Samoa",
+    "ISO": "AS",
+    "COUNTRYAFF": "United States",
+    "AFF_ISO": "US",
+    "SHAPE_Length": 0.600124358526115,
+    "SHAPE_Area": 0.013719718651009
+  },
+  {
+    "FID": 2,
+    "COUNTRY": "United States Minor Outlying Islands",
+    "ISO": "UM",
+    "COUNTRYAFF": "United States",
+    "AFF_ISO": "US",
+    "SHAPE_Length": 0.480216329338853,
+    "SHAPE_Area": 0.00321601634671073
+  },
+  {
+    "FID": 3,
+    "COUNTRY": "Cook Islands",
+    "ISO": "CK",
+    "COUNTRYAFF": "New Zealand",
+    "AFF_ISO": "NZ",
+    "SHAPE_Length": 0.980664163809754,
+    "SHAPE_Area": 0.0130734579987315
+  },
+  {
+    "FID": 4,
+    "COUNTRY": "French Polynesia",
+    "ISO": "PF",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 3.93021062182843,
+    "SHAPE_Area": 0.175332140034676
+  },
+  {
+    "FID": 5,
+    "COUNTRY": "Niue",
+    "ISO": "NU",
+    "COUNTRYAFF": "New Zealand",
+    "AFF_ISO": "NZ",
+    "SHAPE_Length": 0.54141251184954,
+    "SHAPE_Area": 0.021413763180365
+  },
+  {
+    "FID": 6,
+    "COUNTRY": "Pitcairn",
+    "ISO": "PN",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.338167133312508,
+    "SHAPE_Area": 0.00428604298578375
+  },
+  {
+    "FID": 7,
+    "COUNTRY": "Samoa",
+    "ISO": "WS",
+    "COUNTRYAFF": "Samoa",
+    "AFF_ISO": "WS",
+    "SHAPE_Length": 3.01966189419364,
+    "SHAPE_Area": 0.245518905956019
+  },
+  {
+    "FID": 8,
+    "COUNTRY": "Tokelau",
+    "ISO": "TK",
+    "COUNTRYAFF": "New Zealand",
+    "AFF_ISO": "NZ",
+    "SHAPE_Length": 0.108696103738711,
+    "SHAPE_Area": 0.000606214247967192
+  },
+  {
+    "FID": 9,
+    "COUNTRY": "Tonga",
+    "ISO": "TO",
+    "COUNTRYAFF": "Tonga",
+    "AFF_ISO": "TO",
+    "SHAPE_Length": 1.30912378788392,
+    "SHAPE_Area": 0.0400182036535035
+  },
+  {
+    "FID": 10,
+    "COUNTRY": "Wallis and Futuna",
+    "ISO": "WF",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 0.700607552306367,
+    "SHAPE_Area": 0.0134143716099502
+  },
+  {
+    "FID": 11,
+    "COUNTRY": "El Salvador",
+    "ISO": "SV",
+    "COUNTRYAFF": "El Salvador",
+    "AFF_ISO": "SV",
+    "SHAPE_Length": 7.25357159110471,
+    "SHAPE_Area": 1.71903503019085
+  },
+  {
+    "FID": 12,
+    "COUNTRY": "Guatemala",
+    "ISO": "GT",
+    "COUNTRYAFF": "Guatemala",
+    "AFF_ISO": "GT",
+    "SHAPE_Length": 16.7601499507442,
+    "SHAPE_Area": 9.19301468752439
+  },
+  {
+    "FID": 13,
+    "COUNTRY": "Mexico",
+    "ISO": "MX",
+    "COUNTRYAFF": "Mexico",
+    "AFF_ISO": "MX",
+    "SHAPE_Length": 149.331092835386,
+    "SHAPE_Area": 174.117659584853
+  },
+  {
+    "FID": 14,
+    "COUNTRY": "Canada",
+    "ISO": "CA",
+    "COUNTRYAFF": "Canada",
+    "AFF_ISO": "CA",
+    "SHAPE_Length": 2210.68482601386,
+    "SHAPE_Area": 1694.02523974528
+  },
+  {
+    "FID": 15,
+    "COUNTRY": "Argentina",
+    "ISO": "AR",
+    "COUNTRYAFF": "Argentina",
+    "AFF_ISO": "AR",
+    "SHAPE_Length": 138.751348348611,
+    "SHAPE_Area": 278.308964660638
+  },
+  {
+    "FID": 16,
+    "COUNTRY": "Falkland Islands",
+    "ISO": "FK",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 19.0825636567771,
+    "SHAPE_Area": 1.49538331733511
+  },
+  {
+    "FID": 17,
+    "COUNTRY": "Chile",
+    "ISO": "CL",
+    "COUNTRYAFF": "Chile",
+    "AFF_ISO": "CL",
+    "SHAPE_Length": 331.249881201706,
+    "SHAPE_Area": 77.6929921382435
+  },
+  {
+    "FID": 18,
+    "COUNTRY": "Ecuador",
+    "ISO": "EC",
+    "COUNTRYAFF": "Ecuador",
+    "AFF_ISO": "EC",
+    "SHAPE_Length": 35.2205367281208,
+    "SHAPE_Area": 20.7536150718443
+  },
+  {
+    "FID": 19,
+    "COUNTRY": "Peru",
+    "ISO": "PE",
+    "COUNTRYAFF": "Peru",
+    "AFF_ISO": "PE",
+    "SHAPE_Length": 68.2853844078671,
+    "SHAPE_Area": 106.500857766754
+  },
+  {
+    "FID": 20,
+    "COUNTRY": "Bolivia",
+    "ISO": "BO",
+    "COUNTRYAFF": "Bolivia",
+    "AFF_ISO": "BO",
+    "SHAPE_Length": 52.4836872393602,
+    "SHAPE_Area": 92.1901045943966
+  },
+  {
+    "FID": 21,
+    "COUNTRY": "Brazil",
+    "ISO": "BR",
+    "COUNTRYAFF": "Brazil",
+    "AFF_ISO": "BR",
+    "SHAPE_Length": 248.756714930855,
+    "SHAPE_Area": 707.050676126602
+  },
+  {
+    "FID": 22,
+    "COUNTRY": "Paraguay",
+    "ISO": "PY",
+    "COUNTRYAFF": "Paraguay",
+    "AFF_ISO": "PY",
+    "SHAPE_Length": 30.8918839077742,
+    "SHAPE_Area": 35.2087385142825
+  },
+  {
+    "FID": 23,
+    "COUNTRY": "Uruguay",
+    "ISO": "UY",
+    "COUNTRYAFF": "Uruguay",
+    "AFF_ISO": "UY",
+    "SHAPE_Length": 18.4869710799808,
+    "SHAPE_Area": 17.126244682665
+  },
+  {
+    "FID": 24,
+    "COUNTRY": "South Georgia and South Sandwich Islands",
+    "ISO": "GS",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 7.3379121224105,
+    "SHAPE_Area": 0.515458041189019
+  },
+  {
+    "FID": 25,
+    "COUNTRY": "Antarctica",
+    "ISO": "AQ",
+    "COUNTRYAFF": "Antarctica",
+    "AFF_ISO": "AQ",
+    "SHAPE_Length": 1564.14414258023,
+    "SHAPE_Area": 5672.92828629031
+  },
+  {
+    "FID": 26,
+    "COUNTRY": "Fiji",
+    "ISO": "FJ",
+    "COUNTRYAFF": "Fiji",
+    "AFF_ISO": "FJ",
+    "SHAPE_Length": 13.1052700020182,
+    "SHAPE_Area": 1.53744376519839
+  },
+  {
+    "FID": 27,
+    "COUNTRY": "Saint Helena",
+    "ISO": "SH",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.417576735252988,
+    "SHAPE_Area": 0.0110141092698561
+  },
+  {
+    "FID": 28,
+    "COUNTRY": "Anguilla",
+    "ISO": "AI",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.468388676111837,
+    "SHAPE_Area": 0.00779791134544742
+  },
+  {
+    "FID": 29,
+    "COUNTRY": "Antigua and Barbuda",
+    "ISO": "AG",
+    "COUNTRYAFF": "Antigua and Barbuda",
+    "AFF_ISO": "AG",
+    "SHAPE_Length": 1.16290139039629,
+    "SHAPE_Area": 0.0456259505460689
+  },
+  {
+    "FID": 30,
+    "COUNTRY": "Aruba",
+    "ISO": "AW",
+    "COUNTRYAFF": "Aruba",
+    "AFF_ISO": "AW",
+    "SHAPE_Length": 0.610340431042455,
+    "SHAPE_Area": 0.0165976193692821
+  },
+  {
+    "FID": 31,
+    "COUNTRY": "Bahamas",
+    "ISO": "BS",
+    "COUNTRYAFF": "Bahamas",
+    "AFF_ISO": "BS",
+    "SHAPE_Length": 25.4877587261733,
+    "SHAPE_Area": 1.07904998772818
+  },
+  {
+    "FID": 32,
+    "COUNTRY": "Barbados",
+    "ISO": "BB",
+    "COUNTRYAFF": "Barbados",
+    "AFF_ISO": "BB",
+    "SHAPE_Length": 0.813985327257854,
+    "SHAPE_Area": 0.0372121084757107
+  },
+  {
+    "FID": 33,
+    "COUNTRY": "Belize",
+    "ISO": "BZ",
+    "COUNTRYAFF": "Belize",
+    "AFF_ISO": "BZ",
+    "SHAPE_Length": 8.55163436704318,
+    "SHAPE_Area": 1.87698244070627
+  },
+  {
+    "FID": 34,
+    "COUNTRY": "Bermuda",
+    "ISO": "BM",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.391094785607947,
+    "SHAPE_Area": 0.00205522584585373
+  },
+  {
+    "FID": 35,
+    "COUNTRY": "Bonaire",
+    "ISO": "BQ",
+    "COUNTRYAFF": "Netherlands",
+    "AFF_ISO": "NL",
+    "SHAPE_Length": 0.828287379320699,
+    "SHAPE_Area": 0.0262603279874333
+  },
+  {
+    "FID": 36,
+    "COUNTRY": "British Virgin Islands",
+    "ISO": "VG",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.63936764687541,
+    "SHAPE_Area": 0.00986714122450802
+  },
+  {
+    "FID": 37,
+    "COUNTRY": "Cayman Islands",
+    "ISO": "KY",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.733613265174901,
+    "SHAPE_Area": 0.0179315100000329
+  },
+  {
+    "FID": 38,
+    "COUNTRY": "Colombia",
+    "ISO": "CO",
+    "COUNTRYAFF": "Colombia",
+    "AFF_ISO": "CO",
+    "SHAPE_Length": 70.687532245425,
+    "SHAPE_Area": 92.5804896157541
+  },
+  {
+    "FID": 39,
+    "COUNTRY": "Costa Rica",
+    "ISO": "CR",
+    "COUNTRYAFF": "Costa Rica",
+    "AFF_ISO": "CR",
+    "SHAPE_Length": 14.7173254995146,
+    "SHAPE_Area": 4.2118629670589
+  },
+  {
+    "FID": 40,
+    "COUNTRY": "Cuba",
+    "ISO": "CU",
+    "COUNTRYAFF": "Cuba",
+    "AFF_ISO": "CU",
+    "SHAPE_Length": 38.152466675584,
+    "SHAPE_Area": 9.52728467286708
+  },
+  {
+    "FID": 41,
+    "COUNTRY": "Curacao",
+    "ISO": "CW",
+    "COUNTRYAFF": "Netherlands",
+    "AFF_ISO": "NL",
+    "SHAPE_Length": 1.16039256703671,
+    "SHAPE_Area": 0.0392487290053696
+  },
+  {
+    "FID": 42,
+    "COUNTRY": "Dominica",
+    "ISO": "DM",
+    "COUNTRYAFF": "Dominica",
+    "AFF_ISO": "DM",
+    "SHAPE_Length": 1.09711764262335,
+    "SHAPE_Area": 0.064835109820552
+  },
+  {
+    "FID": 43,
+    "COUNTRY": "Dominican Republic",
+    "ISO": "DO",
+    "COUNTRYAFF": "Dominican Republic",
+    "AFF_ISO": "DO",
+    "SHAPE_Length": 13.2538162556306,
+    "SHAPE_Area": 4.14756946935121
+  },
+  {
+    "FID": 44,
+    "COUNTRY": "French Guiana",
+    "ISO": "GF",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 12.2530849719096,
+    "SHAPE_Area": 6.80757696041049
+  },
+  {
+    "FID": 45,
+    "COUNTRY": "Grenada",
+    "ISO": "GD",
+    "COUNTRYAFF": "Grenada",
+    "AFF_ISO": "GD",
+    "SHAPE_Length": 0.681409314668556,
+    "SHAPE_Area": 0.0287531176187032
+  },
+  {
+    "FID": 46,
+    "COUNTRY": "Guadeloupe",
+    "ISO": "GP",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 2.53438848794468,
+    "SHAPE_Area": 0.139606337989792
+  },
+  {
+    "FID": 47,
+    "COUNTRY": "Guyana",
+    "ISO": "GY",
+    "COUNTRYAFF": "Guyana",
+    "AFF_ISO": "GY",
+    "SHAPE_Length": 25.7075985295842,
+    "SHAPE_Area": 17.1752147558439
+  },
+  {
+    "FID": 48,
+    "COUNTRY": "Haiti",
+    "ISO": "HT",
+    "COUNTRYAFF": "Haiti",
+    "AFF_ISO": "HT",
+    "SHAPE_Length": 14.0310494055482,
+    "SHAPE_Area": 2.33059545451024
+  },
+  {
+    "FID": 49,
+    "COUNTRY": "Honduras",
+    "ISO": "HN",
+    "COUNTRYAFF": "Honduras",
+    "AFF_ISO": "HN",
+    "SHAPE_Length": 20.9717469218778,
+    "SHAPE_Area": 9.42232399634751
+  },
+  {
+    "FID": 50,
+    "COUNTRY": "Jamaica",
+    "ISO": "JM",
+    "COUNTRYAFF": "Jamaica",
+    "AFF_ISO": "JM",
+    "SHAPE_Length": 5.38581954305399,
+    "SHAPE_Area": 0.942433833953154
+  },
+  {
+    "FID": 51,
+    "COUNTRY": "Martinique",
+    "ISO": "MQ",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 1.37903811752818,
+    "SHAPE_Area": 0.0963141461665117
+  },
+  {
+    "FID": 52,
+    "COUNTRY": "Montserrat",
+    "ISO": "MS",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.378841026917159,
+    "SHAPE_Area": 0.00953878928291203
+  },
+  {
+    "FID": 53,
+    "COUNTRY": "Nicaragua",
+    "ISO": "NI",
+    "COUNTRYAFF": "Nicaragua",
+    "AFF_ISO": "NI",
+    "SHAPE_Length": 18.0306744404883,
+    "SHAPE_Area": 10.6687971007593
+  },
+  {
+    "FID": 54,
+    "COUNTRY": "Panama",
+    "ISO": "PA",
+    "COUNTRYAFF": "Panama",
+    "AFF_ISO": "PA",
+    "SHAPE_Length": 25.300754981141,
+    "SHAPE_Area": 6.08830115140896
+  },
+  {
+    "FID": 55,
+    "COUNTRY": "Puerto Rico",
+    "ISO": "PR",
+    "COUNTRYAFF": "United States",
+    "AFF_ISO": "US",
+    "SHAPE_Length": 4.78861765898392,
+    "SHAPE_Area": 0.7813508145237
+  },
+  {
+    "FID": 56,
+    "COUNTRY": "Saba",
+    "ISO": "BQ",
+    "COUNTRYAFF": "Netherlands",
+    "AFF_ISO": "NL",
+    "SHAPE_Length": 0.131117772332772,
+    "SHAPE_Area": 0.00120397214667742
+  },
+  {
+    "FID": 57,
+    "COUNTRY": "Saint Barthelemy",
+    "ISO": "BL",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 0.23181356608819,
+    "SHAPE_Area": 0.00197754914118262
+  },
+  {
+    "FID": 58,
+    "COUNTRY": "Saint Eustatius",
+    "ISO": "BQ",
+    "COUNTRYAFF": "Netherlands",
+    "AFF_ISO": "NL",
+    "SHAPE_Length": 0.195131826153914,
+    "SHAPE_Area": 0.00203748937640413
+  },
+  {
+    "FID": 59,
+    "COUNTRY": "Saint Kitts and Nevis",
+    "ISO": "KN",
+    "COUNTRYAFF": "Saint Kitts and Nevis",
+    "AFF_ISO": "KN",
+    "SHAPE_Length": 0.666472582996356,
+    "SHAPE_Area": 0.0166259773469616
+  },
+  {
+    "FID": 60,
+    "COUNTRY": "Saint Lucia",
+    "ISO": "LC",
+    "COUNTRYAFF": "Saint Lucia",
+    "AFF_ISO": "LC",
+    "SHAPE_Length": 0.95298765424427,
+    "SHAPE_Area": 0.0531243979913017
+  },
+  {
+    "FID": 61,
+    "COUNTRY": "Saint Martin",
+    "ISO": "MF",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 0.408210817642094,
+    "SHAPE_Area": 0.0046221186011324
+  },
+  {
+    "FID": 62,
+    "COUNTRY": "Saint Pierre and Miquelon",
+    "ISO": "PM",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 1.35324959893252,
+    "SHAPE_Area": 0.0301584116936694
+  },
+  {
+    "FID": 63,
+    "COUNTRY": "Saint Vincent and the Grenadines",
+    "ISO": "VC",
+    "COUNTRYAFF": "Saint Vincent and the Grenadines",
+    "AFF_ISO": "VC",
+    "SHAPE_Length": 0.649527005754028,
+    "SHAPE_Area": 0.0285448188512501
+  },
+  {
+    "FID": 64,
+    "COUNTRY": "Sint Maarten",
+    "ISO": "SX",
+    "COUNTRYAFF": "Netherlands",
+    "AFF_ISO": "NL",
+    "SHAPE_Length": 0.316927131331061,
+    "SHAPE_Area": 0.00364581577465726
+  },
+  {
+    "FID": 65,
+    "COUNTRY": "Suriname",
+    "ISO": "SR",
+    "COUNTRYAFF": "Suriname",
+    "AFF_ISO": "SR",
+    "SHAPE_Length": 17.1266128630751,
+    "SHAPE_Area": 11.810420806727
+  },
+  {
+    "FID": 66,
+    "COUNTRY": "Trinidad and Tobago",
+    "ISO": "TT",
+    "COUNTRYAFF": "Trinidad and Tobago",
+    "AFF_ISO": "TT",
+    "SHAPE_Length": 4.38497237397237,
+    "SHAPE_Area": 0.413752703092474
+  },
+  {
+    "FID": 67,
+    "COUNTRY": "Turks and Caicos Islands",
+    "ISO": "TC",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 1.2019739168969,
+    "SHAPE_Area": 0.02610506885777
+  },
+  {
+    "FID": 68,
+    "COUNTRY": "US Virgin Islands",
+    "ISO": "VI",
+    "COUNTRYAFF": "United States",
+    "AFF_ISO": "US",
+    "SHAPE_Length": 1.23662789517204,
+    "SHAPE_Area": 0.0256854986873992
+  },
+  {
+    "FID": 69,
+    "COUNTRY": "Venezuela",
+    "ISO": "VE",
+    "COUNTRYAFF": "Venezuela",
+    "AFF_ISO": "VE",
+    "SHAPE_Length": 76.9474475013067,
+    "SHAPE_Area": 74.6283769584296
+  },
+  {
+    "FID": 70,
+    "COUNTRY": "Burkina Faso",
+    "ISO": "BF",
+    "COUNTRYAFF": "Burkina Faso",
+    "AFF_ISO": "BF",
+    "SHAPE_Length": 27.0074227278534,
+    "SHAPE_Area": 22.6341542039024
+  },
+  {
+    "FID": 71,
+    "COUNTRY": "Cabo Verde",
+    "ISO": "CV",
+    "COUNTRYAFF": "Cabo Verde",
+    "AFF_ISO": "CV",
+    "SHAPE_Length": 6.51261964208446,
+    "SHAPE_Area": 0.340358451744079
+  },
+  {
+    "FID": 72,
+    "COUNTRY": "Côte d'Ivoire",
+    "ISO": "CI",
+    "COUNTRYAFF": "Côte d'Ivoire",
+    "AFF_ISO": "CI",
+    "SHAPE_Length": 31.576751561663,
+    "SHAPE_Area": 26.3404966744319
+  },
+  {
+    "FID": 73,
+    "COUNTRY": "Gambia",
+    "ISO": "GM",
+    "COUNTRYAFF": "Gambia",
+    "AFF_ISO": "GM",
+    "SHAPE_Length": 10.7761057490762,
+    "SHAPE_Area": 0.895054173186356
+  },
+  {
+    "FID": 74,
+    "COUNTRY": "Ghana",
+    "ISO": "GH",
+    "COUNTRYAFF": "Ghana",
+    "AFF_ISO": "GH",
+    "SHAPE_Length": 23.0136635478555,
+    "SHAPE_Area": 19.6118156840552
+  },
+  {
+    "FID": 75,
+    "COUNTRY": "Gibraltar",
+    "ISO": "GI",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.144832568609372,
+    "SHAPE_Area": 0.000785835004685167
+  },
+  {
+    "FID": 76,
+    "COUNTRY": "Guinea",
+    "ISO": "GN",
+    "COUNTRYAFF": "Guinea",
+    "AFF_ISO": "GN",
+    "SHAPE_Length": 31.7201924739149,
+    "SHAPE_Area": 20.2386183194907
+  },
+  {
+    "FID": 77,
+    "COUNTRY": "Guinea-Bissau",
+    "ISO": "GW",
+    "COUNTRYAFF": "Guinea-Bissau",
+    "AFF_ISO": "GW",
+    "SHAPE_Length": 17.26042443685,
+    "SHAPE_Area": 2.76099239830611
+  },
+  {
+    "FID": 78,
+    "COUNTRY": "Liberia",
+    "ISO": "LR",
+    "COUNTRYAFF": "Liberia",
+    "AFF_ISO": "LR",
+    "SHAPE_Length": 15.1712487451721,
+    "SHAPE_Area": 7.84884686186375
+  },
+  {
+    "FID": 79,
+    "COUNTRY": "Mali",
+    "ISO": "ML",
+    "COUNTRYAFF": "Mali",
+    "AFF_ISO": "ML",
+    "SHAPE_Length": 64.2045167752772,
+    "SHAPE_Area": 106.64958092695
+  },
+  {
+    "FID": 80,
+    "COUNTRY": "Mauritania",
+    "ISO": "MR",
+    "COUNTRYAFF": "Mauritania",
+    "AFF_ISO": "MR",
+    "SHAPE_Length": 52.308388955561,
+    "SHAPE_Area": 89.9050768783683
+  },
+  {
+    "FID": 81,
+    "COUNTRY": "Morocco",
+    "ISO": "MA",
+    "COUNTRYAFF": "Morocco",
+    "AFF_ISO": "MA",
+    "SHAPE_Length": 56.1032566069788,
+    "SHAPE_Area": 62.4631664502859
+  },
+  {
+    "FID": 82,
+    "COUNTRY": "Portugal",
+    "ISO": "PT",
+    "COUNTRYAFF": "Portugal",
+    "AFF_ISO": "PT",
+    "SHAPE_Length": 27.2280277800805,
+    "SHAPE_Area": 9.64156669340055
+  },
+  {
+    "FID": 83,
+    "COUNTRY": "Senegal",
+    "ISO": "SN",
+    "COUNTRYAFF": "Senegal",
+    "AFF_ISO": "SN",
+    "SHAPE_Length": 31.010946782367,
+    "SHAPE_Area": 16.4280056040654
+  },
+  {
+    "FID": 84,
+    "COUNTRY": "Sierra Leone",
+    "ISO": "SL",
+    "COUNTRYAFF": "Sierra Leone",
+    "AFF_ISO": "SL",
+    "SHAPE_Length": 13.8097170002216,
+    "SHAPE_Area": 5.95383635515294
+  },
+  {
+    "FID": 85,
+    "COUNTRY": "Greenland",
+    "ISO": "GL",
+    "COUNTRYAFF": "Denmark",
+    "AFF_ISO": "DK",
+    "SHAPE_Length": 942.221329105521,
+    "SHAPE_Area": 660.92716523586
+  },
+  {
+    "FID": 86,
+    "COUNTRY": "Guernsey",
+    "ISO": "GG",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.416945004230022,
+    "SHAPE_Area": 0.00902517740806829
+  },
+  {
+    "FID": 87,
+    "COUNTRY": "Ireland",
+    "ISO": "IE",
+    "COUNTRYAFF": "Ireland",
+    "AFF_ISO": "IE",
+    "SHAPE_Length": 34.8280700400965,
+    "SHAPE_Area": 9.35949141623273
+  },
+  {
+    "FID": 88,
+    "COUNTRY": "Isle of Man",
+    "ISO": "IM",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 1.29516993957072,
+    "SHAPE_Area": 0.0851470422581947
+  },
+  {
+    "FID": 89,
+    "COUNTRY": "Jersey",
+    "ISO": "JE",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.576975589090226,
+    "SHAPE_Area": 0.0153948777768326
+  },
+  {
+    "FID": 90,
+    "COUNTRY": "United Kingdom",
+    "ISO": "GB",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 115.97423585184,
+    "SHAPE_Area": 33.6304585437135
+  },
+  {
+    "FID": 91,
+    "COUNTRY": "Iceland",
+    "ISO": "IS",
+    "COUNTRYAFF": "Iceland",
+    "AFF_ISO": "IS",
+    "SHAPE_Length": 58.7777198268356,
+    "SHAPE_Area": 19.5735710111445
+  },
+  {
+    "FID": 92,
+    "COUNTRY": "Faroe Islands",
+    "ISO": "FO",
+    "COUNTRYAFF": "Denmark",
+    "AFF_ISO": "DK",
+    "SHAPE_Length": 5.74374457914413,
+    "SHAPE_Area": 0.254309919253202
+  },
+  {
+    "FID": 93,
+    "COUNTRY": "Svalbard",
+    "ISO": "SJ",
+    "COUNTRYAFF": "Norway",
+    "AFF_ISO": "NO",
+    "SHAPE_Length": 148.065451605177,
+    "SHAPE_Area": 26.0438051222535
+  },
+  {
+    "FID": 94,
+    "COUNTRY": "Bouvet Island",
+    "ISO": "BV",
+    "COUNTRYAFF": "Norway",
+    "AFF_ISO": "NO",
+    "SHAPE_Length": 0.358486719588918,
+    "SHAPE_Area": 0.00795388056249529
+  },
+  {
+    "FID": 95,
+    "COUNTRY": "New Zealand",
+    "ISO": "NZ",
+    "COUNTRYAFF": "New Zealand",
+    "AFF_ISO": "NZ",
+    "SHAPE_Length": 80.3321209534038,
+    "SHAPE_Area": 29.1742387080513
+  },
+  {
+    "FID": 96,
+    "COUNTRY": "Angola",
+    "ISO": "AO",
+    "COUNTRYAFF": "Angola",
+    "AFF_ISO": "AO",
+    "SHAPE_Length": 58.8734697951819,
+    "SHAPE_Area": 103.813059074342
+  },
+  {
+    "FID": 97,
+    "COUNTRY": "Botswana",
+    "ISO": "BW",
+    "COUNTRYAFF": "Botswana",
+    "AFF_ISO": "BW",
+    "SHAPE_Length": 33.9299440690701,
+    "SHAPE_Area": 50.677520686807
+  },
+  {
+    "FID": 98,
+    "COUNTRY": "Burundi",
+    "ISO": "BI",
+    "COUNTRYAFF": "Burundi",
+    "AFF_ISO": "BI",
+    "SHAPE_Length": 7.71475020148953,
+    "SHAPE_Area": 2.21238705008329
+  },
+  {
+    "FID": 99,
+    "COUNTRY": "Comoros",
+    "ISO": "KM",
+    "COUNTRYAFF": "Comoros",
+    "AFF_ISO": "KM",
+    "SHAPE_Length": 3.06076989413696,
+    "SHAPE_Area": 0.142408871580779
+  },
+  {
+    "FID": 100,
+    "COUNTRY": "Congo",
+    "ISO": "CG",
+    "COUNTRYAFF": "Congo",
+    "AFF_ISO": "CG",
+    "SHAPE_Length": 37.8604825985046,
+    "SHAPE_Area": 27.9742901116424
+  },
+  {
+    "FID": 101,
+    "COUNTRY": "Congo DRC",
+    "ISO": "CD",
+    "COUNTRYAFF": "Congo DRC",
+    "AFF_ISO": "CD",
+    "SHAPE_Length": 83.4316450942307,
+    "SHAPE_Area": 189.790904765766
+  },
+  {
+    "FID": 102,
+    "COUNTRY": "Gabon",
+    "ISO": "GA",
+    "COUNTRYAFF": "Gabon",
+    "AFF_ISO": "GA",
+    "SHAPE_Length": 32.2705626089087,
+    "SHAPE_Area": 21.1858020838921
+  },
+  {
+    "FID": 103,
+    "COUNTRY": "Kenya",
+    "ISO": "KE",
+    "COUNTRYAFF": "Kenya",
+    "AFF_ISO": "KE",
+    "SHAPE_Length": 33.6126787257929,
+    "SHAPE_Area": 47.306852130487
+  },
+  {
+    "FID": 104,
+    "COUNTRY": "Lesotho",
+    "ISO": "LS",
+    "COUNTRYAFF": "Lesotho",
+    "AFF_ISO": "LS",
+    "SHAPE_Length": 7.09803181436881,
+    "SHAPE_Area": 2.84150813790083
+  },
+  {
+    "FID": 105,
+    "COUNTRY": "Malawi",
+    "ISO": "MW",
+    "COUNTRYAFF": "Malawi",
+    "AFF_ISO": "MW",
+    "SHAPE_Length": 23.1402375607893,
+    "SHAPE_Area": 9.88624877300594
+  },
+  {
+    "FID": 106,
+    "COUNTRY": "Juan De Nova Island",
+    "ISO": "TF",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 0.0925034098329951,
+    "SHAPE_Area": 0.000487027854418301
+  },
+  {
+    "FID": 107,
+    "COUNTRY": "Mozambique",
+    "ISO": "MZ",
+    "COUNTRYAFF": "Mozambique",
+    "AFF_ISO": "MZ",
+    "SHAPE_Length": 66.988924479769,
+    "SHAPE_Area": 66.9765242193152
+  },
+  {
+    "FID": 108,
+    "COUNTRY": "Namibia",
+    "ISO": "NA",
+    "COUNTRYAFF": "Namibia",
+    "AFF_ISO": "NA",
+    "SHAPE_Length": 48.9028241392298,
+    "SHAPE_Area": 72.3101390457149
+  },
+  {
+    "FID": 109,
+    "COUNTRY": "Rwanda",
+    "ISO": "RW",
+    "COUNTRYAFF": "Rwanda",
+    "AFF_ISO": "RW",
+    "SHAPE_Length": 7.15985445295317,
+    "SHAPE_Area": 2.04338240125447
+  },
+  {
+    "FID": 110,
+    "COUNTRY": "Sao Tome and Principe",
+    "ISO": "ST",
+    "COUNTRYAFF": "Sao Tome and Principe",
+    "AFF_ISO": "ST",
+    "SHAPE_Length": 1.52828430331244,
+    "SHAPE_Area": 0.0927900315166639
+  },
+  {
+    "FID": 111,
+    "COUNTRY": "South Africa",
+    "ISO": "ZA",
+    "COUNTRYAFF": "South Africa",
+    "AFF_ISO": "ZA",
+    "SHAPE_Length": 68.4548253215778,
+    "SHAPE_Area": 113.136016685585
+  },
+  {
+    "FID": 112,
+    "COUNTRY": "Eswatini",
+    "ISO": "SZ",
+    "COUNTRYAFF": "Eswatini",
+    "AFF_ISO": "SZ",
+    "SHAPE_Length": 5.02490308743243,
+    "SHAPE_Area": 1.54998763800145
+  },
+  {
+    "FID": 113,
+    "COUNTRY": "Tanzania",
+    "ISO": "TZ",
+    "COUNTRYAFF": "Tanzania",
+    "AFF_ISO": "TZ",
+    "SHAPE_Length": 45.4054960712079,
+    "SHAPE_Area": 77.0087782001914
+  },
+  {
+    "FID": 114,
+    "COUNTRY": "Zambia",
+    "ISO": "ZM",
+    "COUNTRYAFF": "Zambia",
+    "AFF_ISO": "ZM",
+    "SHAPE_Length": 49.1414390830584,
+    "SHAPE_Area": 62.8140219586137
+  },
+  {
+    "FID": 115,
+    "COUNTRY": "Zimbabwe",
+    "ISO": "ZW",
+    "COUNTRYAFF": "Zimbabwe",
+    "AFF_ISO": "ZW",
+    "SHAPE_Length": 26.2984262431928,
+    "SHAPE_Area": 33.4631297090828
+  },
+  {
+    "FID": 116,
+    "COUNTRY": "British Indian Ocean Territory",
+    "ISO": "IO",
+    "COUNTRYAFF": "United Kingdom",
+    "AFF_ISO": "GB",
+    "SHAPE_Length": 0.849597175115602,
+    "SHAPE_Area": 0.00740530646928914
+  },
+  {
+    "FID": 117,
+    "COUNTRY": "French Southern Territories",
+    "ISO": "TF",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 11.404235408628,
+    "SHAPE_Area": 0.922681926915143
+  },
+  {
+    "FID": 118,
+    "COUNTRY": "Heard Island and McDonald Islands",
+    "ISO": "HM",
+    "COUNTRYAFF": "Australia",
+    "AFF_ISO": "AU",
+    "SHAPE_Length": 1.2327439793941,
+    "SHAPE_Area": 0.0536814839353043
+  },
+  {
+    "FID": 119,
+    "COUNTRY": "Madagascar",
+    "ISO": "MG",
+    "COUNTRYAFF": "Madagascar",
+    "AFF_ISO": "MG",
+    "SHAPE_Length": 45.4565514386904,
+    "SHAPE_Area": 51.0710246178608
+  },
+  {
+    "FID": 120,
+    "COUNTRY": "Mauritius",
+    "ISO": "MU",
+    "COUNTRYAFF": "Mauritius",
+    "AFF_ISO": "MU",
+    "SHAPE_Length": 1.99526777816821,
+    "SHAPE_Area": 0.185448296191563
+  },
+  {
+    "FID": 121,
+    "COUNTRY": "Mayotte",
+    "ISO": "YT",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 1.07447187055378,
+    "SHAPE_Area": 0.0371547996459871
+  },
+  {
+    "FID": 122,
+    "COUNTRY": "Glorioso Islands",
+    "ISO": "TF",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 0.0792308112262746,
+    "SHAPE_Area": 0.000407338812381131
+  },
+  {
+    "FID": 123,
+    "COUNTRY": "Réunion",
+    "ISO": "RE",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 1.80950118682589,
+    "SHAPE_Area": 0.229703195980864
+  },
+  {
+    "FID": 124,
+    "COUNTRY": "Seychelles",
+    "ISO": "SC",
+    "COUNTRYAFF": "Seychelles",
+    "AFF_ISO": "SC",
+    "SHAPE_Length": 1.35672674599816,
+    "SHAPE_Area": 0.0308924056411493
+  },
+  {
+    "FID": 125,
+    "COUNTRY": "Algeria",
+    "ISO": "DZ",
+    "COUNTRYAFF": "Algeria",
+    "AFF_ISO": "DZ",
+    "SHAPE_Length": 70.5400821564478,
+    "SHAPE_Area": 213.513461475095
+  },
+  {
+    "FID": 126,
+    "COUNTRY": "Benin",
+    "ISO": "BJ",
+    "COUNTRYAFF": "Benin",
+    "AFF_ISO": "BJ",
+    "SHAPE_Length": 17.063617333093,
+    "SHAPE_Area": 9.57410443569302
+  },
+  {
+    "FID": 127,
+    "COUNTRY": "Cameroon",
+    "ISO": "CM",
+    "COUNTRYAFF": "Cameroon",
+    "AFF_ISO": "CM",
+    "SHAPE_Length": 41.9605955652992,
+    "SHAPE_Area": 37.9727127149484
+  },
+  {
+    "FID": 128,
+    "COUNTRY": "Central African Republic",
+    "ISO": "CF",
+    "COUNTRYAFF": "Central African Republic",
+    "AFF_ISO": "CF",
+    "SHAPE_Length": 42.2080814775731,
+    "SHAPE_Area": 50.6021421791483
+  },
+  {
+    "FID": 129,
+    "COUNTRY": "Chad",
+    "ISO": "TD",
+    "COUNTRYAFF": "Chad",
+    "AFF_ISO": "TD",
+    "SHAPE_Length": 51.6719899775874,
+    "SHAPE_Area": 107.292325251947
+  },
+  {
+    "FID": 130,
+    "COUNTRY": "Equatorial Guinea",
+    "ISO": "GQ",
+    "COUNTRYAFF": "Equatorial Guinea",
+    "AFF_ISO": "GQ",
+    "SHAPE_Length": 8.19100699811793,
+    "SHAPE_Area": 2.18820694571385
+  },
+  {
+    "FID": 131,
+    "COUNTRY": "Kiribati",
+    "ISO": "KI",
+    "COUNTRYAFF": "Kiribati",
+    "AFF_ISO": "KI",
+    "SHAPE_Length": 1.68179929477889,
+    "SHAPE_Area": 0.0343520562575963
+  },
+  {
+    "FID": 132,
+    "COUNTRY": "Libya",
+    "ISO": "LY",
+    "COUNTRYAFF": "Libya",
+    "AFF_ISO": "LY",
+    "SHAPE_Length": 57.444350932542,
+    "SHAPE_Area": 147.347375236215
+  },
+  {
+    "FID": 133,
+    "COUNTRY": "Malta",
+    "ISO": "MT",
+    "COUNTRYAFF": "Malta",
+    "AFF_ISO": "MT",
+    "SHAPE_Length": 0.680191749662977,
+    "SHAPE_Area": 0.0293864325541781
+  },
+  {
+    "FID": 134,
+    "COUNTRY": "Niger",
+    "ISO": "NE",
+    "COUNTRYAFF": "Niger",
+    "AFF_ISO": "NE",
+    "SHAPE_Length": 50.803637221269,
+    "SHAPE_Area": 100.637811381571
+  },
+  {
+    "FID": 135,
+    "COUNTRY": "Nigeria",
+    "ISO": "NG",
+    "COUNTRYAFF": "Nigeria",
+    "AFF_ISO": "NG",
+    "SHAPE_Length": 48.108082151029,
+    "SHAPE_Area": 74.8876415620891
+  },
+  {
+    "FID": 136,
+    "COUNTRY": "Togo",
+    "ISO": "TG",
+    "COUNTRYAFF": "Togo",
+    "AFF_ISO": "TG",
+    "SHAPE_Length": 14.0274073222111,
+    "SHAPE_Area": 4.6921400654
+  },
+  {
+    "FID": 137,
+    "COUNTRY": "Tunisia",
+    "ISO": "TN",
+    "COUNTRYAFF": "Tunisia",
+    "AFF_ISO": "TN",
+    "SHAPE_Length": 25.0143018445706,
+    "SHAPE_Area": 15.1889325716084
+  },
+  {
+    "FID": 138,
+    "COUNTRY": "Cyprus",
+    "ISO": "CY",
+    "COUNTRYAFF": "Cyprus",
+    "AFF_ISO": "CY",
+    "SHAPE_Length": 6.03730112641797,
+    "SHAPE_Area": 0.90266260021024
+  },
+  {
+    "FID": 139,
+    "COUNTRY": "Djibouti",
+    "ISO": "DJ",
+    "COUNTRYAFF": "Djibouti",
+    "AFF_ISO": "DJ",
+    "SHAPE_Length": 7.27760288910308,
+    "SHAPE_Area": 1.77776277701455
+  },
+  {
+    "FID": 140,
+    "COUNTRY": "Egypt",
+    "ISO": "EG",
+    "COUNTRYAFF": "Egypt",
+    "AFF_ISO": "EG",
+    "SHAPE_Length": 53.2304769311098,
+    "SHAPE_Area": 90.4911275517602
+  },
+  {
+    "FID": 141,
+    "COUNTRY": "Eritrea",
+    "ISO": "ER",
+    "COUNTRYAFF": "Eritrea",
+    "AFF_ISO": "ER",
+    "SHAPE_Length": 25.1650787323848,
+    "SHAPE_Area": 10.1786331276392
+  },
+  {
+    "FID": 142,
+    "COUNTRY": "Ethiopia",
+    "ISO": "ET",
+    "COUNTRYAFF": "Ethiopia",
+    "AFF_ISO": "ET",
+    "SHAPE_Length": 46.8103153863514,
+    "SHAPE_Area": 92.722760673375
+  },
+  {
+    "FID": 143,
+    "COUNTRY": "Greece",
+    "ISO": "GR",
+    "COUNTRYAFF": "Greece",
+    "AFF_ISO": "GR",
+    "SHAPE_Length": 80.3967368894562,
+    "SHAPE_Area": 13.5434265368375
+  },
+  {
+    "FID": 144,
+    "COUNTRY": "Iraq",
+    "ISO": "IQ",
+    "COUNTRYAFF": "Iraq",
+    "AFF_ISO": "IQ",
+    "SHAPE_Length": 33.6200149198639,
+    "SHAPE_Area": 42.142041700044
+  },
+  {
+    "FID": 145,
+    "COUNTRY": "Israel",
+    "ISO": "IL",
+    "COUNTRYAFF": "Israel",
+    "AFF_ISO": "IL",
+    "SHAPE_Length": 10.7808023393336,
+    "SHAPE_Area": 1.96436311583179
+  },
+  {
+    "FID": 146,
+    "COUNTRY": "Jordan",
+    "ISO": "JO",
+    "COUNTRYAFF": "Jordan",
+    "AFF_ISO": "JO",
+    "SHAPE_Length": 16.1779616152639,
+    "SHAPE_Area": 8.44911418757387
+  },
+  {
+    "FID": 147,
+    "COUNTRY": "Lebanon",
+    "ISO": "LB",
+    "COUNTRYAFF": "Lebanon",
+    "AFF_ISO": "LB",
+    "SHAPE_Length": 5.61156883768039,
+    "SHAPE_Area": 0.995855918761374
+  },
+  {
+    "FID": 148,
+    "COUNTRY": "Palestinian Territory",
+    "ISO": "PS",
+    "COUNTRYAFF": "Palestinian Territory",
+    "AFF_ISO": "PS",
+    "SHAPE_Length": 4.75789758672638,
+    "SHAPE_Area": 0.594932778161928
+  },
+  {
+    "FID": 149,
+    "COUNTRY": "South Sudan",
+    "ISO": "SS",
+    "COUNTRYAFF": "South Sudan",
+    "AFF_ISO": "SS",
+    "SHAPE_Length": 41.8962017150055,
+    "SHAPE_Area": 51.873499227524
+  },
+  {
+    "FID": 150,
+    "COUNTRY": "Sudan",
+    "ISO": "SD",
+    "COUNTRYAFF": "Sudan",
+    "AFF_ISO": "SD",
+    "SHAPE_Length": 65.2824905939917,
+    "SHAPE_Area": 156.781777846977
+  },
+  {
+    "FID": 151,
+    "COUNTRY": "Syria",
+    "ISO": "SY",
+    "COUNTRYAFF": "Syria",
+    "AFF_ISO": "SY",
+    "SHAPE_Length": 22.535536993499,
+    "SHAPE_Area": 18.5706058091115
+  },
+  {
+    "FID": 152,
+    "COUNTRY": "Turkey",
+    "ISO": "TR",
+    "COUNTRYAFF": "Turkey",
+    "AFF_ISO": "TR",
+    "SHAPE_Length": 76.9907310297634,
+    "SHAPE_Area": 81.1993245255942
+  },
+  {
+    "FID": 153,
+    "COUNTRY": "Uganda",
+    "ISO": "UG",
+    "COUNTRYAFF": "Uganda",
+    "AFF_ISO": "UG",
+    "SHAPE_Length": 21.248227720151,
+    "SHAPE_Area": 19.6768074328088
+  },
+  {
+    "FID": 154,
+    "COUNTRY": "Andorra",
+    "ISO": "AD",
+    "COUNTRYAFF": "Andorra",
+    "AFF_ISO": "AD",
+    "SHAPE_Length": 0.937351764486399,
+    "SHAPE_Area": 0.0555851650153813
+  },
+  {
+    "FID": 155,
+    "COUNTRY": "United States",
+    "ISO": "US",
+    "COUNTRYAFF": "United States",
+    "AFF_ISO": "US",
+    "SHAPE_Length": 726.106055708415,
+    "SHAPE_Area": 1116.67060407863
+  },
+  {
+    "FID": 156,
+    "COUNTRY": "France",
+    "ISO": "FR",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 65.8470426672871,
+    "SHAPE_Area": 64.3483245029273
+  },
+  {
+    "FID": 157,
+    "COUNTRY": "Liechtenstein",
+    "ISO": "LI",
+    "COUNTRYAFF": "Liechtenstein",
+    "AFF_ISO": "LI",
+    "SHAPE_Length": 0.633865658935704,
+    "SHAPE_Area": 0.0209205167418249
+  },
+  {
+    "FID": 158,
+    "COUNTRY": "Monaco",
+    "ISO": "MC",
+    "COUNTRYAFF": "Monaco",
+    "AFF_ISO": "MC",
+    "SHAPE_Length": 0.1374125681801,
+    "SHAPE_Area": 0.00103618862793813
+  },
+  {
+    "FID": 159,
+    "COUNTRY": "Switzerland",
+    "ISO": "CH",
+    "COUNTRYAFF": "Switzerland",
+    "AFF_ISO": "CH",
+    "SHAPE_Length": 15.5315226247949,
+    "SHAPE_Area": 4.88927661224314
+  },
+  {
+    "FID": 160,
+    "COUNTRY": "Belgium",
+    "ISO": "BE",
+    "COUNTRYAFF": "Belgium",
+    "AFF_ISO": "BE",
+    "SHAPE_Length": 11.9990027190426,
+    "SHAPE_Area": 3.89551852697937
+  },
+  {
+    "FID": 161,
+    "COUNTRY": "Germany",
+    "ISO": "DE",
+    "COUNTRYAFF": "Germany",
+    "AFF_ISO": "DE",
+    "SHAPE_Length": 56.1150376523079,
+    "SHAPE_Area": 45.8720539645817
+  },
+  {
+    "FID": 162,
+    "COUNTRY": "Luxembourg",
+    "ISO": "LU",
+    "COUNTRYAFF": "Luxembourg",
+    "AFF_ISO": "LU",
+    "SHAPE_Length": 2.64611859378232,
+    "SHAPE_Area": 0.322093450102925
+  },
+  {
+    "FID": 163,
+    "COUNTRY": "Netherlands",
+    "ISO": "NL",
+    "COUNTRYAFF": "Netherlands",
+    "AFF_ISO": "NL",
+    "SHAPE_Length": 25.804231563779,
+    "SHAPE_Area": 4.59885345927115
+  },
+  {
+    "FID": 164,
+    "COUNTRY": "Albania",
+    "ISO": "AL",
+    "COUNTRYAFF": "Albania",
+    "AFF_ISO": "AL",
+    "SHAPE_Length": 9.62503796839992,
+    "SHAPE_Area": 3.07353997581252
+  },
+  {
+    "FID": 165,
+    "COUNTRY": "Austria",
+    "ISO": "AT",
+    "COUNTRYAFF": "Austria",
+    "AFF_ISO": "AT",
+    "SHAPE_Length": 22.0679371029137,
+    "SHAPE_Area": 10.0394406896191
+  },
+  {
+    "FID": 166,
+    "COUNTRY": "Bosnia and Herzegovina",
+    "ISO": "BA",
+    "COUNTRYAFF": "Bosnia and Herzegovina",
+    "AFF_ISO": "BA",
+    "SHAPE_Length": 13.0905841994357,
+    "SHAPE_Area": 5.79843284897746
+  },
+  {
+    "FID": 167,
+    "COUNTRY": "Croatia",
+    "ISO": "HR",
+    "COUNTRYAFF": "Croatia",
+    "AFF_ISO": "HR",
+    "SHAPE_Length": 37.5892291695376,
+    "SHAPE_Area": 6.38464182356835
+  },
+  {
+    "FID": 168,
+    "COUNTRY": "Czech Republic",
+    "ISO": "CZ",
+    "COUNTRYAFF": "Czech Republic",
+    "AFF_ISO": "CZ",
+    "SHAPE_Length": 18.4495843539191,
+    "SHAPE_Area": 9.82420951578786
+  },
+  {
+    "FID": 169,
+    "COUNTRY": "Denmark",
+    "ISO": "DK",
+    "COUNTRYAFF": "Denmark",
+    "AFF_ISO": "DK",
+    "SHAPE_Length": 45.3818393418664,
+    "SHAPE_Area": 6.14293911824871
+  },
+  {
+    "FID": 170,
+    "COUNTRY": "Hungary",
+    "ISO": "HU",
+    "COUNTRYAFF": "Hungary",
+    "AFF_ISO": "HU",
+    "SHAPE_Length": 18.1620444808642,
+    "SHAPE_Area": 11.0332889724127
+  },
+  {
+    "FID": 171,
+    "COUNTRY": "Italy",
+    "ISO": "IT",
+    "COUNTRYAFF": "Italy",
+    "AFF_ISO": "IT",
+    "SHAPE_Length": 68.044300922069,
+    "SHAPE_Area": 33.0550638295197
+  },
+  {
+    "FID": 172,
+    "COUNTRY": "Montenegro",
+    "ISO": "ME",
+    "COUNTRYAFF": "Montenegro",
+    "AFF_ISO": "ME",
+    "SHAPE_Length": 7.28827348478429,
+    "SHAPE_Area": 1.5180043624074
+  },
+  {
+    "FID": 173,
+    "COUNTRY": "Poland",
+    "ISO": "PL",
+    "COUNTRYAFF": "Poland",
+    "AFF_ISO": "PL",
+    "SHAPE_Length": 35.3278357078704,
+    "SHAPE_Area": 40.9107305218171
+  },
+  {
+    "FID": 174,
+    "COUNTRY": "San Marino",
+    "ISO": "SM",
+    "COUNTRYAFF": "San Marino",
+    "AFF_ISO": "SM",
+    "SHAPE_Length": 0.315110445720152,
+    "SHAPE_Area": 0.00671112264969922
+  },
+  {
+    "FID": 175,
+    "COUNTRY": "Serbia",
+    "ISO": "RS",
+    "COUNTRYAFF": "Serbia",
+    "AFF_ISO": "RS",
+    "SHAPE_Length": 19.4849922905667,
+    "SHAPE_Area": 9.89661076759154
+  },
+  {
+    "FID": 176,
+    "COUNTRY": "Slovakia",
+    "ISO": "SK",
+    "COUNTRYAFF": "Slovakia",
+    "AFF_ISO": "SK",
+    "SHAPE_Length": 14.309671719273,
+    "SHAPE_Area": 5.97807800371313
+  },
+  {
+    "FID": 177,
+    "COUNTRY": "Slovenia",
+    "ISO": "SI",
+    "COUNTRYAFF": "Slovenia",
+    "AFF_ISO": "SI",
+    "SHAPE_Length": 9.95203228824179,
+    "SHAPE_Area": 2.37699205076525
+  },
+  {
+    "FID": 178,
+    "COUNTRY": "North Macedonia",
+    "ISO": "MK",
+    "COUNTRYAFF": "North Macedonia",
+    "AFF_ISO": "MK",
+    "SHAPE_Length": 7.21551143932103,
+    "SHAPE_Area": 2.75000363385979
+  },
+  {
+    "FID": 179,
+    "COUNTRY": "Vatican City",
+    "ISO": "VA",
+    "COUNTRYAFF": "Vatican City",
+    "AFF_ISO": "VA",
+    "SHAPE_Length": 0.0324677424170252,
+    "SHAPE_Area": 0.0000612216410399125
+  },
+  {
+    "FID": 180,
+    "COUNTRY": "Norway",
+    "ISO": "NO",
+    "COUNTRYAFF": "Norway",
+    "AFF_ISO": "NO",
+    "SHAPE_Length": 295.015214622914,
+    "SHAPE_Area": 59.9396434110281
+  },
+  {
+    "FID": 181,
+    "COUNTRY": "Sweden",
+    "ISO": "SE",
+    "COUNTRYAFF": "Sweden",
+    "AFF_ISO": "SE",
+    "SHAPE_Length": 92.1859283329707,
+    "SHAPE_Area": 78.5686040073304
+  },
+  {
+    "FID": 182,
+    "COUNTRY": "Belarus",
+    "ISO": "BY",
+    "COUNTRYAFF": "Belarus",
+    "AFF_ISO": "BY",
+    "SHAPE_Length": 31.6685479105785,
+    "SHAPE_Area": 28.1578094383441
+  },
+  {
+    "FID": 183,
+    "COUNTRY": "Bulgaria",
+    "ISO": "BG",
+    "COUNTRYAFF": "Bulgaria",
+    "AFF_ISO": "BG",
+    "SHAPE_Length": 20.3151893707959,
+    "SHAPE_Area": 12.2104312920272
+  },
+  {
+    "FID": 184,
+    "COUNTRY": "Estonia",
+    "ISO": "EE",
+    "COUNTRYAFF": "Estonia",
+    "AFF_ISO": "EE",
+    "SHAPE_Length": 23.6520492182943,
+    "SHAPE_Area": 7.10781336625296
+  },
+  {
+    "FID": 185,
+    "COUNTRY": "Finland",
+    "ISO": "FI",
+    "COUNTRYAFF": "Finland",
+    "AFF_ISO": "FI",
+    "SHAPE_Length": 69.1260941918468,
+    "SHAPE_Area": 62.654984653489
+  },
+  {
+    "FID": 186,
+    "COUNTRY": "Georgia",
+    "ISO": "GE",
+    "COUNTRYAFF": "Georgia",
+    "AFF_ISO": "GE",
+    "SHAPE_Length": 17.856945462631,
+    "SHAPE_Area": 7.62324071023281
+  },
+  {
+    "FID": 187,
+    "COUNTRY": "Latvia",
+    "ISO": "LV",
+    "COUNTRYAFF": "Latvia",
+    "AFF_ISO": "LV",
+    "SHAPE_Length": 19.3428050197963,
+    "SHAPE_Area": 9.51609185897837
+  },
+  {
+    "FID": 188,
+    "COUNTRY": "Lithuania",
+    "ISO": "LT",
+    "COUNTRYAFF": "Lithuania",
+    "AFF_ISO": "LT",
+    "SHAPE_Length": 17.1321141273136,
+    "SHAPE_Area": 9.20256286138072
+  },
+  {
+    "FID": 189,
+    "COUNTRY": "Moldova",
+    "ISO": "MD",
+    "COUNTRYAFF": "Moldova",
+    "AFF_ISO": "MD",
+    "SHAPE_Length": 12.4572467834433,
+    "SHAPE_Area": 3.99894238766346
+  },
+  {
+    "FID": 190,
+    "COUNTRY": "Romania",
+    "ISO": "RO",
+    "COUNTRYAFF": "Romania",
+    "AFF_ISO": "RO",
+    "SHAPE_Length": 29.0362918643209,
+    "SHAPE_Area": 27.4983093435809
+  },
+  {
+    "FID": 191,
+    "COUNTRY": "Ukraine",
+    "ISO": "UA",
+    "COUNTRYAFF": "Ukraine",
+    "AFF_ISO": "UA",
+    "SHAPE_Length": 79.5452703020405,
+    "SHAPE_Area": 73.4829480179457
+  },
+  {
+    "FID": 192,
+    "COUNTRY": "Afghanistan",
+    "ISO": "AF",
+    "COUNTRYAFF": "Afghanistan",
+    "AFF_ISO": "AF",
+    "SHAPE_Length": 50.8032097216606,
+    "SHAPE_Area": 62.5667138767718
+  },
+  {
+    "FID": 193,
+    "COUNTRY": "Bahrain",
+    "ISO": "BH",
+    "COUNTRYAFF": "Bahrain",
+    "AFF_ISO": "BH",
+    "SHAPE_Length": 1.65372595275656,
+    "SHAPE_Area": 0.0577347152290457
+  },
+  {
+    "FID": 194,
+    "COUNTRY": "India",
+    "ISO": "IN",
+    "COUNTRYAFF": "India",
+    "AFF_ISO": "IN",
+    "SHAPE_Length": 176.501522091413,
+    "SHAPE_Area": 278.688624794288
+  },
+  {
+    "FID": 195,
+    "COUNTRY": "Iran",
+    "ISO": "IR",
+    "COUNTRYAFF": "Iran",
+    "AFF_ISO": "IR",
+    "SHAPE_Length": 75.7732135392343,
+    "SHAPE_Area": 161.769893414734
+  },
+  {
+    "FID": 196,
+    "COUNTRY": "Kuwait",
+    "ISO": "KW",
+    "COUNTRYAFF": "Kuwait",
+    "AFF_ISO": "KW",
+    "SHAPE_Length": 7.54876822741623,
+    "SHAPE_Area": 1.55508510969309
+  },
+  {
+    "FID": 197,
+    "COUNTRY": "Maldives",
+    "ISO": "MV",
+    "COUNTRYAFF": "Maldives",
+    "AFF_ISO": "MV",
+    "SHAPE_Length": 1.12863049322395,
+    "SHAPE_Area": 0.00273840312367682
+  },
+  {
+    "FID": 198,
+    "COUNTRY": "Nepal",
+    "ISO": "NP",
+    "COUNTRYAFF": "Nepal",
+    "AFF_ISO": "NP",
+    "SHAPE_Length": 23.5332666615078,
+    "SHAPE_Area": 13.5337204534609
+  },
+  {
+    "FID": 199,
+    "COUNTRY": "Oman",
+    "ISO": "OM",
+    "COUNTRYAFF": "Oman",
+    "AFF_ISO": "OM",
+    "SHAPE_Length": 32.3352139020106,
+    "SHAPE_Area": 26.7609144790414
+  },
+  {
+    "FID": 200,
+    "COUNTRY": "Pakistan",
+    "ISO": "PK",
+    "COUNTRYAFF": "Pakistan",
+    "AFF_ISO": "PK",
+    "SHAPE_Length": 71.729793755934,
+    "SHAPE_Area": 82.0625164161805
+  },
+  {
+    "FID": 201,
+    "COUNTRY": "Qatar",
+    "ISO": "QA",
+    "COUNTRYAFF": "Qatar",
+    "AFF_ISO": "QA",
+    "SHAPE_Length": 4.78981111664242,
+    "SHAPE_Area": 0.994812395645856
+  },
+  {
+    "FID": 202,
+    "COUNTRY": "Saudi Arabia",
+    "ISO": "SA",
+    "COUNTRYAFF": "Saudi Arabia",
+    "AFF_ISO": "SA",
+    "SHAPE_Length": 68.2767058247393,
+    "SHAPE_Area": 171.282272506923
+  },
+  {
+    "FID": 203,
+    "COUNTRY": "Somalia",
+    "ISO": "SO",
+    "COUNTRYAFF": "Somalia",
+    "AFF_ISO": "SO",
+    "SHAPE_Length": 48.9953616048232,
+    "SHAPE_Area": 52.0704024579851
+  },
+  {
+    "FID": 204,
+    "COUNTRY": "Sri Lanka",
+    "ISO": "LK",
+    "COUNTRYAFF": "Sri Lanka",
+    "AFF_ISO": "LK",
+    "SHAPE_Length": 13.9984198710169,
+    "SHAPE_Area": 5.41208787006677
+  },
+  {
+    "FID": 205,
+    "COUNTRY": "Tajikistan",
+    "ISO": "TJ",
+    "COUNTRYAFF": "Tajikistan",
+    "AFF_ISO": "TJ",
+    "SHAPE_Length": 33.87753191411,
+    "SHAPE_Area": 14.7158593629099
+  },
+  {
+    "FID": 206,
+    "COUNTRY": "Turkmenistan",
+    "ISO": "TM",
+    "COUNTRYAFF": "Turkmenistan",
+    "AFF_ISO": "TM",
+    "SHAPE_Length": 44.8011484147862,
+    "SHAPE_Area": 57.8605596108264
+  },
+  {
+    "FID": 207,
+    "COUNTRY": "United Arab Emirates",
+    "ISO": "AE",
+    "COUNTRYAFF": "United Arab Emirates",
+    "AFF_ISO": "AE",
+    "SHAPE_Length": 16.7596763569019,
+    "SHAPE_Area": 6.23985017745458
+  },
+  {
+    "FID": 208,
+    "COUNTRY": "Yemen",
+    "ISO": "YE",
+    "COUNTRYAFF": "Yemen",
+    "AFF_ISO": "YE",
+    "SHAPE_Length": 34.0113268468468,
+    "SHAPE_Area": 38.2898707166757
+  },
+  {
+    "FID": 209,
+    "COUNTRY": "Armenia",
+    "ISO": "AM",
+    "COUNTRYAFF": "Armenia",
+    "AFF_ISO": "AM",
+    "SHAPE_Length": 12.1611168812857,
+    "SHAPE_Area": 3.14229052599548
+  },
+  {
+    "FID": 210,
+    "COUNTRY": "Azerbaijan",
+    "ISO": "AZ",
+    "COUNTRYAFF": "Azerbaijan",
+    "AFF_ISO": "AZ",
+    "SHAPE_Length": 28.5751348581653,
+    "SHAPE_Area": 17.4071424499334
+  },
+  {
+    "FID": 211,
+    "COUNTRY": "Kazakhstan",
+    "ISO": "KZ",
+    "COUNTRYAFF": "Kazakhstan",
+    "AFF_ISO": "KZ",
+    "SHAPE_Length": 140.347747504746,
+    "SHAPE_Area": 343.160066317709
+  },
+  {
+    "FID": 212,
+    "COUNTRY": "Kyrgyzstan",
+    "ISO": "KG",
+    "COUNTRYAFF": "Kyrgyzstan",
+    "AFF_ISO": "KG",
+    "SHAPE_Length": 36.7541303514419,
+    "SHAPE_Area": 21.5118282913813
+  },
+  {
+    "FID": 213,
+    "COUNTRY": "Uzbekistan",
+    "ISO": "UZ",
+    "COUNTRYAFF": "Uzbekistan",
+    "AFF_ISO": "UZ",
+    "SHAPE_Length": 60.3220685063147,
+    "SHAPE_Area": 48.3699993223691
+  },
+  {
+    "FID": 214,
+    "COUNTRY": "Christmas Island",
+    "ISO": "CX",
+    "COUNTRYAFF": "Australia",
+    "AFF_ISO": "AU",
+    "SHAPE_Length": 0.405139058647021,
+    "SHAPE_Area": 0.0102374850410543
+  },
+  {
+    "FID": 215,
+    "COUNTRY": "Cocos Islands",
+    "ISO": "CC",
+    "COUNTRYAFF": "Australia",
+    "AFF_ISO": "AU",
+    "SHAPE_Length": 0.176670568093147,
+    "SHAPE_Area": 0.00149043830565524
+  },
+  {
+    "FID": 216,
+    "COUNTRY": "Indonesia",
+    "ISO": "ID",
+    "COUNTRYAFF": "Indonesia",
+    "AFF_ISO": "ID",
+    "SHAPE_Length": 416.25500787155,
+    "SHAPE_Area": 153.002509036725
+  },
+  {
+    "FID": 217,
+    "COUNTRY": "Timor-Leste",
+    "ISO": "TL",
+    "COUNTRYAFF": "Timor-Leste",
+    "AFF_ISO": "TL",
+    "SHAPE_Length": 7.71955078591303,
+    "SHAPE_Area": 1.23630443801827
+  },
+  {
+    "FID": 218,
+    "COUNTRY": "Australia",
+    "ISO": "AU",
+    "COUNTRYAFF": "Australia",
+    "AFF_ISO": "AU",
+    "SHAPE_Length": 252.165237695418,
+    "SHAPE_Area": 695.539924441632
+  },
+  {
+    "FID": 219,
+    "COUNTRY": "Nauru",
+    "ISO": "NR",
+    "COUNTRYAFF": "Nauru",
+    "AFF_ISO": "NR",
+    "SHAPE_Length": 0.173777331029355,
+    "SHAPE_Area": 0.00220682173966317
+  },
+  {
+    "FID": 220,
+    "COUNTRY": "New Caledonia",
+    "ISO": "NC",
+    "COUNTRYAFF": "France",
+    "AFF_ISO": "FR",
+    "SHAPE_Length": 12.5718707845911,
+    "SHAPE_Area": 1.64059897860131
+  },
+  {
+    "FID": 221,
+    "COUNTRY": "Norfolk Island",
+    "ISO": "NF",
+    "COUNTRYAFF": "Australia",
+    "AFF_ISO": "AU",
+    "SHAPE_Length": 0.25975410860056,
+    "SHAPE_Area": 0.00453802041209588
+  },
+  {
+    "FID": 222,
+    "COUNTRY": "Papua New Guinea",
+    "ISO": "PG",
+    "COUNTRYAFF": "Papua New Guinea",
+    "AFF_ISO": "PG",
+    "SHAPE_Length": 89.2913764888192,
+    "SHAPE_Area": 37.7804207603652
+  },
+  {
+    "FID": 223,
+    "COUNTRY": "Solomon Islands",
+    "ISO": "SB",
+    "COUNTRYAFF": "Solomon Islands",
+    "AFF_ISO": "SB",
+    "SHAPE_Length": 30.4612883979217,
+    "SHAPE_Area": 2.21880807675263
+  },
+  {
+    "FID": 224,
+    "COUNTRY": "Tuvalu",
+    "ISO": "TV",
+    "COUNTRYAFF": "Tuvalu",
+    "AFF_ISO": "TV",
+    "SHAPE_Length": 0.402972817512915,
+    "SHAPE_Area": 0.00237665111245055
+  },
+  {
+    "FID": 225,
+    "COUNTRY": "Vanuatu",
+    "ISO": "VU",
+    "COUNTRYAFF": "Vanuatu",
+    "AFF_ISO": "VU",
+    "SHAPE_Length": 16.4114684835446,
+    "SHAPE_Area": 1.03713514992792
+  },
+  {
+    "FID": 226,
+    "COUNTRY": "Cambodia",
+    "ISO": "KH",
+    "COUNTRYAFF": "Cambodia",
+    "AFF_ISO": "KH",
+    "SHAPE_Length": 21.9939984429892,
+    "SHAPE_Area": 15.128532415232
+  },
+  {
+    "FID": 227,
+    "COUNTRY": "Laos",
+    "ISO": "LA",
+    "COUNTRYAFF": "Laos",
+    "AFF_ISO": "LA",
+    "SHAPE_Length": 37.5582522674588,
+    "SHAPE_Area": 19.6803737148249
+  },
+  {
+    "FID": 228,
+    "COUNTRY": "Malaysia",
+    "ISO": "MY",
+    "COUNTRYAFF": "Malaysia",
+    "AFF_ISO": "MY",
+    "SHAPE_Length": 60.7667623241101,
+    "SHAPE_Area": 26.7531942780696
+  },
+  {
+    "FID": 229,
+    "COUNTRY": "Myanmar",
+    "ISO": "MM",
+    "COUNTRYAFF": "Myanmar",
+    "AFF_ISO": "MM",
+    "SHAPE_Length": 87.3471888591459,
+    "SHAPE_Area": 58.1201079312892
+  },
+  {
+    "FID": 230,
+    "COUNTRY": "Singapore",
+    "ISO": "SG",
+    "COUNTRYAFF": "Singapore",
+    "AFF_ISO": "SG",
+    "SHAPE_Length": 0.858102626091241,
+    "SHAPE_Area": 0.0447879727837636
+  },
+  {
+    "FID": 231,
+    "COUNTRY": "Thailand",
+    "ISO": "TH",
+    "COUNTRYAFF": "Thailand",
+    "AFF_ISO": "TH",
+    "SHAPE_Length": 65.5202806525262,
+    "SHAPE_Area": 43.1432262065855
+  },
+  {
+    "FID": 232,
+    "COUNTRY": "Vietnam",
+    "ISO": "VN",
+    "COUNTRYAFF": "Vietnam",
+    "AFF_ISO": "VN",
+    "SHAPE_Length": 66.8668024629951,
+    "SHAPE_Area": 27.5560819438862
+  },
+  {
+    "FID": 233,
+    "COUNTRY": "Bangladesh",
+    "ISO": "BD",
+    "COUNTRYAFF": "Bangladesh",
+    "AFF_ISO": "BD",
+    "SHAPE_Length": 42.011938392116,
+    "SHAPE_Area": 12.2224536250751
+  },
+  {
+    "FID": 234,
+    "COUNTRY": "Bhutan",
+    "ISO": "BT",
+    "COUNTRYAFF": "Bhutan",
+    "AFF_ISO": "BT",
+    "SHAPE_Length": 9.20549298923639,
+    "SHAPE_Area": 3.63555871078281
+  },
+  {
+    "FID": 235,
+    "COUNTRY": "China",
+    "ISO": "CN",
+    "COUNTRYAFF": "China",
+    "AFF_ISO": "CN",
+    "SHAPE_Length": 312.493593845668,
+    "SHAPE_Area": 953.844047626134
+  },
+  {
+    "FID": 236,
+    "COUNTRY": "Brunei Darussalam",
+    "ISO": "BN",
+    "COUNTRYAFF": "Brunei Darussalam",
+    "AFF_ISO": "BN",
+    "SHAPE_Length": 4.9188276990171,
+    "SHAPE_Area": 0.468299142396155
+  },
+  {
+    "FID": 237,
+    "COUNTRY": "Philippines",
+    "ISO": "PH",
+    "COUNTRYAFF": "Philippines",
+    "AFF_ISO": "PH",
+    "SHAPE_Length": 130.23135094917,
+    "SHAPE_Area": 24.3001925437763
+  },
+  {
+    "FID": 238,
+    "COUNTRY": "South Korea",
+    "ISO": "KR",
+    "COUNTRYAFF": "South Korea",
+    "AFF_ISO": "KR",
+    "SHAPE_Length": 28.3332677005402,
+    "SHAPE_Area": 9.76687713031933
+  },
+  {
+    "FID": 239,
+    "COUNTRY": "Mongolia",
+    "ISO": "MN",
+    "COUNTRYAFF": "Mongolia",
+    "AFF_ISO": "MN",
+    "SHAPE_Length": 85.1015045525559,
+    "SHAPE_Area": 184.432045125176
+  },
+  {
+    "FID": 240,
+    "COUNTRY": "North Korea",
+    "ISO": "KP",
+    "COUNTRYAFF": "North Korea",
+    "AFF_ISO": "KP",
+    "SHAPE_Length": 27.0689691985354,
+    "SHAPE_Area": 12.9188623394277
+  },
+  {
+    "FID": 241,
+    "COUNTRY": "Guam",
+    "ISO": "GU",
+    "COUNTRYAFF": "United States",
+    "AFF_ISO": "US",
+    "SHAPE_Length": 1.12001626288184,
+    "SHAPE_Area": 0.0480572423261323
+  },
+  {
+    "FID": 242,
+    "COUNTRY": "Japan",
+    "ISO": "JP",
+    "COUNTRYAFF": "Japan",
+    "AFF_ISO": "JP",
+    "SHAPE_Length": 118.053101177066,
+    "SHAPE_Area": 37.9413075726335
+  },
+  {
+    "FID": 243,
+    "COUNTRY": "Marshall Islands",
+    "ISO": "MH",
+    "COUNTRYAFF": "Marshall Islands",
+    "AFF_ISO": "MH",
+    "SHAPE_Length": 0.683479015714763,
+    "SHAPE_Area": 0.00284490860906124
+  },
+  {
+    "FID": 244,
+    "COUNTRY": "Micronesia",
+    "ISO": "FM",
+    "COUNTRYAFF": "Micronesia",
+    "AFF_ISO": "FM",
+    "SHAPE_Length": 1.04242124051924,
+    "SHAPE_Area": 0.0422057750596816
+  },
+  {
+    "FID": 245,
+    "COUNTRY": "Northern Mariana Islands",
+    "ISO": "MP",
+    "COUNTRYAFF": "United States",
+    "AFF_ISO": "US",
+    "SHAPE_Length": 0.908853027863224,
+    "SHAPE_Area": 0.0199270307612974
+  },
+  {
+    "FID": 246,
+    "COUNTRY": "Palau",
+    "ISO": "PW",
+    "COUNTRYAFF": "Palau",
+    "AFF_ISO": "PW",
+    "SHAPE_Length": 1.10532330163806,
+    "SHAPE_Area": 0.0311360277488608
+  },
+  {
+    "FID": 247,
+    "COUNTRY": "Russian Federation",
+    "ISO": "RU",
+    "COUNTRYAFF": "Russian Federation",
+    "AFF_ISO": "RU",
+    "SHAPE_Length": 1536.28714977755,
+    "SHAPE_Area": 2931.52608219264
+  },
+  {
+    "FID": 248,
+    "COUNTRY": "Spain",
+    "ISO": "ES",
+    "COUNTRYAFF": "Spain",
+    "AFF_ISO": "ES",
+    "SHAPE_Length": 51.7249563726083,
+    "SHAPE_Area": 52.9154485823975
+  },
+  {
+    "FID": 249,
+    "COUNTRY": "Canarias",
+    "ISO": "ES",
+    "COUNTRYAFF": "Spain",
+    "AFF_ISO": "ES",
+    "SHAPE_Length": 9.49147417107331,
+    "SHAPE_Area": 0.695335657260461
+  }
+]

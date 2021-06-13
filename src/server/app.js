@@ -1,58 +1,53 @@
-var express = require('express')
-	, cluster = require('cluster')
+const  dotenv = require('dotenv');
+dotenv.config();
+
+const express = require('express')
 	, load = require('express-load')
 	, path = require('path')
 	, util = require('util')
 	, compression = require('compression')
 	, requestTimeout = require('express-timeout')
 	, responseTime = require('response-time')
-	, buffer = require('buffer')
-	, events = require('events')
-	, archiver = require('archiver')
-	, fs = require('fs')
-	, mime = require('mime')
-	, async = require('async')
-	, timeout = require('connect-timeout')
 	, bodyParser = require('body-parser')
 	, multer = require('multer')
 	, session = require('express-session')
 	, parseCookie = require('cookie-parser')
 	, cors = require('cors');
 
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var MongoStore = require('connect-mongo')(session);
-var cookie = parseCookie('LAPIG')
-var mongoAdapter = require('socket.io-adapter-mongo');
-var sharedsession = require("express-socket.io-session");
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const MongoStore = require('connect-mongo')(session);
+const cookie = parseCookie('LAPIG')
+const mongoAdapter = require('socket.io-adapter-mongo');
+const sharedsession = require("express-socket.io-session");
 
+load('config/config.js', { 'cwd': 'config' })
+	.then('config')
+	.into(app);
 
-load('config.js', { 'verbose': false })
-	.then('libs')
-	.then('middleware')
+load('middleware', { 'verbose': false })
 	.then('util')
 	.into(app);
 
 app.middleware.repository.init(function () {
-
-	var mongodbUrl = 'mongodb://' + app.config.mongo.host + ':' + app.config.mongo.port + '/' + app.config.mongo.dbname;
+	const mongodbUrl = 'mongodb://' + app.config.mongo.host + ':' + app.config.mongo.port + '/' + app.config.mongo.dbname;
 
 	app.repository = app.middleware.repository;
-	var store = new MongoStore({ url: mongodbUrl });
+	const store = new MongoStore({ url: mongodbUrl });
 	io.adapter(mongoAdapter(mongodbUrl));
 
 	app.use(cookie);
 
-	var middlewareSession = session({
+	const middlewareSession = session({
 		store: store,
-		secret: 'LAPIG',
+		secret: 'NTVI',
 		resave: false,
 		saveUninitialized: true,
 		key: 'sid',
 		cookie: {
 			httpOnly: false,
-			secure: false,
+			secure: true,
 			maxAge: 1000 * 60 * 60 * 24
 		}
 	})
@@ -75,12 +70,12 @@ app.middleware.repository.init(function () {
 	app.set('views', __dirname + '/templates');
 	app.set('view engine', 'ejs');
 
-	var publicDir = path.join(__dirname, '');
+	const publicDir = path.join(__dirname, '');
 
 	app.use(requestTimeout({
 		'timeout': 1000 * 60 * 30,
 		'callback': function (err, options) {
-			var response = options.res;
+			const response = options.res;
 			if (err) {
 				util.log('Timeout: ' + err);
 			}
@@ -88,7 +83,7 @@ app.middleware.repository.init(function () {
 		}
 	}));
 
-	var corsOptions = {
+	const corsOptions = {
 		origin: 'http://localhost:4200',
 		optionsSuccessStatus: 200
 	}

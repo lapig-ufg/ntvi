@@ -61,6 +61,12 @@ export class ModulesComponent implements  AfterViewInit {
   };
   getMenu(): NbMenuItem[] {
     return [
+      // {
+      //   title: 'Broker',
+      //   icon: 'hard-drive-outline',
+      //   link: '/modules/broker',
+      //   hidden: this.grantMenu(['ROOT']),
+      // },
       {
         title: this.translate.instant('menu_campaigns'),
         icon: 'map',

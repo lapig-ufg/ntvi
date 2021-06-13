@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>{{'campaign_create_edit_title' | translate}}</nb-card-header>
+  <nb-card-header>{{'campaign_edit_title' | translate}}</nb-card-header>
   <nb-card-body>
     <nb-stepper #stepper orientation="vertical">
       <nb-step [stepControl]="infoForm" label="{{'campaign_create_edit_tab_info_title' | translate}}">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 col-xl-6">
-                    <div class="">
+                    <div class="" >
                       <label for="name" class="label">{{'campaign_create_edit_tab_info_field_organization' | translate}}</label>
                       <nb-select id="organization" formControlName="organization" [selected]="reviewCampaign.organizationId" placeholder="{{'campaign_create_edit_tab_info_field_organization_placeholder' | translate}}"
                                  fullWidth filled>
@@ -54,6 +54,32 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 col-xl-6">
+
+                    <div class="form-group">
+                      <label for="numInspectors" class="label">{{'campaign_create_edit_tab_info_field_country' | translate}}</label>
+                      <input #country
+                             id="country"
+                             formControlName="country"
+                             nbInput
+                             fullWidth
+                             type="text"
+                             (input)="onCountryChange()"
+                             placeholder="{{'campaign_create_edit_tab_info_field_country_placeholder' | translate}}"
+                             [nbAutocomplete]="auto" />
+
+                      <nb-autocomplete #auto (selectedChange)="onSelectionCountryChange($event)">
+                        <nb-option *ngFor="let country of filteredCountries$ | async" [value]="country.ISO">
+                          {{ country.COUNTRY }}
+                        </nb-option>
+                      </nb-autocomplete>
+                      <div *ngIf="fInfo.country.touched && fInfo.country.invalid" class="mt-2">
+                        <nb-alert status="danger" *ngIf="fInfo.country.errors.required">
+                          {{'campaign_create_edit_tab_info_field_country_required' | translate}}
+                        </nb-alert>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-xl-6 mt-lg-4 mt-md-4">
                     <nb-toggle status="basic" labelPosition="left" [(checked)]="customImages">
                       {{'campaign_create_edit_tab_info_field_custom_images' | translate}}
                     </nb-toggle>
@@ -138,7 +164,7 @@
                       </div>
                       <div class="row">
                         <div class="col-sm-12 col-md-12 col-xl-12">
-                          <ng2-smart-table *ngIf="compositions.length > 0" [settings]="tableCompositions.settings"
+                          <ng2-smart-table [settings]="tableCompositions.settings"
                                            [source]="tableCompositions.source" (delete)="removeComposition($event)">
                           </ng2-smart-table>
                         </div>
@@ -171,7 +197,7 @@
                       </div>
                       <div class="row">
                         <div class="col-sm-12 col-md-12 col-xl-12">
-                          <ng2-smart-table *ngIf="useClassesSelected.length > 0" [settings]="tableUseClass.settings"
+                          <ng2-smart-table [settings]="tableUseClass.settings"
                                            [source]="tableUseClass.source" (delete)="removeClass($event)">
                           </ng2-smart-table>
                         </div>
@@ -277,7 +303,7 @@
                   </div>
                   <div class="row">
                     <div class="col-sm-12 col-md-12 col-xl-12">
-                      <ng2-smart-table *ngIf="UsersOnCampaigns.length > 0" [settings]="tableUsers.settings"
+                      <ng2-smart-table [settings]="tableUsers.settings"
                                        [source]="tableUsers.source" (delete)="removeUserOnCampaign($event)">
                       </ng2-smart-table>
                     </div>
@@ -333,7 +359,7 @@
                   </div>
                   <div class="row">
                     <div class="col-sm-12 col-md-12 col-xl-12">
-                      <ng2-smart-table *ngIf="images.length > 0" [settings]="tableImages.settings"
+                      <ng2-smart-table [settings]="tableImages.settings"
                                        [source]="tableImages.source" (delete)="removeImage($event)">
                       </ng2-smart-table>
                     </div>
@@ -351,174 +377,6 @@
       <nb-step  label="{{'campaign_create_edit_tab_confirmation_title' | translate}}">
         <div class="step-container">
           <h3 class="m-2">{{'campaign_create_edit_finish_title' | translate}}</h3>
-          <!--          <nb-card>-->
-          <!--            <nb-card-header>Information of Campaign</nb-card-header>-->
-          <!--            <nb-card-body>-->
-          <!--              <div class="form-group">-->
-          <!--                <label for="_name" class="label">Name</label>-->
-          <!--                <input-->
-          <!--                  id="_name"-->
-          <!--                  placeholder="Name of Campaign"-->
-          <!--                  type="text"-->
-          <!--                  nbInput-->
-          <!--                  disabled-->
-          <!--                  fullWidth-->
-          <!--                  [(ngModel)]="reviewCampaign.name"-->
-          <!--                >-->
-          <!--              </div>-->
-          <!--              <div class="form-group">-->
-          <!--                <label for="_description" class="label">Description</label>-->
-          <!--                <textarea-->
-          <!--                  id="_description"-->
-          <!--                  placeholder="Description of Campaign"-->
-          <!--                  rows="5"-->
-          <!--                  fieldSize="large"-->
-          <!--                  nbInput-->
-          <!--                  disabled-->
-          <!--                  fullWidth-->
-          <!--                  [(ngModel)]="reviewCampaign.description"-->
-
-          <!--                ></textarea>-->
-          <!--              </div>-->
-          <!--              <div class="row">-->
-          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
-          <!--                  <div class="">-->
-          <!--                    <label for="_organizationId" class="label">Organization</label>-->
-          <!--                    <nb-select-->
-          <!--                      id="_organizationId"-->
-          <!--                      placeholder="Select a organization"-->
-          <!--                      fullWidth-->
-          <!--                      disabled-->
-          <!--                      filled-->
-          <!--                      [(selected)]="reviewCampaign.organizationId"-->
-          <!--                    >-->
-          <!--                      <nb-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</nb-option>-->
-          <!--                    </nb-select>-->
-          <!--                  </div>-->
-          <!--                </div>-->
-          <!--                <div class="col-sm-12 col-md-6 col-xl-16">-->
-          <!--                  <div class="form-group">-->
-          <!--                    <label for="_numInspectors" class="label">Inspectors</label>-->
-          <!--                    <input-->
-          <!--                      id="_numInspectors"-->
-          <!--                      placeholder="Number of Inspectors"-->
-          <!--                      type="number"-->
-          <!--                      nbInput-->
-          <!--                      disabled-->
-          <!--                      fullWidth-->
-          <!--                      [(ngModel)]="reviewCampaign.numInspectors"-->
-          <!--                    >-->
-          <!--                    <div *ngIf="fInfo.numInspectors.touched && fInfo.numInspectors.invalid" class="mt-2">-->
-          <!--                      <nb-alert status="danger" *ngIf="fInfo.numInspectors.errors.required"> Number of inspectors is-->
-          <!--                        required. </nb-alert>-->
-          <!--                    </div>-->
-          <!--                  </div>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div class="row">-->
-          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
-          <!--                  <div class="form-group">-->
-          <!--                    <label for="_initialDate" class="label">Initial Date</label>-->
-          <!--                    <input-->
-          <!--                      id="_initialDate"-->
-          <!--                      placeholder="Initial Date"-->
-          <!--                      [nbDatepicker]="_dpInitialDate"-->
-          <!--                      nbInput-->
-          <!--                      disabled-->
-          <!--                      fullWidth-->
-          <!--                      [(ngModel)]="reviewCampaign.initialDate"-->
-          <!--                    >-->
-          <!--                    <nb-datepicker #_dpInitialDate></nb-datepicker>-->
-          <!--                  </div>-->
-          <!--                </div>-->
-          <!--                <div class="col-sm-12 col-md-6 col-xl-16">-->
-          <!--                  <div class="form-group">-->
-          <!--                    <label for="_finalDate" class="label">Final Date</label>-->
-          <!--                    <input-->
-          <!--                      id="_finalDate"-->
-          <!--                      placeholder="Final Date"-->
-          <!--                      [nbDatepicker]="_dpFinalDate"-->
-          <!--                      nbInput-->
-          <!--                      disabled-->
-          <!--                      fullWidth-->
-          <!--                      [(ngModel)]="reviewCampaign.finalDate"-->
-          <!--                    >-->
-          <!--                    <nb-datepicker #_dpFinalDate></nb-datepicker>-->
-          <!--                  </div>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div class="row">-->
-          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
-          <!--                  <nb-card>-->
-          <!--                    <nb-card-header>Color Composition</nb-card-header>-->
-          <!--                    <nb-card-body>-->
-          <!--                      <div class="row">-->
-          <!--                        <div class="col-sm-12 col-md-12 col-xl-12">-->
-          <!--                          <ng2-smart-table-->
-          <!--                            *ngIf="compositions.length > 0"-->
-          <!--                            [settings]="tableCompositionsReview.settings"-->
-          <!--                            [source]="tableCompositionsReview.source"-->
-          <!--                          >-->
-          <!--                          </ng2-smart-table>-->
-          <!--                        </div>-->
-          <!--                      </div>-->
-          <!--                    </nb-card-body>-->
-          <!--                  </nb-card>-->
-          <!--                </div>-->
-          <!--                <div class="col-sm-12 col-md-6 col-xl-6">-->
-          <!--                  <nb-card>-->
-          <!--                    <nb-card-header>Use classes</nb-card-header>-->
-          <!--                    <nb-card-body>-->
-          <!--                      <div class="row">-->
-          <!--                        <div class="col-sm-12 col-md-12 col-xl-12">-->
-          <!--                          <ng2-smart-table-->
-          <!--                            *ngIf="useClassesSelected.length > 0"-->
-          <!--                            [settings]="tableUseClassReview.settings"-->
-          <!--                            [source]="tableUseClassReview.source"-->
-          <!--                          >-->
-          <!--                          </ng2-smart-table>-->
-          <!--                        </div>-->
-          <!--                      </div>-->
-          <!--                    </nb-card-body>-->
-          <!--                  </nb-card>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div class="row m-3" *ngIf="points.length > 0">-->
-          <!--                <div class="col-sm-12">-->
-          <!--                  <div class="header-flex">-->
-          <!--                    <span>-->
-          <!--                      <h6>  Points from file </h6>-->
-          <!--                    </span>-->
-          <!--                    <span>-->
-          <!--                      <h6> Total of points: {{points.length}} </h6>-->
-          <!--                    </span>-->
-          <!--                  </div>-->
-          <!--                  <ng2-smart-table [settings]="tablePoints.settings" [source]="tablePoints.source">-->
-          <!--                  </ng2-smart-table>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div class="row m-3">-->
-          <!--                <div class="col-sm-12 col-md-12 col-xl-12">-->
-          <!--                  <h6 class="m-3">  Users </h6>-->
-          <!--                  <ng2-smart-table-->
-          <!--                    *ngIf="UsersOnCampaigns.length > 0"-->
-          <!--                    [settings]="tableUsers.settings"-->
-          <!--                    [source]="tableUsers.source"-->
-          <!--                    (delete)="removeUserOnCampaign($event)"-->
-          <!--                  >-->
-          <!--                  </ng2-smart-table>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div *ngIf="customImages" class="row m-3">-->
-          <!--                <h6>  Custom images </h6>-->
-          <!--                <div class="col-sm-12 col-md-12 col-xl-12">-->
-          <!--                  <ng2-smart-table *ngIf="images.length > 0" [settings]="tableImages.settings"-->
-          <!--                    [source]="tableImages.source" (delete)="removeImage($event)">-->
-          <!--                  </ng2-smart-table>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--            </nb-card-body>-->
-          <!--          </nb-card>-->
           <div class="actions">
             <button nbButton (click)="router.navigateByUrl('modules/campaign/index')">{{'campaign_create_edit_finish_btn' | translate}}</button>
           </div>

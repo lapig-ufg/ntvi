@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { Location } from '../models/location';
 import { Campaign } from '../models/campaign';
 import {NbComponentStatus, NbToastrService} from '@nebular/theme';
+import {Country} from "../models/country";
 
 @Injectable({
   providedIn: 'root',
@@ -62,6 +63,13 @@ export class CampaignService {
         catchError(this.errorHandler),
       );
   }
+
+  getCampaignCountries(): Observable<Country[]> {
+    return this.httpClient.get<Country[]>('assets/data/countries.json').pipe(
+      catchError(this.errorHandler),
+    );
+  }
+
 
   startCampaignCache(campaign): Observable<Campaign> {
     return this.httpClient.put<Campaign>(

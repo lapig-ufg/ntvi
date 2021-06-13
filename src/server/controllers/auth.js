@@ -1,26 +1,15 @@
 const { PrismaClient } = require('@prisma/client')
-const dotenv = require("dotenv-safe");
 const CryptoJS = require("crypto-js");
 const jwt = require('jsonwebtoken');
-
-const result = dotenv.config({
-    allowEmptyValues: true,
-    example: '.env'
-});
-if (result.error) {
-    throw result.error;
-}
-const { parsed: env } = result;
+const env = process.env;
 
 module.exports = function (app) {
     let Controller = {}
 
     let _language = app.util.language;
 
-    const prisma = new PrismaClient({
-        errorFormat: 'pretty',
-        log: ['query'],
-    })
+
+    const prisma = new PrismaClient();
 
     Controller.login = async function (request, response) {
         const { lang } = request.headers;

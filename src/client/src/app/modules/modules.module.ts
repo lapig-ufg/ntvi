@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule } from '@nebular/theme';
+import {NbCardModule, NbMenuModule} from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { ModulesComponent } from './modules.component';
@@ -7,6 +7,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { ModulesRoutingModule } from './modules-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+import { BrokerComponent } from './broker/broker.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
@@ -18,9 +19,11 @@ import { TranslateModule } from '@ngx-translate/core';
     ECommerceModule,
     MiscellaneousModule,
     TranslateModule,
+    NbCardModule,
   ],
   declarations: [
     ModulesComponent,
+    BrokerComponent,
   ],
 })
 export class ModulesModule {

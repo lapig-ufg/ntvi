@@ -1,6 +1,7 @@
 *.log
 *.logs
 *.csv
+*.out
 *.sublime-project
 *.sublime-workspace
 *.pyc
@@ -38,7 +39,7 @@ src/server/integration/py/credentials/
 db/dump/
 src/server/bin/GeoJSON/
 src/server/bin/SHP
-*.out
+src/server/integration/py/*.json
 src/server/.env
 src/server/bin/teste/*
 src/server/bin/.env

@@ -125,7 +125,7 @@ module.exports = function(app) {
 		});
 	}
 
-	getWindow = function(point) {
+	var getWindow = function(point) {
 		var buffer = 4000
 		var coordinates = proj4('EPSG:4326', 'EPSG:900913', [point.lon, point.lat])
 
@@ -140,7 +140,7 @@ module.exports = function(app) {
 		return [[ul[1], ul[0]], [lr[1], lr[0]]]
 	}
 
-	creatPoint = function(point, callback) {
+	var creatPoint = function(point, callback) {
 		var years = [];
 		var yearlyInspections = [];
 

@@ -1,0 +1,15 @@
+@import '../../../../node_modules/bootstrap/scss/mixins/breakpoints';
+@import '../../../../node_modules/@nebular/theme/styles/global/breakpoints';
+@import '../../@theme/styles/themes';
+
+@include nb-install-component() {
+  .broker-frame{
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+  }
+  nb-card-body{
+    padding: 0;
+  }
+}
+

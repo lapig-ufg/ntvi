@@ -10,6 +10,7 @@ export interface Campaign {
   name: string;
   description: string;
   numInspectors: number;
+  country?: string;
   typePeriod?: string;
   status?: string;
   initialDate?: Date;

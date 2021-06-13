@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>{{'campaign_create_edit_title' | translate}}</nb-card-header>
+  <nb-card-header>{{'campaign_create_title' | translate}}</nb-card-header>
   <nb-card-body>
     <nb-stepper #stepper orientation="vertical">
       <nb-step [stepControl]="infoForm" label="{{'campaign_create_edit_tab_info_title' | translate}}">
@@ -52,9 +52,36 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-sm-12 col-md-6 col-xl-6">
-                    <nb-toggle status="basic" labelPosition="left" [(checked)]="customImages">
+
+                    <div class="form-group">
+                      <label for="numInspectors" class="label">{{'campaign_create_edit_tab_info_field_country' | translate}}</label>
+                      <input #country
+                             id="country"
+                             formControlName="country"
+                             nbInput
+                             fullWidth
+                             type="text"
+                             (input)="onCountryChange()"
+                             placeholder="{{'campaign_create_edit_tab_info_field_country_placeholder' | translate}}"
+                             [nbAutocomplete]="auto" />
+
+                      <nb-autocomplete #auto (selectedChange)="onSelectionCountryChange($event)">
+                        <nb-option *ngFor="let country of filteredCountries$ | async" [value]="country.ISO">
+                          {{ country.COUNTRY }}
+                        </nb-option>
+                      </nb-autocomplete>
+                      <div *ngIf="fInfo.country.touched && fInfo.country.invalid" class="mt-2">
+                        <nb-alert status="danger" *ngIf="fInfo.country.errors.required">
+                          {{'campaign_create_edit_tab_info_field_country_required' | translate}}
+                        </nb-alert>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-xl-6 mt-lg-4 mt-md-4">
+                    <nb-toggle fullWidth status="basic" labelPosition="left" [(checked)]="customImages">
                       {{'campaign_create_edit_tab_info_field_custom_images' | translate}}
                     </nb-toggle>
                   </div>

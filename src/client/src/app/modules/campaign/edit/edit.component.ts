@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { CampaignService } from '../service/campaign.service';
 import { Campaign} from '../models/campaign';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +18,9 @@ import { UseClassService } from '../../use-class/service/use-class.service';
 import { UserService } from '../service/user.service';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
+import {Country} from "../models/country";
+import {Observable, of} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'ngx-edit',
@@ -44,7 +47,7 @@ export class EditComponent implements OnInit {
   UsersOnCampaigns = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
   customImages = false as boolean;
-  reviewCampaign = {} as any;
+  reviewCampaign: any;
   permissions = [
     { id: 'ADMIN', name: 'ADMIN' },
     { id: 'INSPETOR', name: 'INSPETOR' },
@@ -83,6 +86,7 @@ export class EditComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -104,6 +108,7 @@ export class EditComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -173,6 +178,7 @@ export class EditComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -200,6 +206,7 @@ export class EditComponent implements OnInit {
       actions: {
         position: 'right',
         edit: false,
+        columnTitle: this.translate.instant('tables_actions'),
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -222,6 +229,11 @@ export class EditComponent implements OnInit {
     },
     source: new LocalDataSource(),
   };
+  countries: Country[];
+  filteredCountries$: Observable<Country[]>;
+
+  @ViewChild('country') country;
+
   constructor(
     public campaignService: CampaignService,
     public satelliteService: SatelliteService,
@@ -233,9 +245,17 @@ export class EditComponent implements OnInit {
     public route: ActivatedRoute,
     public fb: FormBuilder,
     public translate: TranslateService,
-  ) { }
+  ) {
+    this.reviewCampaign = {};
+  }
 
   ngOnInit(): void {
+
+    this.campaignService.getCampaignCountries().subscribe((data: Country[]) => {
+      this.countries = data;
+      this.filteredCountries$ = of(this.countries);
+    });
+
     this.organizationService.getAll().subscribe((data: Organization[]) => {
       this.organizations = data;
     });
@@ -257,6 +277,7 @@ export class EditComponent implements OnInit {
       description: ['', Validators.required],
       organization: ['', Validators.required],
       numInspectors: ['', Validators.required],
+      country: ['', Validators.required],
     });
 
     this.configForm = this.fb.group({
@@ -288,6 +309,10 @@ export class EditComponent implements OnInit {
     this.id = this.route.snapshot.params['campaignId'];
 
     this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
+      this.points = data.points;
+      this.compositions = data.compositions;
+      this.useClassesSelected = data.classes;
+
       this.campaign = data;
       this.tablePoints.source.empty();
       this.tablePoints.source.load(data.points);
@@ -299,11 +324,13 @@ export class EditComponent implements OnInit {
       this.tableUsers.source.load(data.UsersOnCampaigns);
       this.tableCompositions.source.empty();
       this.tableCompositions.source.load(data.compositions);
+      this.reviewCampaign.organizationId = data.organizationId.toString();
       this.infoForm.patchValue({
         name: data.name,
         description: data.description,
         organization: data.organizationId,
         numInspectors: data.numInspectors,
+        country: data.country,
       });
       this.configForm.patchValue({
         initialDate: data.initialDate,
@@ -422,6 +449,7 @@ export class EditComponent implements OnInit {
     this.useClassesSelected = this.useClassesSelected.filter(function (item, i) {
       return item.id !== index;
     });
+
     this.tableUseClass.source.reset();
     await this.tableUseClass.source.load(this.useClassesSelected);
   }
@@ -537,6 +565,7 @@ export class EditComponent implements OnInit {
     this.reviewCampaign.description    = this.infoForm.get('description').value;
     this.reviewCampaign.organizationId = this.infoForm.get('organizationId').value;
     this.reviewCampaign.numInspectors  = this.infoForm.get('numInspectors').value;
+    this.reviewCampaign.country        = this.infoForm.get('country').value;
     this.reviewCampaign.initialDate    = this.configForm.get('initialDate').value;
     this.reviewCampaign.finalDate      = this.configForm.get('finalDate').value;
     this.tableUseClassReview.source.reset();
@@ -545,20 +574,9 @@ export class EditComponent implements OnInit {
     await this.tableCompositionsReview.source.load(this.compositions);
   }
   shufflePoints() {
-    let ctr = this.points.length, temp, index;
-    // While there are elements in the array
-    while (ctr > 0) {
-      // Pick a random index
-      index = Math.floor(Math.random() * ctr);
-      // Decrease ctr by 1
-      ctr--;
-      // And swap the last element with it
-      temp = this.points[ctr];
-      this.points[ctr] = this.points[index];
-      this.points[index] = temp;
-      this.tablePoints.source.empty();
-      this.tablePoints.source.load(this.points);
-    }
+    this.points = this.points.sort(() => Math.random() - 0.5);
+    this.tablePoints.source.empty();
+    this.tablePoints.source.load(this.points);
   }
   handlePointsFile(file) {
     const self = this;
@@ -594,6 +612,27 @@ export class EditComponent implements OnInit {
       });
       return row as Point;
     });
+  }
+
+  private filterCountries(value: string): Country[] {
+    const filterValue = value.toLowerCase();
+    if(this.countries){
+      return this.countries.filter(county => county.COUNTRY.toLowerCase().includes(filterValue));
+    }
+  }
+
+  getFilteredCountries(value: string): Observable<Country[]> {
+    return of(value).pipe(
+      map(filterString => this.filterCountries(filterString)),
+    );
+  }
+
+  onCountryChange() {
+    this.filteredCountries$ = this.getFilteredCountries(this.country.nativeElement.value);
+  }
+
+  onSelectionCountryChange($event) {
+    this.filteredCountries$ = this.getFilteredCountries($event);
   }
 
 }
