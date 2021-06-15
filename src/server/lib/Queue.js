@@ -39,11 +39,11 @@ export default {
             queue.bull.process(queue.handle);
 
             queue.bull.on('completed', (job) => {
-                console.log(`Job completed with result ${JSON.stringify(job)}`);
+                console.log(`Job completed with result ${JSON.stringify(job.key)}`);
             });
 
             queue.bull.on('failed', (job, err) => {
-                console.log('Job failed', queue.key, job.data);
+                console.log('Job failed', queue.key);
                 console.log(err);
             });
         })

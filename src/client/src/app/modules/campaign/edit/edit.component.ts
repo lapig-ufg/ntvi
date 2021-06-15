@@ -20,7 +20,8 @@ import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { TranslateService } from '@ngx-translate/core';
 import {Country} from "../models/country";
 import {Observable, of} from "rxjs";
-import {map} from "rxjs/operators";
+import { map } from "rxjs/operators";
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-edit',
@@ -46,6 +47,7 @@ export class EditComponent implements OnInit {
   images = [] as Image[];
   UsersOnCampaigns = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
+  loadingForms = false as boolean;
   customImages = false as boolean;
   reviewCampaign: any;
   permissions = [
@@ -54,9 +56,25 @@ export class EditComponent implements OnInit {
     { id: 'SUPERVISOR', name: 'SUPERVISOR' },
   ];
   colorsComposition = [
+    { id: 'B1', name: 'B1' },
+    { id: 'B2', name: 'B2' },
+    { id: 'B3', name: 'B3' },
+    { id: 'B4', name: 'B4' },
+    { id: 'B5', name: 'B5' },
+    { id: 'B6', name: 'B6' },
+    { id: 'B7', name: 'B7' },
+    { id: 'B8', name: 'B8' },
+    { id: 'B8A', name: 'B8A' },
+    { id: 'B9', name: 'B9' },
+    { id: 'B10', name: 'B10' },
+    { id: 'B11', name: 'B11' },
+    { id: 'B12', name: 'B12' },
+    { id: 'QA10', name: 'QA10' },
+    { id: 'QA20', name: 'QA20' },
+    { id: 'QA60', name: 'QA60' },
     { id: 'NIR', name: 'NIR' },
-    { id: 'SWIR', name: 'SWIR' },
     { id: 'RED', name: 'RED' },
+    { id: 'SWIR', name: 'SWIR' },
   ];
   tablePoints = {
     settings: {
@@ -233,6 +251,7 @@ export class EditComponent implements OnInit {
   filteredCountries$: Observable<Country[]>;
 
   @ViewChild('country') country;
+  @ViewChild('stepper') stepper;
 
   constructor(
     public campaignService: CampaignService,
@@ -269,7 +288,14 @@ export class EditComponent implements OnInit {
     });
 
     this.userService.getAll().subscribe((data: User[]) => {
-      this.users = data;
+      let users: User[]  = [];
+      const user = JSON.parse(localStorage.getItem('user'));
+      data.forEach(function(us){
+        if (us.id !== user.id){
+          users.push(us)
+        }
+      });
+      this.users = users
     });
 
     this.infoForm = this.fb.group({
@@ -289,7 +315,7 @@ export class EditComponent implements OnInit {
     });
 
     this.pointsForm = this.fb.group({
-      pointsFile: ['', Validators.required],
+      pointsFile: [],
     });
 
     this.usersForm = this.fb.group({
@@ -310,6 +336,7 @@ export class EditComponent implements OnInit {
 
     this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
       this.points = data.points;
+      this.mapPoints = data.points.map(point => [parseFloat(point.longitude), parseFloat(point.latitude)]);
       this.compositions = data.compositions;
       this.useClassesSelected = data.classes;
 
@@ -322,6 +349,7 @@ export class EditComponent implements OnInit {
       this.tableImages.source.load(data.images);
       this.tableUsers.source.empty();
       this.tableUsers.source.load(data.UsersOnCampaigns);
+      this.UsersOnCampaigns = data.UsersOnCampaigns;
       this.tableCompositions.source.empty();
       this.tableCompositions.source.load(data.compositions);
       this.reviewCampaign.organizationId = data.organizationId.toString();
@@ -333,8 +361,8 @@ export class EditComponent implements OnInit {
         country: data.country,
       });
       this.configForm.patchValue({
-        initialDate: data.initialDate,
-        finalDate: data.finalDate,
+        initialDate: new Date(data.initialDate),
+        finalDate: new Date(data.finalDate),
       });
     });
   }
@@ -399,6 +427,7 @@ export class EditComponent implements OnInit {
       user: '',
       permission: '',
     });
+    console.log(this.UsersOnCampaigns)
     this.tableUsers.source.reset();
     await this.tableUsers.source.load(this.UsersOnCampaigns);
   }
@@ -493,18 +522,23 @@ export class EditComponent implements OnInit {
   get fImages() {
     return this.imagesForm.controls;
   }
+
   onInfoFormSubmit() {
     // this.infoForm.markAsDirty();
     this.campaignService.update(this.id, this.infoForm.value).subscribe(res => {
       this.campaign = res;
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
 
   }
   onConfigFormSubmit() {
     // this.configForm.markAsDirty();
-
-    this.campaign.initialDate = this.configForm.get('initialDate').value;
-    this.campaign.finalDate = this.configForm.get('finalDate').value;
+    this.campaign.initialDate = this.configForm.get('initialDate').value.toISOString();
+    this.campaign.finalDate = this.configForm.get('finalDate').value.toISOString();
 
     const auxUseClasses = [];
 
@@ -523,16 +557,26 @@ export class EditComponent implements OnInit {
 
     this.campaign.compositions = auxCompositions;
     this.campaign.classes = auxUseClasses;
-
+    this.loadingPoints = true;
+    setTimeout(() =>  this.loadingPoints = false, 600);
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
   }
   onPointsFormSubmit() {
     // this.pointsForm.markAsDirty();
-
+    this.loadingForms = true;
     this.campaign.points = (this.points.length > 0 ? this.points : null);
-
     this.campaignService.createPointsForm(this.campaign).subscribe(res => {
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
   }
   onUsersFormSubmit() {
@@ -541,6 +585,11 @@ export class EditComponent implements OnInit {
     this.campaign.UsersOnCampaigns = this.UsersOnCampaigns;
 
     this.campaignService.createUsersOnCampaignForm(this.campaign).subscribe(res => {
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_points_error'), 'top-right');
     });
     this.loadInputs();
   }
@@ -550,20 +599,27 @@ export class EditComponent implements OnInit {
     this.campaign.images = (this.images.length > 0 ? this.images : null);
 
     this.campaignService.createImagesForm(this.campaign).subscribe(res => {
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_points_error'), 'top-right');
     });
     this.loadInputs();
   }
+
   showToast(status: NbComponentStatus, massage, position) {
     const duration = 4000;
     setTimeout(() => this.toastService.show(status, massage, { status, position, duration }), 900);
   }
+
   onMapReady(ev) {
     // console.log(ev)
   }
   async loadInputs() {
     this.reviewCampaign.name           = this.infoForm.get('name').value;
     this.reviewCampaign.description    = this.infoForm.get('description').value;
-    this.reviewCampaign.organizationId = this.infoForm.get('organizationId').value;
+    this.reviewCampaign.organizationId = this.infoForm.get('organization').value;
     this.reviewCampaign.numInspectors  = this.infoForm.get('numInspectors').value;
     this.reviewCampaign.country        = this.infoForm.get('country').value;
     this.reviewCampaign.initialDate    = this.configForm.get('initialDate').value;
@@ -574,9 +630,11 @@ export class EditComponent implements OnInit {
     await this.tableCompositionsReview.source.load(this.compositions);
   }
   shufflePoints() {
+    this.loadingPoints = true;
     this.points = this.points.sort(() => Math.random() - 0.5);
     this.tablePoints.source.empty();
     this.tablePoints.source.load(this.points);
+    this.loadingPoints = false;
   }
   handlePointsFile(file) {
     const self = this;
@@ -588,10 +646,11 @@ export class EditComponent implements OnInit {
         return (item.latitude !== null && item.longitude !== null && item.info !== null);
       });
       for (const [index, point] of self.points.entries()) {
-        const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
+        // const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
         self.mapPoints.push([parseFloat(point.longitude), parseFloat(point.latitude)]);
-        const location = data.results[0].locations[0];
-        self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
+        // const location = data.results[0].locations[0];
+        // self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
+        self.points[index].info = '';
 
       }
       await self.tablePoints.source.load(self.points);

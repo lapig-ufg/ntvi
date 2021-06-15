@@ -12,7 +12,7 @@ module.exports = function (app) {
     app.put('/service/campaign/createPointsForm/:id', JWT.verifyJWT, control.createPointsForm);
     app.put('/service/campaign/updatePointsForm/:id', JWT.verifyJWT, control.updatePointsForm);
     app.put('/service/campaign/createUsersCampaignForm/:id', JWT.verifyJWT, control.createUserCampaignForm);
-    app.put('/service/campaign/updateUsersCampaignForm/:id', JWT.verifyJWT, control.updateUserCampaignForm);
+    // app.put('/service/campaign/updateUsersCampaignForm/:id', JWT.verifyJWT, control.updateUserCampaignForm);
     app.put('/service/campaign/createImagesForm/:id', JWT.verifyJWT, control.createImagesForm);
     app.put('/service/campaign/updateImagesForm/:id', JWT.verifyJWT, control.updateImagesForm);
     app.put('/service/campaign/startCampaignCache/:id', JWT.verifyJWT, control.starCampaignCache);

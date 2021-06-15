@@ -14,34 +14,6 @@ module.exports = function (app) {
         log: ['query'],
     })
 
-    const getCampaign = async function (id) {
-        return await prisma.campaign.findUnique({
-            where: {
-                id: parseInt(id),
-            },
-            include: {
-                points: true,
-                images: true,
-                UsersOnCampaigns: {
-                    include: {
-                        user: {
-                            select: {
-                                name: true,
-                            }
-                        }
-                    }
-                },
-                classes: true,
-                compositions: {
-                    include: {
-                        satellite: true,
-                    }
-                },
-                organization: true
-            }
-        })
-    }
-
     Controller.createCampaignInfoForm = async function (request, response) {
         const { name, description, organization, numInspectors, country, permission } = request.body
         let { lang } = request.headers;
@@ -108,9 +80,8 @@ module.exports = function (app) {
 
             arrayQueries.push(prisma.campaign.update({
                 where: { id: parseInt(id) },
-                data: {
-                    classes: { deleteMany: {}},
-                }
+                data: { classes: { set: [] }},
+                include: { classes: true}
             }))
 
             for (let obj of compositions) {
@@ -153,6 +124,12 @@ module.exports = function (app) {
                 where: { campaignId: parseInt(id) },
             }))
 
+            arrayQueries.push(prisma.campaign.update({
+                where: { id: parseInt(id) },
+                data: { classes: { set: [] }},
+                include: { classes: true}
+            }))
+
             for (let obj of compositions) {
                 arrayQueries.push(prisma.composition.create({
                     data: {
@@ -190,19 +167,29 @@ module.exports = function (app) {
         try {
             let arrayQueries = []
 
+            arrayQueries.push(prisma.point.deleteMany({
+                where: { campaignId: parseInt(id) },
+            }))
+
             for (let objPoint of points) {
                 delete objPoint.id
+                delete objPoint.campaignId
+                delete objPoint.updatedAt
+                delete objPoint.createdAt
             }
 
             arrayQueries.push(prisma.campaign.update({
                 where: { id: parseInt(id) },
                 data: {
-                    points: { create: points },
-                }
+                    points: { createMany: {
+                        data: points
+                    } },
+                },
+                include: { points: true}
             }))
 
             const resultQueries = await prisma.$transaction(arrayQueries)
-            console.log("resultQueriesPoints", resultQueries)
+            await Queue.add('SearchPointsInformation', resultQueries[1]);
             response.status(200).json(resultQueries);
         } catch (e) {
             console.error(e)
@@ -225,17 +212,23 @@ module.exports = function (app) {
 
             for (let objPoint of points) {
                 delete objPoint.id
+                delete objPoint.campaignId
+                delete objPoint.updatedAt
+                delete objPoint.createdAt
             }
 
             arrayQueries.push(prisma.campaign.update({
                 where: { id: parseInt(id) },
                 data: {
-                    points: { create: points },
-                }
+                    points: { createMany: {
+                            data: points
+                        } },
+                },
+                include: { points: true}
             }))
 
             const resultQueries = await prisma.$transaction(arrayQueries)
-
+            await Queue.add('SearchPointsInformation', resultQueries[1].points);
             response.status(200).json(resultQueries);
         } catch (e) {
             console.error(e)
@@ -254,14 +247,27 @@ module.exports = function (app) {
 
             let newVet = []
 
+            arrayQueries.push(prisma.campaign.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    UsersOnCampaigns: {
+                        deleteMany: {
+                            campaignId: parseInt(id),
+                        },
+                    },
+                },
+            }))
+
             for (let obj of UsersOnCampaigns) {
                 obj.user = obj.user.id
-                delete obj.userId
+                // delete obj.userId
                 obj.campaign = parseInt(id)
 
                 newVet.push({
                     user: {
-                        connect: { id: obj.user }
+                        connect: { id: parseInt(obj.userId)  }
                     },
                     typeUserInCampaign: obj.typeUserInCampaign
                 })
@@ -284,38 +290,38 @@ module.exports = function (app) {
         }
     }
 
-    Controller.updateUserCampaignForm = async function (request, response) {
-        const { id } = request.params
-        const { points } = request.body
-        let { lang } = request.headers;
-        const texts = language.getLang(lang);
-
-        try {
-            let arrayQueries = []
-
-            arrayQueries.push(prisma.points.deleteMany({
-                where: { campaignId: parseInt(id) },
-            }))
-
-            for (let objPoint of points) {
-                delete objPoint.id
-            }
-
-            arrayQueries.push(prisma.campaign.update({
-                where: { id: parseInt(id) },
-                data: {
-                    points: { create: points },
-                }
-            }))
-
-            const resultQueries = await prisma.$transaction(arrayQueries)
-
-            response.status(200).json(resultQueries);
-        } catch (e) {
-            console.error(e)
-            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
-        }
-    }
+    // Controller.updateUserCampaignForm = async function (request, response) {
+    //     const { id } = request.params
+    //     const { points } = request.body
+    //     let { lang } = request.headers;
+    //     const texts = language.getLang(lang);
+    //
+    //     try {
+    //         let arrayQueries = []
+    //
+    //         arrayQueries.push(prisma.points.deleteMany({
+    //             where: { campaignId: parseInt(id) },
+    //         }))
+    //
+    //         for (let objPoint of points) {
+    //             delete objPoint.id
+    //         }
+    //
+    //         arrayQueries.push(prisma.campaign.update({
+    //             where: { id: parseInt(id) },
+    //             data: {
+    //                 points: { create: points },
+    //             }
+    //         }))
+    //
+    //         const resultQueries = await prisma.$transaction(arrayQueries)
+    //
+    //         response.status(200).json(resultQueries);
+    //     } catch (e) {
+    //         console.error(e)
+    //         response.status(500).json({ message: texts.login_msg_erro + e + '.' });
+    //     }
+    // }
 
     Controller.createImagesForm = async function (request, response) {
         const { id } = request.params
@@ -542,8 +548,6 @@ module.exports = function (app) {
                     publish: publish
                 }
             });
-
-            await Queue.add('UserReport', { campaign });
             response.status(200).json(campaign);
         } catch (e) {
             console.error(e)

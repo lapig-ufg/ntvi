@@ -6,10 +6,10 @@
         <form id="infoForm" [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit()" class="step-container">
           <nb-card>
             <nb-card-header>{{'campaign_create_edit_tab_info_card_title' | translate}}</nb-card-header>
-            <nb-card-body>
+            <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
               <div class="form-group">
                 <label for="name" class="label">{{'campaign_create_edit_tab_info_field_name' | translate}}</label>
-                <input id="name" formControlName="name" placeholder="{{'campaign_create_edit_tab_info_field_name_placeholder' | translate}}" type="text" nbInput fullWidth>
+                <input id="name" formControlName="name" autofocus placeholder="{{'campaign_create_edit_tab_info_field_name_placeholder' | translate}}" type="text" nbInput fullWidth>
                 <div *ngIf="fInfo.name.touched && fInfo.name.invalid" class="mt-2">
                   <nb-alert status="danger" *ngIf="fInfo.name.errors.required">{{'campaign_create_edit_tab_info_field_name_required' | translate}}</nb-alert>
                 </div>
@@ -63,11 +63,12 @@
                              nbInput
                              fullWidth
                              type="text"
+                             focusInputOnValueChange="false"
                              (input)="onCountryChange()"
                              placeholder="{{'campaign_create_edit_tab_info_field_country_placeholder' | translate}}"
                              [nbAutocomplete]="auto" />
 
-                      <nb-autocomplete #auto (selectedChange)="onSelectionCountryChange($event)">
+                      <nb-autocomplete autofocus="false" #auto (selectedChange)="onSelectionCountryChange($event)">
                         <nb-option *ngFor="let country of filteredCountries$ | async" [value]="country.ISO">
                           {{ country.COUNTRY }}
                         </nb-option>
@@ -89,7 +90,7 @@
             </nb-card-body>
           </nb-card>
           <div class="actions">
-            <button type="submit" nbButton nbStepperNext (click)="onInfoFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+            <button type="submit" nbButton >{{'campaign_create_edit_tab_btn_next' | translate}}</button>
           </div>
         </form>
       </nb-step>
@@ -99,14 +100,14 @@
             <nb-card-header>
               {{'campaign_create_edit_tab_config_card_title' | translate}}
             </nb-card-header>
-            <nb-card-body>
+            <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-xl-6">
                   <div class="form-group">
                     <label for="initialDate" class="label">{{'campaign_create_edit_tab_config_field_initial_date' | translate}}</label>
                     <input id="initialDate" formControlName="initialDate" placeholder="{{'campaign_create_edit_tab_config_field_initial_date_placeholder' | translate}}"
                            [nbDatepicker]="dpInitialDate" nbInput fullWidth>
-                    <nb-datepicker #dpInitialDate [format]="'yyyy'"></nb-datepicker>
+                    <nb-datepicker #dpInitialDate  format="{{'datepicker_format' | translate}}"></nb-datepicker>
                     <div *ngIf="fConfig.initialDate.touched && fConfig.initialDate.invalid" class="mt-2">
                       <nb-alert status="danger" *ngIf="fConfig.initialDate.errors.required">
                         {{'campaign_create_edit_tab_config_field_initial_date_required' | translate}}
@@ -119,7 +120,7 @@
                     <label for="finalDate" class="label">{{'campaign_create_edit_tab_config_field_final_date' | translate}}</label>
                     <input id="finalDate" formControlName="finalDate" placeholder="{{'campaign_create_edit_tab_config_field_final_date_placeholder' | translate}}"
                            [nbDatepicker]="dpFinalDate" nbInput fullWidth>
-                    <nb-datepicker #dpFinalDate [format]="'yyyy'"></nb-datepicker>
+                    <nb-datepicker #dpFinalDate format="{{'datepicker_format' | translate}}"></nb-datepicker>
                     <div *ngIf="fConfig.finalDate.touched && fConfig.finalDate.invalid" class="mt-2">
                       <nb-alert status="danger" *ngIf="fConfig.finalDate.errors.required">
                         {{'campaign_create_edit_tab_config_field_final_date_required' | translate}}
@@ -208,7 +209,7 @@
               </div>
               <div class="actions">
                 <button type="button" nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                <button nbButton type="submit" nbStepperNext (click)="onConfigFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                <button nbButton type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
               </div>
             </nb-card-body>
           </nb-card>
@@ -217,9 +218,9 @@
       <nb-step [stepControl]="pointsForm" label="{{'campaign_create_edit_tab_points_title' | translate}}">
         <form [formGroup]="pointsForm" (ngSubmit)="onPointsFormSubmit()" class="step-container">
           <nb-card [nbSpinner]="loadingPoints" nbSpinnerStatus="danger" nbSpinnerSize="giant"
-                   nbSpinnerMessage="Loading points">
+                   nbSpinnerMessage="{{'campaign_create_edit_loading' | translate}}">
             <nb-card-header>{{'campaign_create_edit_tab_points_card_title' | translate}}</nb-card-header>
-            <nb-card-body>
+            <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
               <div class="row mt-3">
                 <div class="col-sm-12">
                   <div class="form-group">
@@ -230,7 +231,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row" *ngIf="points.length > 0 && !loadingPoints">
+              <div class="row" *ngIf="!loadingPoints && mapPoints.length > 0">
                 <div class="col-sm-12">
                   <ngx-ol-map [center]="[4.984761,34.337429]" [zoom]="4" [points]="mapPoints"
                               (mapReady)="onMapReady($event)"></ngx-ol-map>
@@ -261,7 +262,7 @@
               </div>
               <div class="actions">
                 <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                <button type="button" (click)="onPointsFormSubmit()" nbButton nbStepperNext>{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                <button type="submit" nbButton >{{'campaign_create_edit_tab_btn_next' | translate}}</button>
               </div>
             </nb-card-body>
           </nb-card>
@@ -273,7 +274,7 @@
             <div class="col-sm-12 col-md-12 col-xl-12">
               <nb-card>
                 <nb-card-header>{{'campaign_create_edit_tab_users_card_title' | translate}}</nb-card-header>
-                <nb-card-body>
+                <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
                   <div class="row">
                     <div class="col-sm-12 col-md-5 col-xl-5">
                       <div class="form-group">
@@ -310,7 +311,7 @@
                   </div>
                   <div class="actions">
                     <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                    <button nbButton nbStepperNext (click)="onUsersFormSubmit()" type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                    <button nbButton type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
                   </div>
                 </nb-card-body>
               </nb-card>
@@ -324,7 +325,7 @@
             <div class="col-sm-12 col-md-12 col-xl-12">
               <nb-card>
                 <nb-card-header>{{'campaign_create_edit_tab_images_card_title' | translate}}</nb-card-header>
-                <nb-card-body>
+                <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
                   <div class="row">
                     <div class="col-sm-12 col-md-2 col-xl-2">
                       <div class="form-group">
@@ -366,7 +367,7 @@
                   </div>
                   <div class="actions mt-3">
                     <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                    <button nbButton nbStepperNext type="submit" (click)="onImagesFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                    <button nbButton type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
                   </div>
                 </nb-card-body>
               </nb-card>
@@ -376,7 +377,7 @@
       </nb-step>
       <nb-step  label="{{'campaign_create_edit_tab_confirmation_title' | translate}}">
         <div class="step-container">
-          <h3 class="m-2">{{'campaign_create_edit_finish_title' | translate}}</h3>
+          <h3 class="m-2">{{'campaign_edit_finish_title' | translate}}</h3>
           <div class="actions">
             <button nbButton (click)="router.navigateByUrl('modules/campaign/index')">{{'campaign_create_edit_finish_btn' | translate}}</button>
           </div>

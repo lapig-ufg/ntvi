@@ -179,7 +179,7 @@ export class MapComponent implements AfterViewInit {
     });
     const style = new Style({
       image: new Circle({
-        radius: 8,
+        radius: 2,
         fill: new Fill({ color: '#b30059' }),
       }),
     });

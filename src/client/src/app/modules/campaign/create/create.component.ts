@@ -46,6 +46,7 @@ export class CreateComponent implements OnInit {
   campaign: Campaign;
   UsersOnCampaigns = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
+  sendingPoints = false as boolean;
   customImages = false as boolean;
   reviewCampaign = {} as any;
   permissions = [
@@ -54,9 +55,25 @@ export class CreateComponent implements OnInit {
     { id: 'SUPERVISOR', name: 'SUPERVISOR' },
   ];
   colorsComposition = [
+    { id: 'B1', name: 'B1' },
+    { id: 'B2', name: 'B2' },
+    { id: 'B3', name: 'B3' },
+    { id: 'B4', name: 'B4' },
+    { id: 'B5', name: 'B5' },
+    { id: 'B6', name: 'B6' },
+    { id: 'B7', name: 'B7' },
+    { id: 'B8', name: 'B8' },
+    { id: 'B8A', name: 'B8A' },
+    { id: 'B9', name: 'B9' },
+    { id: 'B10', name: 'B10' },
+    { id: 'B11', name: 'B11' },
+    { id: 'B12', name: 'B12' },
+    { id: 'QA10', name: 'QA10' },
+    { id: 'QA20', name: 'QA20' },
+    { id: 'QA60', name: 'QA60' },
     { id: 'NIR', name: 'NIR' },
-    { id: 'SWIR', name: 'SWIR' },
     { id: 'RED', name: 'RED' },
+    { id: 'SWIR', name: 'SWIR' },
   ];
   tablePoints = {
     settings: {
@@ -233,6 +250,7 @@ export class CreateComponent implements OnInit {
   filteredCountries$: Observable<Country[]>;
 
   @ViewChild('country') country;
+  @ViewChild('stepper') stepper;
   constructor(
     public campaignService: CampaignService,
     public satelliteService: SatelliteService,
@@ -264,7 +282,13 @@ export class CreateComponent implements OnInit {
     });
 
     this.userService.getAll().subscribe((data: User[]) => {
-      this.users = data;
+      let users: User[]  = [];
+      const user = JSON.parse(localStorage.getItem('user'));
+      data.forEach(function(us){
+        if (us.id !== user.id){
+          users.push(us)
+        }
+      });
     });
 
     this.infoForm = this.fb.group({
@@ -510,10 +534,14 @@ export class CreateComponent implements OnInit {
   }
   onPointsFormSubmit() {
     this.pointsForm.markAsDirty();
-
+    this.sendingPoints = true;
     this.campaign.points = (this.points.length > 0 ? this.points : null);
-
     this.campaignService.createPointsForm(this.campaign).subscribe(res => {
+      this.sendingPoints = false;
+      this.stepper.next();
+    }, error => {
+      this.sendingPoints = false;
+      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_points_error'), 'top-right');
     });
   }
 
@@ -577,7 +605,7 @@ export class CreateComponent implements OnInit {
         // const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
         // const location = data.results[0].locations[0];
         self.mapPoints.push([parseFloat(point.longitude), parseFloat(point.latitude)]);
-        // self.points[index].info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
+        self.points[index].info = '';
       }
 
       await self.tablePoints.source.load(self.points);

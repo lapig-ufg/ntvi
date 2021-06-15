@@ -130,6 +130,8 @@ export class ViewComponent implements AfterViewInit {
     },
     source: new LocalDataSource(),
   };
+  loadingPoints = false as boolean;
+  mapPoints = [] as any[];
   constructor(
     public campaignService: CampaignService,
     public route: ActivatedRoute,
@@ -146,12 +148,19 @@ export class ViewComponent implements AfterViewInit {
 
     this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
       this.campaign = data;
+      this.mapPoints = data.points.map(point => [parseFloat(point.longitude), parseFloat(point.latitude)]);
       this.tablePoints.source.load(data.points);
       this.tableUseClass.source.load(data.classes);
       this.tableImages.source.load(data.images);
       this.tableUsers.source.load(data.UsersOnCampaigns);
       this.tableCompositionsReview.source.load(data.compositions);
+
+      this.loadingPoints = true;
+      setTimeout(() =>  this.loadingPoints = false, 600);
     });
 
+  }
+  onMapReady(ev) {
+    // console.log(ev)
   }
 }
