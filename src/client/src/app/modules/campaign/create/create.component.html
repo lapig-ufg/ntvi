@@ -6,7 +6,7 @@
         <form id="infoForm" [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit()" class="step-container" autocomplete="off">
           <nb-card>
             <nb-card-header>{{'campaign_create_edit_tab_info_card_title' | translate}}</nb-card-header>
-            <nb-card-body>
+            <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
               <div class="form-group">
                 <label for="name" class="label">{{'campaign_create_edit_tab_info_field_name' | translate}}</label>
                 <input id="name" formControlName="name" placeholder="{{'campaign_create_edit_tab_info_field_name_placeholder' | translate}}" type="text" nbInput fullWidth>
@@ -90,17 +90,17 @@
             </nb-card-body>
           </nb-card>
           <div class="actions">
-            <button type="submit" nbButton nbStepperNext (click)="onInfoFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+            <button type="submit" nbButton >{{'campaign_create_edit_tab_btn_next' | translate}}</button>
           </div>
         </form>
       </nb-step>
       <nb-step [stepControl]="configForm" label="{{'campaign_create_edit_tab_config_title' | translate}}">
-        <form id="configForm" [formGroup]="configForm" class="step-container" autocomplete="off">
+        <form id="configForm" [formGroup]="configForm" (ngSubmit)="onConfigFormSubmit()" class="step-container" autocomplete="off">
           <nb-card>
             <nb-card-header>
               {{'campaign_create_edit_tab_config_card_title' | translate}}
             </nb-card-header>
-            <nb-card-body>
+            <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
               <div class="row">
                 <div class="col-sm-12 col-md-6 col-xl-6">
                   <div class="form-group">
@@ -209,7 +209,7 @@
               </div>
               <div class="actions">
                 <button type="button" nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                <button nbButton type="button" (click)="onConfigFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                <button nbButton type="submit" >{{'campaign_create_edit_tab_btn_next' | translate}}</button>
               </div>
             </nb-card-body>
           </nb-card>
@@ -220,7 +220,7 @@
           <nb-card [nbSpinner]="loadingPoints" nbSpinnerStatus="danger" nbSpinnerSize="giant"
             nbSpinnerMessage="Loading points">
             <nb-card-header>{{'campaign_create_edit_tab_points_card_title' | translate}}</nb-card-header>
-            <nb-card-body>
+            <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
               <div class="row mt-3">
                 <div class="col-sm-12">
                   <div class="form-group">
@@ -262,7 +262,7 @@
               </div>
               <div class="actions">
                 <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                <button type="button" nbButton (click)="onPointsFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                <button type="submit" nbButton >{{'campaign_create_edit_tab_btn_next' | translate}}</button>
               </div>
             </nb-card-body>
           </nb-card>
@@ -274,7 +274,7 @@
             <div class="col-sm-12 col-md-12 col-xl-12">
               <nb-card>
                 <nb-card-header>{{'campaign_create_edit_tab_users_card_title' | translate}}</nb-card-header>
-                <nb-card-body>
+                <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
                   <div class="row">
                     <div class="col-sm-12 col-md-5 col-xl-5">
                       <div class="form-group">
@@ -311,7 +311,7 @@
                   </div>
                   <div class="actions">
                     <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                    <button nbButton nbStepperNext (click)="onUsersFormSubmit()" type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                    <button nbButton type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
                   </div>
                 </nb-card-body>
               </nb-card>
@@ -325,7 +325,7 @@
             <div class="col-sm-12 col-md-12 col-xl-12">
               <nb-card>
                 <nb-card-header>{{'campaign_create_edit_tab_images_card_title' | translate}}</nb-card-header>
-                <nb-card-body>
+                <nb-card-body [nbSpinner]="loadingForms" nbSpinnerStatus="primary" nbSpinnerSize="giant">
                   <div class="row">
                     <div class="col-sm-12 col-md-2 col-xl-2">
                       <div class="form-group">
@@ -367,7 +367,7 @@
                   </div>
                   <div class="actions mt-3">
                     <button nbButton nbStepperPrevious>{{'campaign_create_edit_tab_btn_prev' | translate}}</button>
-                    <button nbButton nbStepperNext type="submit" (click)="onImagesFormSubmit()">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
+                    <button nbButton type="submit">{{'campaign_create_edit_tab_btn_next' | translate}}</button>
                   </div>
                 </nb-card-body>
               </nb-card>

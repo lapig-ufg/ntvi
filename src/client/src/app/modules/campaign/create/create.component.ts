@@ -46,7 +46,7 @@ export class CreateComponent implements OnInit {
   campaign: Campaign;
   UsersOnCampaigns = [] as UsersOnCampaigns[];
   loadingPoints = false as boolean;
-  sendingPoints = false as boolean;
+  loadingForms = false as boolean;
   customImages = false as boolean;
   reviewCampaign = {} as any;
   permissions = [
@@ -88,9 +88,9 @@ export class CreateComponent implements OnInit {
         longitude: {
           title: this.translate.instant('campaign_view_points_table_col_lon'),
         },
-        // info: {
-        //   title: this.translate.instant('campaign_view_points_table_col_location'),
-        // },
+        info: {
+          title: this.translate.instant('campaign_view_points_table_col_location'),
+        },
       },
     },
     source: new LocalDataSource(),
@@ -289,6 +289,7 @@ export class CreateComponent implements OnInit {
           users.push(us)
         }
       });
+      this.users = users
     });
 
     this.infoForm = this.fb.group({
@@ -501,6 +502,11 @@ export class CreateComponent implements OnInit {
 
     this.campaignService.create(data).subscribe(res => {
       this.campaign = res;
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
 
   }
@@ -530,18 +536,23 @@ export class CreateComponent implements OnInit {
     this.campaign.classes = auxUseClasses;
 
     this.campaignService.createConfigForm(this.campaign).subscribe(res => {
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
   }
   onPointsFormSubmit() {
     this.pointsForm.markAsDirty();
-    this.sendingPoints = true;
+    this.loadingForms = true;
     this.campaign.points = (this.points.length > 0 ? this.points : null);
     this.campaignService.createPointsForm(this.campaign).subscribe(res => {
-      this.sendingPoints = false;
+      this.loadingForms = false;
       this.stepper.next();
     }, error => {
-      this.sendingPoints = false;
-      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_points_error'), 'top-right');
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
   }
 
@@ -551,8 +562,13 @@ export class CreateComponent implements OnInit {
     this.campaign.UsersOnCampaigns = this.UsersOnCampaigns;
 
     this.campaignService.createUsersOnCampaignForm(this.campaign).subscribe(res => {
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
-    this.loadInputs();
+    // this.loadInputs();
   }
 
   onImagesFormSubmit() {
@@ -561,12 +577,17 @@ export class CreateComponent implements OnInit {
     this.campaign.images = (this.images.length > 0 ? this.images : null);
 
     this.campaignService.createImagesForm(this.campaign).subscribe(res => {
+      this.loadingForms = false;
+      this.stepper.next();
+    }, error => {
+      this.loadingForms = false;
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
     this.loadInputs();
   }
   showToast(status: NbComponentStatus, massage, position) {
     const duration = 4000;
-    setTimeout(() => this.toastService.show(status, massage, { status, position, duration }), 900);
+    setTimeout(() => this.toastService.show(status, massage, { status, position, duration }), 400);
   }
   onMapReady(ev) {
     // console.log(ev)
@@ -605,7 +626,7 @@ export class CreateComponent implements OnInit {
         // const data = await self.campaignService.getPointInfo(point.latitude, point.longitude).toPromise();
         // const location = data.results[0].locations[0];
         self.mapPoints.push([parseFloat(point.longitude), parseFloat(point.latitude)]);
-        self.points[index].info = '';
+        self.points[index].info = point.info ? point.info : '';
       }
 
       await self.tablePoints.source.load(self.points);

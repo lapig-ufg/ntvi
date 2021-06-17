@@ -4,6 +4,7 @@
   "description": "Server of NTVI",
   "dependencies": {
     "@bull-board/express": "^3.2.7",
+    "@google/earthengine": "^0.1.269",
     "@prisma/client": "^2.24.1",
     "always": "^2.2.0",
     "app-root-path": "^1.0.0",
@@ -40,7 +41,7 @@
     "merge": "^1.2.1",
     "mime": "~1.2.11",
     "moment": "~2.6.0",
-    "mongodb": "^2.0.42",
+    "mongodb": "^3.6.9",
     "mu2": "~0.5.20",
     "multer": "^0.1.8",
     "node-schedule": "~1.2.0",
@@ -75,6 +76,7 @@
   "scripts": {
     "dev:start": "npx prisma generate; export NODE_ENV=dev; nodemon app-ntvi-cluster.js",
     "dev:broker": "nodemon broker-cluster.js",
+    "dev:test": "nodemon ./tests/testConnectionMongo.js",
     "git:push": "git push origin main  --no-verify",
     "prisma:up": "npx prisma migrate dev --preview-feature",
     "prod:broker": "nohup node -r sucrase/register broker-cluster.js > broker.log &",

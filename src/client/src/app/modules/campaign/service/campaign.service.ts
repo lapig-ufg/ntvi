@@ -125,9 +125,31 @@ export class CampaignService {
       );
   }
 
+  updatePointsForm(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/updatePointsForm/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    )
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
   createUsersOnCampaignForm(campaign): Observable<Campaign> {
     return this.httpClient.put<Campaign>(
       this.apiURL + '/campaign/createUsersCampaignForm/' + campaign.id,
+      JSON.stringify(campaign),
+      this.httpOptions,
+    )
+      .pipe(
+        catchError(this.errorHandler),
+      );
+  }
+
+  updateUsersOnCampaignForm(campaign): Observable<Campaign> {
+    return this.httpClient.put<Campaign>(
+      this.apiURL + '/campaign/updateUsersCampaignForm/' + campaign.id,
       JSON.stringify(campaign),
       this.httpOptions,
     )

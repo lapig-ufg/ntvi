@@ -39,12 +39,15 @@ export default {
             queue.bull.process(queue.handle);
 
             queue.bull.on('completed', (job) => {
-                console.log(`Job completed with result ${JSON.stringify(job.key)}`);
+                console.log(`Job completed`);
             });
 
-            queue.bull.on('failed', (job, err) => {
-                console.log('Job failed', queue.key);
-                console.log(err);
+            queue.bull.on('error', (err) => {
+                console.log('Jobs errors', err);
+            });
+
+            queue.bull.on('failed', function(job, err){
+                console.log(`Is last attempt?  => `, (job.attemptsMade === job.opts.attempts));
             });
         })
     }

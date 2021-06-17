@@ -18,7 +18,7 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const MongoStore = require('connect-mongo')(session);
-const cookie = parseCookie('LAPIG')
+const cookie = parseCookie(process.env.SECRET)
 const mongoAdapter = require('socket.io-adapter-mongo');
 const sharedsession = require("express-socket.io-session");
 
@@ -30,18 +30,18 @@ load('middleware', { 'verbose': false })
 	.then('util')
 	.into(app);
 
-app.middleware.repository.init(function () {
+app.middleware.repository.init( function () {
+
 	const mongodbUrl = 'mongodb://' + app.config.mongo.host + ':' + app.config.mongo.port + '/' + app.config.mongo.dbname;
 
 	app.repository = app.middleware.repository;
 	const store = new MongoStore({ url: mongodbUrl });
 	io.adapter(mongoAdapter(mongodbUrl));
-
 	app.use(cookie);
 
 	const middlewareSession = session({
 		store: store,
-		secret: 'NTVI',
+		secret: process.env.SECRET,
 		resave: false,
 		saveUninitialized: true,
 		key: 'sid',
@@ -59,6 +59,7 @@ app.middleware.repository.init(function () {
 	}));
 
 	app.use(compression());
+
 	app.use(express.static(app.config.clientDir, { redirect: false }));
 	app.get('*', function (request, response, next) {
 		if (!request.url.includes('api') && !request.url.includes('service')) {
@@ -70,10 +71,8 @@ app.middleware.repository.init(function () {
 	app.set('views', __dirname + '/templates');
 	app.set('view engine', 'ejs');
 
-	const publicDir = path.join(__dirname, '');
-
 	app.use(requestTimeout({
-		'timeout': 1000 * 60 * 30,
+		'timeout': 1000 * 60 * 60 * 24,
 		'callback': function (err, options) {
 			const response = options.res;
 			if (err) {
@@ -99,6 +98,7 @@ app.middleware.repository.init(function () {
 		parameterLimit: 100000,
 		extended: true
 	}));
+
 	app.use(multer());
 
 	io.on('connection', function (socket) {
@@ -128,6 +128,3 @@ app.middleware.repository.init(function () {
 
 });
 
-process.on('uncaughtException', function (err) {
-	console.error(err.stack);
-});

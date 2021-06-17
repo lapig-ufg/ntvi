@@ -1,70 +1,54 @@
-
-var util = require('util')
-	,   mongodb = require('mongodb')
-	,   async = require('async');
+const { MongoClient } = require('mongodb')
+const async = require('async');
 
 module.exports = function(app) {
+	const config = app.config;
+	let Repository = {
+		db: {},
+		collections: {}
+	};
+	const uri = `mongodb://${config.mongo.host}:${config.mongo.port}/?poolSize=20&writeConcern=majority`;
 
-		var Db = mongodb.Db,
-				Connection = mongodb.Connection,
-				Server = mongodb.Server,
-				config = app.config,
-				Repository = {
-					collections: {}
-				};
+	Repository.client = MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-		Repository.db = new Db(config.mongo.dbname
-				, new Server(config.mongo.host, config.mongo.port, {'auto_reconnect': true, 'pool_size': 5 })
-				, { safe: true }
-		);
+	Repository.init = function(callback) {
 
-		Repository.bin = function(data) {
-			return new mongodb.Binary(data);
-		}
+		Repository.client.connect((err,  client) => {
+			if (err) {
+				return callback(err);
+			}
+			Repository.db = client.db(config.mongo.dbname);
 
-		Repository.id = function(id) {
-			var x = new mongodb.ObjectID(id);
-			console.log(typeof x);
-				return x;
-		};
-
-		Repository.init = function(callback) {
-				
-				Repository.db.open(function(err) {
-						if (err) {
-								return callback(err);
-						}
-
-						Repository.db.listCollections({}).toArray(function(err, names) {
-
-								var forEachOne = function(collection, callback) {
-										var name = collection.name.substr(collection.name.indexOf('\.') + 1);
-										if(name != 'indexes') {
-											Repository.db.collection(name, function(err, repository) {
-												if(err){
-													console.log(err)
-												}
-
-												Repository.collections[name] = repository;
-												callback();
-											});
-										} else {
-											callback();
-										}
-								};
-
-								async.each(names, forEachOne, callback)
+			Repository.db.listCollections().toArray((err, collection) => {
+				if (err) {
+					return callback(err);
+				}
+				const forEachOne = function(collection, callback) {
+					const name = collection.name.substr(collection.name.indexOf('\.') + 1);
+					if(name != 'indexes') {
+						Repository.db.collection(name, function(err, repository) {
+							if(err){
+								console.log(err)
+							}
+							Repository.collections[name] = repository;
+							callback();
 						});
-				});
-		};
+					} else {
+						callback();
+					}
+				};
+				async.each(collection, forEachOne, callback)
+			});
+		})
+	};
 
-		Repository.getSync = function(collectionName) {
-				return Repository.collections[collectionName];
-		};
+	Repository.getSync = function(collectionName) {
+		return Repository.collections[collectionName];
+	};
 
-		Repository.get = function(collectionName, callback) {
-				Repository.db.collection(collectionName, callback);
-		};
+	Repository.get = function(collectionName, callback) {
+		Repository.db.collection(collectionName, callback);
+	};
 
-		return Repository;
+	return Repository;
 };

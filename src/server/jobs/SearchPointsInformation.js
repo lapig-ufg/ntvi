@@ -1,39 +1,67 @@
-import axios from 'axios';
+import { GoogleEarthEngine } from '../lib/GoogleEarthEngine';
 const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient();
-
 export default {
     key: 'SearchPointsInformation',
     options: {
-        delay: 2000,
+        delay: 1000,
     },
-    async handle({data}) {
-        try {
-            let arrayQueries = []
-            for (const [i, point] of data.points.entries()) {
-                let dta = await axios.get(`https://www.mapquestapi.com/geocoding/v1/reverse?key=bBVooFBpN6TcczLfcG0MVLyk7HDhgdxq&location=${point.latitude}%2C${point.longitude}&outFormat=json&thumbMaps=false`)
-                let location =  dta.data.results[0].locations[0]
-                let info = '';
+    async handle(job, done) {
+        const { data } = job
 
-                if(location.adminArea3 && location.adminArea5 && location.adminArea1){
-                    info = location.adminArea5 + ' - ' + location.adminArea3 + ' - ' + location.adminArea1;
-                } else if(location.adminArea5 && location.adminArea1) {
-                    info = location.adminArea5 + ' - ' + location.adminArea1;
-                } else {
-                    info = location.adminArea3 + ' - ' + location.adminArea1;
+        try {
+            const prisma = new PrismaClient()
+            const gee = new GoogleEarthEngine(data.campaign);
+            job.progress(10);
+            const promisePoints = new Promise((resolve, reject) => {
+                gee.run(function (){
+                    let result = gee.pointsInfo(data.points)
+                    result.getInfo((result, error) => {
+                        if(error){
+                            reject(new Error(error));
+                        } else {
+                            job.progress(40);
+                            resolve(result);
+                        }
+                    })
+
+                },  (err) => {
+                    reject(new Error(err));
+                });
+            });
+
+            promisePoints.then( result => {
+                if(result.features.length > 0) {
+                    let arrayQueries = []
+                    result.features.forEach((feature) => {
+                        let id, region = null;
+                        id = feature.properties.point_id
+                        if(feature.region){
+                            region = feature.region.properties.ADM2_NAME + ' - ' + feature.region.properties.ADM1_NAME + ' - ' + feature.region.properties.ADM0_NAME;
+                        } else{
+                            region = ' - ';
+                        }
+                        arrayQueries.push(prisma.point.update({
+                            where: { id: id },
+                            data: { info: region },
+                        }))
+
+                    });
+                    job.progress(70);
+                    prisma.$transaction(arrayQueries).then(result => {
+                        if(result){
+                            job.progress(100);
+                            done();
+                        }
+                    }).catch(error => {
+                        done(new Error(error));
+                    })
                 }
-                arrayQueries.push(prisma.point.update({
-                    where: {
-                        id: parseInt(point.id),
-                    },
-                    data: {
-                        info: info,
-                    },
-                }));
-            }
-            await prisma.$transaction(arrayQueries)
+            }).catch(error => {
+                done(new Error(error));
+            });
+
         } catch (e) {
-            console.error(e)
+            done(new Error(e));
         }
 
     },

@@ -427,7 +427,6 @@ export class EditComponent implements OnInit {
       user: '',
       permission: '',
     });
-    console.log(this.UsersOnCampaigns)
     this.tableUsers.source.reset();
     await this.tableUsers.source.load(this.UsersOnCampaigns);
   }
@@ -571,7 +570,7 @@ export class EditComponent implements OnInit {
     // this.pointsForm.markAsDirty();
     this.loadingForms = true;
     this.campaign.points = (this.points.length > 0 ? this.points : null);
-    this.campaignService.createPointsForm(this.campaign).subscribe(res => {
+    this.campaignService.updatePointsForm(this.campaign).subscribe(res => {
       this.loadingForms = false;
       this.stepper.next();
     }, error => {
@@ -584,12 +583,12 @@ export class EditComponent implements OnInit {
 
     this.campaign.UsersOnCampaigns = this.UsersOnCampaigns;
 
-    this.campaignService.createUsersOnCampaignForm(this.campaign).subscribe(res => {
+    this.campaignService.updateUsersOnCampaignForm(this.campaign).subscribe(res => {
       this.loadingForms = false;
       this.stepper.next();
     }, error => {
       this.loadingForms = false;
-      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_points_error'), 'top-right');
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
     this.loadInputs();
   }
@@ -603,7 +602,7 @@ export class EditComponent implements OnInit {
       this.stepper.next();
     }, error => {
       this.loadingForms = false;
-      this.showToast('danger', this.translate.instant('campaign_create_edit_msg_points_error'), 'top-right');
+      this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
     });
     this.loadInputs();
   }
