@@ -53,7 +53,6 @@ export class ProfileComponent implements OnInit {
       this.selectedTheme = data.theme ? data.theme.toString() : null;
       this.selectedLanguage = data.language ? data.language.toString() : null;
       this.user = data;
-      console.log(data)
     });
 
     this.organizationService.getAll().subscribe((data: Organization[]) => {

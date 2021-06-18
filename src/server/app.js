@@ -9,7 +9,6 @@ const express = require('express')
 	, requestTimeout = require('express-timeout')
 	, responseTime = require('response-time')
 	, bodyParser = require('body-parser')
-	, multer = require('multer')
 	, session = require('express-session')
 	, parseCookie = require('cookie-parser')
 	, cors = require('cors');
@@ -99,8 +98,6 @@ app.middleware.repository.init( function () {
 		extended: true
 	}));
 
-	app.use(multer());
-
 	io.on('connection', function (socket) {
 		socket.on('disconnect', function () {
 			store.get(socket.handshake.sessionID, function (error, session) {
@@ -110,7 +107,7 @@ app.middleware.repository.init( function () {
 	})
 
 	app.use(function (error, request, response, next) {
-		console.log('ServerError: ', error.stack);
+		console.log('ServerError: ', error);
 		next();
 	});
 
@@ -126,5 +123,9 @@ app.middleware.repository.init( function () {
 		}
 	});
 
+});
+
+process.on('warning', (warning) => {
+	console.log(warning.stack);
 });
 

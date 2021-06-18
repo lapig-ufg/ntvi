@@ -99,12 +99,12 @@ module.exports = function (app) {
                 data: {
                     initialDate: initialDate, finalDate: finalDate,
                     classes: { connect: classes },
-                }
+                },
+                include: { classes: true, compositions: true }
             }))
-
             const resultQueries = await prisma.$transaction(arrayQueries)
-
-            response.status(200).json(resultQueries);
+            await Queue.add('UpsertCampaign', resultQueries[resultQueries.length - 1] )
+            response.status(200).json({status:200, message: 'success' });
         } catch (e) {
             console.error(e)
             response.status(500).json({ message: texts.login_msg_erro + e + '.' });
@@ -146,16 +146,21 @@ module.exports = function (app) {
                 data: {
                     initialDate: initialDate, finalDate: finalDate,
                     classes: { connect: classes },
-                }
+                },
+                include: { classes: true, compositions: true }
             }))
 
             const resultQueries = await prisma.$transaction(arrayQueries)
-
-            response.status(200).json(resultQueries);
+            await Queue.add('UpsertCampaign', resultQueries[resultQueries.length - 1] )
+            response.status(200).json({status:200, message: 'success' });
         } catch (e) {
             console.error(e)
             response.status(500).json({ message: texts.login_msg_erro + e + '.' });
         }
+    }
+
+    Controller.split = function (points, numElements) {
+        return new Array(Math.ceil(points.length / numElements)).fill().map(_ => points.splice(0, numElements))
     }
 
     Controller.pointsWithoutInfo = function (points) {
@@ -197,16 +202,30 @@ module.exports = function (app) {
                         data: points
                     } },
                 },
-                select: { country: true, points: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
+                select: { id: true, name:true, country: true, points: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
             }))
 
             const resultQueries = await prisma.$transaction(arrayQueries)
+
+            //Create jobs for add points to mongo
+            await Queue.add('UpsertPoints',
+                {
+                    campaign:{ id: resultQueries[1].id, name: resultQueries[1].name,  country: resultQueries[1].country, UsersOnCampaigns: resultQueries[1].UsersOnCampaigns},
+                    points: resultQueries[1].points
+                }
+            )
+
+            //Create jobs for add points serach info of points on Google Earth Engine
             const pointsWithoutInfo =  Controller.pointsWithoutInfo(resultQueries[1].points)
             if(pointsWithoutInfo.length > 0){
-                const n = 100 //tweak this to add more items per line
-                const arrayDivided = new Array(Math.ceil(pointsWithoutInfo.length / n)).fill().map(_ => pointsWithoutInfo.splice(0, n))
-                for (let points of arrayDivided) {
-                    setTimeout(async () =>  await Queue.add('SearchPointsInformation', { campaign:resultQueries[1], points: points }), 1000);
+                const arraySplited = Controller.split(pointsWithoutInfo, 100)
+                for (let points of arraySplited) {
+                    await Queue.add('SearchPointsInformation',
+                        {
+                            campaign:{ id: resultQueries[1].id, country: resultQueries[1].country, UsersOnCampaigns: resultQueries[1].UsersOnCampaigns },
+                            points: points
+                        }
+                    )
                 }
             }
             response.status(200).json({status:200, message: 'success' });
@@ -243,17 +262,29 @@ module.exports = function (app) {
                             data: points
                         } },
                 },
-                // include: { points: true, UsersOnCampaigns: { include : { user: true}} }
-                select: { country: true, points: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
+                select: { id: true, name:true, country: true, points: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
             }))
 
             const resultQueries = await prisma.$transaction(arrayQueries)
             const pointsWithoutInfo =  Controller.pointsWithoutInfo(resultQueries[1].points)
+
+            await Queue.add('UpsertPoints',
+                {
+                    campaign: { id: resultQueries[1].id, name: resultQueries[1].name,  country: resultQueries[1].country, UsersOnCampaigns: resultQueries[1].UsersOnCampaigns },
+                    points: resultQueries[1].points
+                }
+            )
+
+            //Create jobs for add points serach info of points on Google Earth Engine
             if(pointsWithoutInfo.length > 0){
-                const n = 100 //tweak this to add more items per line
-                const arrayDivided = new Array(Math.ceil(pointsWithoutInfo.length / n)).fill().map(_ => pointsWithoutInfo.splice(0, n))
-                for (let points of arrayDivided) {
-                    setTimeout(async () =>  await Queue.add('SearchPointsInformation', { campaign:resultQueries[1], points: points }), 1000);
+                const arraySplited = Controller.split(pointsWithoutInfo, 100)
+                for (let points of arraySplited) {
+                    await Queue.add('SearchPointsInformation',
+                        {
+                            campaign:{ id: resultQueries[1].id, country: resultQueries[1].country, UsersOnCampaigns: resultQueries[1].UsersOnCampaigns },
+                            points: points
+                        }
+                    )
                 }
             }
             response.status(200).json({status:200, message: 'success' });
