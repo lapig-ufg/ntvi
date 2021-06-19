@@ -2,6 +2,8 @@ import Queue from 'bull';
 import redisCredencials from '../config/redis';
 import * as jobs from '../jobs';
 import Redis from 'ioredis';
+const EventEmitter = require( 'events' );
+EventEmitter.defaultMaxListeners = 20;
 
 const client = new Redis(redisCredencials);
 const subscriber = new Redis(redisCredencials);
@@ -32,7 +34,7 @@ export default {
     queues,
     add(name, data) {
         const queue = this.queues.find(queue => queue.name === name);
-        return queue.bull.add(data, queue.options);
+        return queue.bull.add(data, queue.options, queue.name);
     },
     process() {
         return this.queues.forEach(queue => {

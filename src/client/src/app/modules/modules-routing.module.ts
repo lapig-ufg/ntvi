@@ -53,8 +53,8 @@ const routes: Routes = [{
         .then(m => m.UsersModule),
     },
     {
-      path: '',
-      redirectTo: 'campaign/index',
+      path: '/',
+      redirectTo: 'modules/campaign/index',
       pathMatch: 'full',
     },
     {

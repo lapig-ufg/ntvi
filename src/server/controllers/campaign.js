@@ -3,9 +3,11 @@ import Queue from '../lib/Queue';
 const rp = require("request-promise");
 
 module.exports = function (app) {
-    var Controller = {}
+    let Controller = {}
 
     let language = app.util.language;
+
+    const array = app.util.array;
 
     const config = app.config;
 
@@ -159,10 +161,6 @@ module.exports = function (app) {
         }
     }
 
-    Controller.split = function (points, numElements) {
-        return new Array(Math.ceil(points.length / numElements)).fill().map(_ => points.splice(0, numElements))
-    }
-
     Controller.pointsWithoutInfo = function (points) {
         let pts = [];
         if (Array.isArray(points)){
@@ -218,7 +216,7 @@ module.exports = function (app) {
             //Create jobs for add points serach info of points on Google Earth Engine
             const pointsWithoutInfo =  Controller.pointsWithoutInfo(resultQueries[1].points)
             if(pointsWithoutInfo.length > 0){
-                const arraySplited = Controller.split(pointsWithoutInfo, 100)
+                const arraySplited = array.split(pointsWithoutInfo, 100)
                 for (let points of arraySplited) {
                     await Queue.add('SearchPointsInformation',
                         {
@@ -277,7 +275,7 @@ module.exports = function (app) {
 
             //Create jobs for add points serach info of points on Google Earth Engine
             if(pointsWithoutInfo.length > 0){
-                const arraySplited = Controller.split(pointsWithoutInfo, 100)
+                const arraySplited = array.split(pointsWithoutInfo, 100)
                 for (let points of arraySplited) {
                     await Queue.add('SearchPointsInformation',
                         {

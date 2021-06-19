@@ -16,16 +16,12 @@ export class GoogleEarthEngine {
         })
     }
 
-    run(callback, errorCallback) {
+    run(callback, errorCallback, authenticationErrorCallback) {
         ee.data.authenticateViaPrivateKey(
             this.credentials,
-            () => {
-                ee.initialize(null, null, callback, errorCallback);
-            },
-            (err) => {
-                console.log(err);
-            });
-        ee.reset();
+            () => { ee.initialize(null, null, callback, errorCallback) },
+            authenticationErrorCallback
+        );
     }
 
     getRegionFeatures() {
@@ -38,11 +34,25 @@ export class GoogleEarthEngine {
 
     toFeatureCollection(points) {
         let features = [];
+        let attributes = {
+            prisma: {
+                lat: 'latitude',
+                lon: 'longitude',
+                id: 'id'
+            },
+            mongo: {
+                lat: 'lat',
+                lon: 'lon',
+                id: '_id'
+            }
+        };
 
         if(Array.isArray(points)){
+            const isFrom = points[0].hasOwnProperty('_id') ? 'mongo' : 'prisma';
+            const att = attributes[isFrom];
             points.forEach(function (point) {
                 features.push(
-                    ee.Feature(ee.Geometry.Point([parseFloat(point.longitude), parseFloat(point.latitude)])).set('point_id', point.id)
+                    ee.Feature(ee.Geometry.Point([parseFloat(point[att.lon]), parseFloat(point[att.lat])])).set('_id', point[att.id])
                 );
             });
         }
@@ -58,6 +68,17 @@ export class GoogleEarthEngine {
             const pointGeom = feat.geometry();
             const region = regionFeatures.filterBounds(pointGeom).first();
             return point.set('region', region) ;
+        });
+    }
+    pointsPathRow(points) {
+        const pts = this.toFeatureCollection(points);
+        const tiles = ee.FeatureCollection("users/lapig/WRS2");
+
+        return pts.map(function(point){
+            const feat = ee.Feature(point);
+            const pointGeom = feat.geometry();
+            const tile = tiles.filterBounds(pointGeom).first();
+            return point.set('path', ee.String(tile.get('PATH'))).set('row', ee.String(tile.get('ROW')));
         });
     }
 }

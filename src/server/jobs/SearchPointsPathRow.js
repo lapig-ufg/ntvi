@@ -1,21 +1,30 @@
 import { GoogleEarthEngine } from '../lib/GoogleEarthEngine';
-const { PrismaClient } = require('@prisma/client')
+import {mongo} from "../lib/Mongo";
 const ee = require('@google/earthengine');
+
 export default {
-    key: 'SearchPointsInformation',
+    key: 'SearchPointsPathRow',
     options: {
         delay: 1000,
     },
     async handle(job, done) {
         const { data } = job
-
         try {
-            const prisma = new PrismaClient()
-            const gee = new GoogleEarthEngine(data.campaign);
+            await mongo.connect();
+            const db = await mongo.db(process.env.MONGO_DATABASE);
+
+            const gee = new GoogleEarthEngine(data);
+
             job.progress(10);
+
+            let points = await db.collection('points').find( {'campaignId': data.id} ).toArray();
+            points = points.map((point) => {
+                return { _id: point._id, lat: point.lat, lon: point.lon }
+            });
+
             const promisePoints = new Promise((resolve, reject) => {
                 gee.run(function (){
-                    let result = gee.pointsInfo(data.points)
+                    let result = gee.pointsPathRow(points)
                     result.getInfo((result, error) => {
                         if(error){
                             reject(new Error(error));
@@ -40,28 +49,20 @@ export default {
                 if(result.features.length > 0) {
                     let arrayQueries = []
                     result.features.forEach((feature) => {
-                        let id, region = null;
-                        id = feature.properties.point_id
-                        if(feature.region !== null){
-                            region = feature.region.properties.ADM2_NAME + ' - ' + feature.region.properties.ADM1_NAME + ' - ' + feature.region.properties.ADM0_NAME;
-                        } else{
-                            region = ' - ';
-                        }
-                        arrayQueries.push(prisma.point.update({
-                            where: { id: id },
-                            data: { info: region },
-                        }))
-
+                        arrayQueries.push({ updateOne : {
+                            "filter" : { "_id" : feature.properties._id },
+                            "update" : { $set : { "path" : feature.properties.path, "row" : feature.properties.row } }
+                        } })
                     });
                     job.progress(70);
-                    prisma.$transaction(arrayQueries).then(result => {
+                    db.collection('points').bulkWrite(arrayQueries, { ordered : true } ).then(result => {
                         if(result){
                             job.progress(100);
                             done();
                         }
                     }).catch(error => {
                         done(new Error(error));
-                    })
+                    });
                 }
             }).catch(error => {
                 done(new Error(error));

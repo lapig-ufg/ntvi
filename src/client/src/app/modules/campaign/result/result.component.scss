@@ -4,7 +4,7 @@
 
 @include nb-install-component() {
 
-  /deep/ .ng2-smart-action-add-add {
+  .ng2-smart-action-add-add {
     display: none;
   }
 
