@@ -1,14 +1,7 @@
-const { PrismaClient } = require('@prisma/client')
-
 module.exports = function (app) {
-    var Controller = {}
-
-    let language = app.util.language;
-
-    const prisma = new PrismaClient({
-        errorFormat: 'pretty',
-        log: ['query'],
-    })
+    let Controller = {}
+    let language   = app.util.language;
+    const prisma   = app.repository.prisma;
 
     Controller.getAllOrganizations = async function (request, response) {
         const { lang } = request.headers;

@@ -1,9 +1,6 @@
-var ejs = require('ejs');
-var fs = require('fs');
-var csvWriter = require('csv-write-stream');
-var schedule = require('node-schedule');
-var iconv = require('iconv');
-var proj4 = require('proj4');
+const csvWriter = require('csv-write-stream');
+const iconv = require('iconv');
+const proj4 = require('proj4');
 
 module.exports = function(app) {
 
@@ -378,6 +375,7 @@ module.exports = function(app) {
 
 		response.end()
 	}
+
 	Points.updateSingleClassConsolidated = function (request, response) {
 		var index = request.param("index");
 		var classe = request.param("class");

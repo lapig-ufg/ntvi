@@ -1,7 +1,3 @@
-var ejs = require('ejs');
-var fs = require('fs')
-var schedule = require('node-schedule');
-
 module.exports = function(app) {
 
 	var Points = {};

@@ -1,6 +1,3 @@
-var ejs = require('ejs');
-var fs = require('fs')
-
 module.exports = function(app) {
 	
 	var Login = {};

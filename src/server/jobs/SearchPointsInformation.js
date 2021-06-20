@@ -1,6 +1,6 @@
 import { GoogleEarthEngine } from '../lib/GoogleEarthEngine';
 const { PrismaClient } = require('@prisma/client')
-const ee = require('@google/earthengine');
+
 export default {
     key: 'SearchPointsInformation',
     options: {
@@ -11,28 +11,30 @@ export default {
 
         try {
             const prisma = new PrismaClient()
-            const gee = new GoogleEarthEngine(data.campaign);
+            const engine = new GoogleEarthEngine(data.campaign);
+
             job.progress(10);
+
             const promisePoints = new Promise((resolve, reject) => {
-                gee.run(function (){
-                    let result = gee.pointsInfo(data.points)
+                engine.run(function (){
+                    let result = engine.pointsInfo(data.points)
                     result.getInfo((result, error) => {
                         if(error){
                             reject(new Error(error));
-                            ee.reset();
+                            engine.ee.reset();
                         } else {
                             job.progress(40);
                             resolve(result);
-                            ee.reset();
+                            engine.ee.reset();
                         }
                     })
 
                 },  (err) => {
                     reject(new Error(err));
-                    ee.reset();
+                    engine.ee.reset();
                 },  (err) => {
                     reject(new Error(err));
-                    ee.reset();
+                    engine.ee.reset();
                 });
             });
 

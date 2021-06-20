@@ -1,5 +1,4 @@
-const  dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
 const express = require('express')
 	, load = require('express-load')
@@ -122,6 +121,10 @@ app.middleware.repository.init( function () {
 			app.middleware.jobs.start();
 		}
 	});
+
+	if (process.env.NODE_ENV === 'prod') {
+		app.repository.listenLogs();
+	}
 
 });
 

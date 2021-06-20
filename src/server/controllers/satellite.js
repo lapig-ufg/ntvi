@@ -2,13 +2,9 @@ const { PrismaClient } = require('@prisma/client')
 
 module.exports = function (app) {
     var Controller = {}
+    let language   = app.util.language;
+    const prisma   = app.repository.prisma;
 
-    let language = app.util.language;
-
-    const prisma = new PrismaClient({
-        errorFormat: 'pretty',
-        log: ['query', 'info', 'warn'],
-    })
 
     Controller.getAllSatellites = async function (request, response) {
         const { lang } = request.headers;

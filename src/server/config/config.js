@@ -8,7 +8,7 @@ module.exports = function (app) {
 		"appRoot": appRoot,
 		"clientDir": appRoot + process.env.CLIENT_DIR,
 		"langDir": appRoot + process.env.LANG_DIR,
-		"logDir": appRoot + process.env.LOG_DIR,
+		"logDir": appRoot + process.env.LOGS_DIR,
 		"imgDir": appRoot + process.env.IMG_DIR,
 		"imgGDALTmpDir": appRoot + process.env.IMG_GDAL_TMP_DIR,
 		"imgDownloadCmd": appRoot + process.env.IMG_DOWN_CMD,
@@ -29,10 +29,22 @@ module.exports = function (app) {
 			"connectionTimeoutMillis": 0,
 
 		},
+		"prismaOpts": {
+			errorFormat: 'pretty',
+			// log: ['query'],
+			log: [
+				{ level: 'query', emit: 'event' },
+				{ level: 'error', emit: 'event' },
+			],
+			__internal:{
+				useUds: true
+			}
+		},
 		"mongo": {
 			"host": process.env.MONGO_HOST,
 			"port": process.env.MONGO_PORT,
-			"dbname": process.env.MONGO_DATABASE
+			"dbname": process.env.MONGO_DATABASE,
+			"logsDbname": process.env.MONGO_DATABASE_LOGS
 		},
 		"jobs": {
 			"timezone": process.env.JOBS_TIME_ZONE,
@@ -67,14 +79,24 @@ module.exports = function (app) {
 				}
 			]
 		},
-		"port": process.env.PORT,
+		"port": process.env.APP_PORT,
 	};
 
 	if (process.env.NODE_ENV == 'prod') {
-		config["mongo"]["port"] = process.env.MONGO_PORT_PROD;
+		config["mongo"]["port"] = process.env.MONGO_PORT;
 		config.jobs.toRun[0].runOnAppStart = process.env.PUBLISH_LAYERS;
-		config.jobs.toRun[1].runOnAppStart = process.env.START_CAHE;
-		config["imgDir"] = process.env.IMG_DIR_PROD;
+		config.jobs.toRun[1].runOnAppStart = process.env.START_CACHE;
+		config["imgDir"] = process.env.IMG_DIR;
+		config["prismaOpts"] = {
+			__internal:{
+				useUds: true
+			},
+			errorFormat: 'pretty',
+			log: [
+				{ level: 'query', emit: 'event' },
+				{ level: 'error', emit: 'event' },
+			],
+		}
 	}
 
 	return config;

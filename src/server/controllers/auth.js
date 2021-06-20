@@ -1,15 +1,11 @@
-const { PrismaClient } = require('@prisma/client')
 const CryptoJS = require("crypto-js");
 const jwt = require('jsonwebtoken');
 const env = process.env;
 
 module.exports = function (app) {
     let Controller = {}
-
-    let _language = app.util.language;
-
-
-    const prisma = new PrismaClient();
+    let _language  = app.util.language;
+    const prisma   = app.repository.prisma;
 
     Controller.login = async function (request, response) {
         const { lang } = request.headers;

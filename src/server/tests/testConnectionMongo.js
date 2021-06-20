@@ -13,4 +13,4 @@ async function run() {
     }
 }
 
-run().catch(console.dir);
+run().catch(e => console.dir(e,{ depth: Infinity }));

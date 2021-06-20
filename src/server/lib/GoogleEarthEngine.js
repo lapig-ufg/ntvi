@@ -1,35 +1,38 @@
 const ee = require('@google/earthengine');
+const { PrismaClient } = require('@prisma/client')
+import { mongo } from "./Mongo";
 
 export class GoogleEarthEngine {
     credentials;
-    country;
+    campaign;
+    ee;
+    prisma;
+
     constructor(campaign) {
-        this.country = campaign.country;
-        this.deserializeCredentials(campaign)
+        this.campaign = campaign;
+        this.deserializeCredentials()
+        this.ee = ee;
+        this.prisma = new PrismaClient();
     }
 
-    deserializeCredentials(campaign) {
-        campaign.UsersOnCampaigns.forEach((campUser) => {
+    async db() {
+        await mongo.connect();
+        return await mongo.db(process.env.MONGO_DATABASE);
+    }
+
+    deserializeCredentials() {
+        this.campaign.UsersOnCampaigns.forEach((campUser) => {
             if (campUser.typeUserInCampaign === 'ADMIN') {
                 this.credentials = JSON.parse(campUser.user.geeKey);
             }
         })
     }
 
-    run(callback, errorCallback, authenticationErrorCallback) {
-        ee.data.authenticateViaPrivateKey(
-            this.credentials,
-            () => { ee.initialize(null, null, callback, errorCallback) },
-            authenticationErrorCallback
-        );
-    }
-
     getRegionFeatures() {
         const countries = ee.FeatureCollection("users/lapig/countries");
         const dataset = ee.FeatureCollection("FAO/GAUL/2015/level2");
-        const selectedCountry = ee.Feature(countries.filter(ee.Filter.eq('ISO', this.country)).first());
-        const regionFeatures = dataset.filterBounds(selectedCountry.geometry());
-        return regionFeatures;
+        const selectedCountry = ee.Feature(countries.filter(ee.Filter.eq('ISO', this.campaign.country)).first());
+        return dataset.filterBounds(selectedCountry.geometry());
     }
 
     toFeatureCollection(points) {
@@ -70,6 +73,7 @@ export class GoogleEarthEngine {
             return point.set('region', region) ;
         });
     }
+
     pointsPathRow(points) {
         const pts = this.toFeatureCollection(points);
         const tiles = ee.FeatureCollection("users/lapig/WRS2");
@@ -80,5 +84,13 @@ export class GoogleEarthEngine {
             const tile = tiles.filterBounds(pointGeom).first();
             return point.set('path', ee.String(tile.get('PATH'))).set('row', ee.String(tile.get('ROW')));
         });
+    }
+
+    run(callback, errorCallback, authenticationErrorCallback) {
+        ee.data.authenticateViaPrivateKey(
+            this.credentials,
+            () => { ee.initialize(null, null, callback, errorCallback) },
+            authenticationErrorCallback
+        );
     }
 }

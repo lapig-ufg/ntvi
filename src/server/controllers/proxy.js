@@ -1,6 +1,4 @@
-var ejs = require('ejs');
-var fs = require('fs');
-var requester = require('request');
+const requester = require('request');
 
 module.exports = function(app) {
 

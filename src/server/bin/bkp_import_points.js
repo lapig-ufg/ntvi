@@ -125,7 +125,7 @@ var getDB = function (dbUrl, callback) {
 	var MongoClient = mongodb.MongoClient;
 	MongoClient.connect(dbUrl, function (err, db) {
 		if (err)
-			return console.dir(err);
+			return console.dir(err, { depth: Infinity });
 		callback(db);
 	});
 }

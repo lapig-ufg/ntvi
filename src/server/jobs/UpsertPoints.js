@@ -1,5 +1,7 @@
 import { mongo }  from '../lib/Mongo'
 import Queue from '../lib/Queue';
+import moment from "moment";
+
 
 export default {
     key: 'UpsertPoints',
@@ -25,7 +27,7 @@ export default {
                     "campaign": data.campaign.name,
                     "lon": point.longitude,
                     "lat": point.latitude,
-                    "dateImport": new Date(),
+                    "dateImport": moment().toISOString(true),
                     "biome": '',
                     "uf": '',
                     "county": point.info,

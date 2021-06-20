@@ -4,17 +4,9 @@ const rp = require("request-promise");
 
 module.exports = function (app) {
     let Controller = {}
-
-    let language = app.util.language;
-
-    const array = app.util.array;
-
-    const config = app.config;
-
-    const prisma = new PrismaClient({
-        errorFormat: 'pretty',
-        log: ['query'],
-    })
+    let language   = app.util.language;
+    const array    = app.util.array;
+    const prisma   = app.repository.prisma;
 
     Controller.createCampaignInfoForm = async function (request, response) {
         const { name, description, organization, numInspectors, country, permission } = request.body

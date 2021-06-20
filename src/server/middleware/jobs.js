@@ -63,7 +63,8 @@ module.exports = function(app) {
 	
 	Jobs.start = function() {
 		config.jobs.toRun.forEach(function(job) {
-			var logFile = config.logDir + "/" + job.name + ".log";
+			var logFile = config.logDir + job.name + ".log";
+			// var logFile = config.logDir + "/" + job.name + ".log";
 
 			new cron.CronJob(job.cron, function() {
 				var logStream = fs.createWriteStream(logFile, {'flags': 'a'});

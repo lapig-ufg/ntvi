@@ -1,6 +1,5 @@
 import { GoogleEarthEngine } from '../lib/GoogleEarthEngine';
 import {mongo} from "../lib/Mongo";
-const ee = require('@google/earthengine');
 
 export default {
     key: 'SearchPointsPathRow',
@@ -13,7 +12,7 @@ export default {
             await mongo.connect();
             const db = await mongo.db(process.env.MONGO_DATABASE);
 
-            const gee = new GoogleEarthEngine(data);
+            const engine = new GoogleEarthEngine(data);
 
             job.progress(10);
 
@@ -23,25 +22,25 @@ export default {
             });
 
             const promisePoints = new Promise((resolve, reject) => {
-                gee.run(function (){
-                    let result = gee.pointsPathRow(points)
+                engine.run(function (){
+                    let result = engine.pointsPathRow(points)
                     result.getInfo((result, error) => {
                         if(error){
                             reject(new Error(error));
-                            ee.reset();
+                            engine.ee.reset();
                         } else {
                             job.progress(40);
                             resolve(result);
-                            ee.reset();
+                            engine.ee.reset();
                         }
                     })
 
                 },  (err) => {
                     reject(new Error(err));
-                    ee.reset();
+                    engine.ee.reset();
                 },  (err) => {
                     reject(new Error(err));
-                    ee.reset();
+                    engine.ee.reset();
                 });
             });
 

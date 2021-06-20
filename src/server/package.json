@@ -72,14 +72,14 @@
   },
   "scripts": {
     "dev:init": "ssh -p 2522 -f root@$IP_LASERV_PROD -L 27019:localhost:27017 -N; ssh -f root@$IP_LASERV_HOMOLOG -L 5436:localhost:5432 -N -p 2522; sudo docker start redis",
-    "dev:start": "npx prisma generate; export NODE_ENV=dev; npx nodemon app-ntvi-cluster.js",
+    "dev:start": "npx prisma generate; npx nodemon app-ntvi-cluster.js",
     "dev:broker": "nodemon broker-cluster.js",
-    "dev:test": "npx nodemon ./tests/testConnectionMongo.js",
+    "dev:test": "npx nodemon ./tests/testGee.js",
     "git:push": "git push origin main  --no-verify",
     "prisma:up": "npx prisma migrate dev --preview-feature",
-    "prod:broker": "nohup node -r sucrase/register broker-cluster.js > broker.log &",
+    "prod:broker": "nohup node -r sucrase/register broker-cluster.js > ./logs/broker.log &",
     "prod:stop": "kill $(pgrep -f 'node'); kill $(pgrep -f 'query-engine-debian-openssl')",
-    "prod:start": "npx prisma generate; export NODE_ENV=prod; nohup node -r sucrase/register app-ntvi-cluster.js > app.log &"
+    "prod:start": "npx prisma generate; nohup node -r sucrase/register app-ntvi-cluster.js > ./logs/app.log &"
   },
   "repository": "https://github.com/lapig-ufg/ntvi",
   "author": "LAPIG",

@@ -2,12 +2,9 @@ const { PrismaClient } = require('@prisma/client');
 const CryptoJS = require("crypto-js");
 
 module.exports = function (app) {
-    var Controller = {}
+    let Controller = {}
     let _language = app.util.language;
-    const prisma = new PrismaClient({
-        errorFormat: 'pretty',
-        log: ['query', 'info', 'warn'],
-    })
+    const prisma   = app.repository.prisma;
 
     Controller.getUserByID = async function (request, response) {
 

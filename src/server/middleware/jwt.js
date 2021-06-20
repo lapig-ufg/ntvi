@@ -23,6 +23,7 @@ module.exports = function (app) {
 
                 // se tudo estiver ok, salva no request para uso posterior
                 request.user = decoded;
+                app.repository.token = decoded
                 next();
             });
         }catch (e) {
