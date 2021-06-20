@@ -3,7 +3,7 @@ import redisCredencials from '../config/redis';
 import * as jobs from '../jobs';
 import Redis from 'ioredis';
 const EventEmitter = require( 'events' );
-EventEmitter.defaultMaxListeners = 20;
+EventEmitter.defaultMaxListeners = parseInt(process.env.DEFAULT_MAX_LISTENERS);
 
 const client = new Redis(redisCredencials);
 const subscriber = new Redis(redisCredencials);

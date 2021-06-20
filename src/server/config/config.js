@@ -27,15 +27,11 @@ module.exports = function (app) {
 			"max": 20,
 			"idleTimeoutMillis": 0,
 			"connectionTimeoutMillis": 0,
-
+			"url": process.env.DATABASE_URL
 		},
 		"prismaOpts": {
 			errorFormat: 'pretty',
-			// log: ['query'],
-			log: [
-				{ level: 'query', emit: 'event' },
-				{ level: 'error', emit: 'event' },
-			],
+			log: ['query'],
 			__internal:{
 				useUds: true
 			}
@@ -44,6 +40,7 @@ module.exports = function (app) {
 			"host": process.env.MONGO_HOST,
 			"port": process.env.MONGO_PORT,
 			"dbname": process.env.MONGO_DATABASE,
+			"url": process.env.MONGO_URL,
 			"logsDbname": process.env.MONGO_DATABASE_LOGS
 		},
 		"jobs": {

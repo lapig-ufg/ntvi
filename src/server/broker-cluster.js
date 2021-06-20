@@ -1,9 +1,13 @@
+const envs = require('dotenv').config();
+const dotenvExpand = require('dotenv-expand');
+dotenvExpand(envs)
+
 const cluster = require('cluster');
 let numCPUs = require('os').cpus().length;
 
 if (cluster.isMaster) {
 
-  if(process.env.NODE_ENV == 'dev') {
+  if(process.env.NODE_ENV === 'dev') {
     numCPUs = 4
   }
 

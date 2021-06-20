@@ -1,9 +1,9 @@
 import { Landsat } from '../lib/Landsat';
-import moment from "moment";
-const  dotenv = require('dotenv');
 const path = require('path');
-dotenv.config({path:path.join(process.cwd(), '/.env')});
-// const ee = require('@google/earthengine');
+const envs = require('dotenv').config({path:path.join(process.cwd(), '/.env')});
+const dotenvExpand = require('dotenv-expand');
+dotenvExpand(envs)
+
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 

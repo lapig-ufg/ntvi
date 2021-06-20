@@ -1,4 +1,6 @@
-require('dotenv').config();
+const envs = require('dotenv').config();
+const dotenvExpand = require('dotenv-expand');
+dotenvExpand(envs)
 
 const cluster = require('cluster');
 let numCPUs = require('os').cpus().length;
