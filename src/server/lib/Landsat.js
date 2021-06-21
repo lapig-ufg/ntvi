@@ -1,18 +1,13 @@
 import { GoogleEarthEngine } from "./GoogleEarthEngine";
+import { PythonShell } from 'python-shell';
+const moment  = require('moment');
+const appRoot = require('app-root-path');
 
 export class Landsat extends GoogleEarthEngine {
-    compositions;
-    landsat_5;
-    landsat_7;
-    landsat_8;
-    tiles;
-    satellites;
-    periods;
 
     constructor(campaign) {
         super(campaign);
-        this.satellites =  [ 'L8', 'L7', 'L5' ];
-        this.periods = [
+        Landsat.prototype.periods = [
             {
                 "name": 'WET',
                 "dtStart": '-01-01',
@@ -24,40 +19,55 @@ export class Landsat extends GoogleEarthEngine {
                 "dtEnd": '-10-30'
             }
         ];
+        Landsat.prototype.mosaicsPromises = [];
         this.getCompositions();
+
+        PythonShell.defaultOptions = {
+            mode: 'text',
+            pythonPath: process.env.PYTHON_PATH,
+            pythonOptions: ['-u'],
+            scriptPath: appRoot + process.env.SCRIPTS_PY,
+        };
     }
 
     initSatellites() {
-        this.landsat_5 = this.ee.ImageCollection("LANDSAT/LT05/C01/T1_TOA");
-        this.landsat_7 = this.ee.ImageCollection("LANDSAT/LE07/C01/T1_TOA");
-        this.landsat_8 = this.ee.ImageCollection("LANDSAT/LC08/C01/T1_TOA");
+
+        Landsat.prototype.landsat_5 = super.ee.ImageCollection("LANDSAT/LT05/C01/T1_TOA");
+        Landsat.prototype.landsat_7 = super.ee.ImageCollection("LANDSAT/LE07/C01/T1_TOA");
+        Landsat.prototype.landsat_8 = super.ee.ImageCollection("LANDSAT/LC08/C01/T1_TOA");
     }
 
     getCompositions() {
-        const landsatCompositions = this.campaign.compositions.find(comp => { return comp.satelliteId === 1 });
-        this.compositions = landsatCompositions.colors;
+        const landsatCompositions = super.campaign.compositions.find(comp => { return comp.satelliteId === 1 });
+        Landsat.prototype.compositions = landsatCompositions.colors;
     }
 
     getWRS(feature){
-        return this.ee.Feature(feature).get('PR')
+        return super.ee.Feature(feature).get('PR')
     }
 
     getTiles() {
-        const countries = this.ee.FeatureCollection("users/lapig/countries")
-        const wrs = this.ee.FeatureCollection("users/lapig/WRS2")
+        return new Promise((resolve, reject) => {
+            try {
+                const countries = super.ee.FeatureCollection("users/lapig/countries")
+                const wrs = super.ee.FeatureCollection("users/lapig/WRS2")
 
-        const selectedCountry = this.ee.Feature(countries.filter(this.ee.Filter.eq('ISO', this.country)).first())
+                const selectedCountry = super.ee.Feature(countries.filter(super.ee.Filter.eq('ISO', super.campaign.country)).first())
 
-        const wrs_filtered = wrs.filterBounds(selectedCountry.geometry())
+                const wrs_filtered = wrs.filterBounds(selectedCountry.geometry())
 
-        const wrs_list = wrs_filtered.toList(wrs_filtered.size())
+                const wrs_list = wrs_filtered.toList(wrs_filtered.size())
 
-        return  wrs_list.map(this.getWRS)
+                wrs_list.map(this.getWRS).getInfo(tiles => resolve(tiles))
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
     getBestImg(satellite, year, mDaysStart, mDaysEnd, path, row) {
-        let collection = '';
-        let bands      = '';
+        let collection = null;
+        let bands      = null;
         const dtStart  = year + mDaysStart;
         const dtEnd    = year + mDaysEnd
 
@@ -76,31 +86,135 @@ export class Landsat extends GoogleEarthEngine {
                 break;
         }
 
-        const bestImg = collection.filterDate(dtStart,dtEnd)
-            .filterMetadata('WRS_PATH','equals',path)
-            .filterMetadata('WRS_ROW','equals',row)
+        const img = collection.filterDate(dtStart, dtEnd)
+            .filterMetadata('WRS_PATH','equals', path)
+            .filterMetadata('WRS_ROW','equals', row)
             .sort("CLOUD_COVER")
-            .select(bands,['NIR','SWIR','RED'])
-            .first()
+            .select(bands, ['NIR','SWIR','RED'])
+            .first();
 
-        return ee.Image(bestImg)
+        return super.ee.Image(img)
    }
 
     getBestMosaic(tiles, satellite, year, dtStart, dtEnd) {
-        const images = [];
+        let images = []
         tiles.forEach(tile => {
             const path = tile.slice(0, 3);
             const row = tile.slice(3, 6);
-            const bestImg = this.getBestImg(satellite, year, dtStart, dtEnd, path, row)
-            images.push(bestImg);
+            const img = this.getBestImg(satellite, year, dtStart, dtEnd, path, row);
+            images.push(img)
         });
-
-        const imageCollection = this.ee.ImageCollection.fromImages(images);
-
-        return imageCollection.mosaic()
+        let imageCollection = super.ee.ImageCollection.fromImages(images)
+        return imageCollection;
     }
 
-    publishImg(image, callbackMapId) {
-        image.getMapId({ "bands": this.compositions}, callbackMapId)
+    getSatellite(year) {
+        let satellite = null;
+
+        switch (true) {
+            case year >= 2013 :
+                satellite = 'L8';
+                break;
+            case year >= 2000 && year < 2013:
+                satellite = 'L7';
+                break;
+            case year > 1984 && year < 2000:
+                satellite = 'L5';
+                break;
+        }
+        return  satellite;
+    }
+
+    getExpirationDate() {
+        const now = moment();
+        return now.add(22, 'hours').toISOString(true);
+    }
+
+    publishImg(image) {
+       // return image.getMap({ "bands": this.compositions});
+       return image.getInfo();
+    }
+
+    processPeriod(tiles, year, suffix = '') {
+        const self = this;
+        this.periods.forEach(per => {
+           this.mosaicsPromises.push(new Promise(async (resolve, reject) => {
+                try {
+                    const db = await this.db();
+                    const period = per['name'];
+                    const dtStart = per['dtStart'];
+                    const dtEnd = per['dtEnd'];
+                    const satellite = self.getSatellite(year);
+                    const mosaicId = satellite + "_" + year + "_" + period + suffix;
+                    const mosaic = await db.collection('mosaics').findOne({ "_id": mosaicId, campaignId: super.campaign.id });
+
+                    if(mosaic !== null) {
+                        if(moment().isAfter(mosaic['expiration_date'])){
+                            reject(mosaicId + ' exists and is valid.');
+                        } else {
+                            const bestMosaic = self.getBestMosaic(tiles, satellite, year, dtStart, dtEnd)
+                            const map = self.publishImg(bestMosaic);
+                            const expirationDate = self.getExpirationDate()
+                            let ob = {
+                                campaignId: super.campaign.id,
+                                expiration_date: expirationDate,
+                                mosaicId: mosaicId,
+                                map: map
+                            };
+                            resolve(ob)
+                        }
+                    } else {
+                        const bestMosaic = self.getBestMosaic(tiles, satellite, year, dtStart, dtEnd)
+                        const map = self.publishImg(bestMosaic);
+                        const expirationDate = self.getExpirationDate()
+                        let ob = {
+                            campaignId: super.campaign.id,
+                            expiration_date: expirationDate,
+                            mosaicId: mosaicId,
+                            map: map
+                        };
+                        resolve(ob)
+                    }
+
+                } catch (e) {
+                    reject(e);
+                }
+            }));
+        });
+    }
+
+    publishLayers () {
+        return new Promise( (resolve, reject) => {
+            try {
+                let logs = [];
+                const region = Array.isArray(super.campaign.country) ? super.campaign.country : [super.campaign.country];
+                let params = super.credentials;
+
+                params['campaign'] = super.campaign.id;
+                params['region'] = region;
+                params['compositions'] = this.compositions;
+                params['initialYear'] = moment(super.campaign.initialDate).year();
+                params['finalYear'] = moment(super.campaign.finalDate).year();
+
+                const shell = new PythonShell('publish_layers_landsat.py', { args: [JSON.stringify(params)]});
+
+                shell.on('message', function (message) {
+                    logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss') + " - " + message + " ]");
+                });
+
+                shell.end(function (err,code,signal) {
+
+                    if (err) {
+                        console.log('CODE:', code)
+                        console.log('SIGNAL:', signal)
+                        reject(err)
+                    } else {
+                        resolve(logs)
+                    }
+                });
+            } catch (e) {
+                reject(e);
+            }
+        })
     }
 }

@@ -34,7 +34,7 @@ export default {
     queues,
     add(name, data) {
         const queue = this.queues.find(queue => queue.name === name);
-        return queue.bull.add(data, queue.options, queue.name);
+        return queue.bull.add(data, queue.options);
     },
     process() {
         return this.queues.forEach(queue => {
@@ -42,10 +42,6 @@ export default {
 
             queue.bull.on('completed', (job) => {
                 console.log(`Job ${job.id} completed`);
-            });
-
-            queue.bull.on('error', (err) => {
-                console.log('Jobs errors', err);
             });
 
             queue.bull.on('failed', (job, err) => {

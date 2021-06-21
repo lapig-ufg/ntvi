@@ -111,7 +111,7 @@ def publishImg(image):
 
 	mapId = image.getMapId({ "bands": 'SWIR,NIR,RED'})
 	
-	print(mapId['tile_fetcher'].url_format)
+	url = mapId['tile_fetcher'].url_format
 
 	for i in mapId:
 		

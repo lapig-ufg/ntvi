@@ -51,6 +51,7 @@
     "pg": "^7.18.2",
     "pg-connection-string": "^2.3.0",
     "proj4": "^2.5.0",
+    "python-shell": "^3.0.0",
     "reproject": "^1.2.6",
     "request": "^2.88.2",
     "request-param": "^0.2.0",

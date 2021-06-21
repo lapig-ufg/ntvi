@@ -22,11 +22,13 @@ data = json.loads(DATA_KEY)
 
 MONGO_HOST = os.environ.get("MONGO_HOST")
 MONGO_PORT = int(os.environ.get("MONGO_PORT"))
-MONGO_DATABASE = "ntvi"
+MONGO_DATABASE = os.environ.get("MONGO_DATABASE")
 
 SATELLITE = "COPERNICUS_S2_SR"
-CAMPAIGN = data['campaign']
-REGION_NAME = data['region']
+BANDS= data['compositions']
+REGIONS_NAMES = data['region']
+INITIAL_YEAR = int(data['initialYear'])
+FINAL_YEAR = int(data['finalYear'])
 
 EE_ACCOUNT = data['client_email']
 EE_CREDENTIALS = ee.ServiceAccountCredentials(EE_ACCOUNT, None, DATA_KEY)
@@ -101,10 +103,12 @@ def getBestImg(regionBounds, date):
     composition = bestImg.median().clip(regionBounds)
     return ee.Image(composition)
 
-def getRegionBounds(regionName):
+def getRegionBounds(regionsNames):
     regions = ee.FeatureCollection("users/lapig/countries")
 
-    selectedRegion = ee.Feature(regions.filter(ee.Filter.eq('ISO', regionName)).first())
+    query = ee.Filter.inList('ISO', regionsNames)
+    selectedCountries = ee.Feature(regions.filter(query))
+    selectedRegion =  ee.FeatureCollection(selectedCountries).flatten()
     bounds = selectedRegion.geometry()
 
     return bounds
@@ -137,8 +141,8 @@ def getExpirationDate():
 	expiration_datetime = datetime(now.year, now.month, now.day) + timedelta(hours=24)
 	return expiration_datetime
 
-def processPeriod(regionName, periods, suffix = ''):
-    bounds = getRegionBounds(regionName)
+def processPeriod(regionsNames, periods, suffix = ''):
+    bounds = getRegionBounds(regionsNames)
     for date in periods:
 
         mosaicId = CAMPAIGN +"_"+SATELLITE + "_" + str(date['month'])
@@ -153,7 +157,7 @@ def processPeriod(regionName, periods, suffix = ''):
 
                 mosaic = {
                     "_id": mosaicId,
-                    "campaign": CAMPAIGN,
+                    "campaignId": CAMPAIGN,
                     "date": date,
                     "ee_token": eeToken,
                     "ee_mapid": eeMapid,
@@ -174,6 +178,6 @@ db = client[MONGO_DATABASE]
 ee.Initialize(EE_CREDENTIALS)
 
 periods = getTimeList()
-processPeriod(REGION_NAME, periods)
+processPeriod(REGIONS_NAMES, periods)
 
 ee.Reset()
