@@ -40,12 +40,12 @@ Para verificar se a instalação ocorreu corretamente execute o comando:
 
 O Broker é o gerenciador dos processos executados em background do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. A necessidade da crição desse componente ocorre pela elevada demanda de operações que geram os mosaicos das imagens e os seus respectivos *_caches_, esses procedimentos requer muito tempo para serem finalizados. O "cache", nesse contexto, refere-se a produção antecipada das imagens "recortadas" para cada ponto da campanha. No fluxo padrão do TVI, essas imagens são geradas no momento da requisição do usuário levando bastante tempo para serem produzidas e, consequentemente, inviabilizando as rotinas de inspeções dos pontos.
 
-<div align="center">
+<div align="center" style="display: grid;">
   <br/>
   <br/>
   <figure>
     <img src="https://miro.medium.com/max/438/1*2ljI2y9V3DyGX07mbD_msQ.png" />
-    <figcaption  align="center">Fig. 1 - <a  align="center" href="https://betterprogramming.pub/using-bull-to-manage-job-queues-in-a-node-js-micro-service-stack-7a6257e64509" target="_blank">Arquitetura do Worker. </a></figcaption>
+    <figcaption  > <a  href="https://betterprogramming.pub/using-bull-to-manage-job-queues-in-a-node-js-micro-service-stack-7a6257e64509" target="_blank">Fig. 1 - Arquitetura do Worker. </a></figcaption>
   </figure>
   <br/>
   <br/>
@@ -54,12 +54,12 @@ O Broker é o gerenciador dos processos executados em background do TVI, ou seja
 Na prática, essas rotinas (_Jobs_) são adiciondas nas filas (_Queues_) e, em seguida, processadas na ordem "FIFO" (_first in first out_) pelos _Workers_, conforme é ilustrado na Figura 1.
 
 
-<div align="center">
+<div align="center"  style="display: grid;">
   <br/>
   <br/>
   <figure>
     <img src="https://raw.githubusercontent.com/OptimalBits/bull/develop/docs/job-lifecycle.png" />
-    <figcaption  align="center">Fig. 2 - <a align="center" href="https://github.com/OptimalBits/bull/tree/develop/docs" target="_blank"> Ciclo de vida dos <i>Jobs</i></a>.</figcaption>
+    <figcaption > <a href="https://github.com/OptimalBits/bull/tree/develop/docs" target="_blank"> Fig. 2 - Ciclo de vida dos <i>Jobs</i></a>.</figcaption>
   </figure>
   <br/>
   <br/>
