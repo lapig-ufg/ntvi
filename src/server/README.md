@@ -45,7 +45,7 @@ O Broker é o gerenciador dos processos executados em background do TVI, ou seja
   <br/>
   <figure>
     <img src="https://miro.medium.com/max/438/1*2ljI2y9V3DyGX07mbD_msQ.png" />
-    <figcaption>Fig. 1 - <a href="https://betterprogramming.pub/using-bull-to-manage-job-queues-in-a-node-js-micro-service-stack-7a6257e64509" target="_blank">Arquitetura do Worker. </a></figcaption>
+    <figcaption  align="center">Fig. 1 - <a  align="center" href="https://betterprogramming.pub/using-bull-to-manage-job-queues-in-a-node-js-micro-service-stack-7a6257e64509" target="_blank">Arquitetura do Worker. </a></figcaption>
   </figure>
   <br/>
   <br/>
@@ -59,7 +59,7 @@ Na prática, essas rotinas (_Jobs_) são adiciondas nas filas (_Queues_) e, em s
   <br/>
   <figure>
     <img src="https://raw.githubusercontent.com/OptimalBits/bull/develop/docs/job-lifecycle.png" />
-    <figcaption>Fig. 2 - <a href="https://github.com/OptimalBits/bull/tree/develop/docs" target="_blank"> Ciclo de vida dos <i>Jobs</i></a>.</figcaption>
+    <figcaption  align="center">Fig. 2 - <a align="center" href="https://github.com/OptimalBits/bull/tree/develop/docs" target="_blank"> Ciclo de vida dos <i>Jobs</i></a>.</figcaption>
   </figure>
   <br/>
   <br/>
