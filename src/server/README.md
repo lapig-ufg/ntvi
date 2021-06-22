@@ -38,12 +38,37 @@ Para verificar se a instalação ocorreu corretamente execute o comando:
    
 # Broker
 
-O Broker é o gerenciador dos processos executados em background do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. Na prática, as rotinas (_Jobs_) são organizadas em filas (_Queues_) e em seguidas processadas pela biblioteca [Bull](https://github.com/OptimalBits/bull). A necessidade da crição do Broker ocorre pela elevada demanda de operações que processam dados pesados e demoram muito para serem finalizadas.  
+O Broker é o gerenciador dos processos executados em background do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. A necessidade da crição desse componente ocorre pela elevada demanda de operações que geram os mosaicos das imagens e os seus respectivos *_caches_, esses procedimentos requer muito tempo para serem finalizados. O "cache", nesse contexto, refere-se a produção antecipada das imagens "recortadas" para cada ponto da campanha. No fluxo padrão do TVI, essas imagens são geradas no momento da requisição do usuário levando bastante tempo para serem produzidas e, consequentemente, inviabilizando as rotinas de inspeções dos pontos.
+
+<div align="center">
+  <br/>
+  <br/>
+  <figure>
+    <img src="https://miro.medium.com/max/438/1*2ljI2y9V3DyGX07mbD_msQ.png" />
+    <figcaption>Fig. 1 - <a href="https://betterprogramming.pub/using-bull-to-manage-job-queues-in-a-node-js-micro-service-stack-7a6257e64509" target="_blank">Arquitetura do Worker. </a></figcaption>
+  </figure>
+  <br/>
+  <br/>
+</div>
+
+Na prática, essas rotinas (_Jobs_) são adiciondas nas filas (_Queues_) e, em seguida, processadas na ordem "FIFO" (_first in first out_) pelos _Workers_, conforme é ilustrado na Figura 1.
+
+
+<div align="center">
+  <br/>
+  <br/>
+  <figure>
+    <img src="https://raw.githubusercontent.com/OptimalBits/bull/develop/docs/job-lifecycle.png" />
+    <figcaption>Fig. 2 - <a href="https://github.com/OptimalBits/bull/tree/develop/docs" target="_blank"> Ciclo de vida dos <i>Jobs</i></a>.</figcaption>
+  </figure>
+  <br/>
+  <br/>
+</div>
 
 ## Tecnologias utilizadas
 
-- [Bull](https://github.com/OptimalBits/bull)
-- [Google Earth Engine](https://earthengine.google.com/)
+- [Bull](https://github.com/OptimalBits/bull) - biblioteca que implementa um sistema de filas rápido e robusto baseado em redis.
+- [Google Earth Engine](https://earthengine.google.com/) - uma plataforma em escala planetária para dados e análises de ciências da Terra.
 
 
 ## Dependências

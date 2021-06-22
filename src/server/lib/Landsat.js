@@ -204,8 +204,6 @@ export class Landsat extends GoogleEarthEngine {
                 shell.end(function (err,code,signal) {
 
                     if (err) {
-                        console.log('CODE:', code)
-                        console.log('SIGNAL:', signal)
                         reject(err)
                     } else {
                         resolve(logs)

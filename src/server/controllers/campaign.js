@@ -561,10 +561,13 @@ module.exports = function (app) {
                 where: { id: parseInt(id) },
                 data: {
                     status: status
-                }
+                },
+                select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
             });
 
-            response.status(200).json(campaign);
+            await Queue.add('GenerateCache', campaign)
+
+            response.status(200).json({status:200, message: 'success' });
         } catch (e) {
             console.error(e)
             response.status(500).json({ message: texts.login_msg_erro + e + '.' });

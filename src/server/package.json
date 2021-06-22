@@ -73,7 +73,7 @@
     "prisma": "^2.25.0"
   },
   "scripts": {
-    "dev:init": "ssh -p 2522 -f root@$IP_LASERV_PROD -L 27019:localhost:27017 -N; ssh -f root@$IP_LASERV_HOMOLOG -L 5436:localhost:5432 -N -p 2522; sudo docker start redis",
+    "dev:init": "ssh -p 2522 -f root@$IP_LASERV_PROD -L 27019:localhost:27017 -N; ssh -f root@$IP_LASERV_HOMOLOG -L 5436:localhost:5432 -N -p 2522",
     "dev:start": "npx prisma generate; npx nodemon app-ntvi-cluster.js",
     "dev:broker": "nodemon broker-cluster.js",
     "dev:test": "npx nodemon ./tests/testPythonShell.js",

@@ -69,8 +69,8 @@
                              [nbAutocomplete]="auto" />
 
                       <nb-autocomplete #auto (selectedChange)="onSelectionCountryChange($event)">
-                        <nb-option *ngFor="let country of filteredCountries$ | async" [value]="country.ISO">
-                          {{ country.COUNTRY }}
+                        <nb-option *ngFor="let coun of filteredCountries$ | async" [value]="coun.ISO">
+                          {{ coun.COUNTRY }}
                         </nb-option>
                       </nb-autocomplete>
                       <div *ngIf="fInfo.country.touched && fInfo.country.invalid" class="mt-2">

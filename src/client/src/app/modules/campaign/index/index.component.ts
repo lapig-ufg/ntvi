@@ -79,6 +79,7 @@ export class IndexComponent implements  AfterViewInit  {
   startCache(campaign) {
     campaign.status = 'CACHING';
     this.campaignService.startCampaignCache(campaign).subscribe((data: Campaign) => {
+
       this.showToast('success', this.translate.instant('campaign_index_msg_cache'), 'top-right');
     });
   }
