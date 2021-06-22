@@ -119,7 +119,7 @@ def publishImg(image):
 
 def getExpirationDate():
 	now = datetime.datetime.now()
-	return datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=24)
+	return datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=22)
 
 def processPeriod(tiles, periods, suffix = ''):
 	for periodDict in periods:
@@ -128,7 +128,7 @@ def processPeriod(tiles, periods, suffix = ''):
 		dtStart = periodDict['dtStart']
 		dtEnd = periodDict['dtEnd']
 
-		mosaicId = satellite + "_" + str(year) + "_" + period + suffix
+		mosaicId = str(CAMPAIGN) + "_" + satellite + "_" + str(year) + "_" + period + suffix
 		existMosaic = db.mosaics.find_one({ "_id": mosaicId, "campaignId": CAMPAIGN })
 
 		if existMosaic == None or datetime.datetime.now() > existMosaic['expiration_date']:
@@ -146,7 +146,7 @@ def processPeriod(tiles, periods, suffix = ''):
 					"expiration_date": expirationDate
 				}
 
-				db.mosaics.update_one({ "_id": mosaicId }, { "$set": mosaic }, True)
+				db.mosaics.update_one({ "_id": mosaicId, "campaignId": CAMPAIGN }, { "$set": mosaic }, True)
 				print(mosaicId + mosaic)
 			except:
 				traceback.print_exc()

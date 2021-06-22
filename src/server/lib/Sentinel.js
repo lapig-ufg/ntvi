@@ -17,8 +17,11 @@ export class Sentinel extends GoogleEarthEngine {
             scriptPath: appRoot + process.env.SCRIPTS_PY,
         };
     }
-
-    runFromPython () {
+    getCompositions() {
+        const sentinelCompositions = super.campaign.compositions.find(comp => { return comp.satelliteId === 1 });
+        Sentinel.prototype.compositions = sentinelCompositions.colors;
+    }
+    publishLayers () {
         return new Promise( (resolve, reject) => {
             try {
                 let logs = [];
@@ -27,13 +30,14 @@ export class Sentinel extends GoogleEarthEngine {
 
                 params['campaign'] = super.campaign.id;
                 params['region'] = region;
+                params['compositions'] = this.compositions;
                 params['initialYear'] = moment(super.campaign.initialDate).year();
                 params['finalYear'] = moment(super.campaign.finalDate).year();
 
                 const shell = new PythonShell('publish_layers_sentinel.py', { args: [JSON.stringify(params)]});
 
                 shell.on('message', function (message) {
-                    logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss') + " - " + message + " ]");
+                    logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss')  + " ]" + " - " + message);
                 });
 
                 shell.end(function (err,code,signal) {

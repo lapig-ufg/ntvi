@@ -16,8 +16,14 @@ async function run(){
           select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} },
           where: {id: 1},
       });
+
       const landsat = new Landsat(campaign);
       landsat.publishLayers().then(result => {
+          console.log(result)
+      }).catch(console.error)
+
+      const sentinel = new Sentinel(campaign);
+      sentinel.publishLayers().then(result => {
           console.log(result)
       }).catch(console.error)
 
@@ -25,6 +31,5 @@ async function run(){
       console.error(e)
   }
 }
-
 
 run().catch(console.error);

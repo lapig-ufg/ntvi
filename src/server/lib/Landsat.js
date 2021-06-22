@@ -104,8 +104,7 @@ export class Landsat extends GoogleEarthEngine {
             const img = this.getBestImg(satellite, year, dtStart, dtEnd, path, row);
             images.push(img)
         });
-        let imageCollection = super.ee.ImageCollection.fromImages(images)
-        return imageCollection;
+        return super.ee.ImageCollection.fromImages(images)
     }
 
     getSatellite(year) {
@@ -199,7 +198,7 @@ export class Landsat extends GoogleEarthEngine {
                 const shell = new PythonShell('publish_layers_landsat.py', { args: [JSON.stringify(params)]});
 
                 shell.on('message', function (message) {
-                    logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss') + " - " + message + " ]");
+                    logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss')  + " ]" + " - " + message);
                 });
 
                 shell.end(function (err,code,signal) {

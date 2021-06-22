@@ -24,6 +24,7 @@ MONGO_HOST = os.environ.get("MONGO_HOST")
 MONGO_PORT = int(os.environ.get("MONGO_PORT"))
 MONGO_DATABASE = os.environ.get("MONGO_DATABASE")
 
+CAMPAIGN = data['campaign']
 SATELLITE = "COPERNICUS_S2_SR"
 BANDS= data['compositions']
 REGIONS_NAMES = data['region']
@@ -138,17 +139,17 @@ def publishImg(image):
 
 def getExpirationDate():
 	now = datetime.now()
-	expiration_datetime = datetime(now.year, now.month, now.day) + timedelta(hours=24)
+	expiration_datetime = datetime(now.year, now.month, now.day) + timedelta(hours=22)
 	return expiration_datetime
 
 def processPeriod(regionsNames, periods, suffix = ''):
     bounds = getRegionBounds(regionsNames)
     for date in periods:
 
-        mosaicId = CAMPAIGN +"_"+SATELLITE + "_" + str(date['month'])
+        mosaicId = str(CAMPAIGN) + "_" +SATELLITE + "_" + str(date['month'])
         existMosaic = db.mosaics.find_one({ "_id": mosaicId,  "campaign": CAMPAIGN, })
 
-        if existMosaic == None or datetime.now() > existMosaic['expiration_datetime']:
+        if existMosaic == None or datetime.now() > existMosaic['expiration_date']:
             try:
                 bestMosaic = getBestMosaic(bounds, date)
                 eeToken, eeMapid, mapUrl = publishImg(bestMosaic)
@@ -162,11 +163,11 @@ def processPeriod(regionsNames, periods, suffix = ''):
                     "ee_token": eeToken,
                     "ee_mapid": eeMapid,
                     "url": mapUrl,
-                    "expiration_datetime": expirationDate
+                    "expiration_date": expirationDate
                 }
 
-                db.mosaics.update_one({ "_id": mosaicId, "campaign": CAMPAIGN }, { "$set": mosaic }, True)
-                print(mosaic)
+                db.mosaics.update_one({ "_id": mosaicId, "campaignId": CAMPAIGN }, { "$set": mosaic }, True)
+                print(mosaicId)
             except:
                 traceback.print_exc()
         else:
