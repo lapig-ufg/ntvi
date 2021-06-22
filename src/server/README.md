@@ -7,38 +7,22 @@
 
 # Servidor
 
-O Servidor da aplicação _Temporal Vision Inspection_ é o componente responsável por todas as operações de gerenciamento dos dados produzidos pela sistema, comunicação com os bancos de dados, integração com o Google Eearth Engine e controle da API REST do TVI.  
+O Servidor da aplicação (TVI) _Temporal Vision Inspection_ é o componente responsável por todas as operações de gerenciamento dos dados produzidos pelo sistema, comunicação com os bancos de dados, integração com o Google Earth Engine e controle da API REST do TVI.  
 
 ## Tecnologias utilizadas
 
 
-- [MongoDB](https://docs.mongodb.com/drivers/node/current/fundamentals)
-- [Node JS](https://nodejs.org/en/)
-- [Prima ORM](https://www.prisma.io/)
-- [PostgresSQL](https://www.postgresql.org/)
+- [MongoDB](https://docs.mongodb.com/drivers/node/current/fundamentals) é banco de dados de documentos, o que significa que ele armazena dados em documentos do tipo JSON.
+- [Node JS](https://nodejs.org/en/) é um ambiente de execução Javascript _server-side_, baseado no motor V8 JavaScript do Chrome.
+- [Prisma ORM](https://www.prisma.io/) é um ORM (_Object Relational Mapper_) escrito em JavaScript e TypeScript  que pode ser usado para construir servidores GraphQL, APIs REST, microsserviços. 
+- [PostgresSQL](https://www.postgresql.org/) é um poderoso sistema de banco de dados relacional de código aberto que usa e estende a linguagem SQL combinada com muitos recursos que armazenam e escalam com segurança as cargas de trabalho de dados mais complicadas.
 
 ## Dependências
 
-### GDAL/OGR
-
-GDAL é uma biblioteca de tradução para formatos de dados geoespaciais raster e vetoriais. OGR _Simple Features Library_ é uma biblioteca escrita em C++ de código aberto (e ferramentas de linha de comando) que fornece acesso de leitura (e às vezes gravação) a uma variedade de formatos de arquivo vetorial, incluindo ESRI Shapefiles, S-57, SDTS, PostGIS, Oracle Spatial e Mapinfo mid/mif e TAB. [Veja mais.](https://mothergeo-py.readthedocs.io/en/latest/development/how-to/gdal-ubuntu-pkg.html)
-
-    #!/usr/bin/env bash
-    sudo add-apt-repository ppa:ubuntugis/ppa
-    sudo apt update
-    sudo apt install -y gdal-bin
-    sudo apt install -y libgdal-dev
-    export CPLUS_INCLUDE_PATH=/usr/include/gdal
-    export C_INCLUDE_PATH=/usr/include/gdal
- 
-
-Para verificar se a instalação ocorreu corretamente execute o comando:
-    
-    ogrinfo --version
    
 # Broker
 
-O Broker é o gerenciador dos processos executados em background do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. A necessidade da crição desse componente ocorre pela elevada demanda de operações que geram os mosaicos das imagens e os seus respectivos *_caches_, esses procedimentos requer muito tempo para serem finalizados. O "cache", nesse contexto, refere-se a produção antecipada das imagens "recortadas" para cada ponto da campanha. No fluxo padrão do TVI, essas imagens são geradas no momento da requisição do usuário levando bastante tempo para serem produzidas e, consequentemente, inviabilizando as rotinas de inspeções dos pontos.
+O Broker é o gerenciador dos processos executados em _background_ do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. A necessidade da criação desse componente ocorre pela elevada demanda de operações que geram os mosaicos das imagens e os seus respetivos *_caches_, esses procedimentos requerem muito tempo para serem finalizados. O "_cache_", nesse contexto, refere-se a produção antecipada das imagens recortadas para cada ponto da campanha. No fluxo padrão do TVI, essas imagens são geradas no momento da requisição do usuário levando bastante tempo para serem produzidas e, consequentemente, inviabilizando as rotinas de inspeções dos pontos.
 
 <p align="center">
   <br/>
@@ -50,7 +34,7 @@ O Broker é o gerenciador dos processos executados em background do TVI, ou seja
   <br/>
 </p>
 
-Na prática, essas rotinas (_Jobs_) são adiciondas nas filas (_Queues_) e, em seguida, processadas na ordem "FIFO" (_first in first out_) pelos _Workers_, conforme é ilustrado na Figura 1.
+Sendo assim, o Broker surge com o objetivo controlar todas essas operações pesadas da aplicação. Esse componente funciona da seguinte forma: as rotinas (_Jobs_) são adicionadas nas filas (_Queues_) e, em seguida, processadas na ordem “FIFO” (_first in first out_) pelos _Workers_, conforme é ilustrado na Figura 1.
 
 <p align="center">
   <br/>
@@ -64,12 +48,13 @@ Na prática, essas rotinas (_Jobs_) são adiciondas nas filas (_Queues_) e, em s
 
 ## Tecnologias utilizadas
 
-- [Bull](https://github.com/OptimalBits/bull) - biblioteca que implementa um sistema de filas rápido e robusto baseado em redis.
-- [Google Earth Engine](https://earthengine.google.com/) - uma plataforma em escala planetária para dados e análises de ciências da Terra.
+- [Bull](https://github.com/OptimalBits/bull) é uma biblioteca que implementa um sistema de filas rápido e robusto baseado em redis.
+- [Google Earth Engine](https://earthengine.google.com/) é uma plataforma em escala planetária para dados e análises de ciências da Terra.
 
 
 ## Dependências
 
+### Python
 Os _scripts_ de geração das imagens das coleções Landsat e Sentinel foram escritos em _**python**_ e recomendamos usarem a versão **3.8** para execução deles.
 
 - [earthengine-api](https://developers.google.com/earth-engine/guides/python_install)
@@ -87,5 +72,22 @@ Os _scripts_ de geração das imagens das coleções Landsat e Sentinel foram es
 - [DateTimeRange](https://pypi.org/project/DateTimeRange/)
   
         pip3 install DateTimeRange
+
+### GDAL/OGR
+
+GDAL é uma biblioteca de tradução para formatos de dados geoespaciais raster e vetoriais. OGR _Simple Features Library_ é uma biblioteca escrita em C++ de código aberto (e ferramentas de linha de comando) que fornece acesso de leitura (e às vezes gravação) a uma variedade de formatos de arquivo vetorial, incluindo ESRI Shapefiles, S-57, SDTS, PostGIS, Oracle Spatial e Mapinfo mid/mif e TAB. [Veja mais.](https://mothergeo-py.readthedocs.io/en/latest/development/how-to/gdal-ubuntu-pkg.html)
+
+    #!/usr/bin/env bash
+    sudo add-apt-repository ppa:ubuntugis/ppa
+    sudo apt update
+    sudo apt install -y gdal-bin
+    sudo apt install -y libgdal-dev
+    export CPLUS_INCLUDE_PATH=/usr/include/gdal
+    export C_INCLUDE_PATH=/usr/include/gdal
+
+
+Para verificar se a instalação ocorreu corretamente execute o comando:
+
+    ogrinfo --version
 
 
