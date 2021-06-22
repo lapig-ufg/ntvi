@@ -12,8 +12,8 @@ O Servidor da aplicação _Temporal Vision Inspection_ é o componente responsá
 ## Tecnologias utilizadas
 
 
-- [MongoDB](https://nodejs.org/en/)
-- [Node JS](https://github.com/OptimalBits/bull)
+- [MongoDB](https://docs.mongodb.com/drivers/node/current/fundamentals)
+- [Node JS](https://nodejs.org/en/)
 - [Prima ORM](https://www.prisma.io/)
 - [PostgresSQL](https://www.postgresql.org/)
 
@@ -38,7 +38,7 @@ Para verificar se a instalação ocorreu corretamente execute o comando:
    
 # Broker
 
-O Broker é gerenciador dos processos executados em background do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. Na prática, as rotinas (_Jobs_) são organizadas em filas (_Queues_) e em seguidas processadas pela biblioteca [Bull](https://github.com/OptimalBits/bull). A necessidade da crição do Broker ocorreu pela elevada demanda de operações que processam dados pesados e demoram muito para serem finalizadas.  
+O Broker é o gerenciador dos processos executados em background do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. Na prática, as rotinas (_Jobs_) são organizadas em filas (_Queues_) e em seguidas processadas pela biblioteca [Bull](https://github.com/OptimalBits/bull). A necessidade da crição do Broker ocorre pela elevada demanda de operações que processam dados pesados e demoram muito para serem finalizadas.  
 
 ## Tecnologias utilizadas
 
@@ -48,7 +48,7 @@ O Broker é gerenciador dos processos executados em background do TVI, ou seja, 
 
 ## Dependências
 
-Os _scripts_ são de geração das imagens das coleções Landsat e Sentinel foram escritos em _**python**_ e recomendamos usarem a versão **3.8** para execução deles.
+Os _scripts_ de geração das imagens das coleções Landsat e Sentinel foram escritos em _**python**_ e recomendamos usarem a versão **3.8** para execução deles.
 
 - [earthengine-api](https://developers.google.com/earth-engine/guides/python_install)
   
