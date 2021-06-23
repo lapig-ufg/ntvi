@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
-import Queue from '../lib/Queue';
+import Queue from '../libs/Queue';
 const rp = require("request-promise");
 
 module.exports = function (app) {

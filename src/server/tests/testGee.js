@@ -1,5 +1,5 @@
-import { Landsat } from '../lib/Landsat';
-import file from './file';
+import { Landsat } from '../libs/Landsat';
+import file from '../libs/File';
 const path = require('path');
 const envs = require('dotenv').config({path:path.join(process.cwd(), '/.env')});
 const dotenvExpand = require('dotenv-expand');

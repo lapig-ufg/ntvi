@@ -1,5 +1,5 @@
-import { GoogleEarthEngine } from '../lib/GoogleEarthEngine';
-import {mongo} from "../lib/Mongo";
+import { GoogleEarthEngine } from '../libs/GoogleEarthEngine';
+import {mongo} from "../libs/Mongo";
 
 export default {
     key: 'SearchPointsPathRow',

@@ -1,7 +1,7 @@
 const { createBullBoard } = require('@bull-board/api')
 const { BullAdapter } = require('@bull-board/api/bullAdapter')
 const { ExpressAdapter } = require('@bull-board/express')
-import Queue from '../lib/Queue';
+import Queue from '../libs/Queue';
 
 const serverAdapter = new ExpressAdapter();
 const queues = Queue.queues.map(queue =>  new BullAdapter(queue.bull))

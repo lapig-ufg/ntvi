@@ -1,4 +1,4 @@
-import { GoogleEarthEngine } from '../lib/GoogleEarthEngine';
+import { GoogleEarthEngine } from '../libs/GoogleEarthEngine';
 const { PrismaClient } = require('@prisma/client')
 
 export default {

@@ -1,39 +1,34 @@
-var ejs = require('ejs');
-var fs = require('fs');
-var requester = require('request');
-var querystring = require('querystring');
-var child_process = require('child_process');
-var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
-var proj4 = require('proj4');
-var path = require('path');
-var request = require('request');
-var async = require('async');
+const fs = require('fs');
+const exec = require('child_process').exec;
+const proj4 = require('proj4');
+const path = require('path');
+const request = require('request');
+const async = require('async');
 
 module.exports = function(app) {
 	
-	var Image = {};
-	var Internal = {};
+	let Image = {};
+	let Internal = {};
 
-	var campaigns = app.repository.collections.campaign;
-	var mosaics = app.repository.collections.mosaics;
-	var points = app.repository.collections.points;
+	const campaigns = app.repository.collections.campaign;
+	const mosaics = app.repository.collections.mosaics;
+	const points = app.repository.collections.points;
 	
-	var config = app.config;
+	const config = app.config;
 
-	var GDAL_PARAMS = ['-of', 'PNG', '-tr', 30, 30 ]
+	const GDAL_PARAMS = ['-of', 'PNG', '-tr', 30, 30 ]
 
 	Internal.TMSUrl = function(mosaicId, campaignId, callback) {
 		campaigns.findOne({ "_id": campaignId }, function(err, campaign) {
-			if (campaign != undefined && campaign.customURLs != undefined && campaign.customURLs[mosaicId] != undefined) {
+			if (campaign !== undefined && campaign.customURLs !== undefined && campaign.customURLs[mosaicId] !== undefined) {
 				callback(campaign.customURLs[mosaicId]);
 			} else {
 				mosaics.findOne({ "_id": mosaicId }, function(err, mosaic) {
 					
-					var url = undefined
-					if(mosaic != undefined) {
-						var token = mosaic.ee_token;
-						var mapid = mosaic.ee_mapid;
+					let url = undefined
+					if(mosaic !== undefined) {
+						const token = mosaic.ee_token;
+						const mapid = mosaic.ee_mapid;
 						url = "https://earthengine.googleapis.com/v1alpha/" + mapid + "/tiles/${z}/${x}/${y}"
 					}
 
@@ -74,8 +69,8 @@ module.exports = function(app) {
 	}
 
 	Image.gdalDefinition = function(request, response) {
-		var mosaicId = request.param('id')
-		var campaignId = request.param('campaign')
+		const mosaicId = request.param('id')
+		const campaignId = request.param('campaign')
 
 		Internal.TMSUrl(mosaicId, campaignId, function(TMSurl) {
 			if(TMSurl != undefined)
@@ -87,33 +82,33 @@ module.exports = function(app) {
 	}
 
 	Image.access = function(request, response) {
-		var layerId = request.param('layerId')
-		var pointId = request.param('pointId')
-		var campaignId = request.param('campaign')
+		const layerId = request.param('layerId')
+		const pointId = request.param('pointId')
+		const campaignId = request.param('campaign')
 
-		var sourceUrl = 'http://localhost:3000/source/'+layerId+'?campaign='+campaignId
+		const sourceUrl = 'http://localhost:3000/source/'+layerId+'?campaign='+campaignId
 		
 		points.findOne({ _id:pointId }, function(err, point) {
 
 			if (point) {
 				
-				var imagePath = path.join(config.imgDir, point.campaign, pointId, layerId +'.png')
+				const imagePath = path.join(config.imgDir, point.campaign, pointId, layerId +'.png')
 
 				fs.exists(imagePath, function(exists) {
 					if (exists) {
 						response.sendFile(imagePath)
 					} else {
 
-						var buffer = 4000
-						var coordinates = proj4('EPSG:4326', 'EPSG:900913', [point.lon, point.lat])
+						const buffer = 4000
+						const coordinates = proj4('EPSG:4326', 'EPSG:900913', [point.lon, point.lat])
 
-						var ulx = coordinates[0] - buffer
-						var uly = coordinates[1] + buffer
-						var lrx = coordinates[0] + buffer
-						var lry = coordinates[1] - buffer
-						var projwin = ulx + " " + uly + " " + lrx + " " + lry
+						const ulx = coordinates[0] - buffer
+						const uly = coordinates[1] + buffer
+						const lrx = coordinates[0] + buffer
+						const lry = coordinates[1] - buffer
+						const projwin = ulx + " " + uly + " " + lrx + " " + lry
 
-						var cmd = config.imgDownloadCmd + ' "' + sourceUrl + '" "' + projwin + '" ' + imagePath
+						const cmd = config.imgDownloadCmd + ' "' + sourceUrl + '" "' + projwin + '" ' + imagePath
 						console.log(cmd)
 
 						exec(cmd, function() {
@@ -131,21 +126,22 @@ module.exports = function(app) {
 
 	Image.populateCache = function(requestPointCache, pointCacheCompĺete, finished) {
 
-		var periods = ['DRY','WET']
+		const periods = ['DRY','WET']
 
- 		var getRequestTasks = function(point, campaign) {
+ 		const getRequestTasks = function(point, campaign) {
 
- 			var satellite
- 			var requestTasks = [];
- 			var urls = [];
+ 			let satellite
+ 			const requestTasks = [];
+ 			const urls = [];
 			
-			var initialYear = campaign.initialYear;
-			var finalYear = campaign.finalYear;
+			const initialYear = campaign.initialYear;
+			const finalYear = campaign.finalYear;
 
 			periods.forEach(function(period){
-				for (var year = initialYear; year <= finalYear; year++) {
+				for (let year = initialYear; year <= finalYear; year++) {
 			 				
 	 				satellite = 'L7';
+
 					if(year > 2012) { 
 						satellite = 'L8'
 					} else if(year > 2011) {
@@ -157,15 +153,15 @@ module.exports = function(app) {
 					layerId = satellite+"_"+year+"_"+period
 					pointId = point._id
 
-					var url = "http://localhost:" + config.port + "/image/"+layerId+"/"+pointId+"?campaign="+campaign._id;
+					const url = "http://localhost:" + config.port + "/image/"+layerId+"/"+pointId+"?campaign="+campaign._id;
 					urls.push(url);
 				}
 			});
 
 			urls.forEach(function(url) {
 				requestTasks.push(function(next) {
-					var params = { timeout: 3600 * 1000 };
-					var callback = function(error, response, html) {
+					const params = { timeout: 3600 * 1000 };
+					const callback = function(error, response, html) {
 						requestPointCache(point, url)
 						if(error) {
 							request(url, params, callback);
@@ -180,18 +176,18 @@ module.exports = function(app) {
 			return requestTasks;
  		}
 
- 		var cacheJobCanStopFlag = false;
- 		var startCacheJob = function(next) {
+ 		let cacheJobCanStopFlag = false;
+ 		const startCacheJob = function(next) {
 	 		app.repository.collections.points.findOne({ "cached" : false }, { lon:1, lat: 1, campaign: 1}, { sort: [['index', 1]] }, function(err, point) {
 	 			if(point) {
 	 				app.repository.collections.campaign.findOne({ "_id" : point.campaign }, function(err, campaign) {
-						var requestTasks = getRequestTasks(point, campaign);
+						const requestTasks = getRequestTasks(point, campaign);
 						
-						var hour = new Date().getHours()
-						var day = new Date().getDay();
-						var busyTimeCondition = ( (day == 6) || (day == 0) || (hour >= 8 && hour <= 19 ) )
+						const hour = new Date().getHours()
+						const day = new Date().getDay();
+						const busyTimeCondition = ( (day == 6) || (day == 0) || (hour >= 8 && hour <= 19 ) )
 
-						var parallelRequestsLimit = busyTimeCondition ? config.cache.parallelRequestsBusyTime : config.cache.parallelRequestsDawnTime;
+						const parallelRequestsLimit = busyTimeCondition ? config.cache.parallelRequestsBusyTime : config.cache.parallelRequestsDawnTime;
 
 						async.parallelLimit(requestTasks, parallelRequestsLimit, function() {
 							app.repository.collections.points.update({ _id: point._id}, { '$set': { "cached": true }  }, {}, function() {
@@ -207,11 +203,11 @@ module.exports = function(app) {
 	 		});
  		}
 
- 		var cacheJobCanStop = function() {
+ 		const cacheJobCanStop = function() {
  			return cacheJobCanStopFlag;
  		}
 
- 		var onComplete = function() {
+ 		const onComplete = function() {
  			finished();
  		}
 

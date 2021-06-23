@@ -5,7 +5,7 @@ const appRoot = require('app-root-path');
 
 export class Sentinel extends GoogleEarthEngine {
 
-    constructor(campaign) {
+    constructor(campaign, job = null) {
         super(campaign);
 
         this.getCompositions();

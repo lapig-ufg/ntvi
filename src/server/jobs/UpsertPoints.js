@@ -1,5 +1,5 @@
-import { mongo }  from '../lib/Mongo'
-import Queue from '../lib/Queue';
+import { mongo }  from '../libs/Mongo'
+import Queue from '../libs/Queue';
 import moment from "moment";
 
 

@@ -1,4 +1,4 @@
-import { mongo }  from '../lib/Mongo'
+import { mongo }  from '../libs/Mongo'
 
 export default {
     key: 'UpsertCampaign',

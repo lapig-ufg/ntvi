@@ -1,10 +1,17 @@
-import { Landsat } from "../lib/Landsat";
-import { Sentinel } from "../lib/Sentinel";
+import { Landsat } from "../libs/Landsat";
+import { Sentinel } from "../libs/Sentinel";
+const moment = require("moment-timezone");
 
 export default {
-    key: 'GenerateCache',
+    key: 'PublishLayers',
     options: {
         delay: 1000,
+        repeat: {
+            cron: '10 22 * * *', // run everyday at 22:10 until end date.
+            tz: process.env.JOBS_TIME_ZONE,
+            startDate: moment().tz(process.env.JOBS_TIME_ZONE).format(),
+            endDate: moment().tz(process.env.JOBS_TIME_ZONE).add(15, 'days').format()
+        }
     },
     async handle(job, done) {
         const { data } = job
@@ -14,8 +21,6 @@ export default {
 
             const landsat = new Landsat(data);
             const sentinel = new Sentinel(data);
-
-            job.progress(30);
 
             const promises = Promise.all([landsat.publishLayers(), sentinel.publishLayers()])
 
