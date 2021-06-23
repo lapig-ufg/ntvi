@@ -565,7 +565,7 @@ module.exports = function (app) {
                 select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
             });
 
-            await Queue.add('GenerateCache', campaign)
+            await Queue.add('InitCache', campaign)
 
             response.status(200).json({status:200, message: 'success' });
         } catch (e) {

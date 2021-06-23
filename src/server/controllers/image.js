@@ -16,8 +16,6 @@ module.exports = function(app) {
 	
 	const config = app.config;
 
-	const GDAL_PARAMS = ['-of', 'PNG', '-tr', 30, 30 ]
-
 	Internal.TMSUrl = function(mosaicId, campaignId, callback) {
 		campaigns.findOne({ "_id": campaignId }, function(err, campaign) {
 			if (campaign !== undefined && campaign.customURLs !== undefined && campaign.customURLs[mosaicId] !== undefined) {
@@ -86,7 +84,7 @@ module.exports = function(app) {
 		const pointId = request.param('pointId')
 		const campaignId = request.param('campaign')
 
-		const sourceUrl = 'http://localhost:3000/source/'+layerId+'?campaign='+campaignId
+		const sourceUrl = `http://localhost:${config.port}/source/${layerId}?campaign=${campaignId}`
 		
 		points.findOne({ _id:pointId }, function(err, point) {
 
@@ -109,6 +107,7 @@ module.exports = function(app) {
 						const projwin = ulx + " " + uly + " " + lrx + " " + lry
 
 						const cmd = config.imgDownloadCmd + ' "' + sourceUrl + '" "' + projwin + '" ' + imagePath
+
 						console.log(cmd)
 
 						exec(cmd, function() {
