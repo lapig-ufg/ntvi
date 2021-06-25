@@ -6,6 +6,7 @@
 *.sublime-workspace
 *.pyc
 .idea
+
 node_modules
 ows_runtime.map
 src/client/build/*
@@ -39,6 +40,8 @@ src/server/integration/py/credentials/
 db/dump/
 src/server/bin/GeoJSON/
 src/server/bin/SHP
+src/server/STORAGE
+src/server/ntvi-files
 src/server/integration/py/*.json
 src/server/.env
 src/server/bin/teste/*

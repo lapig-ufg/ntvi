@@ -154,6 +154,7 @@
   "campaign_create_edit_tab_config_field_final_date_placeholder": "Data Final",
   "campaign_create_edit_tab_config_field_final_date_required": "Data Final é obrigatória.",
   "campaign_create_edit_tab_config_card_colors_title": "Composição das cores das bandas",
+  "campaign_create_edit_tab_config_card_preview": "Pré-visualização das imagens",
   "campaign_create_edit_tab_config_field_satellite": "Satélite",
   "campaign_create_edit_tab_config_field_satellite_placeholder": "Selecione um Satélite",
   "campaign_create_edit_tab_config_field_colors": "Cores",

@@ -55,7 +55,7 @@ export default {
                 if(result[1].insertedCount === points.length){
                     await Queue.add('SearchPointsPathRow', data.campaign )
                     job.progress(100);
-                    done();
+                    done(null, result[1]);
                 } else{
                     done(new Error('Can not insert all documents: ' + result[1]));
                 }

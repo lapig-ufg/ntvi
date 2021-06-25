@@ -3,7 +3,7 @@ const proj4 = require('proj4');
 export default {
     buffer(point)  {
         const buffer = 4000
-        const coordinates = proj4('EPSG:4326', 'EPSG:900913', [point.lon, point.lat])
+        const coordinates = proj4('EPSG:4326', 'EPSG:900913', [parseFloat(point.lon), parseFloat(point.lat)])
 
         const ulx = coordinates[0] - buffer
         const uly = coordinates[1] + buffer

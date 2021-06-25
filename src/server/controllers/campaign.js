@@ -1,4 +1,5 @@
-const { PrismaClient } = require('@prisma/client')
+import { Landsat, Sentinel } from "../libs";
+
 import Queue from '../libs/Queue';
 const rp = require("request-promise");
 
@@ -641,6 +642,70 @@ module.exports = function (app) {
             response.end();
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    Controller.getThumbsBySatellites = function (campaign) {
+        let promises = [];
+        campaign.compositions.forEach(comp => {
+            if(parseInt(comp.satelliteId) === 1){
+                promises.push(new Promise((resolve, reject) => {
+                    const landsat = new Landsat(campaign);
+                    landsat.run(function (){
+                        landsat.getThumbURL().then(thumb => {
+                            console.log(comp)
+                            resolve({satelliteId: 1, title: comp.satellite.name, url: thumb })
+                        })
+                    },  (err) => {
+                        reject(new Error(err))
+                        landsat.ee.reset();
+                    },  (err) => {
+                        reject(new Error(err))
+                        landsat.ee.reset();
+                    });
+                }));
+            } else {
+                promises.push(new Promise((resolve, reject) => {
+                    const sentinel = new Sentinel(campaign);
+
+                    sentinel.run(function (){
+
+                        sentinel.getThumbURL().then(thumb => {
+                            resolve({satelliteId: 2, title: comp.satellite.name, url: thumb })
+                        })
+                    },  (err) => {
+                        reject(new Error(err))
+                        sentinel.ee.reset();
+                    },  (err) => {
+                        reject(new Error(err))
+                        sentinel.ee.reset();
+                    });
+                }));
+            }
+        })
+        return promises;
+    }
+
+    Controller.getThumbs = async function (request, response) {
+        const {id,  compositions } = request.body
+        try {
+            prisma.campaign.findUnique({
+                select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} },
+                where: {id: parseInt(id)},
+            }).then(campaign => {
+
+                campaign['compositions'] = compositions;
+
+                let thumbs = Promise.all(Controller.getThumbsBySatellites(campaign));
+
+                thumbs.then(resul => {
+                    response.status(200).json(resul);
+                })
+            });
+
+        } catch (e) {
+            console.error(e)
+            response.status(500).json({ message: e});
         }
     }
 

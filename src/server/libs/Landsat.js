@@ -38,7 +38,7 @@ export class Landsat extends GoogleEarthEngine {
     }
 
     getCompositions() {
-        const landsatCompositions = super.campaign.compositions.find(comp => { return comp.satelliteId === 1 });
+        const landsatCompositions = super.campaign.compositions.find(comp => { return parseInt(comp.satelliteId) === 1 });
         Landsat.prototype.compositions = landsatCompositions.colors;
     }
 
@@ -59,6 +59,47 @@ export class Landsat extends GoogleEarthEngine {
                 const wrs_list = wrs_filtered.toList(wrs_filtered.size())
 
                 wrs_list.map(this.getWRS).getInfo(tiles => resolve(tiles))
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    getBounds() {
+        return new Promise((resolve, reject) => {
+            try {
+                const countries = super.ee.FeatureCollection("users/lapig/countries")
+
+                const selectedCountry = super.ee.Feature(countries.filter(super.ee.Filter.eq('ISO', super.campaign.country)).first())
+                const center = selectedCountry.geometry().centroid().buffer(2e4)
+               resolve(center)
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    getThumbURL() {
+        return new Promise((resolve, reject) => {
+            try {
+                this.getBounds().then(ob => {
+                    const year = moment().year() - 1;
+                    const bands = ['B5','B6','B4']
+                    const img = super.ee.ImageCollection("LANDSAT/LC08/C01/T1_TOA").filterDate(year + '-01-01', year + '-12-31')
+                        .sort("CLOUD_COVER")
+                        .filterBounds(ob)
+                        .select(bands, ['NIR','SWIR','RED'])
+                        .first();
+
+                    const thumb = img.getThumbURL({
+                        "bands": this.compositions,
+                        'region': ob,
+                        'dimensions': 180,
+                        'format': 'png'
+                    });
+
+                    resolve(thumb)
+                })
             } catch (e) {
                 reject(e);
             }
@@ -198,11 +239,44 @@ export class Landsat extends GoogleEarthEngine {
                 const shell = new PythonShell('publish_layers_landsat.py', { args: [JSON.stringify(params)]});
 
                 shell.on('message', function (message) {
+                    console.log(message)
                     logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss')  + " ]" + " - " + message);
                 });
 
                 shell.end(function (err,code,signal) {
 
+                    if (err) {
+                        reject(err)
+                    } else {
+                        resolve(logs)
+                    }
+                });
+            } catch (e) {
+                reject(e);
+            }
+        })
+    }
+
+    getMosaicsDates() {
+        return new Promise( (resolve, reject) => {
+            try {
+                let logs = [];
+                const region = Array.isArray(super.campaign.country) ? super.campaign.country : [super.campaign.country];
+                let params = super.credentials;
+
+                params['campaign'] = super.campaign.id;
+                params['region'] = region;
+                params['compositions'] = this.compositions;
+                params['initialYear'] = moment(super.campaign.initialDate).year();
+                params['finalYear'] = moment(super.campaign.finalDate).year();
+
+                const shell = new PythonShell('update_mosaic_date.py', { args: [JSON.stringify(params)]});
+
+                shell.on('message', function (message) {
+                    logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss')  + " ]" + " - " + message);
+                });
+
+                shell.end(function (err,code,signal) {
                     if (err) {
                         reject(err)
                     } else {

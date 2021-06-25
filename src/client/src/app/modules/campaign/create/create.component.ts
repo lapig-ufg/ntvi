@@ -49,6 +49,10 @@ export class CreateComponent implements OnInit {
   loadingForms = false as boolean;
   customImages = false as boolean;
   reviewCampaign = {} as any;
+  loadingThumb = false;
+  thumbs = [];
+  selectedThumb: any = {};
+  isSingleView = false;
   permissions = [
     { id: 'ADMIN', name: 'ADMIN' },
     { id: 'INSPETOR', name: 'INSPETOR' },
@@ -361,6 +365,7 @@ export class CreateComponent implements OnInit {
     });
     this.tableCompositions.source.reset();
     await this.tableCompositions.source.load(this.compositions);
+    this.getThumb()
   }
   async addUserOnCampaign() {
     const userId = this.usersForm.get('user').value;
@@ -427,6 +432,9 @@ export class CreateComponent implements OnInit {
     this.compositions = this.compositions.filter(function (item, i) {
       return i !== index;
     });
+    if ( this.thumbs.length > 0 ) {
+        this.thumbs = this.thumbs.filter(thumb => thumb.satelliteId != event.data.satelliteId)
+    }
     this.tableCompositions.source.reset();
     await this.tableCompositions.source.load(this.compositions);
   }
@@ -668,5 +676,21 @@ export class CreateComponent implements OnInit {
 
   onSelectionCountryChange($event) {
     this.filteredCountries$ = this.getFilteredCountries($event);
+  }
+  getThumb(){
+      this.loadingThumb = true;
+      let camp = this.campaign;
+      camp.compositions = this.compositions;
+      this.campaignService.thumb(this.campaign).subscribe(res => {
+            this.thumbs = res
+            setTimeout(() => this.loadingThumb = false, 1500);
+          }, error => {
+            this.loadingThumb = false;
+            this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
+      });
+  }
+  selectThumb(thumb: any) {
+      this.selectedThumb = thumb;
+      this.isSingleView = true;
   }
 }

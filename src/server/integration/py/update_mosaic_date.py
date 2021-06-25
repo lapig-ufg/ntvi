@@ -46,6 +46,9 @@ PERIODS_BR = [
 	}
 ]
 
+client = MongoClient(MONGO_HOST, MONGO_PORT)
+db = client[MONGO_DATABASE]
+
 def getBestImg(satellite, year, mDaysStart, mDaysEnd, path, row):
 	dtStart = str(year) + mDaysStart
 	dtEnd = str(year) + mDaysEnd
@@ -114,24 +117,15 @@ def processPeriod(tiles, periods, suffix = ''):
 
         mosaicId = str(CAMPAIGN) + "_" + satellite + "_" + str(year) + "_" + period
 
-        requests = []
-
         for bestImage in getBestImages(satellite,year,dtStart,dtEnd):
             try:
+                print(bestImage)
                 date = bestImage['eeObj'].get('DATE_ACQUIRED').getInfo()
-                dt = { "dates": { "row": bestImage['row'], "path":bestImage['path'], "date": date  } }
-                requests.append(UpdateOne({ "_id": mosaicId }, { "$push": dt }, True))
-            except:
+                dt = { "dates": { "row": bestImage['row'], "path": bestImage['path'], "date": date  } }
+                db.mosaics.update({ "_id": mosaicId, "campaignId": CAMPAIGN }, { "$push": dt }, True)
+                print(mosaicId + ' - ' + dt.path+dt.row + ' - ' + dt.date + ' inserted. ')
+            except Exception as e:
                 pass
-
-        try:
-            db.mosaics.bulk_write(requests)
-        except BulkWriteError as bwe:
-            print(bwe.details)
-
-
-client = MongoClient(MONGO_HOST, MONGO_PORT)
-db = client[MONGO_DATABASE]
 
 TILES = getWrsCodes(REGIONS_NAMES)
 

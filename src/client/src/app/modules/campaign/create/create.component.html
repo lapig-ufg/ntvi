@@ -168,6 +168,46 @@
                           <ng2-smart-table *ngIf="compositions.length > 0" [settings]="tableCompositions.settings"
                             [source]="tableCompositions.source" (delete)="removeComposition($event)">
                           </ng2-smart-table>
+                            <div id="thumb-create" class="mt-4" >
+                                <nb-card size="medium" *ngIf="thumbs.length > 0">
+                                    <nb-card-header>
+                                        {{'campaign_create_edit_tab_config_card_preview' | translate}}
+                                        <div>
+                                            <button class="single-view-button"
+                                                    nbButton
+                                                    type="button"
+                                                    size="small"
+                                                    [appearance]="isSingleView ? 'filled' : 'outline'"
+                                                    (click)="isSingleView = true">
+                                                <i class="nb-square"></i>
+                                            </button>
+                                            <button class="grid-view-button"
+                                                    nbButton
+                                                    type="button"
+                                                    size="small"
+                                                    [appearance]="isSingleView ? 'outline' : 'filled'"
+                                                    (click)="isSingleView = false">
+                                                <nb-icon icon="grid" pack="eva"></nb-icon>
+                                            </button>
+                                        </div>
+                                    </nb-card-header>
+                                    <div class="grid-container" [nbSpinner]="loadingThumb" nbSpinnerStatus="primary" nbSpinnerSize="giant" >
+                                        <div class="single-view" *ngIf="isSingleView">
+                                            <div class="camera" [style.background-image]="'url(' + selectedThumb.url + ')'">
+                                                <span class="camera-name">{{ selectedThumb.title }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="grid-view" *ngIf="!isSingleView">
+                                            <div class="camera"
+                                                 *ngFor="let thumb of thumbs"
+                                                 [style.background-image]="'url(' + thumb.url + ')'"
+                                                 (click)="selectThumb(thumb)">
+                                                <span class="camera-name">{{ thumb.title }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nb-card>
+                            </div>
                         </div>
                       </div>
                     </nb-card-body>

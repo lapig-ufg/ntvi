@@ -43,23 +43,23 @@ export default {
                     let arrayQueries = []
                     result.features.forEach((feature) => {
                         let id, region = null;
-                        id = feature.properties.point_id
-                        if(feature.region !== null){
-                            region = feature.region.properties.ADM2_NAME + ' - ' + feature.region.properties.ADM1_NAME + ' - ' + feature.region.properties.ADM0_NAME;
-                        } else{
+                        id = feature.properties._id;
+                        if(feature.properties.hasOwnProperty('region')){
+                            const reg =  feature.properties.region;
+                            region = reg.properties.ADM2_NAME + ' - ' + reg.properties.ADM1_NAME + ' - ' + reg.properties.ADM0_NAME;
+                        } else {
                             region = ' - ';
                         }
                         arrayQueries.push(prisma.point.update({
                             where: { id: id },
                             data: { info: region },
                         }))
-
                     });
                     job.progress(70);
                     prisma.$transaction(arrayQueries).then(result => {
                         if(result){
                             job.progress(100);
-                            done();
+                            done(null, result);
                         }
                     }).catch(error => {
                         done(new Error(error));

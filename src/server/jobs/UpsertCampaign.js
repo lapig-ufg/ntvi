@@ -36,7 +36,7 @@ export default {
             upsetCampaign.then( result => {
                 if(result){
                     job.progress(100);
-                    done();
+                    done(null, result);
                 }
             }).catch(error => {
                 done(new Error(error));

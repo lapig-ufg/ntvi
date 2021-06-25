@@ -1,4 +1,4 @@
-import { Landsat } from '../libs/Landsat';
+import { Landsat, Sentinel } from '../libs';
 import file from '../libs/File';
 const path = require('path');
 const envs = require('dotenv').config({path:path.join(process.cwd(), '/.env')});
@@ -15,7 +15,7 @@ async function run(){
   try {
       const campaign = await prisma.campaign.findUnique({
           select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} },
-          where: {id: 1},
+          where: {id: 2},
       });
 
       const landsat = new Landsat(campaign);
@@ -25,19 +25,23 @@ async function run(){
 
       landsat.run(function (){
 
-          landsat.initSatellites();
+          landsat.getThumbURL().then(thumb => {
+              console.log(thumb)
+          })
 
-          landsat.getTiles().then(tiles =>  {
-              for (let year = initialYear; year <= finalYear; year++) {
-                  landsat.processPeriod(tiles, year)
-              }
-          }).then(() => {
-              Promise.all(landsat.mosaicsPromises).then(mosaics => {
-                  mosaics.forEach(mosaic => {
-                      console.log(mosaic)
-                  })
-              })
-          }).catch(err => console.error(new Error(err)))
+          // landsat.initSatellites();
+          //
+          // landsat.getTiles().then(tiles =>  {
+          //     for (let year = initialYear; year <= finalYear; year++) {
+          //         landsat.processPeriod(tiles, year)
+          //     }
+          // }).then(() => {
+          //     Promise.all(landsat.mosaicsPromises).then(mosaics => {
+          //         mosaics.forEach(mosaic => {
+          //             console.log(mosaic)
+          //         })
+          //     })
+          // }).catch(err => console.error(new Error(err)))
 
       },  (err) => {
           console.error(new Error(err))

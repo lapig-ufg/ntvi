@@ -83,11 +83,11 @@ Os _scripts_ de geração das imagens das coleções Landsat e Sentinel foram es
 
 GDAL é uma biblioteca de tradução para formatos de dados geoespaciais raster e vetoriais. OGR _Simple Features Library_ é uma biblioteca escrita em C++ de código aberto (e ferramentas de linha de comando) que fornece acesso de leitura (e às vezes gravação) a uma variedade de formatos de arquivo vetorial, incluindo ESRI Shapefiles, S-57, SDTS, PostGIS, Oracle Spatial e Mapinfo mid/mif e TAB. [Veja mais.](https://mothergeo-py.readthedocs.io/en/latest/development/how-to/gdal-ubuntu-pkg.html)
 
+    Ubuntu 20.04
     #!/usr/bin/env bash
     sudo add-apt-repository ppa:ubuntugis/ppa
     sudo apt update
     sudo apt install -y gdal-bin
-    sudo apt install -y libgdal-dev
     export CPLUS_INCLUDE_PATH=/usr/include/gdal
     export C_INCLUDE_PATH=/usr/include/gdal
 

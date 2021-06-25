@@ -21,7 +21,6 @@ import { TranslateService } from '@ngx-translate/core';
 import {Country} from "../models/country";
 import {Observable, of} from "rxjs";
 import { map } from "rxjs/operators";
-import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-edit',
@@ -50,31 +49,35 @@ export class EditComponent implements OnInit {
   loadingForms = false as boolean;
   customImages = false as boolean;
   reviewCampaign: any;
+  loadingThumb = false;
+  thumbs = [];
+  selectedThumb: any = {};
+  isSingleView = false;
   permissions = [
     { id: 'ADMIN', name: 'ADMIN' },
     { id: 'INSPETOR', name: 'INSPETOR' },
     { id: 'SUPERVISOR', name: 'SUPERVISOR' },
   ];
   colorsComposition = [
-    { id: 'B1', name: 'B1' },
-    { id: 'B2', name: 'B2' },
-    { id: 'B3', name: 'B3' },
-    { id: 'B4', name: 'B4' },
-    { id: 'B5', name: 'B5' },
-    { id: 'B6', name: 'B6' },
-    { id: 'B7', name: 'B7' },
-    { id: 'B8', name: 'B8' },
-    { id: 'B8A', name: 'B8A' },
-    { id: 'B9', name: 'B9' },
-    { id: 'B10', name: 'B10' },
-    { id: 'B11', name: 'B11' },
-    { id: 'B12', name: 'B12' },
-    { id: 'QA10', name: 'QA10' },
-    { id: 'QA20', name: 'QA20' },
-    { id: 'QA60', name: 'QA60' },
-    { id: 'NIR', name: 'NIR' },
-    { id: 'RED', name: 'RED' },
-    { id: 'SWIR', name: 'SWIR' },
+      { id: 'NIR', name: 'NIR - Landsat' },
+      { id: 'RED', name: 'RED - Landsat' },
+      { id: 'SWIR', name: 'SWIR - Landsat' },
+      { id: 'B1', name: 'B1 - Sentinel' },
+      { id: 'B2', name: 'B2 - Sentinel' },
+      { id: 'B3', name: 'B3 - Sentinel' },
+      { id: 'B4', name: 'B4 - Sentinel' },
+      { id: 'B5', name: 'B5 - Sentinel' },
+      { id: 'B6', name: 'B6 - Sentinel' },
+      { id: 'B7', name: 'B7 - Sentinel' },
+      { id: 'B8', name: 'B8 - Sentinel' },
+      { id: 'B8A', name: 'B8A - Sentinel' },
+      { id: 'B9', name: 'B9 - Sentinel' },
+      { id: 'B10', name: 'B10 - Sentinel' },
+      { id: 'B11', name: 'B11 - Sentinel' },
+      { id: 'B12', name: 'B12 - Sentinel' },
+      { id: 'QA10', name: 'QA10 - Sentinel' },
+      { id: 'QA20', name: 'QA20 - Sentinel' },
+      { id: 'QA60', name: 'QA60 - Sentinel' },
   ];
   tablePoints = {
     settings: {
@@ -404,6 +407,7 @@ export class EditComponent implements OnInit {
     });
     this.tableCompositions.source.reset();
     await this.tableCompositions.source.load(this.compositions);
+    this.getThumb()
   }
   async addUserOnCampaign() {
     const userId = this.usersForm.get('user').value;
@@ -469,6 +473,9 @@ export class EditComponent implements OnInit {
     this.compositions = this.compositions.filter(function (item, i) {
       return i !== index;
     });
+    if ( this.thumbs.length > 0 ) {
+        this.thumbs = this.thumbs.filter(thumb => thumb.satelliteId != event.data.satelliteId)
+    }
     this.tableCompositions.source.reset();
     await this.tableCompositions.source.load(this.compositions);
   }
@@ -612,6 +619,19 @@ export class EditComponent implements OnInit {
     setTimeout(() => this.toastService.show(status, massage, { status, position, duration }), 900);
   }
 
+  getThumb(){
+      this.loadingThumb = true;
+      let camp = this.campaign;
+      camp.compositions = this.compositions;
+      this.campaignService.thumb(this.campaign).subscribe(res => {
+          this.thumbs = res
+          setTimeout(() => this.loadingThumb = false, 1500);
+      }, error => {
+          this.loadingThumb = false;
+          this.showToast('danger', this.translate.instant('error_msg'), 'top-right');
+      });
+  }
+
   onMapReady(ev) {
     // console.log(ev)
   }
@@ -691,6 +711,10 @@ export class EditComponent implements OnInit {
 
   onSelectionCountryChange($event) {
     this.filteredCountries$ = this.getFilteredCountries($event);
+  }
+  selectThumb(thumb: any) {
+      this.selectedThumb = thumb;
+      this.isSingleView = true;
   }
 
 }

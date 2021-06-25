@@ -103,6 +103,17 @@ export class CampaignService {
       );
   }
 
+  thumb(campaign): Observable<any> {
+    return this.httpClient.post<Campaign>(
+        this.apiURL + '/campaign/thumb',
+        JSON.stringify(campaign),
+        this.httpOptions,
+    )
+        .pipe(
+            catchError(this.errorHandler),
+        );
+  }
+
   createConfigForm(campaign): Observable<Campaign> {
     return this.httpClient.put<Campaign>(
       this.apiURL + '/campaign/createConfigForm/' + campaign.id,

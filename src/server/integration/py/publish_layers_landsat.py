@@ -118,41 +118,51 @@ def publishImg(image):
 
 def getExpirationDate():
 	now = datetime.datetime.now()
-	return datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(hours=22)
+	return datetime.datetime(now.year, now.month, now.day, now.hour, now.minute, now.second) + datetime.timedelta(hours=22)
+
+def saveMosaic(mosaicId, tiles, satellite, year, dtStart, dtEnd):
+    bestMosaic = getBestMosaic(tiles, satellite,year,dtStart,dtEnd)
+    print()
+    eeToken, eeMapid, url = publishImg(bestMosaic)
+
+    expirationDate = getExpirationDate()
+
+    mosaic = {
+        "campaignId": CAMPAIGN,
+        "dates": [],
+        "ee_token": eeToken,
+        "ee_mapid": eeMapid,
+        "url": url,
+        "expiration_date": expirationDate
+    }
+
+    db.mosaics.update_one({ "_id": mosaicId, "campaignId": CAMPAIGN }, { "$set": mosaic }, True)
+    print(mosaicId)
 
 def processPeriod(tiles, periods, suffix = ''):
-	for periodDict in periods:
+    for periodDict in periods:
+        period = periodDict['name']
+        dtStart = periodDict['dtStart']
+        dtEnd = periodDict['dtEnd']
 
-		period = periodDict['name']
-		dtStart = periodDict['dtStart']
-		dtEnd = periodDict['dtEnd']
+        mosaicId = str(CAMPAIGN) + "_" + satellite + "_" + str(year) + "_" + period + suffix
+        existMosaic = db.mosaics.find_one({ "_id": mosaicId, "campaignId": CAMPAIGN })
 
-		mosaicId = str(CAMPAIGN) + "_" + satellite + "_" + str(year) + "_" + period + suffix
-		existMosaic = db.mosaics.find_one({ "_id": mosaicId, "campaignId": CAMPAIGN })
+        try:
+            if existMosaic != None:
+                print(existMosaic)
+                if datetime.datetime.now() > existMosaic['expiration_date']:
+                    print(mosaicId + ' exists and is valid.')
+                else:
+                    saveMosaic(mosaicId, tiles, satellite, year, dtStart, dtEnd)
+            else:
+                saveMosaic(mosaicId, tiles, satellite, year, dtStart, dtEnd)
 
-		if existMosaic == None or datetime.datetime.now() > existMosaic['expiration_date']:
-			try:
-				bestMosaic = getBestMosaic(tiles, satellite,year,dtStart,dtEnd)
-				eeToken, eeMapid, url = publishImg(bestMosaic)
+        except Exception as e:
+            print(str(e))
+            traceback.print_exc()
+            print(mosaicId + ' no image.')
 
-				expirationDate = getExpirationDate()
-
-				mosaic = {
-				    "campaignId": CAMPAIGN,
-					"ee_token": eeToken,
-					"ee_mapid": eeMapid,
-					"url": url,
-					"expiration_date": expirationDate
-				}
-
-				db.mosaics.update_one({ "_id": mosaicId, "campaignId": CAMPAIGN }, { "$set": mosaic }, True)
-				print(mosaicId + mosaic)
-			except:
-				traceback.print_exc()
-				print(mosaicId + ' no image.')
-
-		else:
-			print(mosaicId + ' exists and is valid.')
 
 client = MongoClient(MONGO_HOST, MONGO_PORT)
 db = client[MONGO_DATABASE]

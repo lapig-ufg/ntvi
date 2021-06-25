@@ -19,8 +19,10 @@ export class CacheMaker {
             try {
                 const db = await this.db();
                 db.collection('campaign').findOne({ "_id": this.campaign.id }).then(camp => {
-                    if (camp !== undefined && camp.customURLs !== undefined) {
-                        resolve(camp.customURLs);
+                    if (camp.hasOwnProperty('customURLs')) {
+                      if(camp.customURLs.length > 0){
+                          resolve(camp.customURLs);
+                      }
                     } else {
                         const mosaics = db.collection('mosaics').find({"campaignId": this.campaign.id }).toArray()
                         if(mosaics !== undefined || true) {
@@ -36,9 +38,13 @@ export class CacheMaker {
         })
 
         promise.then(mosaics => {
-            CacheMaker.prototype.mosaics = mosaics.map(mosaic => {
-                return mosaic['wms'] = this.wmsXmlResponse(mosaic)
+            let mo = [];
+            mosaics.map(mosaic => {
+                mosaic.wms = this.wmsXmlResponse(mosaic)
+                mo.push(mosaic)
             });
+            CacheMaker.prototype.mosaics = mo;
+
         }).catch(console.error)
 
     }
@@ -61,23 +67,26 @@ export class CacheMaker {
                 </DataWindow> \n\
                 <Cache> \n\
                     <Expires>1</Expires> \n\
-                    <Path>"+process.env.IMG_GDAL_TMP_DIR+"/"+mosaic._id+"_"+mosaic.campaignId+"</Path> \n\
+                    <Path>"+process.env.IMG_GDAL_TMP_DIR+"/"+mosaic._id+"</Path> \n\
                 </Cache> \n\
                 <Projection>EPSG:900913</Projection> \n\
                 <BlockSizeX>256</BlockSizeX> \n\
                 <BlockSizeY>256</BlockSizeY> \n\
                 <BandsCount>3</BandsCount> \n\
                 <MaxConnections>10</MaxConnections> \n\
+                <ZeroBlockOnServerException>true</ZeroBlockOnServerException> \n\
+                <ZeroBlockHttpCodes>204,404</ZeroBlockHttpCodes> \n\
                 <Cache /> \n\
             </GDAL_WMS>"
     }
 
     async run() {
         const db     = await this.db();
-        const points = await db.collection('points').find({"campaign": this.campaign.id, "cached" : false }).toArray()
-
-        for (let point of points) {
-            await Queue.add('Cache', {point: point, mosaics: this.mosaics} )
-        }
+        const points = await db.collection('points').find({"campaignId": this.campaign.id, "cached" : false }).limit(1).toArray()
+        setTimeout(async () => {
+            for (let point of points) {
+                await Queue.add('Cache', {point: point, mosaics: this.mosaics} )
+            }
+        }, 2000);
     }
 }

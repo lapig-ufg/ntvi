@@ -154,6 +154,7 @@
   "campaign_create_edit_tab_config_field_final_date_placeholder": "Final Date",
   "campaign_create_edit_tab_config_field_final_date_required": "Final Date is required.",
   "campaign_create_edit_tab_config_card_colors_title": "Colors Composition",
+  "campaign_create_edit_tab_config_card_preview": "Images Preview",
   "campaign_create_edit_tab_config_field_satellite": "Satellite",
   "campaign_create_edit_tab_config_field_satellite_placeholder": "Select a satellite",
   "campaign_create_edit_tab_config_field_colors": "Colors",

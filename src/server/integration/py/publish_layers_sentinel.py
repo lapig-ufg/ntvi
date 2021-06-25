@@ -124,7 +124,7 @@ def getBestMosaic(bounds, date):
 
 def publishImg(image):
 
-	mapId = image.getMapId({ "bands": 'B4,B3,B2', "min": 0.02, "max": 0.3, "gamma": 1.5})
+	mapId = image.getMapId({ "bands": BANDS, "min": 0.02, "max": 0.3, "gamma": 1.5})
 	
 	mapUrl = mapId['tile_fetcher'].url_format
 
@@ -139,8 +139,27 @@ def publishImg(image):
 
 def getExpirationDate():
 	now = datetime.now()
-	expiration_datetime = datetime(now.year, now.month, now.day) + timedelta(hours=22)
+	expiration_datetime = datetime(now.year, now.month, now.day, now.hour, now.minute, now.second) + timedelta(hours=22)
 	return expiration_datetime
+
+def saveMosaic(mosaicId, bounds, date):
+    bestMosaic = getBestMosaic(bounds, date)
+    eeToken, eeMapid, mapUrl = publishImg(bestMosaic)
+
+    expirationDate = getExpirationDate()
+
+    mosaic = {
+        "_id": mosaicId,
+        "campaignId": CAMPAIGN,
+        "date": date,
+        "ee_token": eeToken,
+        "ee_mapid": eeMapid,
+        "url": mapUrl,
+        "expiration_date": expirationDate
+    }
+
+    db.mosaics.update_one({ "_id": mosaicId, "campaignId": CAMPAIGN }, { "$set": mosaic }, True)
+    print(mosaicId)
 
 def processPeriod(regionsNames, periods, suffix = ''):
     bounds = getRegionBounds(regionsNames)
@@ -148,30 +167,19 @@ def processPeriod(regionsNames, periods, suffix = ''):
 
         mosaicId = str(CAMPAIGN) + "_" +SATELLITE + "_" + str(date['month'])
         existMosaic = db.mosaics.find_one({ "_id": mosaicId,  "campaign": CAMPAIGN, })
+        try:
+            if existMosaic != None:
+                if datetime.now() > existMosaic['expiration_date']:
+                    print(mosaicId + ' exists and is valid.')
+                else:
+                   saveMosaic(mosaicId, bounds, date)
+            else:
+                saveMosaic(mosaicId, bounds, date)
+        except Exception as e:
+            print(str(e))
+            traceback.print_exc()
+            print(mosaicId + ' no image.')
 
-        if existMosaic == None or datetime.now() > existMosaic['expiration_date']:
-            try:
-                bestMosaic = getBestMosaic(bounds, date)
-                eeToken, eeMapid, mapUrl = publishImg(bestMosaic)
-
-                expirationDate = getExpirationDate()
-
-                mosaic = {
-                    "_id": mosaicId,
-                    "campaignId": CAMPAIGN,
-                    "date": date,
-                    "ee_token": eeToken,
-                    "ee_mapid": eeMapid,
-                    "url": mapUrl,
-                    "expiration_date": expirationDate
-                }
-
-                db.mosaics.update_one({ "_id": mosaicId, "campaignId": CAMPAIGN }, { "$set": mosaic }, True)
-                print(mosaicId)
-            except:
-                traceback.print_exc()
-        else:
-            print('mosaic exists and is valid.')
 
 client = MongoClient(MONGO_HOST, MONGO_PORT)
 db = client[MONGO_DATABASE]

@@ -2,8 +2,6 @@ const appRoot = require('app-root-path');
 
 module.exports = function (app) {
 	//appRoot faz parte da documentação do js
-	const appProducao = process.env.APP_PRODUCAO;
-
 	const config = {
 		"appRoot": appRoot,
 		"clientDir": appRoot + process.env.CLIENT_DIR,
