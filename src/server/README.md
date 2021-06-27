@@ -79,22 +79,28 @@ Os _scripts_ de geração das imagens das coleções Landsat e Sentinel foram es
 
          pip3 install opencv-python
 
-### GDAL/OGR
+### Tile Stitch
 
-GDAL é uma biblioteca de tradução para formatos de dados geoespaciais raster e vetoriais. OGR _Simple Features Library_ é uma biblioteca escrita em C++ de código aberto (e ferramentas de linha de comando) que fornece acesso de leitura (e às vezes gravação) a uma variedade de formatos de arquivo vetorial, incluindo ESRI Shapefiles, S-57, SDTS, PostGIS, Oracle Spatial e Mapinfo mid/mif e TAB. [Veja mais.](https://mothergeo-py.readthedocs.io/en/latest/development/how-to/gdal-ubuntu-pkg.html)
+Tile Stitch é um _script_ desenvolvido em C pela Mapbox Inc. com o objetivo de baixar images em PNG e GEOTIFF de um servidor TMS. [Veja mais.](https://github.com/lapig-ufg/tile-stitch.git)
 
-    Ubuntu 20.04
-    #!/usr/bin/env bash
-    sudo add-apt-repository ppa:ubuntugis/ppa
+    #instalação realizada no Ubuntu 20.04
     sudo apt update
-    sudo apt install -y gdal-bin
-    export CPLUS_INCLUDE_PATH=/usr/include/gdal
-    export C_INCLUDE_PATH=/usr/include/gdal
+    sudo apt install -y git build-essential pkg-config libcurl4-openssl-dev libpng-dev libjpeg-dev libtiff-dev libgeotiff-dev
+    git clone git@github.com:lapig-ufg/tile-stitch.git
+    cd tile-stitch
+    make
+    #install the compiled stitch
+    sudo install ./stitch /usr/local/bin/
 
 
 Para verificar se a instalação ocorreu corretamente execute o comando:
 
-    ogrinfo --version
+    stitch
+
+    #Output: 
+    #Usage: stitch [-o outfile] [-f png|geotiff] minlat minlon maxlat maxlon zoom http://whatever/{z}/{x}/{y}.png ...
+    #Usage: stitch [-o outfile] [-f png|geotiff] -c lat lon width height zoom http://whatever/{z}/{x}/{y}.png ...
+
 
 Além da instalação do GDAL, também é utilizada no sistema a projeção Google Mercator EPSG:900913 que não é definida por padrão no arquivo de projeções da biblioteca. O primeiro passo é encontrar o arquivo **epsg**, normalmente ele é encontrado no endereço **/usr/share/proj/epsg** ou **/opt/google/earth/pro/resources/gdal/epsg**. Esse endereço varia conforme a instalação da _lib_. Em seguida, adicione o código abaixo no final do arquivo e salve. 
 

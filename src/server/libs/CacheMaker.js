@@ -38,55 +38,19 @@ export class CacheMaker {
         })
 
         promise.then(mosaics => {
-            let mo = [];
-            mosaics.map(mosaic => {
-                mosaic.wms = this.wmsXmlResponse(mosaic)
-                mo.push(mosaic)
-            });
-            CacheMaker.prototype.mosaics = mo;
-
+            CacheMaker.prototype.mosaics = mosaics;
         }).catch(console.error)
 
     }
 
-    wmsXmlResponse(mosaic) {
-        return "\
-            <GDAL_WMS> \n\
-                <Service name=\"TMS\"> \n\
-                    <ServerUrl>"+mosaic.url+"</ServerUrl> \n\
-                </Service> \n\
-                <DataWindow> \n\
-                    <UpperLeftX>-20037508.34</UpperLeftX> \n\
-                    <UpperLeftY>20037508.34</UpperLeftY> \n\
-                    <LowerRightX>20037508.34</LowerRightX> \n\
-                    <LowerRightY>-20037508.34</LowerRightY> \n\
-                    <TileLevel>20</TileLevel> \n\
-                    <TileCountX>1</TileCountX> \n\
-                    <TileCountY>1</TileCountY> \n\
-                    <YOrigin>top</YOrigin> \n\
-                </DataWindow> \n\
-                <Cache> \n\
-                    <Expires>1</Expires> \n\
-                    <Path>"+process.env.IMG_GDAL_TMP_DIR+"/"+mosaic._id+"</Path> \n\
-                </Cache> \n\
-                <Projection>EPSG:900913</Projection> \n\
-                <BlockSizeX>256</BlockSizeX> \n\
-                <BlockSizeY>256</BlockSizeY> \n\
-                <BandsCount>3</BandsCount> \n\
-                <MaxConnections>10</MaxConnections> \n\
-                <ZeroBlockOnServerException>true</ZeroBlockOnServerException> \n\
-                <ZeroBlockHttpCodes>204,404</ZeroBlockHttpCodes> \n\
-                <Cache /> \n\
-            </GDAL_WMS>"
-    }
-
     async run() {
         const db     = await this.db();
-        const points = await db.collection('points').find({"campaignId": this.campaign.id, "cached" : false }).limit(1).toArray()
+        const points = await db.collection('points').find({"campaignId": this.campaign.id, "cached" : false }).limit(10).toArray()
         setTimeout(async () => {
-            for (let point of points) {
-                await Queue.add('Cache', {point: point, mosaics: this.mosaics} )
-            }
+            await Queue.add('Cache', { point: points[4], mosaics: this.mosaics} )
+            // for (let point of points) {
+            //     await Queue.add('Cache', { point: point, mosaics: this.mosaics} )
+            // }
         }, 2000);
     }
 }
