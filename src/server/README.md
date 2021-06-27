@@ -75,13 +75,31 @@ Os _scripts_ de geração das imagens das coleções Landsat e Sentinel foram es
 
         pip3 install numpy
   
+- [imageio](https://pypi.org/project/imageio/)
+
+         pip3 install imageio
+  
 - [opencv-python](https://pypi.org/project/opencv-python/)
 
-         pip3 install opencv-python
+      pip3 install opencv-python
+  
+- [imageio-ffmpeg](https://pypi.org/project/imageio-ffmpeg/)
+
+         pip3 install imageio-ffmpeg
+  
+- [pygifsicle](https://pypi.org/project/pygifsicle/)
+
+         pip3  install pygifsicle
+
+
+### [Gifsicle](https://github.com/kohler/gifsicle) 
+Gifsicle é uma ferramenta de linha de comando para criar, editar e obter informações sobre imagens e animações GIF.
+    
+    sudo apt-get install -y gifsicle
 
 ### Tile Stitch
 
-Tile Stitch é um _script_ desenvolvido em C pela Mapbox Inc. com o objetivo de baixar images em PNG e GEOTIFF de um servidor TMS. [Veja mais.](https://github.com/lapig-ufg/tile-stitch.git)
+Tile Stitch é um _script_ escrito em C por Eric Fischer, desenvolvedor da Mapbox Inc. com o objetivo de baixar imagens em PNG e GEOTIFF de um servidor TMS. [Veja mais.](https://github.com/lapig-ufg/tile-stitch.git)
 
     #instalação realizada no Ubuntu 20.04
     sudo apt update
@@ -102,7 +120,7 @@ Para verificar se a instalação ocorreu corretamente execute o comando:
     #Usage: stitch [-o outfile] [-f png|geotiff] -c lat lon width height zoom http://whatever/{z}/{x}/{y}.png ...
 
 
-Além da instalação do GDAL, também é utilizada no sistema a projeção Google Mercator EPSG:900913 que não é definida por padrão no arquivo de projeções da biblioteca. O primeiro passo é encontrar o arquivo **epsg**, normalmente ele é encontrado no endereço **/usr/share/proj/epsg** ou **/opt/google/earth/pro/resources/gdal/epsg**. Esse endereço varia conforme a instalação da _lib_. Em seguida, adicione o código abaixo no final do arquivo e salve. 
+Também é necessário adicionar no sistema, a projeção Google Mercator EPSG:900913 que não é definida por padrão no arquivo de projeções. O primeiro passo é encontrar o arquivo **epsg**, normalmente ele é encontrado no endereço **/usr/share/proj/epsg** ou **/opt/google/earth/pro/resources/gdal/epsg**. Esse endereço varia conforme a instalação da _lib_. Em seguida, adicione o código abaixo no final do arquivo e salve. 
 
   
     #GOOGLE MERCATOR

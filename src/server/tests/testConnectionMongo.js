@@ -9,6 +9,7 @@ async function run() {
         await mongo.connect();
         const db = await mongo.db("ntvi")
         console.log(moment().tz(process.env.JOBS_TIME_ZONE).add(15, 'days').format())
+        console.log(new Date('2020-12-01').getMonth())
 
     } finally {
         await mongo.close();

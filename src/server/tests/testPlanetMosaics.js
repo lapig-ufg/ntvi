@@ -1,11 +1,11 @@
-import { Landsat } from '../libs/Landsat';
-import { Sentinel } from '../libs/Sentinel';
+import { Planet } from '../libs';
 const path = require('path');
 const envs = require('dotenv').config({path:path.join(process.cwd(), '/.env')});
 const dotenvExpand = require('dotenv-expand');
 dotenvExpand(envs)
 const EventEmitter = require( 'events' );
 EventEmitter.defaultMaxListeners = parseInt(process.env.DEFAULT_MAX_LISTENERS);
+
 
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
@@ -17,19 +17,14 @@ async function run(){
           where: {id: 3},
       });
 
-      const landsat = new Landsat(campaign);
-      landsat.publishLayers().then(result => {
-          console.log(result)
-      }).catch(console.error)
-
-      const sentinel = new Sentinel(campaign);
-      sentinel.publishLayers().then(result => {
-          console.log(result)
-      }).catch(console.error)
-
+      const planet = new Planet(campaign);
+      planet.publishLayers().then(res => {
+          console.log(res)
+      });
   }  catch (e) {
       console.error(e)
   }
 }
+
 
 run().catch(console.error);

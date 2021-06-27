@@ -4,7 +4,7 @@ TMS_URL="$1"
 POINT="$2"
 ZOOM="$3"
 IMAGE_FILE="$4"
-
+IMAGE_ID="$5"
 BASEDIR=$(dirname "$0")
 
 STITCH_PARAMS="-c -- $POINT 300 300 $ZOOM $TMS_URL"
@@ -16,3 +16,5 @@ mkdir -p $(dirname $IMAGE_FILE)
 
 stitch -o $IMAGE_FILE $STITCH_PARAMS
 python3 $BASEDIR/enhance_img_clahe.py $IMAGE_FILE
+
+echo "IMAGE: $IMAGE_ID "

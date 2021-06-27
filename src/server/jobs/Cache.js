@@ -1,4 +1,6 @@
 import { mongo }  from '../libs/Mongo';
+import { Planet }  from '../libs/Planet';
+import file from '../libs/File';
 const { spawn } = require('child_process');
 const path = require('path');
 const moment  = require('moment');
@@ -27,8 +29,8 @@ export default {
                 return new Promise((resolve, reject) => {
                     try {
                         const imagePath = path.join(imgDir, campaignNameNormalized, data.point._id, mosaic._id +'.png');
-                        const zoom = mosaic._id.includes('COPERNICUS_S2_SR') ? 15 : 12;
-                        const child = spawn(imgDownloadCmd, [mosaic.url, data.point.lat + " " +  data.point.lon, zoom, imagePath]);
+                        const zoom = 12;
+                        const child = spawn(imgDownloadCmd, [mosaic.url, data.point.lat + " " +  data.point.lon, zoom, imagePath, mosaic._id]);
 
                         child.stdout.on('data', (data) => {
                             logs.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss')  + " ]" + " - " +data);
@@ -43,7 +45,6 @@ export default {
                         });
 
                         child.on('close', (code) => {
-                            console.log(code)
                             if(code === 0) {
                                 resolve(logs)
                             } else {
@@ -56,14 +57,20 @@ export default {
                     }
                 });
             }));
-            
+
             job.progress(40);
 
             mosaicsPromises.then((result) => {
-              db.collection('points').updateOne({"_id": data.point._id }, {$set : { "cached": true }}).then(res => {
-                  job.progress(100);
-                  done(null, result + res);
-              });
+                const imageDir = path.join(imgDir, campaignNameNormalized, data.point._id);
+                const promises = Promise.all([file.hasNoImages(imageDir), Planet.createTimesSeriesImage(imageDir)]);
+                job.progress(40);
+                promises.then(processResult => {
+                    job.progress(50);
+                    db.collection('points').updateOne({"_id": data.point._id }, {$set : { "cached": true, "images_not_found": processResult[0]}}).then(res => {
+                        job.progress(100);
+                        done(null, result + res);
+                    });
+                });
             }).catch(error => {
                 console.log(error)
                 done(new Error(error));

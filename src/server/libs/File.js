@@ -36,6 +36,46 @@ export default {
             });
         });
     },
+    hasNoImages(dir) {
+        let images = [];
+        return new Promise((resolve, reject) => {
+            fs.readdir(dir, (error, files) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    files.forEach(file => {
+                        const stats = fs.statSync(dir + "/" + file)
+                        if (stats.size <= 1300) {
+                           images.push(file.slice(0, -4))
+                        }
+                    })
+                    resolve(images);
+                }
+            });
+        });
+    },
+    files(dir) {
+        return new Promise((resolve, reject) => {
+            fs.readdir(dir, (error, files) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(files);
+                }
+            });
+        });
+    },
+    size(path) {
+        return new Promise((resolve, reject) => {
+            fs.stat(path, (error, stats) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(stats.size);
+                }
+            });
+        });
+    },
     exists(path) {
         return new Promise((resolve, reject) => {
             fs.access(path, fs.constants.F_OK, err => {
