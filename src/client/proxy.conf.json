@@ -7,14 +7,6 @@
       "^/": ""
     }
   },
-  "/image/*":{
-    "target":"https://tvi.lapig.iesa.ufg.br",
-    "secure":false,
-    "logLevel":"debug",
-    "pathRewrite": {
-      "^/": ""
-    }
-  },
   "/api/*":{
     "target":"http://localhost:3000",
     "secure":false,

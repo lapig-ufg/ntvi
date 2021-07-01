@@ -2,14 +2,27 @@ const  dotenv = require('dotenv');
 const path = require('path');
 dotenv.config({path:path.join(process.cwd(), '/.env')});
 import { mongo }  from '../libs/Mongo'
-const moment = require("moment-timezone");
 
 async function run() {
     try {
         await mongo.connect();
         const db = await mongo.db("ntvi")
-        console.log(moment().tz(process.env.JOBS_TIME_ZONE).add(15, 'days').format())
-        console.log(new Date('2020-12-01').getMonth())
+
+       const pontos = db.collection('campaign').aggregate([
+            {
+                $lookup: {
+                    from: "points",
+                    localField: "_id",
+                    foreignField: "campaignId",
+                    as: "points"
+                },
+            },
+           { "$unwind": "$points" }
+       ]);+
+
+       await pontos.forEach(pto => {
+            console.log(pto)
+       })
 
     } finally {
         await mongo.close();

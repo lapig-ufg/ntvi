@@ -86,12 +86,12 @@ export class Landsat extends GoogleEarthEngine {
                     const year = moment().year() - 1;
                     const bands = ['B5','B6','B4']
                     const img = super.ee.ImageCollection("LANDSAT/LC08/C01/T1_TOA").filterDate(year + '-01-01', year + '-12-31')
-                        .sort("CLOUD_COVER")
+                        .sort("CLOUD_COVER", false)
                         .filterBounds(ob)
-                        .select(bands, ['NIR','SWIR','RED'])
-                        .first();
+                        .mosaic()
+                        .select(bands, ['NIR','SWIR','RED']);
 
-                    const thumb = img.getThumbURL({
+                    const thumb = super.ee.Image(img).getThumbURL({
                         "bands": this.compositions,
                         'region': ob,
                         'dimensions': 180,

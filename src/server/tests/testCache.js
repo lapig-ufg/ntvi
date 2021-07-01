@@ -1,4 +1,4 @@
-import { CacheMaker, Landsat, Sentinel } from '../libs';
+import { CacheMaker, Landsat, Sentinel, Planet } from '../libs';
 const path = require('path');
 const envs = require('dotenv').config({path:path.join(process.cwd(), '/.env')});
 const dotenvExpand = require('dotenv-expand');
@@ -14,16 +14,17 @@ async function run(){
   try {
       const campaign = await prisma.campaign.findUnique({
           select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} },
-          where: {id: 3},
+          where: {id: 9},
       });
-      //
+
       // const landsat    = new Landsat(campaign);
       // const sentinel   = new Sentinel(campaign);
+      // const planet     = new Planet(campaign);
       const cacheMaker = new CacheMaker(campaign);
       await cacheMaker.run();
 
-      // const promises = Promise.all([landsat.publishLayers(), sentinel.publishLayers()])
-      // const promises = Promise.all([landsat.getMosaicsDates()])
+      // const promises = Promise.all([landsat.publishLayers(), sentinel.publishLayers(), planet.publishLayers()]);
+      // const promises = Promise.all([planet.publishLayers()])
 
       // promises.then(async result => {
       //     console.log(result)

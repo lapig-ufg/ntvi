@@ -62,9 +62,10 @@ def getBestImg(satellite, year, mDaysStart, mDaysEnd, path, row):
 	bestImg = collection.filterDate(dtStart,dtEnd) \
 										.filterMetadata('WRS_PATH','equals',path)  \
 										.filterMetadata('WRS_ROW','equals',row) \
-										.sort("CLOUD_COVER") \
+										.sort('CLOUD_COVER', False) \
 										.select(bands,['NIR','SWIR','RED']) \
-										.first()
+										.mosaic()
+
 	
 	return ee.Image(bestImg)
 
@@ -151,10 +152,11 @@ def processPeriod(tiles, periods, suffix = ''):
         try:
             if existMosaic != None:
                 print(existMosaic)
-                if datetime.datetime.now() > existMosaic['expiration_date']:
-                    print(mosaicId + ' exists and is valid.')
+                if datetime.datetime.now().time() > existMosaic['expiration_date'].time():
+                     print(mosaicId + ' exists and is valid.')
                 else:
                     saveMosaic(mosaicId, tiles, satellite, year, dtStart, dtEnd)
+
             else:
                 saveMosaic(mosaicId, tiles, satellite, year, dtStart, dtEnd)
 

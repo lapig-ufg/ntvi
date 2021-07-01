@@ -125,6 +125,30 @@ Também é necessário adicionar no sistema, a projeção Google Mercator EPSG:9
   
     #GOOGLE MERCATOR
     <900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs
-   
 
+##Scale and Zoom
 
+| Zoom Level |	Pixel Size (at equator)|
+|:----------:| :----------------------:|
+| 0	         |          156 km         |
+| 1	         |           78 km         |
+| 2	         |	         39 km         |
+| 3	         |	         20 km         |
+| 4	         |	         10 km         |
+| 5	         |	        4.9 km         |
+| 6	         |	        2.4 km         |
+| 7	         |	        1.2 km         |
+| 8	         |	         611 m         |
+| 9	         |           305 m         |
+| 10	     |	         152 m         |
+| 11	     |	          76 m         |
+| 12	     |	          38 m         |
+| 13	     |	          19 m         |
+| 14	     |	         9.6 m         |
+| 15	     |	         4.8 m         |
+| 16	     |	         2.4 m         |
+| 17	     |	         1.2 m         |
+| 18	     |	         0.6 m         |
+| 19	     |	         0.3 m         |
+| 20	     |	        0.15 m         |
+Fonte: [Google Earth Engine](https://developers.google.com/earth-engine/guides/exporting?hl=en)

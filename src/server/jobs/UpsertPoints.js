@@ -1,7 +1,7 @@
 import { mongo }  from '../libs/Mongo'
 import Queue from '../libs/Queue';
 import moment from "moment";
-
+import string from '../libs/util/String';
 
 export default {
     key: 'UpsertPoints',
@@ -18,7 +18,7 @@ export default {
             job.progress(10);
 
             let counter = 1;
-            const name = data.campaign.name.replace(/\s+/g, '_').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const name = string.normalize(data.campaign.name);
             const points = data.points.map((point) => {
                 return {
                     "_id": counter + '_' +  name,

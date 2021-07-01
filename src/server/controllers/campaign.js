@@ -653,7 +653,6 @@ module.exports = function (app) {
                     const landsat = new Landsat(campaign);
                     landsat.run(function (){
                         landsat.getThumbURL().then(thumb => {
-                            console.log(comp)
                             resolve({satelliteId: 1, title: comp.satellite.name, url: thumb })
                         })
                     },  (err) => {
@@ -695,9 +694,7 @@ module.exports = function (app) {
             }).then(campaign => {
 
                 campaign['compositions'] = compositions;
-
                 let thumbs = Promise.all(Controller.getThumbsBySatellites(campaign));
-
                 thumbs.then(resul => {
                     response.status(200).json(resul);
                 })

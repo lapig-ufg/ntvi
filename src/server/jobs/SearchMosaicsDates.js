@@ -1,6 +1,7 @@
 import { Landsat } from "../libs/Landsat";
 import Queue from '../libs/Queue';
 import {CacheMaker} from "../libs/CacheMaker";
+import { mongo }  from '../libs/Mongo'
 export default {
     key: 'SearchMosaicsDates',
     options: {
@@ -10,12 +11,13 @@ export default {
         const { data } = job
 
         try {
+            await mongo.connect();
             job.progress(10);
 
             const landsat    = new Landsat(data);
             const cacheMaker = new CacheMaker(data);
-
-            const promise = landsat.getMosaicsDates();
+            const db         = await mongo.db(process.env.MONGO_DATABASE);
+            const promise    = landsat.getMosaicsDates();
 
             job.progress(60);
 
@@ -24,6 +26,7 @@ export default {
 
                 await Queue.add('PublishLayers', data )
                 await cacheMaker.run();
+                await db.collection('campaign').updateOne({'_id': data.id}, { $set: {"status": "CACHING"} }, { upsert: true });
 
                 done(null, result);
 

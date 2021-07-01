@@ -1,6 +1,7 @@
 import { mongo }  from '../libs/Mongo';
 import { Planet }  from '../libs/Planet';
-import file from '../libs/File';
+import file from '../libs/util/File';
+import string from '../libs/util/String';
 const { spawn } = require('child_process');
 const path = require('path');
 const moment  = require('moment');
@@ -24,12 +25,21 @@ export default {
 
             job.progress(10);
 
-            const campaignNameNormalized = data.point.campaign.replace(/\s+/g, '_').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            const mosaicsPromises = Promise.all(data.mosaics.map(mosaic => {
+            const campaignNameNormalized = string.normalize(data.point.campaign);
+            const pointId                = string.normalize(data.point._id)
+            const mosaicsPromises        = Promise.all(data.mosaics.map(mosaic => {
                 return new Promise((resolve, reject) => {
                     try {
-                        const imagePath = path.join(imgDir, campaignNameNormalized, data.point._id, mosaic._id +'.png');
-                        const zoom = 12;
+
+                        const imagePath = path.join(imgDir, campaignNameNormalized, pointId, mosaic._id +'.png');
+                        let zoom = 12;
+
+                        if(mosaic._id.includes('PL')){
+                            zoom = 14.6;
+                        } else if(mosaic._id.includes('S2')){
+                            zoom = 13.6;
+                        }
+
                         const child = spawn(imgDownloadCmd, [mosaic.url, data.point.lat + " " +  data.point.lon, zoom, imagePath, mosaic._id]);
 
                         child.stdout.on('data', (data) => {
@@ -61,7 +71,7 @@ export default {
             job.progress(40);
 
             mosaicsPromises.then((result) => {
-                const imageDir = path.join(imgDir, campaignNameNormalized, data.point._id);
+                const imageDir = path.join(imgDir, campaignNameNormalized, pointId);
                 const promises = Promise.all([file.hasNoImages(imageDir), Planet.createTimesSeriesImage(imageDir)]);
                 job.progress(40);
                 promises.then(processResult => {

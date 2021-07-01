@@ -1,6 +1,7 @@
 module.exports = function(app) {
 
 	var Points = {};
+
 	var points = app.repository.collections.points;
 	var mosaics = app.repository.collections.mosaics;
 	var status = app.repository.collections.status;

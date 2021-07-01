@@ -7,7 +7,7 @@ export default {
     options: {
         delay: 1000,
         repeat: {
-            cron: '10 22 * * *', // run everyday at 22:10 until end date.
+            cron: '10 22 * * *', // run every day at 22:10 until end date.
             tz: process.env.JOBS_TIME_ZONE,
             startDate: moment().tz(process.env.JOBS_TIME_ZONE).format(),
             endDate: moment().tz(process.env.JOBS_TIME_ZONE).add(15, 'days').format()

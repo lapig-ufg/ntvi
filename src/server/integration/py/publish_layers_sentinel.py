@@ -8,6 +8,7 @@ import traceback
 import glob
 import calendar
 import os
+import numpy as np
 from os.path import join, dirname, abspath
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -25,7 +26,7 @@ MONGO_PORT = int(os.environ.get("MONGO_PORT"))
 MONGO_DATABASE = os.environ.get("MONGO_DATABASE")
 
 CAMPAIGN = data['campaign']
-SATELLITE = "COPERNICUS_S2_SR"
+SATELLITE = "S2"
 BANDS= data['compositions']
 REGIONS_NAMES = data['region']
 INITIAL_YEAR = int(data['initialYear'])
@@ -33,6 +34,42 @@ FINAL_YEAR = int(data['finalYear'])
 
 EE_ACCOUNT = data['client_email']
 EE_CREDENTIALS = ee.ServiceAccountCredentials(EE_ACCOUNT, None, DATA_KEY)
+
+FOREST = ['RED', 'GREEN', 'BLUE']
+DRYREGIONS = ['NIR', 'RED', 'GREEN']
+AGRICULTURALAREAS = ['REDEDGE4', 'SWIR1', 'REDEDGE1']
+
+print("BANDS: ", BANDS)
+
+def getMin():
+    min = [0.0]
+    if np.array_equal(FOREST, BANDS):
+        min = [200,300,700]
+    elif np.array_equal(DRYREGIONS, BANDS):
+        min = [1100,700,600]
+    elif np.array_equal(AGRICULTURALAREAS, BANDS):
+        min = [1700,700,600]
+    return min
+
+def getMax():
+    max = [0.0]
+    if np.array_equal(FOREST,BANDS):
+        max = [3000,2500,2300]
+    elif np.array_equal(DRYREGIONS,BANDS):
+        max = [4000,2800,2400]
+    elif np.array_equal(AGRICULTURALAREAS,BANDS):
+        max = [4600,5000,2400]
+    return max
+
+def getGamma():
+    gamma = [1.35]
+    if np.array_equal(FOREST, BANDS):
+        gamma = [1.35]
+    elif np.array_equal(DRYREGIONS, BANDS):
+        gamma =  [1.1]
+    elif np.array_equal(AGRICULTURALAREAS, BANDS):
+        gamma = [0.8]
+    return gamma
 
 def getTimeList():
     """
@@ -80,29 +117,18 @@ def getTimeList():
             startdate = next_month
         else:
             return date_range_list
-# Function to mask clouds S2
-
-
-def maskS2srClouds(image):
-    qa = image.select('QA60')
-
-    # Bits 10 and 11 are clouds and cirrus, respectively.
-    cloudBitMask = 1 << 10
-    cirrusBitMask = 1 << 11
-
-    # Both flags should be set to zero, indicating clear conditions.
-    mask = qa.bitwiseAnd(cloudBitMask).eq(0).And(qa.bitwiseAnd(cirrusBitMask).eq(0))
-
-    return image.updateMask(mask).divide(10000)
 
 def getBestImg(regionBounds, date):
-    collection = ee.ImageCollection("COPERNICUS/S2_SR")
-    bands = ['B4','B3','B2']
+    collection = ee.ImageCollection("COPERNICUS/S2")
 
-    bestImg = collection.filterBounds(regionBounds).filterDate(date['start'],date['end']).filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than',10).map(maskS2srClouds)
+    bestImg = collection.filterBounds(regionBounds) \
+        .filterDate(date['start'], date['end']) \
+        .sort("CLOUDY_PIXEL_PERCENTAGE", False) \
+        .select(['B2','B3','B4','B5','B6','B7','B8','B8A','B11','B12'], ['BLUE','GREEN','RED','REDEDGE1','REDEDGE2','REDEDGE3','NIR','REDEDGE4','SWIR1','SWIR2']) \
+        .mosaic()
 
-    composition = bestImg.median().clip(regionBounds)
-    return ee.Image(composition)
+
+    return ee.Image(bestImg)
 
 def getRegionBounds(regionsNames):
     regions = ee.FeatureCollection("users/lapig/countries")
@@ -123,19 +149,21 @@ def getBestMosaic(bounds, date):
     return mosaic
 
 def publishImg(image):
+#     print(getMin())
+#     print(getMax())
+#     print(getGamma())
+    mapId = image.getMapId({ "bands": BANDS, "min": getMin(), "max": getMax(), "gamma": getGamma()})
 
-	mapId = image.getMapId({ "bands": BANDS, "min": 0.02, "max": 0.3, "gamma": 1.5})
-	
-	mapUrl = mapId['tile_fetcher'].url_format
+    mapUrl = mapId['tile_fetcher'].url_format
 
-	for i in mapId:
-		
-		if(i == u'token'):
-			eeToken = str(mapId.get(i))
-		elif (i == u'mapid'):
-			eeMapid = str(mapId.get(i))
+    for i in mapId:
 
-	return eeToken, eeMapid, mapUrl
+        if(i == u'token'):
+            eeToken = str(mapId.get(i))
+        elif (i == u'mapid'):
+            eeMapid = str(mapId.get(i))
+
+    return eeToken, eeMapid, mapUrl
 
 def getExpirationDate():
 	now = datetime.now()
@@ -169,10 +197,11 @@ def processPeriod(regionsNames, periods, suffix = ''):
         existMosaic = db.mosaics.find_one({ "_id": mosaicId,  "campaign": CAMPAIGN, })
         try:
             if existMosaic != None:
-                if datetime.now() > existMosaic['expiration_date']:
-                    print(mosaicId + ' exists and is valid.')
+                print(datetime.now().time() > existMosaic['expiration_date'].time())
+                if datetime.now().time() > existMosaic['expiration_date'].time():
+                    saveMosaic(mosaicId, bounds, date)
                 else:
-                   saveMosaic(mosaicId, bounds, date)
+                    print(mosaicId + ' exists and is valid.')
             else:
                 saveMosaic(mosaicId, bounds, date)
         except Exception as e:

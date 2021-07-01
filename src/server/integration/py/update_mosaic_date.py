@@ -66,9 +66,9 @@ def getBestImg(satellite, year, mDaysStart, mDaysEnd, path, row):
 	bestImg = collection.filterDate(dtStart,dtEnd) \
 										.filterMetadata('WRS_PATH','equals',path)  \
 										.filterMetadata('WRS_ROW','equals',row) \
-										.sort("CLOUD_COVER") \
+										.sort("CLOUD_COVER"  False) \
 										.select(bands,['NIR','SWIR','RED']) \
-										.first()
+										.mosaic()
 
 	return ee.Image(bestImg)
 

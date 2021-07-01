@@ -7,7 +7,7 @@ IMAGE_FILE="$4"
 IMAGE_ID="$5"
 BASEDIR=$(dirname "$0")
 
-STITCH_PARAMS="-c -- $POINT 300 300 $ZOOM $TMS_URL"
+STITCH_PARAMS="-c -- $POINT 256 256 $ZOOM $TMS_URL"
 
 mkdir -p $(dirname $IMAGE_FILE)
 

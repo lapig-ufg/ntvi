@@ -62,22 +62,16 @@ export class EditComponent implements OnInit {
       { id: 'NIR', name: 'NIR - Landsat' },
       { id: 'RED', name: 'RED - Landsat' },
       { id: 'SWIR', name: 'SWIR - Landsat' },
-      { id: 'B1', name: 'B1 - Sentinel' },
-      { id: 'B2', name: 'B2 - Sentinel' },
-      { id: 'B3', name: 'B3 - Sentinel' },
-      { id: 'B4', name: 'B4 - Sentinel' },
-      { id: 'B5', name: 'B5 - Sentinel' },
-      { id: 'B6', name: 'B6 - Sentinel' },
-      { id: 'B7', name: 'B7 - Sentinel' },
-      { id: 'B8', name: 'B8 - Sentinel' },
-      { id: 'B8A', name: 'B8A - Sentinel' },
-      { id: 'B9', name: 'B9 - Sentinel' },
-      { id: 'B10', name: 'B10 - Sentinel' },
-      { id: 'B11', name: 'B11 - Sentinel' },
-      { id: 'B12', name: 'B12 - Sentinel' },
-      { id: 'QA10', name: 'QA10 - Sentinel' },
-      { id: 'QA20', name: 'QA20 - Sentinel' },
-      { id: 'QA60', name: 'QA60 - Sentinel' },
+      { id: 'BLUE', name: 'BLUE - Sentinel' },
+      { id: 'GREEN', name: 'GREEN - Sentinel' },
+      { id: 'NIR', name: 'NIR - Sentinel' },
+      { id: 'RED', name: 'RED - Sentinel' },
+      { id: 'REDEDGE1', name: 'RED EDGE 01 - Sentinel' },
+      { id: 'REDEDGE2', name: 'RED EDGE 02 - Sentinel' },
+      { id: 'REDEDGE3', name: 'RED EDGE 03 - Sentinel' },
+      { id: 'REDEDGE4', name: 'RED EDGE 04 - Sentinel' },
+      { id: 'SWIR1', name: 'SWIR 01 - Sentinel' },
+      { id: 'SWIR2', name: 'SWIR 02 - Sentinel' },
   ];
   tablePoints = {
     settings: {
@@ -625,7 +619,7 @@ export class EditComponent implements OnInit {
       camp.compositions = this.compositions;
       this.campaignService.thumb(this.campaign).subscribe(res => {
           this.thumbs = res
-          setTimeout(() => this.loadingThumb = false, 1500);
+          setTimeout(() => this.loadingThumb = false, 3000);
       }, error => {
           this.loadingThumb = false;
           this.showToast('danger', this.translate.instant('error_msg'), 'top-right');

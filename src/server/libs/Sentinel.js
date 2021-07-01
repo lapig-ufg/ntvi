@@ -1,8 +1,8 @@
 import { GoogleEarthEngine } from "./GoogleEarthEngine";
 import { PythonShell } from 'python-shell';
-import {locationForIndex} from "sucrase/dist/parser/traverser/base";
 const moment  = require('moment');
 const appRoot = require('app-root-path');
+const _ = require('lodash');
 
 export class Sentinel extends GoogleEarthEngine {
 
@@ -17,10 +17,13 @@ export class Sentinel extends GoogleEarthEngine {
             pythonOptions: ['-u'],
             scriptPath: appRoot + process.env.SCRIPTS_PY,
         };
+        Sentinel.prototype.forest = ['RED', 'GREEN', 'BLUE'];
+        Sentinel.prototype.dryRegions = ['NIR','RED', 'GREEN'];
+        Sentinel.prototype.agriculturalAreas = ['REDEDGE4','SWIR1','REDEDGE1'];
     }
     getCompositions() {
         const sentinelCompositions = super.campaign.compositions.find(comp => { return parseInt(comp.satelliteId) === 2 });
-        Sentinel.prototype.compositions = sentinelCompositions.colors;
+        Sentinel.prototype.compositions = sentinelCompositions.colors.split(',');
     }
 
     publishLayers () {
@@ -89,22 +92,62 @@ export class Sentinel extends GoogleEarthEngine {
         });
     }
 
+    getMin(){
+        let min = [0.0];
+        if(_.isEqual(this.compositions,  this.forest)){
+            min = [200,300,700];
+        } else if(_.isEqual(this.compositions, this.dryRegions)){
+            min = [1100,700,600];
+        } else if(_.isEqual(this.compositions,  this.agriculturalAreas)){
+            min = [1700,700,600];
+        }
+        return min; 
+    }
+    getMax(){
+        let max = [2000];
+        if(_.isEqual(this.compositions,  this.forest)){
+            max = [3000,2500,2300];
+        } else if(_.isEqual(this.compositions,  this.dryRegions)){
+            max = [4000,2800,2400];
+        } else if(_.isEqual(this.compositions,  this.agriculturalAreas)){
+            max = [4600,5000,2400];
+        }
+        return max;
+    }
+    getGamma(){
+        let gamma = [1.35];
+        if(_.isEqual(this.compositions,  this.forest)){
+            gamma = [1.35];
+        } else if(_.isEqual(this.compositions,  this.dryRegions)){
+            gamma = [1.1];
+        } else if(_.isEqual(this.compositions,  this.agriculturalAreas)){
+            gamma = [0.8];
+        }
+        return gamma;
+    }
+
     getThumbURL() {
         return new Promise((resolve, reject) => {
             try {
+                //  SR
+                //  'min': 0.0,
+                //  'max': 0.2,
                 this.getBounds().then(region => {
                     const year = moment().year() - 1;
-                    const img = super.ee.ImageCollection('COPERNICUS/S2_SR').filterDate(year + '-01-01', year + '-12-31')
+                    const img = super.ee.ImageCollection('COPERNICUS/S2')
+                        .filterDate(year + '-01-01', year + '-12-31')
                         .filterBounds(region)
-                        .filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than',20)
-                        .map(this.maskS2clouds);
-
-                    const composition = img.median();
-                    const imgCom =  super.ee.Image(composition)
-                    const thumb = imgCom.getThumbURL({
-                        'min': 0.0,
-                        'max': 0.2,
-                        'bands': this.compositions.split(','),
+                        .sort('CLOUDY_PIXEL_PERCENTAGE', false)
+                        .mosaic()
+                        .select(
+                            ['B2','B3','B4','B5','B6','B7','B8','B8A','B11','B12'],
+                            ['BLUE','GREEN','RED','REDEDGE1','REDEDGE2','REDEDGE3','NIR','REDEDGE4','SWIR1','SWIR2']
+                        );
+                    const thumb = super.ee.Image(img).getThumbURL({
+                        'min': this.getMin(),
+                        'max': this.getMax(),
+                        'gamma': this.getGamma(),
+                        'bands': this.compositions,
                         'region': region,
                         'dimensions': 180,
                         'format': 'png'

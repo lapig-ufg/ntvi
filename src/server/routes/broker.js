@@ -14,6 +14,6 @@ createBullBoard({
 })
 
 module.exports = function (app) {
-    const JWT = app.middleware.jwt;
-    app.use('/service/broker', serverAdapter.getRouter());
+    // const broker = app.middleware.broker;
+    app.use('/service/broker/', serverAdapter.getRouter());
 }

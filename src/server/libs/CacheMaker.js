@@ -45,12 +45,12 @@ export class CacheMaker {
 
     async run() {
         const db     = await this.db();
-        const points = await db.collection('points').find({"campaignId": this.campaign.id, "cached" : false }).limit(10).toArray()
+        const points = await db.collection('points').find({"campaignId": this.campaign.id, "cached" : false }).limit(1).toArray()
         setTimeout(async () => {
-            await Queue.add('Cache', { point: points[4], mosaics: this.mosaics} )
-            // for (let point of points) {
-            //     await Queue.add('Cache', { point: point, mosaics: this.mosaics} )
-            // }
+            // await Queue.add('Cache', { point: points[0], mosaics: this.mosaics} )
+            for (let point of points) {
+                await Queue.add('Cache', { point: point, mosaics: this.mosaics} )
+            }
         }, 2000);
     }
 }
