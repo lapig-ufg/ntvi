@@ -9,7 +9,6 @@
 
 node_modules
 ows_runtime.map
-src/client/build/*
 src/client/node_modules
 src/client/.idea
 *~
