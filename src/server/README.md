@@ -18,7 +18,7 @@ O Servidor da aplicação  _Temporal Vision Inspection_ (TVI) é o componente re
 - [PostgresSQL](https://www.postgresql.org/) é um poderoso sistema de banco de dados relacional de código aberto que usa e estende a linguagem SQL combinada com muitos recursos que armazenam e escalam com segurança as cargas de trabalho de dados mais complicadas.
 
    
-# Broker
+# TVI Broker
 
 O Broker é o gerenciador dos processos executados em _background_ do TVI, ou seja, as rotinas que são realizadas independentes do fluxo principal da aplicação. A necessidade da criação desse componente ocorre pela elevada demanda de operações como: o cadastro das campanhas e os seus pontos, a geração dos mosaicos das imagens e os seus respetivos *_caches_, esses procedimentos requerem muito tempo para serem finalizados. O "_cache_", nesse contexto, refere-se a produção antecipada das imagens recortadas para cada ponto da campanha. No fluxo padrão do TVI, essas imagens são geradas no momento da requisição do usuário levando bastante tempo para serem produzidas e, consequentemente, inviabilizando as rotinas de inspeções dos pontos.
 
@@ -151,4 +151,5 @@ Também é necessário adicionar no sistema, a projeção Google Mercator EPSG:9
 | 18	     |	         0.6 m         |
 | 19	     |	         0.3 m         |
 | 20	     |	        0.15 m         |
+
 Fonte: [Google Earth Engine](https://developers.google.com/earth-engine/guides/exporting?hl=en)
