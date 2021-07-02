@@ -50,9 +50,9 @@ export class Planet  {
             this.getMosaics().then( async mosaics => {
                 let layers = [];
                 mosaics.forEach((mosaic, index) => {
-                    let counter = index < 9 ? '0' + (index + 1): (index + 1);
+                    // let counter = index < 9 ? '0' + (index + 1): (index + 1);
                     const date = moment(mosaic. first_acquired)
-                    mosaic['_id'] = counter + "_" + this.campaign.id + "_PL_" + date.format('MM') + "_" + date.format('YYYY') ;
+                    mosaic['_id'] = this.campaign.id + "_PL_" + date.format('MM') + "_" + date.format('YYYY') ;
                     mosaic['campaignId'] = this.campaign.id;
                     mosaic['url'] = mosaic._links.tiles;
 
@@ -72,8 +72,7 @@ export class Planet  {
             })
         });
     }
-
-    static createTimesSeriesImage(pointDir) {
+    static timelapse(pointDir) {
         PythonShell.defaultOptions = {
             mode: 'text',
             pythonPath: process.env.PYTHON_PATH,
@@ -84,7 +83,7 @@ export class Planet  {
             try {
                 let logs = [];
 
-                 const shell = new PythonShell('create_image_timeseries.py', { args: [pointDir]});
+                const shell = new PythonShell('timelapse.py', { args: [pointDir]});
 
                 shell.on('message', function (message) {
                     console.log(message)
@@ -103,7 +102,4 @@ export class Planet  {
             }
         })
     }
-
-
-
 }

@@ -19,8 +19,6 @@ export default {
         try {
             job.progress(10);
 
-
-
         } catch (e) {
             done(new Error(e));
         }

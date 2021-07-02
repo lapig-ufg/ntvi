@@ -32,6 +32,7 @@ export default {
                     try {
 
                         const imagePath = path.join(imgDir, campaignNameNormalized, pointId, mosaic._id +'.png');
+
                         let zoom = 12;
 
                         if(mosaic._id.includes('PL')){
@@ -51,7 +52,7 @@ export default {
                         });
 
                         child.on('error', (error) => {
-                            errors.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss')  + " ]" + " - " +error.message);
+                            errors.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss')  + " ]" + " - " + error.message);
                         });
 
                         child.on('close', (code) => {
@@ -70,9 +71,16 @@ export default {
 
             job.progress(40);
 
+            // const imageDir = path.join(imgDir, campaignNameNormalized, pointId);
+            // const promises = Promise.all([ Planet.timelapse(imageDir)]);
+            // job.progress(40);
+            // promises.then(processResult => {
+            //     console.log(processResult)
+            // });
+
             mosaicsPromises.then((result) => {
                 const imageDir = path.join(imgDir, campaignNameNormalized, pointId);
-                const promises = Promise.all([file.hasNoImages(imageDir), Planet.createTimesSeriesImage(imageDir)]);
+                const promises = Promise.all([file.hasNoImages(imageDir), Planet.timelapse(imageDir)]);
                 job.progress(40);
                 promises.then(processResult => {
                     job.progress(50);

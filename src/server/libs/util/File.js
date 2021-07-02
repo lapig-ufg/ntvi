@@ -45,7 +45,7 @@ export default {
                 } else {
                     files.forEach(file => {
                         const stats = fs.statSync(dir + "/" + file)
-                        if (stats.size <= 1300) {
+                        if (stats.size <= 100000) {
                            images.push(file.slice(0, -4))
                         }
                     })

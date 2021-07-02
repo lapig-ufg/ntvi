@@ -12,9 +12,10 @@ const prisma = new PrismaClient()
 
 async function run(){
   try {
+
       const campaign = await prisma.campaign.findUnique({
           select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} },
-          where: {id: 9},
+          where: {id: 3},
       });
 
       // const landsat    = new Landsat(campaign);
