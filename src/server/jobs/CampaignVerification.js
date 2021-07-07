@@ -19,6 +19,67 @@ export default {
         try {
             job.progress(10);
 
+            const pontos = db.collection('campaign').aggregate([
+                {
+                    $lookup: {
+                        from: "points",
+                        localField: "_id",
+                        foreignField: "campaignId",
+                        as: "points"
+                    },
+                },
+                {
+                    "$project": {
+                        "_id": 1,
+                        "status": 1,
+                        "noCache": {
+                            $size: {
+                                $filter: {
+                                    input: "$points",
+                                    as: "point",
+                                    cond: {$eq: ["$$point.cached", false]}
+                                }
+                            }
+                        },
+                        "hasCache": {
+                            $size: {
+                                $filter: {
+                                    input: "$points",
+                                    as: "point",
+                                    cond: {$eq: ["$$point.cached", true]}
+                                }
+                            }
+                        },
+                        "totalPoints": {$size: "$points"}
+                    }
+                },
+                { $sort : { _id : 1 } }
+            ]);
+            const promises = [];
+
+            await pontos.forEach( pto =>  {
+               if(pto.status === 'INCOMPLETE' && pto.hasCache === pto.totalPoints){
+                   promises.push(prisma.campaign.update({
+                       where: { id: parseInt(pto._id) },
+                       data: {
+                           status: 'READY',
+                       }
+                   }));
+                   promises.push(db.collection('campaign').updateOne({_id: pto._id}, {$set: {status: 'READY'}}))
+               }
+            })
+            const allPromises = Promise.all(promises);
+
+            allPromises.then(re =>{
+                if(re) {
+                    done(re);
+                }else {
+                    done(new Error('error on campaign verification'));
+                }
+            }).catch(e => {
+                done(new Error(e));
+            })
+
         } catch (e) {
             done(new Error(e));
         }

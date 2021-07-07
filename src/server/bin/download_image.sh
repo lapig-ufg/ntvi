@@ -27,5 +27,8 @@ case $IMAGE_ID in
   *"L8"*)
     python3 $BASEDIR/enhance_img_clahe.py $IMAGE_FILE
     ;;
+  *"PL"*)
+    python3 $BASEDIR/enhance_img_planet.py $IMAGE_FILE
+    ;;
 esac
 

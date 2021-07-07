@@ -1,14 +1,18 @@
-const  dotenv = require('dotenv');
 const path = require('path');
-dotenv.config({path:path.join(process.cwd(), '/.env')});
-import { mongo }  from '../libs/Mongo'
+const appRoot = require('app-root-path');
+const envs = require('dotenv').config({path: path.join(appRoot.path, '/.env')});
+const dotenvExpand = require('dotenv-expand');
+
+dotenvExpand(envs)
+
+import {mongo} from '../libs/Mongo'
 
 async function run() {
     try {
         await mongo.connect();
         const db = await mongo.db("ntvi")
 
-       const pontos = db.collection('campaign').aggregate([
+        const pontos = db.collection('campaign').aggregate([
             {
                 $lookup: {
                     from: "points",
@@ -17,16 +21,41 @@ async function run() {
                     as: "points"
                 },
             },
-           { "$unwind": "$points" }
-       ]);+
+            {
+                "$project": {
+                    "_id": 1,
+                    "status": 1,
+                    "noCache": {
+                        $size: {
+                            $filter: {
+                                input: "$points",
+                                as: "point",
+                                cond: {$eq: ["$$point.cached", false]}
+                            }
+                        }
+                    },
+                    "hasCache": {
+                        $size: {
+                            $filter: {
+                                input: "$points",
+                                as: "point",
+                                cond: {$eq: ["$$point.cached", true]}
+                            }
+                        }
+                    },
+                    "totalPoints": {$size: "$points"}
+                }
+            },
+            { $sort : { _id : 1 } }
+        ]);
 
-       await pontos.forEach(pto => {
+        await pontos.forEach(pto => {
             console.log(pto)
-       })
+        })
 
     } finally {
         await mongo.close();
     }
 }
 
-run().catch(e => console.dir(e,{ depth: Infinity }));
+run().catch(e => console.dir(e, {depth: Infinity}));
