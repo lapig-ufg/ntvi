@@ -34,6 +34,16 @@ import Static from 'ol/source/ImageStatic';
 import XYZ from 'ol/source/XYZ';
 import TileLayer from 'ol/layer/Tile';
 
+/**
+ * TODO: GeolocationPositionError is missing in @types/ol@6.4.1,
+ * if this is fixed then typeRoots in tsconfig.json can be removed
+ */
+interface GeolocationPositionError {
+	code: number;
+	message: string;
+}
+
+
 @Component({
   selector: 'ngx-ol-map',
   templateUrl: './map.component.html',
