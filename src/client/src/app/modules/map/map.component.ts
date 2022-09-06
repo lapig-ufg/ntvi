@@ -62,7 +62,7 @@ export class MapComponent implements AfterViewInit {
   Map: Map;
   ext: any;
   features = [] as Feature[];
-  layerPoints = {} as VectorLayer;
+  layerPoints: any = {};
   @Output() mapReady = new EventEmitter<Map>();
 
   constructor(
