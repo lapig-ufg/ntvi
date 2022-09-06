@@ -8,12 +8,10 @@ export class CacheMaker {
         CacheMaker.prototype.prisma = new PrismaClient();
         this.finMosaics();
     }
-
     async db() {
         await mongo.connect();
         return await mongo.db(process.env.MONGO_DATABASE);
     }
-
     finMosaics() {
         const promise =  new Promise( async (resolve, reject) => {
             try {
@@ -42,10 +40,9 @@ export class CacheMaker {
         }).catch(console.error)
 
     }
-
     async run() {
         const db     = await this.db();
-        const points = await db.collection('points').find({"campaignId": this.campaign.id, "cached" : false }).limit(1).toArray()
+        const points = await db.collection('points').find({"campaignId": this.campaign.id, "cached" : false }).limit(10).toArray()
         setTimeout(async () => {
             // await Queue.add('Cache', { point: points[0], mosaics: this.mosaics} )
             for (let point of points) {

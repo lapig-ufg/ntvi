@@ -77,12 +77,12 @@ export default {
         });
     },
     exists(path) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             fs.access(path, fs.constants.F_OK, err => {
                 if(!err) {
                     resolve(true);
                 } else {
-                    reject(err);
+                    resolve(false);
                 }
             });
         });

@@ -15,7 +15,7 @@ module.exports = function(app) {
 						var endDate;
 
 				  	layer.fileObj.forEach(function(dateMultiple){
-					    
+
 						    if (endDate === undefined)
 						      	endDate = dateMultiple.date;
 						    else if (dateMultiple.date > endDate)
@@ -31,12 +31,11 @@ module.exports = function(app) {
 						layer.last_date = lastDate;
 				}
 			return layer;
-		}
-
+		};
 		Layer.findByBasepaths = function(_id, callback){
-			
-				var query = { 
-				    "$or": [ 
+
+				var query = {
+				    "$or": [
 				        { "_id": { "$in": _id } },
 				        { "fileObj.name": { "$in": _id } }
 				    ]
@@ -51,27 +50,23 @@ module.exports = function(app) {
 						}
 						callback(result);
 				});
-		}
-
+		};
 		Layer.findById = function(_id, callback){
 				layerCollection.findOne({_id : _id}, {}, function(err, layer) {
 						layer = Internal.processMultipleLayer(layer);
 						callback(layer);
 				});
-		}
-
-		Layer.listAllSubjects = function(projects, callback) {
+		};
+		Layer.listAllSubjects = function(projects, callback){
 				layerCollection.distinct('subject', { 'project': { $in: projects } }, function(err,subjects) {
 						callback(subjects);
 				});
 		};
-
-		Layer.findBySubject = function(subject, projects, callback) {
+		Layer.findBySubject = function(subject, projects, callback){
 				layerCollection.find({ 'subject': subject, 'project': { $in: projects } }).toArray(function (err, layers){
 						callback(layers);
 				});
 		};
-
 		Layer.findByRegexWithPagination = function(search, projects, skip, limit, lang, callback) {
 
 			var query = {	'project': { $in: projects } };

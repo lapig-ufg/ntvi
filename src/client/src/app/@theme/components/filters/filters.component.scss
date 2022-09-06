@@ -1,0 +1,17 @@
+@import '../../styles/themes';
+@import '~@nebular/theme/styles/global/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
+
+@include nb-install-component() {
+    ::ng-deep .form {
+        display: flex;
+        flex-direction: column;
+
+        .text-label {
+            margin-top: 1.5rem;
+        }
+    }
+    .container-filter{
+        min-width: 30rem !important;
+    }
+}

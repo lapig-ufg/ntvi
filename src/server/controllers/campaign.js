@@ -613,8 +613,6 @@ module.exports = function (app) {
     }
 
     Controller.getMODIS = async function (request, response) {
-        // const { long, lat } = request.params
-
         const { lang } = request.headers;
         const texts = language.getLang(lang);
         let returnObject = [];

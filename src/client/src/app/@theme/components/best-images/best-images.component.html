@@ -1,0 +1,41 @@
+<nb-card class="card-best-image" status="info" size="giant" *ngIf="imagesPlanet?.length > 0">
+    <nb-card-header >{{title}}</nb-card-header>
+    <nb-card-body >
+        <nb-tabset>
+            <nb-tab tabTitle="Planet" responsive >
+                <div class="grid-container">
+                    <div class="grid-view">
+                        <div class="camera" *ngFor="let img of imagesPlanet; let i = index">
+                            <ngx-map-leaflet [type]="'best'" [lon]="img.pto.lon" [lat]="img.pto.lat" [bounds]="img.pto.bounds" [zoom]="12.7" [tmsUrl]="img.url"></ngx-map-leaflet>
+                            <div class="camera-name">
+                                <span>{{formatDate(img.date)}}</span>
+                                <span>PLANET</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nb-tab>
+            <nb-tab tabTitle="Sentinel" responsive >
+                <div class="grid-container">
+                    <div class="grid-view">
+                        <div class="camera" *ngFor="let img of imagesSentinel; let i = index">
+                            <ngx-map-leaflet [type]="'best'" [lon]="img.pto.lon" [lat]="img.pto.lat" [bounds]="img.pto.bounds" [zoom]="12.7" [tmsUrl]="img.url"></ngx-map-leaflet>
+                            <div class="camera-name">
+                                <span>{{formatDate(img.date)}}</span>
+                                <span>SENTINEL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nb-tab>
+        </nb-tabset>
+    </nb-card-body>
+    <nb-card-footer class="dialog-buttons">
+        <button class="cancel" nbButton  status="basic" (click)="cancel()">ok</button>
+    </nb-card-footer>
+</nb-card>
+
+
+
+
+

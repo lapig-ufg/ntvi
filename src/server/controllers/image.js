@@ -1,219 +1,190 @@
-const fs = require('fs');
-const exec = require('child_process').exec;
-const proj4 = require('proj4');
+import string from "../libs/util/String";
+import file from "../libs/util/File";
+
+const moment = require('moment');
 const path = require('path');
-const request = require('request');
-const async = require('async');
+const base = require('app-root-path');
+const spawn = require('child_process').spawn;
 
-module.exports = function(app) {
-	
-	let Image = {};
-	let Internal = {};
+module.exports = function (app) {
+    let Image = {};
 
-	const campaigns = app.repository.collections.campaign;
-	const mosaics = app.repository.collections.mosaics;
-	const points = app.repository.collections.points;
-	
-	const config = app.config;
+    const campaigns = app.repository.collections.campaign;
+    const mosaics = app.repository.collections.mosaics;
+    const points = app.repository.collections.points;
 
-	Internal.TMSUrl = function(mosaicId, campaignId, callback) {
-		campaigns.findOne({ "_id": campaignId }, function(err, campaign) {
-			if (campaign !== undefined && campaign.customURLs !== undefined && campaign.customURLs[mosaicId] !== undefined) {
-				callback(campaign.customURLs[mosaicId]);
-			} else {
-				mosaics.findOne({ "_id": mosaicId }, function(err, mosaic) {
-					
-					let url = undefined
-					if(mosaic !== undefined) {
-						const token = mosaic.ee_token;
-						const mapid = mosaic.ee_mapid;
-						url = "https://earthengine.googleapis.com/v1alpha/" + mapid + "/tiles/${z}/${x}/${y}"
-					}
+    const config = app.config;
 
-					callback(url);
-				})
-			}
+    // Image.access = function(request, response) {
+    // 	let { layerId, pointId, campaignId } = request.params
+    //
+    // 	const sourceUrl = `http://localhost:${config.port}/source/${layerId}?campaign=${campaignId}`
+    //
+    // 	points.findOne({ _id: pointId }, function(err, point) {
+    //
+    // 		if (point) {
+    //
+    // 			const imagePath = path.join(config.imgDir, point.campaign, pointId, layerId +'.png')
+    //
+    // 			fs.exists(imagePath, function(exists) {
+    // 				if (exists) {
+    // 					response.sendFile(imagePath)
+    // 				} else {
+    //
+    // 					const buffer = 4000
+    // 					const coordinates = proj4('EPSG:4326', 'EPSG:900913', [point.lon, point.lat])
+    //
+    // 					const ulx = coordinates[0] - buffer
+    // 					const uly = coordinates[1] + buffer
+    // 					const lrx = coordinates[0] + buffer
+    // 					const lry = coordinates[1] - buffer
+    // 					const projwin = ulx + " " + uly + " " + lrx + " " + lry
+    //
+    // 					const cmd = config.imgDownloadCmd + ' "' + sourceUrl + '" "' + projwin + '" ' + imagePath
+    //
+    // 					console.log(cmd)
+    //
+    // 					exec(cmd, function() {
+    // 						response.sendFile(imagePath)
+    // 					})
+    // 				}
+    // 			})
+    //
+    // 		} else {
+    // 			response.end()
+    // 		}
+    //
+    // 	})
+    // }
 
-		})
-	}
+    Image.access = async function (request, response) {
 
-	Internal.GDALWmsXmlResponse = function(mosaicId, campaignId, TMSurl) {
-		return "\
-<GDAL_WMS> \n\
-    <Service name=\"TMS\"> \n\
-        <ServerUrl>"+TMSurl+"</ServerUrl> \n\
-    </Service> \n\
-    <DataWindow> \n\
-        <UpperLeftX>-20037508.34</UpperLeftX> \n\
-        <UpperLeftY>20037508.34</UpperLeftY> \n\
-        <LowerRightX>20037508.34</LowerRightX> \n\
-        <LowerRightY>-20037508.34</LowerRightY> \n\
-        <TileLevel>20</TileLevel> \n\
-        <TileCountX>1</TileCountX> \n\
-        <TileCountY>1</TileCountY> \n\
-        <YOrigin>top</YOrigin> \n\
-    </DataWindow> \n\
-    <Cache> \n\
-    	<Expires>1</Expires> \n\
-    	<Path>"+config.imgGDALTmpDir+"/"+mosaicId+"_"+campaignId+"</Path> \n\
-    </Cache> \n\
-    <Projection>EPSG:900913</Projection> \n\
-    <BlockSizeX>256</BlockSizeX> \n\
-    <BlockSizeY>256</BlockSizeY> \n\
-    <BandsCount>3</BandsCount> \n\
-    <MaxConnections>10</MaxConnections> \n\
-    <Cache /> \n\
-</GDAL_WMS>"
-	}
+        let {layerId, pointId, campaignId, index} = request.params;
 
-	Image.gdalDefinition = function(request, response) {
-		const mosaicId = request.param('id')
-		const campaignId = request.param('campaign')
+        const point = await points.findOne({campaignId: parseInt(campaignId), index: parseInt(index)});
+        const mosaic = await mosaics.findOne({_id: layerId});
 
-		Internal.TMSUrl(mosaicId, campaignId, function(TMSurl) {
-			if(TMSurl != undefined)
-				response.write(Internal.GDALWmsXmlResponse(mosaicId, campaignId, TMSurl))
+        let errors = [];
+        const imgDir = process.env.NODE_ENV === 'dev' ? base.path + process.env.IMG_DIR : process.env.IMG_DIR;
+        const imgDownloadCmd = base.path + process.env.IMG_DOWN_CMD;
 
-			response.end()
-		});
+        const campaignNameNormalized = string.normalize(point.campaign);
+        const imagePath = path.join(imgDir, campaignNameNormalized, pointId, mosaic._id + '.png');
 
-	}
+        file.exists(imagePath).then(result => {
+            if (result) {
+                response.sendFile(imagePath)
+            } else {
+                const mosaicsPromises = new Promise((resolve, reject) => {
+                    try {
+                        let zoom = 12;
 
-	Image.access = function(request, response) {
-		const layerId = request.param('layerId')
-		const pointId = request.param('pointId')
-		const campaignId = request.param('campaign')
+                        if (mosaic._id.includes('PL')) {
+                            zoom = 14.6;
+                        } else if (mosaic._id.includes('S2')) {
+                            zoom = 13.6;
+                        }
 
-		const sourceUrl = `http://localhost:${config.port}/source/${layerId}?campaign=${campaignId}`
-		
-		points.findOne({ _id:pointId }, function(err, point) {
+                        const child = spawn(imgDownloadCmd, [mosaic.url, point.lat + " " + point.lon, zoom, imagePath, mosaic._id]);
 
-			if (point) {
-				
-				const imagePath = path.join(config.imgDir, point.campaign, pointId, layerId +'.png')
+                        child.stderr.on('data', (data) => {
+                            errors.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss') + " ]" + " - " + data);
+                        });
+                        child.on('error', (error) => {
+                            errors.push("[ " + moment().format('YYYY-MM-DD HH:mm:ss') + " ]" + " - " + error.message);
+                        });
+                        child.on('close', (code) => {
+                            if (code === 0) {
+                                resolve(true)
+                            } else {
+                                reject(errors)
+                            }
+                        });
 
-				fs.exists(imagePath, function(exists) {
-					if (exists) {
-						response.sendFile(imagePath)
-					} else {
+                    } catch (e) {
+                        reject(e)
+                    }
+                });
+                mosaicsPromises.then((result) => {
+                    if (result) {
+                        response.sendFile(imagePath)
+                    }
+                }).catch(error => {
+                    response.status(400).json({status: 400, message: error.message});
+                    response.end();
+                });
+            }
+        });
 
-						const buffer = 4000
-						const coordinates = proj4('EPSG:4326', 'EPSG:900913', [point.lon, point.lat])
+    }
 
-						const ulx = coordinates[0] - buffer
-						const uly = coordinates[1] + buffer
-						const lrx = coordinates[0] + buffer
-						const lry = coordinates[1] - buffer
-						const projwin = ulx + " " + uly + " " + lrx + " " + lry
+    Image.la_timelapse = async function (request, response) {
 
-						const cmd = config.imgDownloadCmd + ' "' + sourceUrl + '" "' + projwin + '" ' + imagePath
+        let {pointId, campaignId, index} = request.params;
 
-						console.log(cmd)
+        const point = await points.findOne({campaignId: parseInt(campaignId), index: parseInt(index)});
 
-						exec(cmd, function() {
-							response.sendFile(imagePath)
-						})
-					}
-				})
+        const imgDir = process.env.NODE_ENV === 'dev' ? base.path + process.env.IMG_DIR : process.env.IMG_DIR;
 
-			} else {
-				response.end()
-			}
+        const campaignNameNormalized = string.normalize(point.campaign);
 
-		})
-	}
+        const imagePath = path.join(imgDir, campaignNameNormalized, pointId, 'la_timelapse.gif');
 
-	Image.populateCache = function(requestPointCache, pointCacheCompĺete, finished) {
+        file.exists(imagePath).then(result => {
+            if (result) {
+                response.sendFile(imagePath)
+            } else {
+                response.status(400).json(false);
+                response.end();
+            }
+        });
 
-		const periods = ['DRY','WET']
+    }
+    Image.pl_timelapse = async function (request, response) {
 
- 		const getRequestTasks = function(point, campaign) {
+        let {pointId, campaignId, index} = request.params;
 
- 			let satellite
- 			const requestTasks = [];
- 			const urls = [];
-			
-			const initialYear = campaign.initialYear;
-			const finalYear = campaign.finalYear;
+        const point = await points.findOne({campaignId: parseInt(campaignId), index: parseInt(index)});
 
-			periods.forEach(function(period){
-				for (let year = initialYear; year <= finalYear; year++) {
-			 				
-	 				satellite = 'L7';
+        const imgDir = process.env.NODE_ENV === 'dev' ? base.path + process.env.IMG_DIR : process.env.IMG_DIR;
 
-					if(year > 2012) { 
-						satellite = 'L8'
-					} else if(year > 2011) {
-						satellite = 'L7'
-					} else if(year > 2003  || year < 2000) {
-						satellite = 'L5'
-					}
+        const campaignNameNormalized = string.normalize(point.campaign);
 
-					layerId = satellite+"_"+year+"_"+period
-					pointId = point._id
+        const imagePath = path.join(imgDir, campaignNameNormalized, pointId, 'pl_timelapse.gif');
 
-					const url = "http://localhost:" + config.port + "/image/"+layerId+"/"+pointId+"?campaign="+campaign._id;
-					urls.push(url);
-				}
-			});
+        file.exists(imagePath).then(result => {
+            if (result) {
+                response.sendFile(imagePath)
+            } else {
+                response.status(400).json(false);
+                response.end();
+            }
+        });
 
-			urls.forEach(function(url) {
-				requestTasks.push(function(next) {
-					const params = { timeout: 3600 * 1000 };
-					const callback = function(error, response, html) {
-						requestPointCache(point, url)
-						if(error) {
-							request(url, params, callback);
-						} else {
-				    	next();
-						}
-				  }
-					request(url, params, callback);
-				});
-			});
+    }
+    Image.s2_timelapse = async function (request, response) {
 
-			return requestTasks;
- 		}
+        let {pointId, campaignId, index} = request.params;
 
- 		let cacheJobCanStopFlag = false;
- 		const startCacheJob = function(next) {
-	 		app.repository.collections.points.findOne({ "cached" : false }, { lon:1, lat: 1, campaign: 1}, { sort: [['index', 1]] }, function(err, point) {
-	 			if(point) {
-	 				app.repository.collections.campaign.findOne({ "_id" : point.campaign }, function(err, campaign) {
-						const requestTasks = getRequestTasks(point, campaign);
-						
-						const hour = new Date().getHours()
-						const day = new Date().getDay();
-						const busyTimeCondition = ( (day == 6) || (day == 0) || (hour >= 8 && hour <= 19 ) )
+        const point = await points.findOne({campaignId: parseInt(campaignId), index: parseInt(index)});
 
-						const parallelRequestsLimit = busyTimeCondition ? config.cache.parallelRequestsBusyTime : config.cache.parallelRequestsDawnTime;
+        const imgDir = process.env.NODE_ENV === 'dev' ? base.path + process.env.IMG_DIR : process.env.IMG_DIR;
 
-						async.parallelLimit(requestTasks, parallelRequestsLimit, function() {
-							app.repository.collections.points.update({ _id: point._id}, { '$set': { "cached": true }  }, {}, function() {
-								pointCacheCompĺete(point._id);
-								next();
-							});
-						});
-	 				});
-	 			} else {
-	 				cacheJobCanStopFlag = true;
-	 				next()
-	 			}
-	 		});
- 		}
+        const campaignNameNormalized = string.normalize(point.campaign);
 
- 		const cacheJobCanStop = function() {
- 			return cacheJobCanStopFlag;
- 		}
+        const imagePath = path.join(imgDir, campaignNameNormalized, pointId, 's2_timelapse.gif');
 
- 		const onComplete = function() {
- 			finished();
- 		}
+        file.exists(imagePath).then(result => {
+            if (result) {
+                response.sendFile(imagePath)
+            } else {
+                response.status(400).json(false);
+                response.end();
+            }
+        });
 
- 		async.doUntil(startCacheJob, cacheJobCanStop, onComplete);
+    }
 
-	}
-
-	return Image;
+    return Image;
 
 }

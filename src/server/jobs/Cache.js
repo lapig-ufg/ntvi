@@ -4,8 +4,9 @@ import file from '../libs/util/File';
 import string from '../libs/util/String';
 const { spawn } = require('child_process');
 const path = require('path');
-const moment  = require('moment');
 const base = require('app-root-path');
+const moment  = require('moment');
+
 
 export default {
     key: 'Cache',

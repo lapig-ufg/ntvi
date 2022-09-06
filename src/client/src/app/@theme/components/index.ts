@@ -3,3 +3,7 @@ export * from './footer/footer.component';
 export * from './search-input/search-input.component';
 export * from './tiny-mce/tiny-mce.component';
 export * from './dialog/dialog.component';
+export * from './status-card/status-card.component';
+export * from './filters/filters.componet';
+export * from './best-images/best-images.component';
+export * from './map-leaflet/map-leaflet.component';

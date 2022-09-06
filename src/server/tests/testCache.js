@@ -1,4 +1,5 @@
 import { CacheMaker, Landsat, Sentinel, Planet } from '../libs';
+import Queue from "../libs/Queue";
 const path = require('path');
 const envs = require('dotenv').config({path:path.join(process.cwd(), '/.env')});
 const dotenvExpand = require('dotenv-expand');
@@ -18,20 +19,21 @@ async function run(){
           where: {id: 3},
       });
 
-      // const landsat    = new Landsat(campaign);
-      // const sentinel   = new Sentinel(campaign);
-      // const planet     = new Planet(campaign);
-      const cacheMaker = new CacheMaker(campaign);
-      await cacheMaker.run();
+      const landsat    = new Landsat(campaign);
+      const sentinel   = new Sentinel(campaign);
+      const planet     = new Planet(campaign);
+      // const cacheMaker = new CacheMaker(campaign);
+      // await cacheMaker.run();
 
-      // const promises = Promise.all([landsat.publishLayers(), sentinel.publishLayers(), planet.publishLayers()]);
+      const promises = Promise.all([landsat.publishLayers(), sentinel.publishLayers(), planet.publishLayers()]);
       // const promises = Promise.all([planet.publishLayers()])
 
-      // promises.then(async result => {
-      //     console.log(result)
-      // }).catch(error => {
-      //     console.error(error)
-      // });
+      promises.then(async result => {
+          console.log(result)
+          // await Queue.add('SearchMosaicsDates', campaign )
+      }).catch(error => {
+          console.error(error)
+      });
 
   }  catch (e) {
       console.error(e)

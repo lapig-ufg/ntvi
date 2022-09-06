@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+const { MongoClient } = require('mongodb');
 const { PrismaClient } = require('@prisma/client')
 const async = require('async');
 
@@ -11,6 +11,7 @@ module.exports = function(app) {
 		prisma: {},
 		token: {},
 	};
+
 	const uri = `mongodb://${config.mongo.host}:${config.mongo.port}/?poolSize=20&writeConcern=majority`;
 
 	Repository.client = MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -68,7 +69,5 @@ module.exports = function(app) {
 			await Repository.dbLogs.collection('errors').insertOne( log );
 		})
 	};
-
-
 	return Repository;
 };

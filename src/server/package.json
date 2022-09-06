@@ -5,7 +5,7 @@
   "dependencies": {
     "@bull-board/express": "^3.2.7",
     "@google/earthengine": "^0.1.185",
-    "@prisma/client": "^2.25.0",
+    "@prisma/client": "^2.27.0",
     "app-root-path": "^1.0.0",
     "archiver": "~0.4.10",
     "async": "~0.2.10",
@@ -72,7 +72,7 @@
     "xml2js": "~0.4.1"
   },
   "devDependencies": {
-    "prisma": "^2.25.0"
+    "prisma": "^2.27.0"
   },
   "scripts": {
     "dev:init": "ssh -p 2522 -f root@$IP_LASERV_PROD -L 27019:localhost:27017 -N; ssh -f root@$IP_LASERV_HOMOLOG -L 5436:localhost:5432 -N -p 2522; ssh -f root@$IP_LASERV_HOMOLOG -L 6378:localhost:6379 -N -p 2522",

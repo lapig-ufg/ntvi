@@ -1,19 +1,13 @@
-@import '../../../@theme/styles/themes';
+@import '../../styles/themes';
 @import '~@nebular/theme/styles/global/breakpoints';
 @import '~bootstrap/scss/mixins/breakpoints';
 
 @include nb-install-component() {
-
-    .ng2-smart-action-add-add {
-        display: none;
-    }
-
-    nb-card-header {
-        display: flex;
-        align-items: center;
-        padding-top: 0.625rem;
-        padding-bottom: 0.625rem;
-    }
+  max-height: 95vh;
+  .dialog-buttons{
+    display: flex;
+    justify-content: space-between;
+  }
 
     .single-view-button {
         .nb-square {
@@ -138,70 +132,8 @@
             padding: 0;
         }
     }
-}
 
-
-.window-filter {
-    min-width: 35rem;
-}
-
-.diolog-best-images {
-    min-width: 90%;
-    min-height: 90%;
-}
-
-.campaign-cards {
-    display: flex;
-    justify-content: space-between;
-
-    div {
-        padding-left: 0;
-        padding-right: 0;
+    .card-best-image{
+        min-width: 70vw;
     }
-
-    nb-icon {
-        width: 1.6em;
-        height: 1.6em;
-    }
-
-}
-
-.title-point {
-    text-align: center;
-    padding: 0.8rem;
-}
-
-.classification {
-    padding: 0.5rem;
-}
-
-.img-satellite {
-    padding: unset;
-}
-
-.location {
-    font-family: Open Sans, sans-serif;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-}
-
-.header-point {
-    padding: 0.1rem;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.show-img {
-    cursor: pointer;
-}
-
-.btn-actions-class {
-    display: contents;
-}
-
-.timelapses {
-    border-radius: 8px ;
-    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);
 }

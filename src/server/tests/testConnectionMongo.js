@@ -12,42 +12,57 @@ async function run() {
         await mongo.connect();
         const db = await mongo.db("ntvi")
 
-        const pontos = db.collection('campaign').aggregate([
-            {
-                $lookup: {
-                    from: "points",
-                    localField: "_id",
-                    foreignField: "campaignId",
-                    as: "points"
+        // const pontos = db.collection('campaign').aggregate([
+        //     {
+        //         $lookup: {
+        //             from: "points",
+        //             localField: "_id",
+        //             foreignField: "campaignId",
+        //             as: "points"
+        //         },
+        //     },
+        //     {
+        //         "$project": {
+        //             "_id": 1,
+        //             "status": 1,
+        //             "noCache": {
+        //                 $size: {
+        //                     $filter: {
+        //                         input: "$points",
+        //                         as: "point",
+        //                         cond: {$eq: ["$$point.cached", false]}
+        //                     }
+        //                 }
+        //             },
+        //             "hasCache": {
+        //                 $size: {
+        //                     $filter: {
+        //                         input: "$points",
+        //                         as: "point",
+        //                         cond: {$eq: ["$$point.cached", true]}
+        //                     }
+        //                 }
+        //             },
+        //             "totalPoints": {$size: "$points"}
+        //         }
+        //     },
+        //     { $sort : { _id : 1 } }
+        // ]);
+        const pontos = db.collection('points').aggregate(
+            [
+                { $match: { index: 3, campaignId : 3 } },
+                {
+                    $lookup: {
+                        from: "mosaics",
+                        localField: "campaignId",
+                        foreignField: "campaignId",
+                        as: "mosaics"
+                    },
                 },
-            },
-            {
-                "$project": {
-                    "_id": 1,
-                    "status": 1,
-                    "noCache": {
-                        $size: {
-                            $filter: {
-                                input: "$points",
-                                as: "point",
-                                cond: {$eq: ["$$point.cached", false]}
-                            }
-                        }
-                    },
-                    "hasCache": {
-                        $size: {
-                            $filter: {
-                                input: "$points",
-                                as: "point",
-                                cond: {$eq: ["$$point.cached", true]}
-                            }
-                        }
-                    },
-                    "totalPoints": {$size: "$points"}
-                }
-            },
-            { $sort : { _id : 1 } }
-        ]);
+                { $unwind : "$mosaics" },
+                {$sort: {index: 1}}
+            ]
+        );
 
         await pontos.forEach(pto => {
             console.log(pto)

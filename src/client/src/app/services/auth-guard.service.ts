@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { tap } from 'rxjs/operators';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { TranslateService } from '@ngx-translate/core';
-import {NbComponentStatus, NbToastrService} from '@nebular/theme';
+import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -53,9 +53,9 @@ export class AuthGuard implements CanActivate {
           //   await self.router.navigate(['auth/login']);
           // }
 
-          const appLocalStorage = JSON.parse(localStorage.getItem('auth_app_token'))
-          if(appLocalStorage) {
-            let access = appLocalStorage.ownerStrategyName === "google" ?
+          const appLocalStorage = JSON.parse(localStorage.getItem('auth_app_token'));
+          if (appLocalStorage) {
+            let access = appLocalStorage.ownerStrategyName === 'google' ?
               localStorage.getItem('token') : appLocalStorage['value'];
             const token = jwtDecode<JwtPayload>(access);
             const isExpired = Date.now() >= token.exp * 1000;

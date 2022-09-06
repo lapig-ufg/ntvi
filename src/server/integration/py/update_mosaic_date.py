@@ -34,43 +34,38 @@ EE_CREDENTIALS = ee.ServiceAccountCredentials(EE_ACCOUNT, None, DATA_KEY)
 SATELLITES = [ 'L8', 'L7', 'L5' ]
 
 PERIODS_BR = [
-	{
-		"name": 'WET',
-		"dtStart": '-01-01',
-		"dtEnd": '-04-30'
-	},
-	{
-		"name": 'DRY',
-		"dtStart": '-06-01',
-		"dtEnd": '-10-30'
-	}
+    {
+        "name": 'WET',
+        "dtStart": '-01-01',
+        "dtEnd": '-04-30'
+    },
+    {
+        "name": 'DRY',
+        "dtStart": '-06-01',
+        "dtEnd": '-10-30'
+    }
 ]
 
 client = MongoClient(MONGO_HOST, MONGO_PORT)
 db = client[MONGO_DATABASE]
 
 def getBestImg(satellite, year, mDaysStart, mDaysEnd, path, row):
-	dtStart = str(year) + mDaysStart
-	dtEnd = str(year) + mDaysEnd
+    dtStart = str(year) + mDaysStart
+    dtEnd = str(year) + mDaysEnd
 
-	if satellite == 'L8':
-		collection = LANDSAT_8
-		bands = ['B5','B6','B4']
-	elif satellite == 'L5':
-		collection = LANDSAT_5
-		bands = ['B4','B5','B3']
-	elif satellite == 'L7':
-		collection = LANDSAT_7
-		bands = ['B4','B5','B3']
+    if satellite == 'L8':
+        collection = LANDSAT_8
+        bands = ['B5','B6','B4']
+    elif satellite == 'L5':
+        collection = LANDSAT_5
+        bands = ['B4','B5','B3']
+    elif satellite == 'L7':
+        collection = LANDSAT_7
+        bands = ['B4','B5','B3']
 
-	bestImg = collection.filterDate(dtStart,dtEnd) \
-										.filterMetadata('WRS_PATH','equals',path)  \
-										.filterMetadata('WRS_ROW','equals',row) \
-										.sort("CLOUD_COVER"  False) \
-										.select(bands,['NIR','SWIR','RED']) \
-										.mosaic()
+    bestImg = collection.filterDate(dtStart,dtEnd).filterMetadata('WRS_PATH','equals',path).filterMetadata('WRS_ROW','equals',row).sort("CLOUD_COVER",False).select(bands,['NIR','SWIR','RED']).mosaic()
 
-	return ee.Image(bestImg)
+    return ee.Image(bestImg)
 
 def getWRS(feature):
     return ee.Feature(feature).get('PR')
