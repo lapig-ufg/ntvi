@@ -4,10 +4,13 @@ FROM registry.lapig.iesa.ufg.br/lapig-images-homol/app_ntvi:base
 ENV URL_TO_APPLICATION_GITHUB="https://github.com/lapig-ufg/ntvi.git"
 ENV BRANCH="develop"
 
+WORKDIR /APP
+
 LABEL maintainer="Renato Gomes <renatogomessilverio@gmail.com>"
 
 RUN if [ -d "/APP/ntvi" ]; then rm -Rf /APP/ntvi; fi  && \
-    cd /APP && git clone -b ${BRANCH} ${URL_TO_APPLICATION_GITHUB}
+    cd /APP && git clone -b ${BRANCH} ${URL_TO_APPLICATION_GITHUB} && \
+    mdkir -p /APP/ntvi/src/server/logs 
     
 ADD ./src/server/node_modules /APP/ntvi/src/server/node_modules  
 ADD ./src/client/dist /APP/ntvi/src/client/dist
