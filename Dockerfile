@@ -10,7 +10,7 @@ LABEL maintainer="Renato Gomes <renatogomessilverio@gmail.com>"
 
 RUN if [ -d "/APP/ntvi" ]; then rm -Rf /APP/ntvi; fi  && \
     cd /APP && git clone -b ${BRANCH} ${URL_TO_APPLICATION_GITHUB} && \
-    mkdir -p /APP/ntvi/src/server/logs 
+    mkdir -p /APP/ntvi/src/server/logs && apk add openssh
     
 ADD ./src/server/node_modules /APP/ntvi/src/server/node_modules  
 ADD ./src/client/dist /APP/ntvi/src/client/dist
