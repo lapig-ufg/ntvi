@@ -108,7 +108,7 @@
 
         stage('Deploy container on DEV') {
 
-                        configFileProvider([configFile(fileId: "$File_Json_Id_NTVI_HOMOL", targetLocation: 'container-atlas-deploy-homol.json')]) {
+                        configFileProvider([configFile(fileId: "$File_Json_Id_APP_NTVI_HOMOL", targetLocation: 'container-atlas-deploy-homol.json')]) {
 
                             def url = "http://$SERVER_HOMOL/containers/$application_name?force=true"
                             def response = sh(script: "curl -v -X DELETE $url", returnStdout: true).trim()
