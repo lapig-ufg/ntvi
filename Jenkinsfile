@@ -2,6 +2,7 @@
 
     load "$JENKINS_HOME/.envvars"
     def application_name= "app_ntvi"
+    def NODE_VERSION="v14.20.0"
 
         stage('Checkout') {
             git branch: 'develop',
@@ -23,6 +24,7 @@
                     -Dsonar.login=$SonarKeyProject"
                     }
         }
+
         stage('Build') {
                         //INSTALL NVM BINARY AND INSTALL NODE VERSION AND USE NODE VERSION
                         nvm(nvmInstallURL: 'https://raw.githubusercontent.com/creationix/nvm/master/install.sh', 
