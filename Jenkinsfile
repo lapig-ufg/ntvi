@@ -110,7 +110,7 @@
 
         stage('Deploy container on PROD') {
 
-                        configFileProvider([configFile(fileId: "$File_Json_Id_APP_NTVI_PROD", targetLocation: 'container-atlas-deploy-prod.json')]) {
+                        configFileProvider([configFile(fileId: "$File_Json_Id_APP_NTVI_PROD", targetLocation: 'container-ntvi-deploy-prod.js')]) {
 
                             def url = "http://$SERVER_PROD/containers/$application_name?force=true"
                             def response = sh(script: "curl -v -X DELETE $url", returnStdout: true).trim()
