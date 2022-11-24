@@ -7,6 +7,9 @@
 *.pyc
 .idea
 
+*.Jenkinsfile
+*.Dockerfile
+
 node_modules
 ows_runtime.map
 src/client/node_modules
