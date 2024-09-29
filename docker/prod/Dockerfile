@@ -1,5 +1,8 @@
 FROM lapig/ntvi:base
 
+# Instalar curl
+RUN apk update && apk add curl
+
 # Clone app and npm install on server
 ENV URL_TO_APPLICATION_GITHUB="https://github.com/lapig-ufg/ntvi.git"
 ENV BRANCH="main"
@@ -15,4 +18,4 @@ ADD ./src/client/dist /APP/ntvi/src/client/dist
 
 CMD [ "/bin/bash", "-c", "/APP/src/server/prod-start.sh; tail -f /dev/null"]
 
-ENTRYPOINT [ "/APP/Monitora.sh"]
+ENTRYPOINT [ "/APP/monitor.sh"]

@@ -1,4 +1,5 @@
 import { GoogleEarthEngine } from "./GoogleEarthEngine";
+import {Satellites} from "../util/satellites";
 import { PythonShell } from 'python-shell';
 const moment  = require('moment');
 const appRoot = require('app-root-path');
@@ -38,7 +39,7 @@ export class Landsat extends GoogleEarthEngine {
     }
 
     getCompositions() {
-        const landsatCompositions = super.campaign.compositions.find(comp => { return parseInt(comp.satelliteId) === 1 });
+        const landsatCompositions = super.campaign.compositions.find(comp => { return parseInt(comp.satelliteId) === Satellites.LANDSAT });
         Landsat.prototype.compositions = landsatCompositions.colors;
     }
 

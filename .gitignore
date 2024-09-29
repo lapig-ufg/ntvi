@@ -49,3 +49,4 @@ src/server/.env
 src/server/bin/teste/*
 src/server/test/logs/*
 src/server/bin/.env
+devops/*.sh

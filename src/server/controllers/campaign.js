@@ -1,5 +1,5 @@
 import { Landsat, Sentinel } from "../libs";
-
+import {Satellites} from "../util/satellites";
 import Queue from '../libs/Queue';
 const rp = require("request-promise");
 
@@ -206,7 +206,7 @@ module.exports = function (app) {
                 }
             )
 
-            //Create jobs for add points serach info of points on Google Earth Engine
+            //Create jobs for add points search info of points on Google Earth Engine
             const pointsWithoutInfo =  Controller.pointsWithoutInfo(resultQueries[1].points)
             if(pointsWithoutInfo.length > 0){
                 const arraySplited = array.split(pointsWithoutInfo, 100)
@@ -215,7 +215,7 @@ module.exports = function (app) {
                         {
                             campaign:{ id: resultQueries[1].id, country: resultQueries[1].country, UsersOnCampaigns: resultQueries[1].UsersOnCampaigns },
                             points: points
-                        }
+                        }, {removeOnComplete: true }
                     )
                 }
             }
@@ -263,7 +263,8 @@ module.exports = function (app) {
                 {
                     campaign: { id: resultQueries[1].id, name: resultQueries[1].name,  country: resultQueries[1].country, UsersOnCampaigns: resultQueries[1].UsersOnCampaigns },
                     points: resultQueries[1].points
-                }
+                },
+                {removeOnComplete: true }
             )
 
             //Create jobs for add points serach info of points on Google Earth Engine
@@ -274,7 +275,7 @@ module.exports = function (app) {
                         {
                             campaign:{ id: resultQueries[1].id, country: resultQueries[1].country, UsersOnCampaigns: resultQueries[1].UsersOnCampaigns },
                             points: points
-                        }
+                        }, {removeOnComplete: true }
                     )
                 }
             }
@@ -566,7 +567,7 @@ module.exports = function (app) {
                 select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
             });
 
-            await Queue.add('InitCache', campaign)
+            await Queue.add('InitCache', campaign, {removeOnComplete: true })
 
             response.status(200).json({status:200, message: 'success' });
         } catch (e) {
@@ -646,12 +647,12 @@ module.exports = function (app) {
     Controller.getThumbsBySatellites = function (campaign) {
         let promises = [];
         campaign.compositions.forEach(comp => {
-            if(parseInt(comp.satelliteId) === 1){
+            if(parseInt(comp.satelliteId) === Satellites.LANDSAT){
                 promises.push(new Promise((resolve, reject) => {
                     const landsat = new Landsat(campaign);
                     landsat.run(function (){
                         landsat.getThumbURL().then(thumb => {
-                            resolve({satelliteId: 1, title: comp.satellite.name, url: thumb })
+                            resolve({satelliteId: Satellites.LANDSAT, title: comp.satellite.name, url: thumb })
                         })
                     },  (err) => {
                         reject(new Error(err))
@@ -662,22 +663,24 @@ module.exports = function (app) {
                     });
                 }));
             } else {
-                promises.push(new Promise((resolve, reject) => {
-                    const sentinel = new Sentinel(campaign);
+                if(parseInt(comp.satelliteId) === Satellites.SENTINEL){
+                    promises.push(new Promise((resolve, reject) => {
+                        const sentinel = new Sentinel(campaign);
 
-                    sentinel.run(function (){
+                        sentinel.run(function (){
 
-                        sentinel.getThumbURL().then(thumb => {
-                            resolve({satelliteId: 2, title: comp.satellite.name, url: thumb })
-                        })
-                    },  (err) => {
-                        reject(new Error(err))
-                        sentinel.ee.reset();
-                    },  (err) => {
-                        reject(new Error(err))
-                        sentinel.ee.reset();
-                    });
-                }));
+                            sentinel.getThumbURL().then(thumb => {
+                                resolve({satelliteId: Satellites.SENTINEL, title: comp.satellite.name, url: thumb })
+                            })
+                        },  (err) => {
+                            reject(new Error(err))
+                            sentinel.ee.reset();
+                        },  (err) => {
+                            reject(new Error(err))
+                            sentinel.ee.reset();
+                        });
+                    }));
+                }
             }
         })
         return promises;

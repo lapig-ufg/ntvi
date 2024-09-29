@@ -1,4 +1,5 @@
 import { GoogleEarthEngine } from "./GoogleEarthEngine";
+import {Satellites} from "../util/satellites";
 import { PythonShell } from 'python-shell';
 const moment  = require('moment');
 const appRoot = require('app-root-path');
@@ -22,7 +23,7 @@ export class Sentinel extends GoogleEarthEngine {
         Sentinel.prototype.agriculturalAreas = ['REDEDGE4','SWIR1','REDEDGE1'];
     }
     getCompositions() {
-        const sentinelCompositions = super.campaign.compositions.find(comp => { return parseInt(comp.satelliteId) === 2 });
+        const sentinelCompositions = super.campaign.compositions.find(comp => { return parseInt(comp.satelliteId) === Satellites.SENTINEL });
         Sentinel.prototype.compositions = sentinelCompositions.colors.split(',');
     }
 

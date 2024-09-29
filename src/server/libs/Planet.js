@@ -51,8 +51,10 @@ export class Planet  {
                 let layers = [];
                 mosaics.forEach((mosaic, index) => {
                     // let counter = index < 9 ? '0' + (index + 1): (index + 1);
-                    const date = moment(mosaic. first_acquired)
+
+                    const date = moment(mosaic.first_acquired)
                     mosaic['_id'] = this.campaign.id + "_PL_" + date.format('MM') + "_" + date.format('YYYY') ;
+                    console.log(mosaic['_id'])
                     mosaic['campaignId'] = this.campaign.id;
                     mosaic['url'] = mosaic._links.tiles;
 
