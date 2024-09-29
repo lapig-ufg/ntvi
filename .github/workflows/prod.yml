@@ -64,12 +64,16 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '12.22.2'
+          node-version: '14.17.3'
 
       - name: Build Server and client
         run: |
           npm set progress=false
           cd ${{ github.workspace }}/src/server && npm install
+          cd ${{ github.workspace }}/src/client && npm install
+          npm install -g @angular/cli@10.2.4
+          cd ${{ github.workspace }}/src/client && ng build --stats-json --source-map=false --no-progress
+
 
       - name: Build Docker
         run: |

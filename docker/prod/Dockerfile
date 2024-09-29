@@ -13,9 +13,7 @@ RUN if [ -d "/APP/ntvi" ]; then rm -Rf /APP/ntvi; fi  && \
     cd /APP && git clone -b ${BRANCH} ${URL_TO_APPLICATION_GITHUB} && \
     mkdir -p /APP/ntvi/src/server/logs
     
-ADD ./src/server/node_modules /APP/ntvi/src/server/node_modules  
-ADD ./src/client/dist /APP/ntvi/src/client/dist
+ADD ../../src/server/node_modules /APP/ntvi/src/server/node_modules
+ADD ../../src/client/dist /APP/ntvi/src/client/dist
 
-CMD [ "/bin/bash", "-c", "/APP/src/server/prod-start.sh; tail -f /dev/null"]
-
-ENTRYPOINT [ "/APP/monitor.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "/APP/monitor.sh"]
