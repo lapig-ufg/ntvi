@@ -83,30 +83,34 @@ module.exports = function (app) {
         }
     }
 
-    Controller.oauth    = async function (request, response) {
-        const { name, email, picture, locale} = request.body
+    Controller.oauth = async function (request, response) {
+        const { name, email, picture, locale } = request.body;
 
         let { lang } = request.headers;
 
-        if(!lang){
-            lang = locale.includes('pt')? 'pt' : 'en';
+        // Check if locale exists and if not, set lang to default
+        if (!lang) {
+            if (locale && typeof locale === 'string' && locale.includes('pt')) {
+                lang = 'pt';
+            } else {
+                lang = 'en';
+            }
         }
 
         const texts = _language.getLang(lang);
         try {
-
             const user = await prisma.user.findUnique({
                 where: {
                     email: email,
                 },
-            })
+            });
 
-            if(user) {
-                if(!user.picture && picture != '' ) {
+            if (user) {
+                if (!user.picture && picture != '') {
                     await prisma.user.update({
                         where: { id: parseInt(user.id) },
                         data: { picture: picture },
-                    })
+                    });
                 }
                 const payload = {
                     id: user.id,
@@ -118,43 +122,40 @@ module.exports = function (app) {
                     language: user.language,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
-                    expiresIn: '24h'
+                    expiresIn: '24h',
                 });
 
                 return response.json(token);
-
             } else {
-                const user = await prisma.user.create({
+                const newUser = await prisma.user.create({
                     data: {
                         name: name,
                         email: email,
                         picture: picture,
-                        terms:false,
+                        terms: false,
                     },
                 });
 
                 const payload = {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    picture: user.picture,
-                    role: user.typeUser,
-                    theme: user.theme,
-                    language: user.language,
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email,
+                    picture: newUser.picture,
+                    role: newUser.typeUser,
+                    theme: newUser.theme,
+                    language: newUser.language,
                 };
                 const token = jwt.sign(payload, env.SECRET, {
-                    expiresIn: '24h'
+                    expiresIn: '24h',
                 });
 
                 return response.json(token);
             }
-
-            response.status(500).json({message: texts.login_msg_notfound});
-        }catch (e) {
-            console.error(e)
-            response.status(500).json({message: texts.login_msg_erro + e + '.'});
+        } catch (e) {
+            console.error(e);
+            response.status(500).json({ message: texts.login_msg_erro + e + '.' });
         }
-    }
+    };
 
     Controller.logout   = async function (request, response) {
         response.json({ auth: false, token: null });
