@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -48,7 +49,7 @@ model Composition {
 }
 
 model Point {
-  id         Int  @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   latitude   String?
   longitude  String?
   info       String

@@ -17,8 +17,8 @@ module.exports = function(app) {
 	Repository.client = MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 	Repository.init = function(callback) {
-		Repository.prisma = new PrismaClient(config.prismaOpts);
-		Repository.client.connect((err,  client) => {
+		Repository.prisma = new PrismaClient();
+		Repository.client.connect((err, client) => {
 			if (err) {
 				return callback(err);
 			}
@@ -32,10 +32,10 @@ module.exports = function(app) {
 				}
 				const forEachOne = function(collection, callback) {
 					const name = collection.name.substr(collection.name.indexOf('\.') + 1);
-					if(name != 'indexes') {
+					if (name != 'indexes') {
 						Repository.db.collection(name, function(err, repository) {
-							if(err){
-								console.log(err)
+							if (err) {
+								console.log(err);
 							}
 							Repository.collections[name] = repository;
 							callback();
@@ -44,9 +44,9 @@ module.exports = function(app) {
 						callback();
 					}
 				};
-				async.each(collection, forEachOne, callback)
+				async.each(collection, forEachOne, callback);
 			});
-		})
+		});
 	};
 
 	Repository.getSync = function(collectionName) {
