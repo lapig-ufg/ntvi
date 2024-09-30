@@ -1,5 +1,5 @@
 export const Satellites = {
-    SENTINEL: 1,
-    LANDSAT: 2,
+    SENTINEL: 2,
+    LANDSAT: 1,
     PLANET: 3
 }

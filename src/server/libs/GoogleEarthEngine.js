@@ -1,4 +1,5 @@
 const ee = require('@google/earthengine');
+const { google } = require('google-auth-library');
 const { PrismaClient } = require('@prisma/client')
 import { mongo } from "./Mongo";
 
@@ -89,8 +90,16 @@ export class GoogleEarthEngine {
     run(callback, errorCallback, authenticationErrorCallback) {
         this.ee.data.authenticateViaPrivateKey(
             this.credentials,
-            () => {this.ee.initialize(null, null, callback, errorCallback) },
-            authenticationErrorCallback
+            () => {
+                this.ee.initialize(null, null, callback, (error) => {
+                    errorCallback(error);
+                    console.error('Initialization error:', error);
+                });
+            },
+            (authError) => {
+                authenticationErrorCallback(authError);
+                console.error('Authentication error:', authError);
+            }
         );
     }
 }

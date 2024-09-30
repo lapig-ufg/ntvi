@@ -21,6 +21,7 @@ export class Landsat extends GoogleEarthEngine {
             }
         ];
         Landsat.prototype.mosaicsPromises = [];
+        this.initSatellites();
         this.getCompositions();
 
         PythonShell.defaultOptions = {
@@ -32,10 +33,9 @@ export class Landsat extends GoogleEarthEngine {
     }
 
     initSatellites() {
-
-        Landsat.prototype.landsat_5 = super.ee.ImageCollection("LANDSAT/LT05/C01/T1_TOA");
-        Landsat.prototype.landsat_7 = super.ee.ImageCollection("LANDSAT/LE07/C01/T1_TOA");
-        Landsat.prototype.landsat_8 = super.ee.ImageCollection("LANDSAT/LC08/C01/T1_TOA");
+        Landsat.prototype.landsat_5 = super.ee.ImageCollection("LANDSAT/LT05/C02/T1_L2");
+        Landsat.prototype.landsat_7 = super.ee.ImageCollection("LANDSAT/LE07/C02/T1_L2");
+        Landsat.prototype.landsat_8 = super.ee.ImageCollection("LANDSAT/LC08/C02/T1_L2");
     }
 
     getCompositions() {
@@ -86,7 +86,7 @@ export class Landsat extends GoogleEarthEngine {
                 this.getBounds().then(ob => {
                     const year = moment().year() - 1;
                     const bands = ['B5','B6','B4']
-                    const img = super.ee.ImageCollection("LANDSAT/LC08/C01/T1_TOA").filterDate(year + '-01-01', year + '-12-31')
+                    const img = super.ee.ImageCollection("LANDSAT/LC08/C02/T1_L2").filterDate(year + '-01-01', year + '-12-31')
                         .sort("CLOUD_COVER", false)
                         .filterBounds(ob)
                         .mosaic()
@@ -98,7 +98,7 @@ export class Landsat extends GoogleEarthEngine {
                         'dimensions': 180,
                         'format': 'png'
                     });
-
+                    console.log(thumb, this.compositions)
                     resolve(thumb)
                 })
             } catch (e) {
