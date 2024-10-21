@@ -55,7 +55,7 @@ export class PointService {
 
     getNextPoint(form): Observable<any> {
         return this.httpClient.post<any>(
-            this.apiURL + '/points/next-point',
+            this.apiURL + '/points/update-point',
             JSON.stringify(form),
             this.httpOptions,
         )
@@ -64,8 +64,14 @@ export class PointService {
             );
     }
 
-    getPoint(): Observable<any> {
-        return this.httpClient.get<any>(this.apiURL + '/points/next-point')
+    getPoint(ob: any): Observable<any> {
+        return this.httpClient.post<any>(this.apiURL + '/points/next-point', ob)
+            .pipe(
+                catchError(this.errorHandler),
+            );
+    }
+    getPointToInpection(campaignId: number, interpreterId: number): Observable<any> {
+        return this.httpClient.get<any>(`${this.apiURL}/point-inspection/${campaignId}/${interpreterId}`)
             .pipe(
                 catchError(this.errorHandler),
             );

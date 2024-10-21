@@ -148,7 +148,7 @@ export class ViewComponent implements AfterViewInit {
 
     this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
       this.campaign = data;
-      this.mapPoints = data.points.map(point => [parseFloat(point.longitude), parseFloat(point.latitude)]);
+      this.mapPoints = data.points.map(point => [point.longitude, point.latitude]);
       this.tablePoints.source.load(data.points);
       this.tableUseClass.source.load(data.classes);
       this.tableImages.source.load(data.images);

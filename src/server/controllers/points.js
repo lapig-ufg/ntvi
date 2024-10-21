@@ -1,11 +1,12 @@
 const proj4 = require('proj4');
-
+import {Point, UsersOnCampaigns} from '@prisma/client';
 module.exports = function (app) {
     let Points = {};
     const campaign = app.repository.collections.campaign;
     const points = app.repository.collections.points;
     const mosaics = app.repository.collections.mosaics;
     const status = app.repository.collections.status;
+    const prisma   = app.repository.prisma;
 
     const getImageDates = function (path, row, callback) {
         const filterMosaic = {'dates.path': path, 'dates.row': row};
@@ -39,62 +40,62 @@ module.exports = function (app) {
         return [[ul[1], ul[0]], [lr[1], lr[0]]]
     }
 
-    const findPoint = function (campaign, username, callback) {
+    var findPoint = function(campaign, username, callback) {
 
-        const findOneFilter = {
+        var findOneFilter = {
             "$and": [
-                {"userName": {"$nin": [username]}},
-                {"$where": 'this.userName.length<' + campaign.numInspec},
-                {"campaign": {"$eq": campaign._id}},
-                {"underInspection": {$lt: campaign.numInspec}}
+                { "userName": { "$nin": [ username ] } },
+                { "$where": 'this.userName.length < '+ campaign.numInspec },
+                { "campaign": { "$eq":  campaign._id } },
+                { "underInspection": { $lt:  campaign.numInspec } }
             ]
         };
 
-        const currentFilter = {
+        var currentFilter = {
             "$and": [
-                {"userName": {"$nin": [username]}},
-                {"$where": 'this.userName.length<' + campaign.numInspec},
-                {"campaign": {"$eq": campaign._id}}
+                { "userName": { "$nin": [ username ] } },
+                { "$where":'this.userName.length<'+ campaign.numInspec },
+                { "campaign": { "$eq":  campaign._id } }
             ]
         };
 
-        const countFilter = {
+        var countFilter = {
             "$and": [
                 {"userName": {$in: [username]}},
                 {"campaign": campaign._id}
             ]
         };
 
-        const totalFilter = {
+        var totalFilter = {
             "$and": [
-                {"campaign": {"$eq": campaign._id}}
+                {"campaign": { "$eq":  campaign._id }}
             ]
         };
 
-        const findOneSort = [['index', 1]]
-        const findOneUpdate = {'$inc': {'underInspection': 1}}
+        var findOneSort = [['index', 1]]
+        var findOneUpdate = {'$inc': {'underInspection': 1}}
 
         //points.findOne(findOneFilter, { sort: [['index', 1]] }, function(err, point) {
-        points.findAndModify(findOneFilter, findOneSort, findOneUpdate, {}, function (err, object) {
-            point = object.value
-            if (point) {
-                points.count(totalFilter, function (err, total) {
+        points.findAndModify(findOneFilter, findOneSort, findOneUpdate, {}, function(err, object) {
+
+            const point = object.value;
+            if(point) {
+                points.count(totalFilter, function(err, total) {
                     points.count(countFilter, function (err, count) {
-                        getImageDates(point.path, point.row, function (dates) {
+                        getImageDates(point.path, point.row, function(dates) {
                             point.dates = dates
 
                             point.bounds = getWindow(point)
 
-                            var statusId = username + "_" + campaign._id
+                            var statusId = username+"_"+campaign._id
                             status.updateOne({"_id": statusId}, {
-                                $set: {
+                                $set:{
                                     "campaign": campaign._id,
                                     "status": "Online",
                                     "name": username,
                                     "atualPoint": point._id,
                                     "dateLastPoint": new Date()
-                                }
-                            }, {
+                                }}, {
                                 upsert: true
                             })
 
@@ -110,9 +111,8 @@ module.exports = function (app) {
                     })
                 });
             } else {
-                points.count(totalFilter, function (err, total) {
-                    points.count(countFilter, function (err, count) {
-
+                points.count(totalFilter, function(err, total) {
+                    points.count(countFilter, function(err, count) {
                         var result = {};
                         result['point'] = {};
                         result['total'] = total;
@@ -232,11 +232,16 @@ module.exports = function (app) {
     }
 
     Points.getCurrentPoint = function (request, response) {
-        const user = request.session.user;
 
-        findPoint(user.campaign, user.name, function (result) {
+        const {campaign, user} = request.body;
+
+        findPoint(campaign, user.name, function (result) {
+            if (result.error) {
+                response.status(500).json({status: 500, message: result.error});
+                response.end();
+            }
+            console.log(result)
             request.session.currentPointId = result.point._id;
-
             response.send(result);
             response.end();
         })
@@ -528,6 +533,96 @@ module.exports = function (app) {
             })
         })
     }
+
+    Points.getPointForInspection = async (req, res) => {
+        try {
+            const { campaignId, interpreterId } = req.params;
+
+            // Verifique se o usuário está relacionado à campanha
+            const userOnCampaign = await prisma.usersOnCampaigns.findFirst({
+                where: {
+                    userId: parseInt(interpreterId),
+                    campaignId: parseInt(campaignId),
+                },
+            });
+
+            if (!userOnCampaign) {
+                return res.status(403).json({ message: "O usuário não está relacionado a esta campanha." });
+            }
+
+            // Busque o total de pontos da campanha
+            const totalPoints = await prisma.point.count({
+                where: {
+                    campaignId: parseInt(campaignId),
+                },
+            });
+
+            // Busque a campanha para obter as datas inicial e final
+            const campaign = await prisma.campaign.findUnique({
+                where: { id: parseInt(campaignId) },
+            });
+
+            if (!campaign) {
+                return res.status(404).json({ message: "Campanha não encontrada." });
+            }
+
+            // Busque um ponto disponível para inspeção, verificando se não foi inspecionado para todos os períodos
+            const point = await prisma.point.findFirst({
+                where: {
+                    campaignId: parseInt(campaignId),
+                    status: 'CREATED', // Verifique pontos que ainda não foram inspecionados
+                    inspections: {
+                        none: {
+                            inspectorId: parseInt(interpreterId),
+                        },
+                    },
+                    OR: [
+                        {
+                            inspections: {
+                                none: {
+                                    typePeriod: 'YEARLY',
+                                    date: {
+                                        gte: campaign.initialDate,
+                                        lte: campaign.finalDate,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            inspections: {
+                                none: {
+                                    typePeriod: 'MONTHLY',
+                                    date: {
+                                        gte: campaign.initialDate,
+                                        lte: campaign.finalDate,
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                },
+                orderBy: {
+                    createdAt: 'asc',
+                },
+            });
+
+            if (!point) {
+                return res.status(404).json({ message: "Nenhum ponto disponível para inspeção.", totalPoints });
+            }
+
+            // Atualize o ponto para marcar que ele está em inspeção
+            await prisma.point.update({
+                where: { id: point.id },
+                data: { status: 'INSPECTING' },
+            });
+
+            // Envie o ponto e o total de pontos de volta para o cliente
+            res.status(200).json({ ...point, total: totalPoints });
+        } catch (error) {
+            console.error("Erro ao buscar ponto para inspeção:", error);
+            res.status(500).json({ message: "Erro interno ao buscar ponto para inspeção." });
+        }
+    };
 
     return Points;
 }

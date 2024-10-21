@@ -1,24 +1,24 @@
 <div class="row">
   <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
     <div class="header-point">
-      <h6 class="title-point" *ngIf="isDataAvailable"> {{'campaign_inspection_point_title' | translate:{current:info.current, total:info.total} }}</h6>
+      <h6 class="title-point" *ngIf="isDataAvailable"> {{'campaign_inspection_point_title' | translate:{current: info.id, total: info.total} }}</h6>
       <span class="mt-1 mb-1 location">{{'campaign_inspection_location_title' | translate}}</span>
     </div>
 <!--    <ngx-ol-map *ngIf="isDataAvailable" [showBaseMapGoogle]="true" [showBaseMapsEsri]="false" [height]="'140px'"-->
 <!--      [mouseWheelZoom]="true" [zoom]="2" [minZoom]="2" [maxZoom]="18" [mapId]="'map_point' + info.current" [center]="center" [points]="points"></ngx-ol-map>-->
     <div class="mt-2 mb-2" *ngIf="isDataAvailable">
-      <div class="">
-        <label for="biome" class="label">{{'campaign_inspection_field_biome' | translate}}</label>
-        <input id="biome" disabled fieldSize="tiny" type="text" [value]="info.point?.biome" nbInput fullWidth>
-      </div>
+<!--      <div class="">-->
+<!--        <label for="biome" class="label">{{'campaign_inspection_field_biome' | translate}}</label>-->
+<!--        <input id="biome" disabled fieldSize="tiny" type="text" [value]="info.point?.biome" nbInput fullWidth>-->
+<!--      </div>-->
       <div class="">
         <label for="municipality" class="label">{{'campaign_inspection_field_municipality' | translate}}</label>
         <input id="municipality" disabled fieldSize="tiny" type="text"
-          [value]="info.point?.county  + ' - ' + info.point?.uf | uppercase" nbInput fullWidth>
+          [value]="info.info | uppercase" nbInput fullWidth>
       </div>
       <div class="">
         <label for="coordinate" class="label">{{'campaign_inspection_field_coordinate' | translate}}</label>
-        <input id="coordinate" disabled [value]="info.point.lat + ' ' + info.point.lon" fieldSize="tiny" type="text"
+        <input id="coordinate" disabled [value]="info.latitude + ' ' + info.longitude" fieldSize="tiny" type="text"
           nbInput fullWidth>
       </div>
     </div>
@@ -74,12 +74,23 @@
           <div *ngIf="image === 'DRY'" class="grid-container">
             <div class="grid-view" *ngIf="isDataAvailable">
               <div class="camera" *ngFor="let img of imagesDry; let i = index">
-                <ngx-ol-map *ngIf="isDataAvailable" [showFullscreen]="false" [mouseWheelZoom]="false"
-                            [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
-                            [mapId]="'map_images_dry' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
-                </ngx-ol-map>
+                  <ngx-ol-map
+                      [showFullscreen]="false"
+                      [mouseWheelZoom]="false"
+                      [showBaseMapGoogle]="false"
+                      [dragPan]="false"
+                      [zoom]="13"
+                      [minZoom]="1"
+                      [maxZoom]="18"
+                      [height]="'300px'"
+                      [mapId]="'map_images_dry' + i"
+                      [center]="center"
+                      period="DRY"
+                      [year]="img.year"
+                      [showLandsat]="true">
+                  </ngx-ol-map>
                 <div class="camera-name">
-                  <span>{{ img.date | date }}</span>
+                  <span>{{ img.year }}</span>
                   <span>{{'campaign_inspection_images_dry' | translate}}</span>
                 </div>
               </div>
@@ -88,12 +99,23 @@
           <div *ngIf="image === 'WET'" class="grid-container">
             <div class="grid-view" *ngIf="isDataAvailable">
               <div class="camera" *ngFor="let img of imagesWet; let i = index">
-                <ngx-ol-map [showFullscreen]="false" [mouseWheelZoom]="false"
-                            [showBaseMapGoogle]="false" [dragPan]="false" [zoom]="1" [minZoom]="1" [maxZoom]="18" [height]="'300px'"
-                            [mapId]="'map_images_wet' + i" [center]="center" [imgUrl]="img.url" [extent]="extent" [points]="points">
+                <ngx-ol-map
+                    [showFullscreen]="false"
+                    [mouseWheelZoom]="false"
+                    [showBaseMapGoogle]="false"
+                    [dragPan]="false"
+                    [zoom]="13"
+                    [minZoom]="1"
+                    [maxZoom]="18"
+                    [height]="'300px'"
+                    [mapId]="'map_images_wet' + i"
+                    [center]="center"
+                    period="WET"
+                    [year]="img.year"
+                    [showLandsat]="true">
                 </ngx-ol-map>
                 <div class="camera-name">
-                  <span>{{ img.date | date }}</span>
+                  <span>{{ img.year }}</span>
                   <span>{{'campaign_inspection_images_wet' | translate}}</span>
                 </div>
               </div>
@@ -117,10 +139,10 @@
 </div>
 <div class="row">
   <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
-    <nb-card [nbSpinner]="!isDataAvailable" size="tiny">
-      <nb-card-header>{{'campaign_inspection_point_modis_title' | translate}}</nb-card-header>
+    <nb-card [nbSpinner]="!isDataAvailableTimeSeries" size="tiny">
+      <nb-card-header>{{'campaign_inspection_point_landsat_title' | translate}}</nb-card-header>
       <nb-card-body class="classification">
-        <chart  *ngIf="isDataAvailable" type="line" [data]="dataChart" [options]="options"></chart>
+        <chart  *ngIf="isDataAvailableTimeSeries" type="line" [data]="dataChart" [options]="options"></chart>
       </nb-card-body>
     </nb-card>
   </div>

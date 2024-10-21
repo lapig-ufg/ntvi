@@ -36,6 +36,7 @@ import {DashboardModule} from '../dashboard/dashboard.module';
 import {ThemeModule} from '../../@theme/theme.module';
 import {MapsModule} from '../maps/maps.module';
 import {ModulesModule} from '../modules.module';
+import {NgxChartsModule} from "@swimlane/ngx-charts";
 
 @NgModule({
     declarations: [
@@ -81,6 +82,7 @@ import {ModulesModule} from '../modules.module';
         ThemeModule,
         MapsModule,
         ModulesModule,
+        NgxChartsModule,
     ],
 })
 export class CampaignModule {

@@ -16,14 +16,40 @@
       <p class="description">{{campaign.description}}</p>
     </nb-card-header>
     <nb-card-body>
-      <ngx-ol-map
-        [center]="[4.984761,34.337429]"
-        [zoom]="4"
-        [mouseWheelZoom]="false"
-        [height]="'250px'"
-        [mapId]="'map' + i"
-        [points]="handlePoints(campaign)"
-      ></ngx-ol-map>
+        <nb-flip-card>
+            <nb-card-front>
+                <nb-card>
+                    <nb-card-body>
+                        <ngx-ol-map
+                            [center]="[4.984761,34.337429]"
+                            [zoom]="4"
+                            [mouseWheelZoom]="false"
+                            [height]="'215px'"
+                            [mapId]="'map' + i"
+                            [points]="handlePoints(campaign)"
+                        ></ngx-ol-map>
+                    </nb-card-body>
+                </nb-card>
+            </nb-card-front>
+            <nb-card-back>
+                <nb-card>
+                    <nb-card-body>
+                        <ngx-charts-pie-chart
+                            [view]="[400, 200]"
+                            [scheme]="colorScheme"
+                            [results]="getPointsCacheData(campaign)"
+
+                            [labels]="true"
+                            [doughnut]="true"
+                            [explodeSlices]="true"
+                            [animations]="false"
+                            [legend]="false"
+                            [legendPosition]="'below'">
+                        </ngx-charts-pie-chart>
+                    </nb-card-body>
+                </nb-card>
+            </nb-card-back>
+        </nb-flip-card>
     </nb-card-body>
     <nb-card-footer >
       <nb-actions class="nb-actions" size="tiny">

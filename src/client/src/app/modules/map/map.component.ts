@@ -11,9 +11,7 @@ import {
 
 import {View, Feature, Map} from 'ol';
 import {defaults as defaultInteractions} from 'ol/interaction';
-import {boundingExtent} from 'ol/extent';
 import {Coordinate} from 'ol/coordinate';
-import {toLonLat, transformExtent} from 'ol/proj';
 import {defaults as DefaultControls} from 'ol/control';
 import * as proj4x from 'proj4';
 
@@ -21,20 +19,16 @@ const proj4 = (proj4x as any).default;
 import VectorLayer from 'ol/layer/Vector';
 import Projection from 'ol/proj/Projection';
 import {register} from 'ol/proj/proj4';
-import {get as GetProjection} from 'ol/proj';
-import {Extent} from 'ol/extent';
+import {transform, fromLonLat, get as GetProjection} from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
-import {Circle, Style} from 'ol/style';
+import {Circle, Icon, Style} from 'ol/style';
 import OlTileLayer from 'ol/layer/Tile';
 import OlXYZ from 'ol/source/XYZ';
 import Fill from 'ol/style/Fill';
-import {Point as OPoint} from 'ol/geom';
+import {Point, Point as OPoint} from 'ol/geom';
 import FullScreen from 'ol/control/FullScreen';
-import ImageLayer from 'ol/layer/Image';
-import Static from 'ol/source/ImageStatic';
-import XYZ from 'ol/source/XYZ';
 import TileLayer from 'ol/layer/Tile';
-
+import {cross} from './icon';
 @Component({
     selector: 'ngx-ol-map',
     templateUrl: './map.component.html',
@@ -43,7 +37,7 @@ import TileLayer from 'ol/layer/Tile';
 })
 export class MapComponent implements AfterViewInit {
 
-    @Input() center: Coordinate;
+    @Input() center: Coordinate = [0, 0];
     @Input() zoom = 3 as number;
     @Input() minZoom = 4 as number;
     @Input() maxZoom = 18 as number;
@@ -54,9 +48,11 @@ export class MapComponent implements AfterViewInit {
     @Input() showBaseMapsEsri = false as boolean;
     @Input() showFullscreen = true as boolean;
     @Input() dragPan = true as boolean;
-    @Input() extent: Extent;
+    @Input() extent = [-304.038676, -74.719954, 314.008199, 85.717737] as any;
     @Input() mouseWheelZoom = false as boolean;
-    @Input() imgUrl = null as string;
+    @Input() period: 'WET' | 'DRY'; // Novo input para definir o período
+    @Input() year: number; // Novo input para definir o ano
+    @Input() showLandsat = false as boolean ; // Flag para exibir ou não a camada Landsat
 
     view: View;
     projection: Projection;
@@ -69,8 +65,7 @@ export class MapComponent implements AfterViewInit {
     constructor(
         private zone: NgZone,
         private cd: ChangeDetectorRef,
-    ) {
-    }
+    ) {}
 
     ngAfterViewInit(): void {
         if (!this.Map) {
@@ -80,53 +75,28 @@ export class MapComponent implements AfterViewInit {
     }
 
     private initMap(): void {
-        this.ext = [-304.038676, -74.719954, 314.008199, 85.717737];
-
-        if (this.extent && this.extent.hasOwnProperty('length')) {
-            if (this.extent.length > 0) {
-                this.ext = this.extent;
-            }
-        }
-
-        const controls = [];
-        const layers = [];
+        // Carregar projeção EPSG:4326
         proj4.defs([
-            [
-                'EPSG:4326',
-                '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
-            [
-                'EPSG:4269',
-                '+title=NAD83 (long/lat) +proj=longlat +a=6378137.0 +b=6356752.31414036 +ellps=GRS80 +datum=NAD83 +units=degrees',
-            ],
+            ['EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'],
         ]);
 
         register(proj4);
         this.projection = GetProjection('EPSG:4326');
-        this.projection.setExtent(this.ext);
+        this.projection.setExtent(this.extent);
+
         this.view = new View({
             center: this.center,
             zoom: this.zoom,
             maxZoom: this.maxZoom,
             minZoom: this.minZoom,
-            resolution: 2,
-            maxResolution: 2,
             projection: this.projection,
         });
-        const baseMapGoogle = new OlTileLayer({
-            source: new OlXYZ({
-                url: 'https://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-            }),
-        });
-        const baseMapsEsri = new TileLayer({
-            source: new XYZ({
-                url:
-                    'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            }),
-        });
 
+         // Cria as camadas dinamicamente
+
+        const controls = [];
         if (this.showFullscreen) controls.push(new FullScreen());
-        if (this.showBaseMapGoogle) layers.push(baseMapGoogle);
-        if (this.showBaseMapsEsri) layers.push(baseMapsEsri);
+
         this.Map = new Map({
             interactions: defaultInteractions({
                 altShiftDragRotate: false,
@@ -134,70 +104,104 @@ export class MapComponent implements AfterViewInit {
                 dragPan: this.dragPan,
                 mouseWheelZoom: this.mouseWheelZoom,
             }),
-            layers: layers,
             target: this.mapId,
             view: this.view,
             controls: DefaultControls().extend(controls),
         });
-        if (this.imgUrl) {
-            this.addImage();
+        const layers = this.createLayers();
+        if (Array.isArray(layers) && layers.length > 0) {
+            layers.forEach(layer =>  this.Map.addLayer(layer));
         }
-        if (this.hasVales(this.points)) {
+        if (this.hasValues(this.points)) {
             this.addPoints();
         }
     }
 
-    hasVales(array) {
-        let values = 0;
-        for (const item of array) {
-            values++;
+    private createLayers(): TileLayer[] {
+        const layers = [];
+
+        // Carregar a camada Landsat apenas se showLandsat for true
+        if (this.showLandsat) {
+            const landsatLayerUrl = `https://tm{1-5}.lapig.iesa.ufg.br/api/layers/landsat/{x}/{y}/{z}?period=${this.period}&year=${this.year}`;
+
+            // Adiciona a camada Landsat dinâmica
+            const landsatLayer = new TileLayer({
+                source: new OlXYZ({
+                    url: landsatLayerUrl,
+                    attributions: `Landsat - ${this.year} (${this.period})`,
+                    attributionsCollapsible: false,
+                }),
+            });
+            layers.push(landsatLayer);
+            this.addMarker(this.center[1], this.center[0], this.Map);
         }
-        return (values > 0 ? true : false);
+
+        if (this.showBaseMapGoogle) {
+            layers.push(new OlTileLayer({
+                source: new OlXYZ({
+                    url: 'https://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                }),
+            }));
+        }
+
+        if (this.showBaseMapsEsri) {
+            layers.push(new TileLayer({
+                source: new OlXYZ({
+                    url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                }),
+            }));
+        }
+
+        return layers;
     }
 
-    addImage() {
-        const projection = new Projection({
-            code: 'EPSG:4326',
-            units: 'pixels',
-            extent: this.ext,
-        });
-        const layerImage = new ImageLayer({
-            source: new Static({
-                url: this.imgUrl,
-                projection: projection,
-                imageExtent: this.ext,
-            }),
-        });
-        this.Map.addLayer(layerImage);
+    hasValues(array: any[]): boolean {
+        return array.length > 0;
     }
 
-    addPoints() {
-        const self = this;
-        let source = null as VectorSource;
-        self.features = [];
-        this.points.forEach(function (item) {
-            self.features.push(new Feature(new OPoint(item)));
+    addPoints(): void {
+        const source = new VectorSource({
+            features: this.points.map(point => new Feature(new OPoint(point))),
         });
-        source = new VectorSource({
-            features: self.features,
-        });
+
         const style = new Style({
             image: new Circle({
                 radius: 2,
-                fill: new Fill({color: '#b30059'}),
+                fill: new Fill({ color: '#b30059' }),
             }),
         });
+
         this.layerPoints = new VectorLayer({
             source: source,
             style: style,
         });
 
         const ext = source.getExtent();
-        this.Map.getView().fit(ext, {duration: 1500});
+        this.Map.getView().fit(ext, { duration: 1500 });
         this.Map.addLayer(this.layerPoints);
-        // if (this.points.length > 1) {
-        //     const ext = source.getExtent();
-        //     this.Map.getView().fit(ext, {duration: 1500});
-        // }
+    }
+    private addMarker(lat: number, lon: number, map: Map): void {
+        const projectedCoordinate = transform([lon, lat], 'EPSG:3857', 'EPSG:4326');
+        const iconFeature = new Feature({
+            geometry: new Point(fromLonLat([projectedCoordinate[0], projectedCoordinate[1]])),
+        });
+        const iconStyle = new Style({
+            image: new Icon({
+                anchor: [0.5, 0.5],
+                src: cross,
+                scale: 1,
+            }),
+        });
+
+        iconFeature.setStyle(iconStyle);
+        const vectorSource = new VectorSource({
+            features: [iconFeature],
+        });
+        const vectorLayer = new VectorLayer({
+            source: vectorSource,
+            visible: true,
+        });
+        vectorLayer.setZIndex(10000);
+        map.addLayer(vectorLayer);
     }
 }

@@ -1,6 +1,5 @@
-import { Landsat, Planet, Sentinel } from "../libs";
 import Queue from '../libs/Queue';
-
+const { PrismaClient } = require('@prisma/client')
 export default {
     key: 'InitCache',
     options: {
@@ -12,16 +11,12 @@ export default {
         try {
             job.progress(10);
 
-            const landsat    = new Landsat(data);
-            const planet     = new Planet(data);
-            const sentinel   = new Sentinel(data);
-            const promises   = Promise.all([landsat.publishLayers(), planet.publishLayers(), sentinel.publishLayers()])
+            const promises   = Promise.all([])
 
             job.progress(60);
 
             promises.then(async result => {
                 job.progress(100);
-                await Queue.add('SearchMosaicsDates', data )
                 done(null, result);
             }).catch(error => {
                 done(new Error(error));

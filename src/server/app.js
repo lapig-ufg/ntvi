@@ -38,12 +38,12 @@ app.middleware.repository.init( function () {
 	const middlewareSession = session({
 		store: store,
 		secret: process.env.SECRET,
-		resave: false,
+		resave: true,
 		saveUninitialized: true,
 		key: 'sid',
 		cookie: {
 			httpOnly: false,
-			secure: true,
+			secure: process.env.NODE_ENV === 'prod',
 			maxAge: 1000 * 60 * 60 * 24
 		}
 	})

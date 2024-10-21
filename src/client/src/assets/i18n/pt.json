@@ -213,6 +213,7 @@
   "campaign_inspection_images_landsat_dry": "LANDSAT Período Seco",
   "campaign_inspection_images_landsat_wet": "LANDSAT Período Chuvoso",
   "campaign_inspection_point_modis_title": "MODIS NDVI Series",
+  "campaign_inspection_point_landsat_title": "Landsat Series Temporais",
   "campaign_inspection_msg_not_ready": "A campanha não está pronta para inspecionar!",
   "campaign_inspection_msg_not_has_permission": "Você não tem permissão para inspecionar esta campanha!",
   "campaign_result_tab_users_title": "Inspeções por Usuários",

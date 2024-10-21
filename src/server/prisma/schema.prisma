@@ -19,12 +19,13 @@ model Organization {
 }
 
 model UseClass {
-  id          Int        @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
   description String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   campaigns   Campaign[]
+  inspections Inspection[]
 }
 
 model Satellite {
@@ -49,14 +50,22 @@ model Composition {
 }
 
 model Point {
-  id         Int       @id @default(autoincrement())
-  latitude   String?
-  longitude  String?
-  info       String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  campaignId Int?
-  campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  id          Int          @id @default(autoincrement())
+  latitude    Decimal?     @db.Decimal(9, 6)
+  longitude   Decimal?     @db.Decimal(9, 6)
+  info        String
+  cacheStatus CacheStatus  @default(PENDING)
+  status      PointStatus  @default(CREATED)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  campaignId  Int?
+  campaign    Campaign?    @relation(fields: [campaignId], references: [id])
+  inspections Inspection[]
+  biome       String?
+  uf          String?
+  county      String?
+  countyCode  String?
+  dateImport  DateTime?
 }
 
 model Image {
@@ -124,6 +133,19 @@ model User {
   organizationId   Int?
   organization     Organization?      @relation(fields: [organizationId], references: [id])
   UsersOnCampaigns UsersOnCampaigns[]
+  inspections      Inspection[]
+}
+
+model Inspection {
+  id          Int        @id @default(autoincrement())
+  date        DateTime
+  typePeriod  TypePeriod @default(YEARLY)
+  useClassId  Int
+  useClass    UseClass   @relation(fields: [useClassId], references: [id])
+  inspectorId Int
+  pointId     Int
+  inspector   User       @relation(fields: [inspectorId], references: [id])
+  point       Point      @relation(fields: [pointId], references: [id])
 }
 
 enum TypeUser {
@@ -159,4 +181,18 @@ enum TypeTheme {
   cosmic
   corporate
   dark
+}
+
+enum CacheStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+enum PointStatus {
+  CREATED
+  INSPECTING
+  DONE
+  FAILED
 }

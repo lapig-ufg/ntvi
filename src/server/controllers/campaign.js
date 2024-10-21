@@ -228,7 +228,7 @@ module.exports = function (app) {
 
     Controller.updatePointsForm = async function (request, response) {
         const { id } = request.params
-        const { points } = request.body
+        let { points } = request.body
         let { lang } = request.headers;
         const texts = language.getLang(lang);
 
@@ -245,7 +245,11 @@ module.exports = function (app) {
                 delete objPoint.updatedAt
                 delete objPoint.createdAt
             }
-
+            points = points.map((point) => {
+                point.latitude = Number(point.latitude);
+                point.longitude = Number(point.longitude);
+                return point;
+            })
             arrayQueries.push(prisma.campaign.update({
                 where: { id: parseInt(id) },
                 data: {
@@ -459,9 +463,10 @@ module.exports = function (app) {
     }
 
     Controller.getCampaignsByUser = async function (request, response) {
-        const { id } = request.params
+        const { id } = request.params;
         const { lang } = request.headers;
         const texts = language.getLang(lang);
+
         try {
             const campaigns = await prisma.campaign.findMany({
                 where: {
@@ -472,21 +477,65 @@ module.exports = function (app) {
                     }
                 },
                 include: {
-                    points: true,
-                    images: true,
+                    points: {
+                        select: {
+                            id: true,
+                            cacheStatus: true,  // Incluir o cacheStatus para monitorar o progresso do cache
+                            latitude: true,
+                            longitude: true,
+                        }
+                    },
+                    images: {
+                        select: {
+                            id: true,
+                            url: true,  // Inclua as propriedades das imagens que você precisa
+                        }
+                    },
                     classes: true,
                     compositions: true,
                     organization: true,
-                    UsersOnCampaigns: true,
+                    UsersOnCampaigns: {
+                        select: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            },
+                            typeUserInCampaign: true
+                        }
+                    }
                 }
-
             });
-            response.json(campaigns)
+
+            // Adicionar a propriedade pointsCacheStatus com os dados para o gráfico
+            const campaignsWithCacheStatus = campaigns.map(campaign => {
+                const totalPoints = campaign.points.length;
+                const processingPoints = campaign.points.filter(point => point.cacheStatus === 'PROCESSING').length;
+                const cachedPoints = campaign.points.filter(point => point.cacheStatus === 'SUCCESS').length;
+                const failedPoints = campaign.points.filter(point => point.cacheStatus === 'FAILED').length;
+                const pendingPoints = campaign.points.filter(point => point.cacheStatus === 'PENDING').length;
+
+                return {
+                    ...campaign,  // Mantém todas as propriedades da campanha original
+                    pointsCacheStatus: {
+                        totalPoints,
+                        cachedPoints,
+                        processingPoints,
+                        failedPoints,
+                        pendingPoints,
+                        percentageCached: totalPoints > 0 ? ((cachedPoints / totalPoints) * 100).toFixed(2) : "0",  // Percentual de cache concluído
+                    }
+                };
+            });
+
+            response.json(campaignsWithCacheStatus);
+
         } catch (e) {
-            console.error(e)
+            console.error(e);
             response.status(500).json({ error: true, message: texts.login_msg_erro + e + '.' });
         }
-    }
+    };
 
     Controller.getPublicCampaigns = async function (request, response) {
         const { lang } = request.headers;
@@ -564,10 +613,18 @@ module.exports = function (app) {
                 data: {
                     status: status
                 },
-                select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
+                select: { id: true, name:true, initialDate: true, finalDate:true, compositions: true, country: true, points: true, UsersOnCampaigns: { select : {typeUserInCampaign:true, user: {select:{geeKey:true}}}} }
             });
 
-            await Queue.add('InitCache', campaign, {removeOnComplete: true })
+            const { initialDate, finalDate, points } = campaign;
+
+            points.forEach((point, index) => {
+                return Queue.add('PointsCache', {
+                    point,
+                    initialDate,
+                    finalDate,
+                }, { delay: index * 1000 });
+            });
 
             response.status(200).json({status:200, message: 'success' });
         } catch (e) {
