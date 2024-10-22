@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
     <div class="header-point">
-      <h6 class="title-point" *ngIf="isDataAvailable"> {{'campaign_inspection_point_title' | translate:{current: info.id, total: info.total} }}</h6>
+      <h6 class="title-point" *ngIf="isDataAvailable"> {{'campaign_inspection_point_title' | translate:{current: point.id, total: point.total} }}</h6>
       <span class="mt-1 mb-1 location">{{'campaign_inspection_location_title' | translate}}</span>
     </div>
 <!--    <ngx-ol-map *ngIf="isDataAvailable" [showBaseMapGoogle]="true" [showBaseMapsEsri]="false" [height]="'140px'"-->
@@ -14,11 +14,11 @@
       <div class="">
         <label for="municipality" class="label">{{'campaign_inspection_field_municipality' | translate}}</label>
         <input id="municipality" disabled fieldSize="tiny" type="text"
-          [value]="info.info | uppercase" nbInput fullWidth>
+          [value]="point.info | uppercase" nbInput fullWidth>
       </div>
       <div class="">
         <label for="coordinate" class="label">{{'campaign_inspection_field_coordinate' | translate}}</label>
-        <input id="coordinate" disabled [value]="info.latitude + ' ' + info.longitude" fieldSize="tiny" type="text"
+        <input id="coordinate" disabled [value]="point.latitude + ' ' + point.longitude" fieldSize="tiny" type="text"
           nbInput fullWidth>
       </div>
     </div>
@@ -29,13 +29,13 @@
           <button type="button" size="medium" status="danger" nbButton [disabled]="answers.length == 1"  (click)="formSubtraction()">
             <nb-icon icon="trash-2-outline"></nb-icon>
           </button>
-          <button type="button" size="medium" status="success" nbButton  [disabled]="answers[answers.length - 1].finalYear != login.campaign.finalYear" (click)="submitForm()">
+          <button type="button" size="medium" status="success" nbButton  [disabled]="answers[answers.length - 1].finalYear != finalYear" (click)="submitForm()">
             <nb-icon icon="save-outline"></nb-icon>
           </button>
         </div>
         <nb-card size="tiny" *ngFor="let answer of answers; let i = index">
           <nb-card-body class="classification">
-            <div class="row">
+            <div class="row" *ngIf="answer">
               <div class="col-xxxl-6 col-xxl-6 col-lg-6 col-md-6">
                 <label class="label">{{'campaign_inspection_field_from' | translate}}</label>
                 <nb-select placeholder="" fullWidth filled size="small" [(selected)]="answer.initialYear" [disabled]="answers.length >= (i + 1)">
@@ -52,8 +52,8 @@
             <div class="row">
               <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
                 <label class="label ">{{'campaign_inspection_field_class' | translate}}</label>
-                <nb-select fullWidth filled size="small" [(selected)]="answer.landUse" (selectedChange)="formPlus()">
-                  <nb-option *ngFor="let class of login.campaign.landUse; let i = index" [value]="class">{{class}}</nb-option>
+                <nb-select fullWidth filled size="small" [(selected)]="answer.class" (selectedChange)="formPlus()">
+                  <nb-option *ngFor="let class of campaign.classes; let i = index" [value]="class">{{class.name}}</nb-option>
                 </nb-select>
               </div>
             </div>
@@ -141,8 +141,10 @@
   <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
     <nb-card [nbSpinner]="!isDataAvailableTimeSeries" size="tiny">
       <nb-card-header>{{'campaign_inspection_point_landsat_title' | translate}}</nb-card-header>
-      <nb-card-body class="classification">
-        <chart  *ngIf="isDataAvailableTimeSeries" type="line" [data]="dataChart" [options]="options"></chart>
+      <nb-card-body>
+          <div class="classification">
+              <chart  *ngIf="isDataAvailableTimeSeries" [data]="dataChart" [options]="options" ></chart>
+          </div>
       </nb-card-body>
     </nb-card>
   </div>

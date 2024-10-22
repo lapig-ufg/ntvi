@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {Campaign} from "../models/campaign";
 
 @Injectable({
     providedIn: 'root',
@@ -34,9 +33,9 @@ export class PointService {
         );
     }
 
-    point(campaignId, pointId): Observable<any> {
+    point(pointId): Observable<any> {
         return this.httpClient.get<any>(
-            this.apiURL + '/points/' + campaignId + '/' + pointId).pipe(
+            this.apiURL + '/point/' + pointId).pipe(
             catchError(this.errorHandler),
         );
     }
@@ -76,6 +75,16 @@ export class PointService {
                 catchError(this.errorHandler),
             );
     }
+    saveInspections(pointId: number, inspections: any[]): Observable<any> {
+        const body = { pointId, inspections };
+        return this.httpClient.post<any>(
+            `${this.apiURL}/points/save-inspections`,
+            JSON.stringify(body),
+            this.httpOptions,
+        ).pipe(
+            catchError(this.errorHandler),
+        );
+    }
 
     getPointResult(params): Observable<any> {
         return this.httpClient.post<any>(this.apiURL + '/points/results',
@@ -104,13 +113,36 @@ export class PointService {
             );
     }
 
-    errorHandler(error) {
-        let errorMessage = '';
+    errorHandler(error: any) {
+        let mensagemDeErro = '';
+
+        // Tratamento de erros do lado do cliente ou erros de rede
         if (error.error instanceof ErrorEvent) {
-            errorMessage = error.error.message;
+            mensagemDeErro = `Erro no cliente: ${error.error.message}`;
         } else {
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+            mensagemDeErro = `Código do erro: ${error.status}\nMensagem: ${error.message || 'Ocorreu um erro inesperado'}`;
+
+            // Verifica códigos HTTP específicos e personaliza a mensagem
+            switch (error.status) {
+                case 400:
+                    mensagemDeErro = `Requisição inválida: ${error.message}`;
+                    break;
+                case 401:
+                    mensagemDeErro = `Não autorizado: Verifique suas credenciais.`;
+                    break;
+                case 403:
+                    mensagemDeErro = `Proibido: Você não tem permissão para realizar esta ação.`;
+                    break;
+                case 404:
+                    mensagemDeErro = `Não encontrado: ${error.error.message}`;
+                    break;
+                case 500:
+                    mensagemDeErro = `Erro interno no servidor: Tente novamente mais tarde.`;
+                    break;
+                default:
+                    mensagemDeErro = `Código do erro: ${error.status}\nMensagem: ${error.message || 'Ocorreu um erro desconhecido'}`;
+            }
         }
-        return throwError(errorMessage);
+        return throwError(mensagemDeErro);
     }
 }

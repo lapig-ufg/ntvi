@@ -223,7 +223,7 @@
   "campaign_result_date_format": "dd/MM/yyyy",
   "campaign_result_chart_date_format": "DD/MM/YYYY",
   "campaign_result_msg_not_start_inspect": "A campanha não começou a ser inspecionada!",
-  "campaign_result_table_points_column_user": "Inspetor",
+  "campaign_result_table_points_column_user": "Interprete",
   "campaign_result_table_points_column_duration": "Duração da inspeção do ponto",
   "campaign_result_table_points_column_meantime": "Tempo médio de duração de inspeção de todos os pontos",
   "campaign_result_table_users_column_year": "Ano",

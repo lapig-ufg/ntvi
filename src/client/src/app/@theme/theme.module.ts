@@ -17,7 +17,7 @@ import {
     NbTooltipModule,
     NbCheckboxModule,
     NbCardModule,
-    NbTabsetModule, NbSpinnerModule,
+    NbTabsetModule, NbSpinnerModule, NbWindowModule,
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NbSecurityModule} from '@nebular/security';
@@ -29,7 +29,7 @@ import {
     TinyMCEComponent,
     DialogComponent,
     StatusCardComponent,
-    FiltersComponent,
+    FiltersFormComponent,
     BestImagesComponent,
     MapLeafletComponent,
 } from './components';
@@ -51,6 +51,7 @@ import {COSMIC_THEME} from './styles/theme.cosmic';
 import {CORPORATE_THEME} from './styles/theme.corporate';
 import {DARK_THEME} from './styles/theme.dark';
 import {TranslateModule} from '@ngx-translate/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 const NB_MODULES = [
     NbLayoutModule,
@@ -81,7 +82,7 @@ const COMPONENTS = [
     TwoColumnsLayoutComponent,
     DialogComponent,
     StatusCardComponent,
-    FiltersComponent,
+    FiltersFormComponent,
     BestImagesComponent,
     MapLeafletComponent,
 ];
@@ -95,7 +96,14 @@ const PIPES = [
 ];
 
 @NgModule({
-    imports: [CommonModule, ...NB_MODULES, NbCardModule, NbTabsetModule, NbSpinnerModule],
+    imports: [CommonModule,
+        ...NB_MODULES,
+        NbCardModule,
+        NbTabsetModule,
+        NbSpinnerModule,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
     entryComponents: [DialogComponent],
     exports: [CommonModule, ...PIPES, ...COMPONENTS],
     declarations: [...COMPONENTS, ...PIPES],

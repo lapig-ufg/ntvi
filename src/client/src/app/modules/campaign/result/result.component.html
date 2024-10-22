@@ -16,7 +16,7 @@
     <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
         <nb-tabset fullWidth>
             <nb-tab *ngIf="usersInspectionsTable.data.length > 0" tabTitle="{{'campaign_result_tab_users_title' | translate}}" tabIcon="person-outline" responsive>
-                <nb-card [nbSpinner]="!isDataTableAvailable" size="small">
+                <nb-card [nbSpinner]="!isDataTableAvailable" size="tiny">
                     <nb-card-header>{{'campaign_result_table_users_title' | translate}}</nb-card-header>
                     <nb-card-body class="classification">
                         <ng2-smart-table [settings]="usersInspectionsTable.settings"
@@ -60,34 +60,34 @@
             </div>
             <div class="">
                 <label for="municipality" class="label">{{'campaign_inspection_field_municipality' | translate}}</label>
-                <input id="municipality" disabled fieldSize="tiny" type="text" [value]="point.county  + ' - ' + point.uf | uppercase" nbInput fullWidth>
+                <input id="municipality" disabled fieldSize="tiny" type="text" [value]="point.info | uppercase" nbInput fullWidth>
             </div>
             <div class="">
                 <label for="coordinate" class="label">{{'campaign_inspection_field_coordinate' | translate}}</label>
-                <input id="coordinate" disabled [value]="point.lat + ' ' + point.lon" fieldSize="tiny" type="text" nbInput fullWidth>
+                <input id="coordinate" disabled [value]="point.latitude + ' ' + point.longitude" fieldSize="tiny" type="text" nbInput fullWidth>
             </div>
         </div>
-        <nb-toggle *ngIf="isDataAvailable" class="mt-3" fullWidth status="success" labelPosition="end" [(checked)]="showTimelapse">
-           Exibir Time-lapses
-        </nb-toggle>
-        <h6 class="title-point" *ngIf="showTimelapse && isDataAvailable">Time-lapses</h6>
-        <nb-tabset *ngIf="showTimelapse && isDataAvailable" >
-            <nb-tab tabTitle="Landsat" responsive *ngIf="la_timelapse">
-                <nb-card >
-                  <img class="timelapses" alt="la_timelapse" src="{{la_timelapse}}">
-                </nb-card>
-            </nb-tab>
-            <nb-tab tabTitle="Planet" responsive *ngIf="pl_timelapse">
-                <nb-card >
-                    <img class="timelapses" alt="pl_timelapse" src="{{pl_timelapse}}">
-                </nb-card>
-            </nb-tab>
-            <nb-tab tabTitle="Sentinel" responsive *ngIf="s2_timelapse">
-                <nb-card>
-                    <img class="timelapses" alt="s2_timelapse" src="{{s2_timelapse}}">
-                </nb-card>
-            </nb-tab>
-        </nb-tabset>
+<!--        <nb-toggle *ngIf="isDataAvailable" class="mt-3" fullWidth status="success" labelPosition="end" [(checked)]="showTimelapse">-->
+<!--           Exibir Time-lapses-->
+<!--        </nb-toggle>-->
+<!--        <h6 class="title-point" *ngIf="showTimelapse && isDataAvailable">Time-lapses</h6>-->
+<!--        <nb-tabset *ngIf="showTimelapse && isDataAvailable" >-->
+<!--            <nb-tab tabTitle="Landsat" responsive *ngIf="la_timelapse">-->
+<!--                <nb-card >-->
+<!--                  <img class="timelapses" alt="la_timelapse" src="{{la_timelapse}}">-->
+<!--                </nb-card>-->
+<!--            </nb-tab>-->
+<!--            <nb-tab tabTitle="Planet" responsive *ngIf="pl_timelapse">-->
+<!--                <nb-card >-->
+<!--                    <img class="timelapses" alt="pl_timelapse" src="{{pl_timelapse}}">-->
+<!--                </nb-card>-->
+<!--            </nb-tab>-->
+<!--            <nb-tab tabTitle="Sentinel" responsive *ngIf="s2_timelapse">-->
+<!--                <nb-card>-->
+<!--                    <img class="timelapses" alt="s2_timelapse" src="{{s2_timelapse}}">-->
+<!--                </nb-card>-->
+<!--            </nb-tab>-->
+<!--        </nb-tabset>-->
     </div>
     <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
         <nb-card [nbSpinner]="!isDataAvailable" nbSpinnerStatus="success" size="giant">
@@ -98,10 +98,24 @@
                 <div *ngIf="image === 'DRY'" class="grid-container">
                     <div class="grid-view" *ngIf="isDataAvailable">
                         <div class="camera" *ngFor="let img of imagesDry; let i = index">
-                            <ngx-map-leaflet *ngIf="isDataAvailable" [lon]="point.lon"  [lat]="point.lat" [bounds]="point.bounds" [zoom]="12.7" [tmsUrl]="img.url"></ngx-map-leaflet>
+                            <ngx-ol-map
+                                [showFullscreen]="false"
+                                [mouseWheelZoom]="false"
+                                [showBaseMapGoogle]="false"
+                                [dragPan]="false"
+                                [zoom]="13"
+                                [minZoom]="1"
+                                [maxZoom]="18"
+                                [height]="'300px'"
+                                [mapId]="'map_images_dry' + i"
+                                [center]="center"
+                                period="DRY"
+                                [year]="img.year"
+                                [showLandsat]="true">
+                            </ngx-ol-map>
                             <div class="camera-name">
-                                <span>{{formatDate(img.date)}}</span>
-                                <nb-icon (click)="showBestImages(img.hasMonthlyImages)" *ngIf="img.hasMonthlyImages.length > 0" nbTooltip="Imagens Mensais Planet e Sentinel" nbTooltipStatus="primary" class="btn-images" icon="image-outline" pack="eva"></nb-icon>
+                                <span>{{ img.year }}</span>
+                                <nb-icon (click)="showBestImages(img)" *ngIf="img.hasMonthlyImages" nbTooltip="Imagens Mensais Planet e Sentinel" nbTooltipStatus="primary" class="btn-images" icon="image-outline" pack="eva"></nb-icon>
                                 <span>{{'campaign_inspection_images_dry' | translate}}</span>
                             </div>
                         </div>
@@ -110,10 +124,24 @@
                 <div *ngIf="image === 'WET'" class="grid-container">
                     <div class="grid-view" *ngIf="isDataAvailable">
                         <div class="camera" *ngFor="let img of imagesWet; let i = index">
-                            <ngx-map-leaflet *ngIf="isDataAvailable"  [lon]="point.lon" [lat]="point.lat" [bounds]="point.bounds" [zoom]="12.7" [tmsUrl]="img.url"></ngx-map-leaflet>
+                            <ngx-ol-map
+                                [showFullscreen]="false"
+                                [mouseWheelZoom]="false"
+                                [showBaseMapGoogle]="false"
+                                [dragPan]="false"
+                                [zoom]="13"
+                                [minZoom]="1"
+                                [maxZoom]="18"
+                                [height]="'300px'"
+                                [mapId]="'map_images_wet' + i"
+                                [center]="center"
+                                period="WET"
+                                [year]="img.year"
+                                [showLandsat]="true">
+                            </ngx-ol-map>
                             <div class="camera-name">
-                                <span>{{formatDate(img.date)}}</span>
-                                <nb-icon (click)="showBestImages(img.hasMonthlyImages)" *ngIf="img.hasMonthlyImages.length > 0" nbTooltip="Imagens Mensais Planet e Sentinel" nbTooltipStatus="primary" class="btn-images" icon="image-outline" pack="eva"></nb-icon>
+                                <span>{{ img.year }}</span>
+                                <nb-icon (click)="showBestImages(img)" *ngIf="img.hasMonthlyImages" nbTooltip="Imagens Mensais Planet e Sentinel" nbTooltipStatus="primary" class="btn-images" icon="image-outline" pack="eva"></nb-icon>
                                 <span>{{'campaign_inspection_images_wet' | translate}}</span>
                             </div>
                         </div>
@@ -141,9 +169,21 @@
                         <div class="grid-container">
                             <div class="grid-view">
                                 <div class="camera" *ngFor="let img of imagesPlanet; let i = index">
-                                    <ngx-map-leaflet [type]="'best'" [lon]="img.pto.lon" [lat]="img.pto.lat" [bounds]="img.pto.bounds" [zoom]="13" [tmsUrl]="img.url"></ngx-map-leaflet>
+                                    <ngx-ol-map
+                                        [showFullscreen]="false"
+                                        [mouseWheelZoom]="false"
+                                        [showBaseMapGoogle]="false"
+                                        [dragPan]="false"
+                                        [zoom]="5"
+                                        [minZoom]="1"
+                                        [maxZoom]="18"
+                                        [height]="'300px'"
+                                        [mapId]="img.id"
+                                        [center]="center"
+                                        [layerURL]="img._links.tiles">
+                                    </ngx-ol-map>
                                     <div class="camera-name">
-                                        <span>{{formatDate(img.date)}}</span>
+                                        <span>{{formatDate(img.first_acquired)}} - {{formatDate(img.last_acquired)}}</span>
                                         <span>PLANET</span>
                                     </div>
                                 </div>
@@ -154,9 +194,21 @@
                         <div class="grid-container">
                             <div class="grid-view">
                                 <div class="camera" *ngFor="let img of imagesSentinel; let i = index">
-                                    <ngx-map-leaflet [type]="'best'" [lon]="img.pto.lon" [lat]="img.pto.lat" [bounds]="img.pto.bounds" [zoom]="12.6" [tmsUrl]="img.url"></ngx-map-leaflet>
+                                    <ngx-ol-map
+                                        [showFullscreen]="false"
+                                        [mouseWheelZoom]="false"
+                                        [showBaseMapGoogle]="false"
+                                        [dragPan]="false"
+                                        [zoom]="5"
+                                        [minZoom]="1"
+                                        [maxZoom]="18"
+                                        [height]="'300px'"
+                                        [mapId]="'map_sentinel_' + img.month + '_' + img.year"
+                                        [center]="center"
+                                        [layerURL]="img.url">
+                                    </ngx-ol-map>
                                     <div class="camera-name">
-                                        <span>{{formatDate(img.date)}}</span>
+                                        <span>{{img.month}}/{{img.year}}</span>
                                         <span>SENTINEL</span>
                                     </div>
                                 </div>
@@ -169,15 +221,16 @@
     </div>
 </div>
 
-<!--<div class="row">-->
-<!--    <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">-->
-<!--        <nb-card [nbSpinner]="!isModisAvailable" size="tiny">-->
-<!--            <nb-card-header>{{'campaign_inspection_point_modis_title' | translate}}</nb-card-header>-->
-<!--            <nb-card-body class="classification">-->
-<!--                <chart type="{{modisChart.type}}" [data]="modisChart.data" [options]="modisChart.options"></chart>-->
-<!--            </nb-card-body>-->
-<!--        </nb-card>-->
-<!--    </div>-->
-<!--</div>-->
-
+<div class="row">
+    <div class="col-xxxl-12 col-xxl-12 col-lg-12 col-md-12">
+        <nb-card [nbSpinner]="!isDataAvailableTimeSeries" size="tiny">
+            <nb-card-header>{{'campaign_inspection_point_landsat_title' | translate}}</nb-card-header>
+            <nb-card-body>
+                <div class="classification">
+                    <chart  *ngIf="isDataAvailableTimeSeries" [data]="dataChart" [options]="options" ></chart>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>
 

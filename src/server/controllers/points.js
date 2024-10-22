@@ -1,5 +1,6 @@
 const proj4 = require('proj4');
-import {Point, UsersOnCampaigns} from '@prisma/client';
+const moment = require('moment');
+const {PointStatus} = require("@prisma/client");
 module.exports = function (app) {
     let Points = {};
     const campaign = app.repository.collections.campaign;
@@ -282,16 +283,25 @@ module.exports = function (app) {
 
     Points.getPoint = async function (request, response) {
         try {
+            const { pointId } = request.params;
 
-            const { campaignId, pointId } = request.params;
-
-            const mos   = await mosaics.find({campaignId: parseInt(campaignId)}).toArray();
-            const point = await points.findOne({index: parseInt(pointId), campaignId: parseInt(campaignId)})
-            console.log(mos, point)
-            if (mos.length > 0 && point) {
-
-                point['bounds'] = getWindow(point);
-                point['mosaics'] = mos;
+            const point = await prisma.point.findUnique({
+                where: { id: parseInt(pointId) },
+                include: {
+                    inspections: {
+                        include: {
+                            useClass: true,
+                            inspector: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+             if (point) {
 
                 response.status(200).json(point);
                 response.end();
@@ -306,6 +316,7 @@ module.exports = function (app) {
             response.end();
         }
     }
+
     Points.getPoints = async function (request, response) {
         try {
 
@@ -570,7 +581,9 @@ module.exports = function (app) {
             const point = await prisma.point.findFirst({
                 where: {
                     campaignId: parseInt(campaignId),
-                    status: 'CREATED', // Verifique pontos que ainda não foram inspecionados
+                    status: {
+                        in: ['CREATED', 'INSPECTING'],
+                    },
                     inspections: {
                         none: {
                             inspectorId: parseInt(interpreterId),
@@ -621,6 +634,56 @@ module.exports = function (app) {
         } catch (error) {
             console.error("Erro ao buscar ponto para inspeção:", error);
             res.status(500).json({ message: "Erro interno ao buscar ponto para inspeção." });
+        }
+    };
+
+    Points.saveInspections = async function (req, res) {
+        try {
+            // Extract the point ID and inspections data from the request body
+            const { pointId, inspections } = req.body;
+
+            // Find the point in the database
+            const point = await prisma.point.findUnique({
+                where: { id: parseInt(pointId) },
+                include: {
+                    inspections: true // Include existing inspections
+                }
+            });
+
+            if (!point) {
+                return res.status(404).json({ message: "Point not found." });
+            }
+
+            // Update the point in the database with the new inspections using nested inputs
+            const updatedPoint = await prisma.point.update({
+                where: { id: point.id },
+                data: {
+                    status: PointStatus.DONE,
+                    inspections: {
+                        create: inspections.map(inspection => ({
+                            date: new Date(inspection.date), // Ensure date is in the correct format
+                            duration: inspection.duration ? Number(inspection.duration.toFixed(6)) : null, // Optional duration
+                            typePeriod: inspection.typePeriod || 'YEARLY', // Default to YEARLY if not provided
+                            useClass: {
+                                connect: {
+                                    id: inspection.useClassId // Connect by useClassId
+                                }
+                            },
+                            inspector: {
+                                connect: {
+                                    id: inspection.inspectorId // Connect by inspectorId
+                                }
+                            }
+                        }))
+                    }
+                }
+            });
+
+            // Return the updated point
+            res.status(200).json(updatedPoint);
+        } catch (error) {
+            console.error("Error saving inspections:", error);
+            res.status(500).json({ message: "Internal server error." });
         }
     };
 

@@ -4,7 +4,7 @@ import {Campaign} from '../models/campaign';
 import {Router, ActivatedRoute} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {NbWindowService} from '@nebular/theme';
-import { NbDialogService } from '@nebular/theme';
+import {NbDialogService} from '@nebular/theme';
 import {
     NbComponentSize,
     NbComponentStatus,
@@ -22,7 +22,10 @@ import {LocalDataSource} from 'ng2-smart-table';
 import {PointService} from '../service/point.service';
 import {TranslateService} from '@ngx-translate/core';
 import {NbIconLibraries} from '@nebular/theme';
-import {BestImagesComponent, DialogComponent, FiltersComponent} from '../../../@theme/components';
+import {result} from '../inspection/results';
+import {FilterService} from '../service/filter.service';
+import {FiltersFormComponent} from '../../../@theme/components';
+import {PlanetService} from '../service/planet.service';
 
 @Component({
     selector: 'ngx-result',
@@ -75,7 +78,15 @@ export class ResultComponent implements OnInit, OnDestroy {
     la_timelapse: string;
     pl_timelapse: string;
     s2_timelapse: string;
-
+    tmpLandsat: any;
+    dataChart: any;
+    options: any;
+    isDataAvailableTimeSeries = false as boolean;
+    initialYear: number;
+    finalYear: number;
+    filterSubscription: any;
+    planetMosaics: any[] = [];
+    sentinelCapabilities: any;
     constructor(
         private themeService: NbThemeService,
         private breakpointService: NbMediaBreakpointsService,
@@ -93,11 +104,21 @@ export class ResultComponent implements OnInit, OnDestroy {
         private iconLibraries: NbIconLibraries,
         private windowService: NbWindowService,
         private dialogService: NbDialogService,
+        private filterService: FilterService,
+        private planetService: PlanetService,
     ) {
         this.sidebarService.compact('menu-sidebar');
         this.iconLibraries.registerSvgPack('geo', {
             'point': '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" class="svg-inline--fa fa-map-marker-alt fa-w-12" role="img" viewBox="0 0 384 512"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
         });
+        const currentYear = new Date().getFullYear();
+        this.sentinelCapabilities = {
+            'name': 's2_harmonized',
+            'visparam': ['tvi-green', 'tvi-red', 'tvi-rgb'],
+            'period': ['WET', 'DRY', 'MONTH'],
+            'year': Array.from({length: currentYear - 2019 + 1}, (_, i) => 2019 + i),
+            'month': ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+        };
     }
 
     ngOnInit(): void {
@@ -109,6 +130,37 @@ export class ResultComponent implements OnInit, OnDestroy {
                 this.actionSize = width > breakpoints.md ? 'medium' : 'small';
             });
         this.isInspecting();
+        if (this.filterSubscription) {
+            this.filterSubscription.unsubscribe();
+        }
+        this.getPlanetMosaics();
+    }
+    getPlanetMosaics(): void {
+        this.planetService.getMosaics().subscribe(mosaics => {
+            if (mosaics && mosaics.length > 0) {
+                this.planetMosaics = mosaics.map(mosaic => ({
+                    ...mosaic,
+                    tiles: mosaic._links.tiles,
+                    firstAcquired: new Date(mosaic.first_acquired),
+                    lastAcquired: new Date(mosaic.last_acquired),
+                }));
+            }
+            this.getPoints();
+        });
+    }
+    filterMosaicsForYear(year: number){
+        return this.planetMosaics.filter(mosaic => {
+            const firstYear = new Date(mosaic.firstAcquired).getFullYear();
+            const lastYear = new Date(mosaic.lastAcquired).getFullYear();
+            return year >= firstYear && year <= lastYear;
+        });
+    }
+    hasPlanetMosaicForYear(year): boolean {
+        return this.planetMosaics.some(mosaic => {
+            const firstYear = mosaic.firstAcquired.getFullYear();
+            const lastYear = mosaic.lastAcquired.getFullYear();
+            return year >= firstYear && year <= lastYear;
+        });
     }
 
     async getPoints() {
@@ -121,72 +173,92 @@ export class ResultComponent implements OnInit, OnDestroy {
 
     }
 
-    async isInspecting() {
+    isInspecting() {
         this.id = this.route.snapshot.params['campaignId'];
         this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
             this.campaign = data;
+            this.initialYear = new Date(this.campaign.initialDate).getFullYear();
+            this.finalYear = new Date(this.campaign.finalDate).getFullYear();
             if (this.campaign.status !== 'READY') {
                 this.router.navigate(['/modules/campaign/index']);
                 this.showToast('danger', this.translate.instant('campaign_result_msg_not_start_inspect'), 'top-right');
             } else {
-                this.getPoints();
+                this.getPlanetMosaics();
             }
         });
     }
 
-    showBestImages(images){
-        this.imagesPlanet = images.filter(img => {
-            return img.id.includes('PL')
-        });
-        this.imagesSentinel = images.filter(img => {
-            return img.id.includes('S2')
-        });
+    showBestImages(img: { year: number }) {
+        this.imagesPlanet = [];
+        this.imagesSentinel = [];
+        this.imagesPlanet = this.filterMosaicsForYear(img.year);
+         // Limpa o array antes de adicionar as novas imagens
 
-        // const data = {
-        //     title: 'Imagens Mensais',
-        //     imagesPlanet: images.filter(img => {
-        //         return img.id.includes('PL')
-        //     }),
-        //     imagesSentinel: images.filter(img => {
-        //         return img.id.includes('S2')
-        //     })
-        // }
-        // this.dialogService.open(BestImagesComponent, { context: data}).onClose.subscribe();
+        // Usaremos apenas o visparam 'tvi-red'
+        const visparam = 'tvi-red';
+
+        // Obtém o ano e o mês atual
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1; // O mês é baseado em zero, então somamos 1
+
+        // Itera pelos períodos disponíveis no sentinelCapabilities
+        this.sentinelCapabilities.period.forEach(periodOrMonth => {
+            // Apenas processa os meses se o período for "MONTH"
+            if (periodOrMonth === 'MONTH') {
+                this.sentinelCapabilities.month.forEach(month => {
+                    const numericMonth = parseInt(month, 10); // Converte o mês para um número
+                    // Verifica se o mês não é futuro no ano atual
+                    if (img.year < currentYear || (img.year === currentYear && numericMonth <= currentMonth)) {
+                        const url = `https://tm{1-5}.lapig.iesa.ufg.br/api/layers/s2_harmonized/{x}/{y}/{z}?period=MONTH&year=${img.year}&visparam=${visparam}&month=${month}`;
+                        this.imagesSentinel.push({
+                            year: img.year,
+                            month,
+                            period: periodOrMonth,
+                            visparam,
+                            url,
+                        });
+                    }
+                });
+            }
+        });
     }
 
-    async getPoint() {
+    getPoint() {
         this.points = [];
         this.center = [];
         this.imagesPlanet = [];
         this.imagesSentinel = [];
-        this.isDataAvailable = false
-        this.camp = await this.pointService.getCampaign(this.id).toPromise();
-        this.point = await this.pointService.point(this.id, this.currentPoint).toPromise();
-        this.landUses = this.camp.landUse;
-        this.result = await this.pointService.getPointResult({
-            campaignId: this.id,
-            index: this.point.index
-        }).toPromise();
-
-        this.la_timelapse = `/service/la_timelapse/${this.normalize(this.point._id)}/${this.camp._id}/${this.point.index}`;
-        this.pl_timelapse = `/service/pl_timelapse/${this.normalize(this.point._id)}/${this.camp._id}/${this.point.index}`;
-        this.s2_timelapse = `/service/s2_timelapse/${this.normalize(this.point._id)}/${this.camp._id}/${this.point.index}`;
-
-        this.points.push([parseFloat(this.point.lon), parseFloat(this.point.lat)]);
-        this.center.push(this.point.lon);
-        this.center.push(this.point.lat);
-        // this.extent.push(this.point.bounds[0][1]);
-        // this.extent.push(this.point.bounds[1][0]);
-        // this.extent.push(this.point.bounds[1][1]);
-        // this.extent.push(this.point.bounds[0][0]);
-
-        this.initFormViewVariables();
-        this.generateOptionYears(this.camp.initialYear, this.camp.finalYear);
-        this.getUsersInspections();
-        this.getPointsUsersInformations();
-        this.generateImages();
-        // this.initModisChart();
-
+        this.isDataAvailable = false;
+        if (this.filterSubscription) {
+            this.filterSubscription.unsubscribe();
+        }
+        this.point = this.pointService.point(this.currentPoint).subscribe((pointInfo) => {
+            this.point = pointInfo;
+            this.points.push([Number(this.point.longitude), Number(this.point.latitude)]);
+            this.center.push(Number(this.point.longitude));
+            this.center.push(Number(this.point.latitude));
+            this.landUses = this.camp.landUse;
+            this.pointService.getPointResult({
+                campaignId: this.id,
+                index: this.point.index,
+            }).subscribe({
+                next: value => {
+                    this.result = value;
+                },
+                error: error => {
+                    this.showToast('danger', error, 'top-right');
+                },
+            });
+            this.generateOptionYears(this.initialYear, this.finalYear);
+            this.getUsersInspections();
+            // this.getPointsUsersInformations();
+            this.generateImages();
+            this.landsatChart(this.point.longitude, this.point.latitude);
+        }, error => {
+            this.showToast('danger', error, 'top-right');
+            this.router.navigateByUrl('modules/campaign/index').then(r => {
+            });
+        });
     }
 
     getPointsUsersInformations() {
@@ -236,71 +308,71 @@ export class ResultComponent implements OnInit, OnDestroy {
     }
 
     getUsersInspections() {
-        const inspectobj = this.point.inspection;
-        const columns = new Object;
+        const inspectobj = this.point.inspections; // assuming point contains 'inspections'
+        const columns = {};
         const classesList = [];
 
-        for (const land of this.landUses) {
-            classesList.push({
-                value: land, title: land,
-            });
+        // Populate the list for classConsolidated editor from this.campaign.classes
+        for (const land of this.campaign.classes) {
+            classesList.push({ value: land.id, title: land.name });
         }
 
-        columns['year'] = {
-            title: this.translate.instant('campaign_result_table_users_column_year'),
+        // Inspector (interpreter) column as the first column
+        columns['inspector'] = {
+            title: this.translate.instant('campaign_result_table_points_column_user'),
             filter: false,
             editable: false,
         };
 
+        // Consolidated class column
         columns['classConsolidated'] = {
             title: this.translate.instant('campaign_result_table_users_column_class_consolidated'),
             editable: true,
             type: 'html',
             editor: {
                 type: 'list',
-                config: {
-                    list: classesList,
-                },
+                config: { list: classesList },
             },
         };
 
-        const arrData = [];
+        // Get unique years from inspections and add them as columns
+        const years = [...new Set(inspectobj.map(inspection => new Date(inspection.date).getFullYear()))];
 
-        for (const o of inspectobj) {
-            columns[o.userName] = {
-                title: o.userName.toString(),
+        // Add year columns
+        years.forEach(year => {
+            columns[year] = {
+                title: `${year}`,
                 filter: false,
                 editable: false,
             };
+        });
 
-        }
+        const arrData = [];
 
-        if (this.point.hasOwnProperty('years')) {
-            for (let i = 0; i < this.point.years.length; i++) {
+        // Get unique inspectors
+        const inspectors = [...new Set(inspectobj.map(inspection => inspection.inspector.name))];
 
-                const finalObject = Object.assign({}, columns);
-                const secondObject = {};
+        // Populate rows based on the inspectors and their inspections for each year
+        inspectors.forEach(inspectorName => {
+            const rowData = { classConsolidated: null }; // Start with classConsolidated column
 
-                for (const o of inspectobj) {
-                    if (finalObject.hasOwnProperty(o.userName)) {
-                        secondObject[o.userName] = o.landUse[i];
-                    }
-                }
+            // Set inspector (interprete) name in the row
+            rowData['inspector'] = inspectorName;
 
-                const later = {
-                    index: i,
-                    year: this.point.years[i],
-                    classConsolidated: this.point.classConsolidated[i],
-                };
+            // Set inspector data for each year
+            years.forEach(year => {
+                const inspectionForYear = inspectobj.find(inspection =>
+                    new Date(inspection.date).getFullYear() === year && inspection.inspector.name === inspectorName
+                );
+                rowData[year] = inspectionForYear ? inspectionForYear.useClass.name : '-'; // Use '-' if no data
+                rowData['classConsolidated'] = inspectionForYear ? inspectionForYear.useClass.name : null; // Adjust as needed
+            });
 
-                const fin = Object.assign({}, later, secondObject);
+            arrData.push(rowData);
+        });
 
-                arrData.push(fin);
-            }
-        }
-
+        // Setup table settings
         this.usersInspectionsTable.settings = {
-            // mode: 'inline',
             hideSubHeader: true,
             noDataMessage: this.translate.instant('tables_no_data_msg'),
             edit: {
@@ -316,15 +388,17 @@ export class ResultComponent implements OnInit, OnDestroy {
                 delete: false,
                 edit: true,
             },
-            columns: columns,
+            columns: columns, // Columns will be in the order they are added: inspector, classConsolidated, then years
         };
 
+        // Set the table data
         this.usersInspectionsTable.data = arrData;
+        this.usersInspectionsTable.source = new LocalDataSource(arrData);
 
-        this.usersInspectionsTable.source = new LocalDataSource();
-
+        // Indicate the data table is available
         this.isDataTableAvailable = true;
     }
+
 
     satelliteByYear(year) {
         let satellite = 'L7';
@@ -339,113 +413,90 @@ export class ResultComponent implements OnInit, OnDestroy {
     }
 
     normalize(string) {
-        const temp = string.replace(/\s+/g, '_').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        return (temp.slice(temp.length - 1) === "_") ? temp.substring(0, temp.length - 1) : temp;
+        const temp = string.replace(/\s+/g, '_').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        return (temp.slice(temp.length - 1) === '_') ? temp.substring(0, temp.length - 1) : temp;
     }
 
-    hasMonthlyImages(year){
-        let images = [];
-
-        if( this.point.mosaics.length > 0){
-            this.point.mosaics.forEach(mosaic => {
-                const isLandsat = !!(mosaic._id.includes('WET') || mosaic._id.includes('DRY'));
-                if(this.point.hasOwnProperty('images_not_found')){
-                    if (!this.point.images_not_found.includes(mosaic._id) && !isLandsat) {
-                        let id = mosaic._id.split('_');
-                        if (parseInt(id[3]) == year) {
-                            const url = `/service/image/${mosaic._id}/${this.normalize(this.point._id)}/${this.camp._id}/${this.point.index}`;
-                            const date = mosaic._id.includes('PL') ? mosaic.first_acquired : mosaic.date.start;
-                            images.push({
-                                id: mosaic._id,
-                                pto: this.point,
-                                date: date,
-                                url: url,
-                            });
-                        }
-                    }
-                } else {
-                    if (!isLandsat) {
-                        let id = mosaic._id.split('_');
-                        if (parseInt(id[3]) == year) {
-                            const url = `/service/image/${mosaic._id}/${this.normalize(this.point._id)}/${this.camp._id}/${this.point.index}`;
-                            const date = mosaic._id.includes('PL') ? mosaic.first_acquired : mosaic.date.start;
-                            images.push({
-                                id: mosaic._id,
-                                pto: this.point,
-                                date: date,
-                                url: url,
-                            });
-                        }
-                    }
-                }
-
-            });
-        }
-
+    hasMonthlyImages(year) {
+        const images = [];
         return images;
     }
 
     generateImages() {
+        const initialYear = new Date(this.campaign.initialDate).getFullYear();
+        const finalYear = new Date(this.campaign.finalDate).getFullYear();
         this.imagesDry = [];
         this.imagesWet = [];
-        this.point.mosaics.forEach(mosaic => {
-            if (mosaic._id.includes('DRY')) {
-                let id = mosaic._id.split('_');
-                if (mosaic._id.includes(this.satelliteByYear(parseInt(id[2])))) {
-                    const url = `/service/image/${mosaic._id}/${this.normalize(this.point._id)}/${this.camp._id}/${this.point.index}`;
-                    this.imagesDry.push({
-                        date: id[2] + '-01-01',
-                        year: parseInt(id[2]),
-                        hasMonthlyImages: this.hasMonthlyImages(parseInt(id[2])),
-                        url: url,
-                    });
-                }
+        for (let year = initialYear; year <= finalYear; year++) {
+            let sattelite = 'L7';
+            if (year > 2012) {
+                sattelite = 'L8';
+            } else if (year > 2011) {
+                sattelite = 'L7';
+            } else if (year > 2003 || year < 2000) {
+                sattelite = 'L5';
             }
-        });
-        this.point.mosaics.forEach(mosaic => {
-            if (mosaic._id.includes('WET')) {
-                let id = mosaic._id.split('_');
-                if (mosaic._id.includes(this.satelliteByYear(parseInt(id[2])))) {
-                    const url = `/service/image/${mosaic._id}/${this.normalize(this.point._id)}/${this.camp._id}/${this.point.index}`;
-                    this.imagesWet.push({
-                        date: id[2] + '-01-01',
-                        year: parseInt(id[2]),
-                        hasMonthlyImages: this.hasMonthlyImages(parseInt(id[2])),
-                        url: url,
-                    });
-                }
+
+            const tmsIdDry = sattelite + '_' + year + '_DRY';
+            this.tmsIdListDry.push(tmsIdDry);
+            this.imagesDry.push({
+                year: year,
+                hasMonthlyImages: this.hasPlanetMosaicForYear(year),
+            });
+        }
+
+        for (let year = initialYear; year <= finalYear; year++) {
+            let sattelite = 'L7';
+            if (year > 2012) {
+                sattelite = 'L8';
+            } else if (year > 2011) {
+                sattelite = 'L7';
+            } else if (year > 2003 || year < 2000) {
+                sattelite = 'L5';
             }
-        });
+            const tmsIdWet = sattelite + '_' + year + '_WET';
+            this.tmsIdListWet.push(tmsIdWet);
+            this.imagesWet.push({
+                year: year,
+                hasMonthlyImages: this.hasPlanetMosaicForYear(year),
+            });
+        }
         this.isDataAvailable = true;
     }
 
     formatDate(date) {
-        return this.datePipe.transform(date, this.translate.instant('campaign_result_date_format'))
+        return this.datePipe.transform(date, this.translate.instant('campaign_result_date_format'));
     }
 
     prev() {
-        let point = this.currentPoint - 1;
+        const point = this.currentPoint - 1;
         if (point >= 1) {
-            this.currentPoint = point
+            this.currentPoint = point;
             this.getPoint();
         }
     }
 
     next() {
-        let point = this.currentPoint + 1;
+        const point = this.currentPoint + 1;
         if (point <= this.pointsCollection.length) {
             this.currentPoint = point;
             this.getPoint();
         }
     }
 
-    search(point){
+    search(point) {
         this.currentPoint = point;
         this.getPoint();
     }
 
     openWindowFilters() {
-        this.windowService.open(FiltersComponent, {title: 'Filtros', windowClass: 'window-filter'});
+        this.windowService.open(FiltersFormComponent, {title: 'Filtros', windowClass: 'window-filter'});
+        this.filterSubscription = this.filterService.filterData$.subscribe(filterData => {
+            if (filterData) {
+                this.currentPoint = filterData.pointId;
+                this.getPoint();
+            }
+        });
     }
 
     normalizeUser(user) {
@@ -498,153 +549,121 @@ export class ResultComponent implements OnInit, OnDestroy {
         this.optionYears.push(options);
     }
 
-    getDateImages() {
-        const dates = [];
-        for (let i = 0; i < this.imagesWet.length; i++) {
-            dates.push(new Date(this.imagesWet[i].date));
-        }
-        return dates;
-    }
-
-    initFormViewVariables() {
-        this.optionYears = [];
-        const landUseIndex = 1;
-        this.answers = [
-            {
-                initialYear: this.camp.initialYear,
-                finalYear: this.camp.finalYear,
-                landUse: this.camp.landUse[landUseIndex],
-                pixelBorder: false,
-            },
-        ];
-    }
-
-    formPlus() {
-        const prevIndex = this.answers.length - 1;
-        const initialYear = this.answers[prevIndex].finalYear + 1;
-
-        if (this.answers[prevIndex].finalYear === this.login.finalYear) return;
-
-        const finalYear = this.login.finalYear;
-
-        this.generateOptionYears(initialYear, finalYear);
-
-        this.answers.push(
-            {
-                initialYear: initialYear,
-                finalYear: finalYear,
-                landUse: this.camp.landUse[1],
-                pixelBorder: false,
-            },
-        );
-    }
-
-    formSubtraction() {
-        if (this.answers.length >= 1) {
-            this.answers.splice(-1, 1);
-            this.optionYears.splice(-1, 1);
-        }
-    }
-
-    submitForm() {
-        const formPoint = {
-            _id: this.point._id,
-            inspection: {
-                counter: this.login.counter,
-                form: this.answers,
-            },
-        };
-        this.onSubmission = true;
-    }
-
-    initCounter() {
-        this.counter = 0;
-        setInterval(() => this.counter++, 1000);
-    }
-
-    initModisChart() {
+    configChart() {
         this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
             const colors: any = config.variables;
             const chartjs: any = config.variables.chartjs;
-            this.campaignService.returnNDVISeries(this.point.lon, this.point.lat).subscribe(
-                result => {
-                    this.tmpModis = result;
-                    this.isDataAvailable = true;
+            // Definindo os dados dos gráficos
+            this.dataChart = {
+                labels: this.tmpLandsat[0].x, // Assumindo que os eixos 'x' são os mesmos para todos os datasets
+                datasets: [
+                    {
+                        data: this.tmpLandsat[0].y, // NDVI (Savgol)
+                        label: 'NDVI (Savgol)',
+                        borderColor: this.tmpLandsat[0].line.color,
+                        fill: false,
+                        pointRadius: 1,
+                        pointHoverRadius: 3,
+                        pointStyle: 'rect',
+                        type: 'line',
+                        hidden: false,
+                    },
+                    {
+                        data: this.tmpLandsat[1].y, // NDVI (Original)
+                        label: 'NDVI (Original)',
+                        backgroundColor: this.tmpLandsat[1].marker.color,
+                        borderColor: this.tmpLandsat[1].marker.color,
+                        type: this.tmpLandsat[1].type,
+                        fill: false,
+                        hidden: false,
+                        pointRadius: 1,
+                        pointHoverRadius: 3,
+                        pointStyle: 'rect',
+                    },
+                    // {
+                    //     data: this.tmpLandsat[2].y, // Precipitação
+                    //     label: 'Precipitation (mm)',
+                    //     backgroundColor: this.tmpLandsat[2].marker.color,
+                    //     borderColor: this.tmpLandsat[2].marker.color,
+                    //     type: 'bar',
+                    //     stack: 'combined',
+                    //     yAxisID: 'y2',
+                    // },
+                ],
+            };
+            // Definindo as opções do gráfico
+            this.options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: 'index',
+                    intersect: true,
                 },
-                err => {
-                    // console.log('Error: ', err);
-                },
-                () => {
-
-                    this.modisChart.data = {
-                        labels: this.tmpModis.map(element => element.date),
-                        datasets: [{
-                            data: this.tmpModis.map(element => element.ndvi_golay.toFixed(4)),
-                            label: 'NDVI',
-                            // backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
-                            borderColor: colors.primary,
-                            fill: false,
-                            hidden: false,
-                            pointRadius: 1,
-                            pointHoverRadius: 3,
-                            pointStyle: 'rect',
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: true,
+                            color: chartjs.axisLineColor,
                         },
-                        ],
-                    };
-
-                    this.modisChart.options = {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        radius: 1,
-                        tooltips: {
-                            mode: 'index',
-                            intersect: true,
+                        ticks: {
+                            fontColor: chartjs.textColor,
+                            autoSkip: true,
                         },
-                        scales: {
-                            xAxes: [
-                                {
-                                    gridLines: {
-                                        display: true,
-                                        color: chartjs.axisLineColor,
-                                    },
-                                    ticks: {
-                                        fontColor: chartjs.textColor,
-                                        autoSkip: true,
-                                        stepSize: 0.2,
-                                    },
-                                    type: 'time',
-                                    time: {
-                                        tooltipFormat: this.translate.instant('campaign_result_chart_date_format'), // <- HERE
-                                    },
-                                },
-                            ],
-                            yAxes: [
-                                {
-                                    gridLines: {
-                                        display: true,
-                                        color: chartjs.axisLineColor,
-                                    },
-                                    ticks: {
-                                        fontColor: chartjs.textColor,
-                                        autoSkip: true,
-                                        stepSize: 0.2,
-                                    },
-                                },
-                            ],
-                        },
-                        legend: {
-                            labels: {
-                                fontColor: chartjs.textColor,
+                        type: 'time',
+                    }],
+                    yAxes: [
+                        {
+                            gridLines: {
+                                display: true,
+                                color: chartjs.axisLineColor,
                             },
-                            position: 'bottom',
+                            ticks: {
+                                fontColor: chartjs.textColor,
+                                autoSkip: true,
+                                stepSize: 0.2,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'NDVI',
+                            },
                         },
-                    };
-
-                    this.modisChart.type = 'line';
-
-                    this.isModisAvailable = true;
-                });
+                        {
+                            id: 'y2',
+                            position: 'right', // Posicionando o eixo Y2 à direita
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Precipitation (mm)', // Rótulo para precipitação
+                            },
+                            gridLines: {
+                                display: false, // Ocultando as linhas de grade do eixo Y2
+                            },
+                            type: 'linear', // Mantém o tipo de escala linear
+                        },
+                    ],
+                },
+                legend: {
+                    labels: {
+                        fontColor: chartjs.textColor,
+                    },
+                    position: 'bottom',
+                },
+            };
         });
+    }
+
+    landsatChart(lon, lat) {
+        this.campaignService.getLandSatTimeSeries(lon, lat).subscribe(
+            _result => {
+                this.tmpLandsat = result;
+                this.isDataAvailableTimeSeries = true;
+            },
+            err => {
+                console.error('Error: ', err);
+                this.isDataAvailableTimeSeries = false;
+            },
+            () => {
+                this.configChart();
+            },
+        );
     }
 }

@@ -17,7 +17,7 @@ import {Camera, SecurityCamerasData} from '../../../@core/data/security-cameras'
 import {map} from 'rxjs/operators';
 import {LayoutService} from '../../../@core/utils';
 import {TranslateService} from '@ngx-translate/core';
-import {normalizeString} from '../../../utilities/string.util';
+import {result} from './results';
 
 @Component({
     selector: 'ngx-inspection',
@@ -28,7 +28,7 @@ export class InspectionComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     id: number;
     login = {} as any;
-    info = {} as any;
+    point = {} as any;
     points = [] as any[];
     size = 3 as number;
     onSubmission = false as boolean;
@@ -56,6 +56,8 @@ export class InspectionComponent implements OnInit, OnDestroy {
     options: any;
     themeSubscription: any;
     tmpLandsat: any;
+    initialYear: number;
+    finalYear: number;
 
     constructor(
         private themeService: NbThemeService,
@@ -88,6 +90,8 @@ export class InspectionComponent implements OnInit, OnDestroy {
         this.id = this.route.snapshot.params['campaignId'];
         this.campaignService.getCampaignInfo(this.id).subscribe((data: Campaign) => {
             this.campaign = data;
+            this.initialYear = new Date(this.campaign.initialDate).getFullYear();
+            this.finalYear = new Date(this.campaign.finalDate).getFullYear();
             if (this.hasPermission(this.campaign.UsersOnCampaigns)) {
                 if (this.campaign.status !== 'READY') {
                     this.router.navigateByUrl('modules/campaign/index');
@@ -113,51 +117,41 @@ export class InspectionComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    async getPoint() {
+    getPoint() {
         const currentUser = JSON.parse(localStorage.getItem('user'));
-        const user = this.normalizeUser(currentUser);
-        const senha = `${normalizeString(this.campaign.name)}_xpto`;
         const campanha = {...this.campaign};
-        delete campanha.points;
-        const access = {campaign: this.campaign.id, name: user, senha: senha};
-        this.login = await this.pointService.login(access).toPromise();
-        currentUser.name = user;
-        const pointInfo = await this.pointService.getPointToInpection(campanha.id, currentUser.id).toPromise();
-        this.info = pointInfo;
-        this.points.push([Number(pointInfo.longitude), Number(pointInfo.latitude)]);
-        this.center.push(Number(pointInfo.longitude));
-        this.center.push(Number(pointInfo.latitude));
-        this.initFormViewVariables();
-        this.generateOptionYears(this.login.campaign.initialYear, this.login.campaign.finalYear);
-        this.generateImages();
-        this.landsatChart(pointInfo.longitude, pointInfo.latitude);
-        this.initCounter();
+        this.pointService.getPointToInpection(campanha.id, currentUser.id).subscribe(    (pointInfo) => {
+            this.point = pointInfo;
+            this.points.push([Number(pointInfo.longitude), Number(pointInfo.latitude)]);
+            this.center.push(Number(pointInfo.longitude));
+            this.center.push(Number(pointInfo.latitude));
+            this.initFormViewVariables();
+            this.generateOptionYears(this.initialYear, this.finalYear);
+            this.generateImages();
+            this.landsatChart(pointInfo.longitude, pointInfo.latitude);
+            this.initCounter();
+        }, error => {
+            this.showToast('danger', error, 'top-right');
+            this.router.navigateByUrl('modules/campaign/index').then(r => {});
+        });
+
     }
 
     async loadNextPoint(formPoint) {
         this.points = [];
         this.center = [];
         this.extent = [];
-        this.info = {};
-        this.info = await this.pointService.getNextPoint({'point': formPoint}).toPromise();
-        this.points.push([this.info.point.lon, this.info.point.lat]);
-        this.center.push(this.info.point.lon);
-        this.center.push(this.info.point.lat);
-        this.extent.push(this.info.point.bounds[0][1]);
-        this.extent.push(this.info.point.bounds[1][0]);
-        this.extent.push(this.info.point.bounds[1][1]);
-        this.extent.push(this.info.point.bounds[0][0]);
-        this.initFormViewVariables();
-        this.generateOptionYears(this.login.campaign.initialYear, this.login.campaign.finalYear);
-        this.generateImages();
-        this.landsatChart(this.info.point.lon.toString(), this.info.point.lat.toString());
-        this.initCounter();
+        this.isDataAvailable = false;
+        this.isDataAvailableTimeSeries = false;
+        await this.pointService.getNextPoint({'point': formPoint}).toPromise();
     }
 
     generateImages() {
+        const initialYear = new Date(this.campaign.initialDate).getFullYear();
+        const finalYear = new Date(this.campaign.finalDate).getFullYear();
         this.imagesDry = [];
         this.imagesWet = [];
-        for (let year = this.login.campaign.initialYear; year <= this.login.campaign.finalYear; year++) {
+        for (let year = initialYear; year <= finalYear; year++) {
             let sattelite = 'L7';
             if (year > 2012) {
                 sattelite = 'L8';
@@ -167,18 +161,14 @@ export class InspectionComponent implements OnInit, OnDestroy {
                 sattelite = 'L5';
             }
 
-            const tmsId = sattelite + '_' + year + '_' + 'DRY';
             const tmsIdDry = sattelite + '_' + year + '_DRY';
-
             this.tmsIdListDry.push(tmsIdDry);
             this.imagesDry.push({
-                date: `${year}`,
                 year: year,
-                url: null,
             });
         }
 
-        for (let year = this.login.campaign.initialYear; year <= this.login.campaign.finalYear; year++) {
+        for (let year = initialYear; year <= finalYear; year++) {
             let sattelite = 'L7';
             if (year > 2012) {
                 sattelite = 'L8';
@@ -187,26 +177,13 @@ export class InspectionComponent implements OnInit, OnDestroy {
             } else if (year > 2003 || year < 2000) {
                 sattelite = 'L5';
             }
-
-            const tmsId = sattelite + '_' + year + '_' + 'WET';
             const tmsIdWet = sattelite + '_' + year + '_WET';
             this.tmsIdListWet.push(tmsIdWet);
             this.imagesWet.push({
-                date: `${year}`,
                 year: year,
-                url: null,
             });
         }
         this.isDataAvailable = true;
-    }
-
-    normalizeUser(user) {
-        let name = user.name.toLowerCase();
-        name = name.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/\s/g, '_');
-        name = user.id + '_' + name;
-        return name;
     }
 
     ngOnDestroy() {
@@ -231,23 +208,14 @@ export class InspectionComponent implements OnInit, OnDestroy {
         }
         this.optionYears.push(options);
     }
-
-    getDateImages() {
-        const dates = [];
-        for (let i = 0; i < this.imagesWet.length; i++) {
-            dates.push(new Date(this.imagesWet[i].date));
-        }
-        return dates;
-    }
-
     initFormViewVariables() {
         this.optionYears = [];
-        const landUseIndex = 1;
+        const landUseIndex = 0;
         this.answers = [
             {
-                initialYear: this.login.campaign.initialYear,
-                finalYear: this.login.campaign.finalYear,
-                landUse: this.login.campaign.landUse[landUseIndex],
+                initialYear: this.initialYear,
+                finalYear: this.finalYear,
+                class: this.campaign.classes[landUseIndex],
                 pixelBorder: false,
             },
         ];
@@ -256,17 +224,16 @@ export class InspectionComponent implements OnInit, OnDestroy {
     formPlus() {
         const prevIndex = this.answers.length - 1;
         const initialYear = this.answers[prevIndex].finalYear + 1;
+        const finalYear = new Date(this.campaign.finalDate).getFullYear();
 
-        if (this.answers[prevIndex].finalYear === this.login.campaign.finalYear)
+        if (this.answers[prevIndex].finalYear === finalYear)
             return;
-        const finalYear = this.login.campaign.finalYear;
-
         this.generateOptionYears(initialYear, finalYear);
         this.answers.push(
             {
                 initialYear: initialYear,
                 finalYear: finalYear,
-                landUse: this.login.campaign.landUse[1],
+                class: this.answers[prevIndex].class,
                 pixelBorder: false,
             },
         );
@@ -280,136 +247,181 @@ export class InspectionComponent implements OnInit, OnDestroy {
     }
 
     submitForm() {
-        const formPoint = {
-            _id: this.info.point._id,
-            inspection: {
-                counter: this.counter,
-                form: this.answers,
+        // Inicialmente, cria uma lista de todos os anos no intervalo entre initialYear e finalYear
+        const allYears: number[] = [];
+        for (let year = this.initialYear; year <= this.finalYear; year++) {
+            allYears.push(year);
+        }
+
+        // Mapeia as respostas atuais em um formato que associa o intervalo de anos
+        const selectedYears = [];
+        this.answers.forEach(answer => {
+            for (let year = answer.initialYear; year <= answer.finalYear; year++) {
+                selectedYears.push({
+                    year,
+                    class: answer.class.id,  // Supondo que `class` tenha um `id`
+                });
+            }
+        });
+
+        // Preenche automaticamente os anos faltantes no array de inspeções
+        const inspections = allYears.map(year => {
+            const existing = selectedYears.find(entry => entry.year === year);
+            return {
+                duration: null,  // Cria uma nova data com base no ano
+                typePeriod: 'YEARLY',  // Usa o valor do período selecionado
+                date: new Date(Date.UTC(year, 11, 31, 22, 0, 0)),
+                useClassId:  existing.class,
+                inspectorId: JSON.parse(localStorage.getItem('user')).id,  // ID do usuário logado
+            };
+        });
+
+        // Divide o contador pelo número de inspeções e atribui o valor a cada uma
+        const counterPerInspection = this.counter / inspections.length;
+        inspections.forEach(inspection => {
+            inspection.duration = counterPerInspection;
+        });
+
+        // Preparar o ID do ponto e as inspeções para o envio
+        const pointId = this.point.id;
+
+        this.pointService.saveInspections(pointId, inspections).subscribe(
+            response => {
+                this.onSubmission = true;
+                this.isDataAvailable = false;
+                this.showToast('success', 'Inspections saved successfully', 'top-right');
+                setTimeout(() => {
+                    this.getPoint();
+                }, 1000);
             },
-        };
-        this.onSubmission = true;
-        this.isDataAvailable = false;
-        this.loadNextPoint(formPoint);
+            error => {
+                console.error('Error saving inspections', error);
+                this.showToast('danger', 'Erro ao salvar as inspeções', 'top-right');
+            },
+        );
     }
+
 
     initCounter() {
         this.counter = 0;
         setInterval(() => this.counter++, 1000);
     }
-
-    landsatChart(lon, lat) {
+    configChart() {
         this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
             const colors: any = config.variables;
             const chartjs: any = config.variables.chartjs;
-            this.campaignService.getLandSatTimeSeries(lon, lat).subscribe(
-                result => {
-                    this.tmpLandsat = result;
-                    this.isDataAvailableTimeSeries = true;
+            // Definindo os dados dos gráficos
+            this.dataChart = {
+                labels: this.tmpLandsat[0].x, // Assumindo que os eixos 'x' são os mesmos para todos os datasets
+                datasets: [
+                    {
+                        data: this.tmpLandsat[0].y, // NDVI (Savgol)
+                        label: 'NDVI (Savgol)',
+                        borderColor: this.tmpLandsat[0].line.color,
+                        fill: false,
+                        pointRadius: 1,
+                        pointHoverRadius: 3,
+                        pointStyle: 'rect',
+                        type: 'line',
+                        hidden: false,
+                    },
+                    {
+                        data: this.tmpLandsat[1].y, // NDVI (Original)
+                        label: 'NDVI (Original)',
+                        backgroundColor: this.tmpLandsat[1].marker.color,
+                        borderColor: this.tmpLandsat[1].marker.color,
+                        type: this.tmpLandsat[1].type,
+                        fill: false,
+                        hidden: false,
+                        pointRadius: 1,
+                        pointHoverRadius: 3,
+                        pointStyle: 'rect',
+                    },
+                    // {
+                    //     data: this.tmpLandsat[2].y, // Precipitação
+                    //     label: 'Precipitation (mm)',
+                    //     backgroundColor: this.tmpLandsat[2].marker.color,
+                    //     borderColor: this.tmpLandsat[2].marker.color,
+                    //     type: 'bar',
+                    //     stack: 'combined',
+                    //     yAxisID: 'y2',
+                    // },
+                ],
+            };
+            // Definindo as opções do gráfico
+            this.options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: 'index',
+                    intersect: true,
                 },
-                err => {
-                    console.error('Error: ', err);
-                    this.isDataAvailableTimeSeries = false;
-                },
-                () => {
-
-                    // Definindo os dados dos gráficos
-                    this.dataChart = {
-                        labels: this.tmpLandsat[0].x, // Assumindo que os eixos 'x' são os mesmos para todos os datasets
-                        datasets: [
-                            {
-                                data: this.tmpLandsat[0].y, // NDVI (Savgol)
-                                label: 'NDVI (Savgol)',
-                                borderColor: this.tmpLandsat[0].line.color,
-                                fill: false,
-                                pointRadius: 1,
-                                pointHoverRadius: 3,
-                                pointStyle: 'rect',
-                                type: this.tmpLandsat[0].type,
-                                hidden: false,
-                            },
-                            {
-                                data: this.tmpLandsat[1].y, // NDVI (Original)
-                                label: 'NDVI (Original)',
-                                backgroundColor: this.tmpLandsat[1].marker.color,
-                                borderColor: this.tmpLandsat[1].marker.color,
-                                pointRadius: 5,
-                                type: this.tmpLandsat[1].type,
-                                fill: false,
-                                hidden: false,
-                            },
-                            {
-                                data: this.tmpLandsat[2].y, // Precipitação
-                                label: 'Precipitation',
-                                backgroundColor: this.tmpLandsat[2].marker.color,
-                                type: this.tmpLandsat[2].type,
-                                yAxisID: 'y2', // Usando o segundo eixo Y
-                            },
-                        ],
-                    };
-
-                    // Definindo as opções do gráfico
-                    this.options = {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        tooltips: {
-                            mode: 'index',
-                            intersect: true,
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: true,
+                            color: chartjs.axisLineColor,
                         },
-                        scales: {
-                            xAxes: [{
-                                gridLines: {
-                                    display: true,
-                                    color: chartjs.axisLineColor,
-                                },
-                                ticks: {
-                                    fontColor: chartjs.textColor,
-                                    autoSkip: true,
-                                },
-                                type: 'time',
-                            }],
-                            yAxes: [
-                                {
-                                    gridLines: {
-                                        display: true,
-                                        color: chartjs.axisLineColor,
-                                    },
-                                    ticks: {
-                                        fontColor: chartjs.textColor,
-                                        autoSkip: true,
-                                        stepSize: 0.2,
-                                    },
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'NDVI',
-                                    },
-                                },
-                                {
-                                    id: 'y2',
-                                    position: 'right',
-                                    gridLines: {
-                                        display: false,
-                                    },
-                                    ticks: {
-                                        fontColor: chartjs.textColor,
-                                        autoSkip: true,
-                                    },
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Precipitation',
-                                    },
-                                },
-                            ],
+                        ticks: {
+                            fontColor: chartjs.textColor,
+                            autoSkip: true,
                         },
-                        legend: {
-                            labels: {
+                        type: 'time',
+                    }],
+                    yAxes: [
+                        {
+                            gridLines: {
+                                display: true,
+                                color: chartjs.axisLineColor,
+                            },
+                            ticks: {
                                 fontColor: chartjs.textColor,
+                                autoSkip: true,
+                                stepSize: 0.2,
                             },
-                            position: 'bottom',
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'NDVI',
+                            },
                         },
-                    };
+                        {
+                            id: 'y2',
+                            position: 'right', // Posicionando o eixo Y2 à direita
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Precipitation (mm)', // Rótulo para precipitação
+                            },
+                            gridLines: {
+                                display: false, // Ocultando as linhas de grade do eixo Y2
+                            },
+                            type: 'linear', // Mantém o tipo de escala linear
+                        },
+                    ],
                 },
-            );
+                legend: {
+                    labels: {
+                        fontColor: chartjs.textColor,
+                    },
+                    position: 'bottom',
+                },
+            };
         });
+    }
+
+    landsatChart(lon, lat) {
+        this.campaignService.getLandSatTimeSeries(lon, lat).subscribe(
+            _result => {
+                this.tmpLandsat = result;
+                this.isDataAvailableTimeSeries = true;
+            },
+            err => {
+                console.error('Error: ', err);
+                this.isDataAvailableTimeSeries = false;
+            },
+            () => {
+                this.configChart();
+            },
+        );
     }
 
 }

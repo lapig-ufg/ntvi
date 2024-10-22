@@ -53,6 +53,7 @@ export class MapComponent implements AfterViewInit {
     @Input() period: 'WET' | 'DRY'; // Novo input para definir o período
     @Input() year: number; // Novo input para definir o ano
     @Input() showLandsat = false as boolean ; // Flag para exibir ou não a camada Landsat
+    @Input() layerURL = '' as  string;
 
     view: View;
     projection: Projection;
@@ -122,7 +123,7 @@ export class MapComponent implements AfterViewInit {
 
         // Carregar a camada Landsat apenas se showLandsat for true
         if (this.showLandsat) {
-            const landsatLayerUrl = `https://tm{1-5}.lapig.iesa.ufg.br/api/layers/landsat/{x}/{y}/{z}?period=${this.period}&year=${this.year}`;
+            const landsatLayerUrl = `https://tm{1-5}.lapig.iesa.ufg.br/api/layers/landsat/{x}/{y}/{z}?period=${this.period}&year=${this.year}&visparam=landsat-tvi-agri`;
 
             // Adiciona a camada Landsat dinâmica
             const landsatLayer = new TileLayer({
@@ -133,6 +134,17 @@ export class MapComponent implements AfterViewInit {
                 }),
             });
             layers.push(landsatLayer);
+            this.addMarker(this.center[1], this.center[0], this.Map);
+        }
+        if (this.layerURL) {
+            // Adiciona a camada Landsat dinâmica
+            const otherLayer = new TileLayer({
+                source: new OlXYZ({
+                    url: this.layerURL,
+                    attributionsCollapsible: false,
+                }),
+            });
+            layers.push(otherLayer);
             this.addMarker(this.center[1], this.center[0], this.Map);
         }
 

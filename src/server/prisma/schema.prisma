@@ -146,6 +146,7 @@ model Inspection {
   pointId     Int
   inspector   User       @relation(fields: [inspectorId], references: [id])
   point       Point      @relation(fields: [pointId], references: [id])
+  duration    Decimal?   @db.Decimal(10, 6)
 }
 
 enum TypeUser {
