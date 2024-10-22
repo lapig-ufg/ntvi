@@ -339,7 +339,7 @@ export class ResultComponent implements OnInit, OnDestroy {
         const years = [...new Set(inspectobj.map(inspection => new Date(inspection.date).getFullYear()))];
 
         // Add year columns
-        years.forEach(year => {
+        years.forEach((year: number) => {
             columns[year] = {
                 title: `${year}`,
                 filter: false,
@@ -360,7 +360,7 @@ export class ResultComponent implements OnInit, OnDestroy {
             rowData['inspector'] = inspectorName;
 
             // Set inspector data for each year
-            years.forEach(year => {
+            years.forEach((year: number) => {
                 const inspectionForYear = inspectobj.find(inspection =>
                     new Date(inspection.date).getFullYear() === year && inspection.inspector.name === inspectorName
                 );
