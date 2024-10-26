@@ -709,4 +709,8 @@ export class CreateComponent implements OnInit {
         this.selectedThumb = thumb;
         this.isSingleView = true;
     }
+    onSatelliteChange(satelliteId: number) {
+        this.colorsComposition = this.satellitesColors.filter(color => color.id == satelliteId)
+            .map(color => ({name: color.value.toUpperCase(), id: color.value}));
+    }
 }

@@ -139,7 +139,7 @@
                           <div class="form-group">
                             <label for="satellite" class="label">{{'campaign_create_edit_tab_config_field_satellite' | translate}}</label>
                             <nb-select id="satellite" formControlName="satellite" placeholder="{{'campaign_create_edit_tab_config_field_satellite_placeholder' | translate}}"
-                              fullWidth filled>
+                              fullWidth filled (selectedChange)="onSatelliteChange($event)">
                               <nb-option *ngFor="let satellite of satellites" value="{{satellite.id}}">
                                 {{satellite.name}}</nb-option>
                             </nb-select>
@@ -148,10 +148,11 @@
                         <div class="col-sm-12 col-md-5 col-xl-5">
                           <div class="form-group">
                             <label for="_colors" class="label">{{'campaign_create_edit_tab_config_field_colors' | translate}}</label>
-                            <nb-select id="_colors" formControlName="_colors" placeholder="{{'campaign_create_edit_tab_config_field_colors_placeholder' | translate}}" fullWidth filled>
-                              <nb-option *ngFor="let colorComp of colorsComposition" value="{{colorComp.id}}">
-                                {{colorComp.name}}</nb-option>
-                            </nb-select>
+                              <nb-select id="_colors" formControlName="_colors" placeholder="{{'campaign_create_edit_tab_config_field_colors_placeholder' | translate}}" fullWidth
+                                         filled>
+                                  <nb-option *ngFor="let colorComp of colorsComposition" value="{{colorComp.id}}">
+                                      {{colorComp.name}}</nb-option>
+                              </nb-select>
                           </div>
                         </div>
                         <div class="col-sm-12 col-md-2 col-xl-2">
